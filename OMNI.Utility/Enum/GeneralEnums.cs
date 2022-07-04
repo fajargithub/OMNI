@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OMNI.Utilities.Constants
+namespace OMNI.Utilities.Enums
 {
-    public class RoleConstants
+    public enum DatabaseEnums
     {
-
+        ApplicationDb,
+        SimontanaDb
     }
 }

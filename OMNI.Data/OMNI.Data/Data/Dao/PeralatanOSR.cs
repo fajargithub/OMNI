@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace OMNI.Utilities.Constants
+namespace OMNI.Data.Data.Dao
 {
-    public class RoleConstants
+    public class PeralatanOSR
     {
-
     }
 }

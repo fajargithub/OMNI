@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMNI.Utility", "..\OMNI.Utility\OMNI.Utility.csproj", "{81763D20-F609-4A7A-A878-6654E0FD6EDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMNI.Utilities", "..\OMNI.Utility\OMNI.Utilities.csproj", "{81763D20-F609-4A7A-A878-6654E0FD6EDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMNI.Domain", "..\OMNI.Domain\OMNI.Domain.csproj", "{889749D8-C318-41A6-A957-0677056841E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMNI.Domain", "..\OMNI.Domain\OMNI.Domain.csproj", "{889749D8-C318-41A6-A957-0677056841E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMNI.API", "..\OMNI.API\OMNI.API\OMNI.API.csproj", "{26CEB1AA-8091-49ED-9D92-A041D9E383DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMNI.API", "..\OMNI.API\OMNI.API\OMNI.API.csproj", "{26CEB1AA-8091-49ED-9D92-A041D9E383DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMNI.Data", "..\OMNI.Data\OMNI.Data\OMNI.Data.csproj", "{E766E6A0-57FE-4E0B-8AC4-2EB93A7E3F2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMNI.Data", "..\OMNI.Data\OMNI.Data\OMNI.Data.csproj", "{E766E6A0-57FE-4E0B-8AC4-2EB93A7E3F2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

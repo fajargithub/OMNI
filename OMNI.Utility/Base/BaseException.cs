@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OMNI.Utility.Base
+namespace OMNI.Utilities.Base
 {
     public class DataLayerException : Exception
     {

@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OMNI.Utility.Constants
+namespace OMNI.Utilities.Constants
 {
     public enum SessionClaimsKey
     {
         JWT
     }
-    public enum DatabaseEnums
-    {
-        AppUserDb
-    }
+    //public enum DatabaseEnums
+    //{
+    //    AppUserDb
+    //}
 }

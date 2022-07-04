@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OMNI.Utility.Base
+namespace OMNI.Utilities.Base
 {
     public class BaseDao
     {
