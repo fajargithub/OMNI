@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using OMNI.Data.Data.Dao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace OMNI.Data.Data
         {
 
         }
+
+        public DbSet<PeralatanOSR> PeralatanOSR { get; set; }
     }
 }

@@ -9,6 +9,6 @@ namespace OMNI.Utilities.Enums
     public enum DatabaseEnums
     {
         ApplicationDb,
-        SimontanaDb
+        OMNIDb
     }
 }

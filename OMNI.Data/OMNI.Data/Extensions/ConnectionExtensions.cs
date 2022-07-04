@@ -23,6 +23,9 @@ namespace OMNI.Data.Extensions
 
             services.AddDbContext<ApplicationDbContext>(options
                 => options.UseSqlServer(connection + appSettings.DataBase[DatabaseEnums.ApplicationDb.ToString()]));
+
+            services.AddDbContext<OMNIDbContext>(options
+                => options.UseSqlServer(connection + appSettings.DataBase[DatabaseEnums.OMNIDb.ToString()]));
         }
     }
 }
