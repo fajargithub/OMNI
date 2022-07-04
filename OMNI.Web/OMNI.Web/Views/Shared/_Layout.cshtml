@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<partial name="_CopyrightHeader" />
+<html lang="en">
+<head>
+    <partial name="_Head" />
+    @RenderSection("HeadBlock", required: false)
+</head>
+<body class="mod-bg-1 header-function-fixed nav-function-fixed mod-clean-page-bg mod-hide-info-card @ViewBag.PreemptiveClass">
+    <partial name="_ScriptsLoadingSaving" />
+    <div class="page-wrapper">
+        <div class="page-inner">
+            <partial name="_LeftPanel" />
+            <div class="page-content-wrapper">
+                <partial name="_PageHeader" />
+                <main id="js-page-content" role="main" class="page-content">
+                    @if (ViewBag.PreemptiveClass?.Length > 0)
+                    {
+                    }
+                    else
+                    {
+                        <partial name="_PageBreadcrumb" />
+                        <div class="subheader">
+                            <partial name="_PageHeading" />
+                            @RenderSection("SubheaderBlock", required: false)
+                        </div>
+                    }
+                    @RenderBody()
+                </main>
+                <partial name="_PageContentOverlay" />
+                <partial name="_PageFooter" />
+                <partial name="_ShortcutModal" />
+                <partial name="_ColorProfileReference" />
+            </div>
+        </div>
+    </div>
+    <partial name="_ShortcutMenu" />
+    <partial name="_ShortcutMessenger" />
+    <partial name="_PageSettings" />
+    <partial name="_GoogleAnalytics" />
+    <partial name="_ScriptsBasePlugins" />
+    <script type="text/javascript">
+    "use strict";
+
+    const createConnection = () => {
+        connection.start().then(function () {
+            $(`#real-time-icon`)
+                .removeClass(`text-danger`)
+                .addClass(`text-primary`);
+            $(`#real-time-icon`)
+                .attr("title", "Realtime mode ON, You will recive notification immediatly")
+                .attr("data-original-title", "Realtime mode ON, You will recive notification immediatly");
+        }).catch(function (err) {
+            connectionClosed();
+            return console.error(err.toString());
+        });
+    };
+
+    Object.defineProperty(WebSocket, 'OPEN', { value: 1, });
+
+    const connectionClosed = () =>
+    {
+        $(`#real-time-icon`)
+            .removeClass(`text-primary`)
+            .addClass(`text-danger`)
+            .attr("title", "Realtime mode OFF, You will not recive notification immediatly")
+            .attr("data-original-title", "Realtime mode OFF, You will not recive notification immediatly");
+    }
+
+
+    connection.on("test", function (message) {
+        a(message);
+    });
+
+    connection.onclose(function () {
+        connectionClosed();
+        setTimeout(function () {
+            createConnection();
+        }, 2000); // Restart connection after 2 seconds.
+    });
+
+    //$(`#real-time-icon`).on(`click`, function () {
+    //    a();
+    //});
+
+    const pushNotif = (b) => {
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": 300,
+            "hideDuration": 100,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000,
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "slideDown",
+            "hideMethod": "fadeOut"
+        };
+        toastr.info(b);
+    };
+
+    $(function () {
+        createConnection();
+    });
+    </script>
+    @RenderSection("ScriptsBlock", required: false)
+</body>
+
+</html>

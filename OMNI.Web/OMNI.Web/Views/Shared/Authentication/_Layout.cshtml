@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<partial name="_CopyrightHeader" />
+<html lang="en">
+<head>
+    <partial name="_Head" />
+    @RenderSection("Header", required: false)
+</head>
+<body class="text-center align-items-center d-flex min-vh-100" style="background: #E7ECF5;">
+    @RenderBody()
+    <partial name="_ScriptsBasePlugins" />
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

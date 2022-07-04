@@ -1,0 +1,23 @@
+﻿@model AlertViewModel
+@{
+    ViewData["PageName"] = "Alert";
+}
+
+@section PageHeading {
+    <div class="col-xl-12">
+        <h2 class="fs-xxl fw-500 text-white text-center">
+            @Model.TitleContent
+            <small class="h3 fw-300 mt-3 mb-5 text-white opacity-60 hidden-sm-down">
+                @Model.MessageContent
+            </small>
+            <br>
+
+            @if (Model.ButtonContent != null)
+            {
+                <a class="text-white btn btn-primary" asp-action="@Model.AreaUrl" asp-controller="@Model.PageUrl">
+                    @Model.ButtonContent
+                </a>
+            }
+        </h2>
+    </div>
+}

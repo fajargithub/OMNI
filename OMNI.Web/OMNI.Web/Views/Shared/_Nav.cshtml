@@ -1,0 +1,186 @@
+﻿
+
+<ul class="nav flex-column nav-custom nav-menu" style="float: left;width: 50px;">
+    <li class="nav-item active">
+        <a class="nav-link active" data-toggle="pill" href="#simontana">
+            <div style="text-align: center;">
+                <i class="fal fa-analytics" style="font-size: 20px;"></i>
+                <label>Simontana</label>
+            </div>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="pill" href="#bonus">
+            <div style="text-align: center;">
+                <i class="fal fa-address-card" style="font-size: 20px;"></i>
+                <label>Bonus</label>
+            </div>
+        </a>
+    </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content nav-custom" style="color: white;margin-left: 50px;">
+    <div class="tab-pane container active" id="simontana">
+        <div class="nav-link-custom" data-i18n="dashboard.dashboarduw">Simontana</div>
+        <ul class="nav-menu js-nav-menu">
+            <li class="active open">
+                <a href="#" title="Dashboard" data-filter-tags="dashboard">
+                    <i class="fal fa-analytics"></i>
+                    <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Dashboard</span>
+                </a>
+                <ul>
+                    <li class="active">
+                        <a href="@Url.Action("DashboardUW", "Dashboard")" is-active-route title="Underwater Inspection Dashboard" data-filter-tags="uw underwater inspection dashboard">
+                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Underwater Inspection</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("DashboardIM", "Dashboard")" is-active-route title="Inspection & Maintenance Dashboard" data-filter-tags="im inspection maintenance dashboard">
+                            <span class="nav-link-text" data-i18n="dashboard.dashboardim">Inspection & Maintenance</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Account")" title="Account Management" data-filter-tags="account management">
+                    <i class="fal fa-address-card"></i>
+                    <span class="nav-link-text" data-i18n="account.index">Account Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Master" data-filter-tags="master">
+                    <i class="fal fa-database"></i>
+                    <span class="nav-link-text" data-i18n="master.">Master Data</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="@Url.Action("Index", "AssetHolder")" is-active-route title="Asset Holder" data-filter-tags="asset holder master">
+                            <span class="nav-link-text" data-i18n="master.holder">Asset Holder</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Location")" is-active-route title="Location" data-filter-tags="location master">
+                            <span class="nav-link-text" data-i18n="master.location">Location</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "PIC")" is-active-route title="PIC" data-filter-tags="pic master">
+                            <span class="nav-link-text" data-i18n="master.location">PIC</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "SaranaTambat")" is-active-route title="Sarana Tambat Management" data-filter-tags="sarana tambat management">
+                            <span class="nav-link-text" data-i18n="">Sarana Tambat Management</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Sarbat")" is-active-route title="Sarbat Master" data-filter-tags="sarbat master">
+                            <span class="nav-link-text" data-i18n="">Sarbat Master</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "ItemGroup")" is-active-route title="Sarbat Item Category" data-filter-tags="sarbat item category master">
+                            <span class="nav-link-text" data-i18n="">Sarbat Item Category</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "SarbatItem")" is-active-route title="Sarbat Item" data-filter-tags="sarbat item">
+                            <span class="nav-link-text" data-i18n="">Sarbat Item</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" is-active-route title="Checklist" data-filter-tags="checklist master">
+                            <span class="nav-link-text" data-i18n="master.checklist">Checklist</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="@Url.Action("Index", "ChecklistUW")" title="Underwater Inspection Checklist" data-filter-tags="uw underwater inspection checklist master">
+                                    <span class="nav-link-text" data-i18n="master.checklistuw">Underwater Inspection</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" title="Inspection Maintenance Checklist" data-filter-tags="uw underwater inspection checklist master">
+                                    <span class="nav-link-text" data-i18n="master.checklistim">Inspection & Maintenance</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" title="Report" data-filter-tags="report">
+                    <i class="fal fa-file"></i>
+                    <span class="nav-link-text" data-i18n="report.index">Report</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="@Url.Action("Index", "UWReport")" is-active-route title="Underwater Inspection Report" data-filter-tags="uw underwater inspection report">
+                            <span class="nav-link-text" data-i18n="uwreport.index">UW Inspection Report</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="tab-pane container" id="bonus">
+        <div class="nav-link-custom" data-i18n="dashboard.dashboarduw">BONUS</div>
+        <ul class="nav-menu js-nav-menu">
+            <li class="active open">
+                <a href="#" title="Dashboard" data-filter-tags="dashboard">
+                    <i class="fal fa-analytics"></i>
+                    <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Dashboard</span>
+                </a>
+                <ul>
+                    @*<li class="active">
+                    <a href="@Url.Action("DashboardUW", "Dashboard")" is-active-route title="Underwater Inspection Dashboard" data-filter-tags="uw underwater inspection dashboard">
+                        <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Underwater Inspection</span>
+                    </a>
+                </li>*@
+                </ul>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "BALapangan")" title="Otorisasi BA Lapangan">
+                    <i class="fal fa-address-card"></i>
+                    <span class="nav-link-text">Otorisasi BA Lapangan</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Master Bonus">
+                    <span class="nav-link-text">Master Data</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="@Url.Action("Index", "Entity")" is-active-route title="Entity">
+                            <span class="nav-link-text">Entity</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "KegiatanBundling")" is-active-route title="kegiatan Bundling">
+                            <span class="nav-link-text">Kegiatan Bundling</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "KontrakPerjanjian")" title="Kontrak Perjanjian">
+                    <span class="nav-link-text">Kontrak Perjanjian</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "OpenLockClosingPeriod")" title="Open Lock Closing Period">
+                    <span class="nav-link-text">Open Lock Closing Period</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "KKR")" title="Kapal kapal Ringan">
+                    <span class="nav-link-text">Kapal kapal Ringan</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    
+</div>
+

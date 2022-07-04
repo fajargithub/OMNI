@@ -1,0 +1,121 @@
+.empty-field {
+    min-width: 170px;
+    display: inline-block;
+    height: 24px;
+    background-color: rgb(240, 243, 248);
+}
+.slider .indicators {
+    bottom: 50px;
+    z-index: 5;
+}
+
+nav {
+    position: fixed;
+    z-index: 1000;
+}
+
+.kategori {
+    padding: 0 3px;
+    display: inline;
+}
+
+#berita-terkini .item {
+    padding: 5px;
+}
+
+
+#mitra-konsultan .item {
+    float: left;
+    margin-right: 20px;
+    width: 200px;
+    height: 220px;
+}
+    #mitra-konsultan .item .mitra-image {
+        width:200px;
+        height: 200px;
+        object-fit:cover;
+    }
+
+#mitra-konsultan .card .card-image .card-title {
+    font-size: 14px;
+    width: 100%;
+    padding: 10px;
+}
+
+#berita-terkini .card .card-content p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+
+
+.btn-outline-orange {
+    border-radius: 30px;
+    border: 1px solid orange;
+    color: orange;
+    background-color: unset;
+}
+
+    .btn-outline-orange:hover {
+        background-color: unset;
+    }
+
+/* #layanan .card .card-content {
+  border: 1px solid orange;
+} */
+#layanan .card:hover {
+    border: 1px solid orange;
+}
+
+#berita-terkini .card:hover {
+    /*border: 1px solid orange;*/
+    box-shadow: 0 12px 15px 0 rgba(0,0,0,.08), 0 21px 40px 0 rgba(0,0,0,.11);
+}
+
+.tabs .tab a:hover, .tabs .tab a.active {
+    /*color: orange;*/
+}
+
+
+.btn-outline-toska {
+    border-radius: 30px;
+    border: 1px solid #6ab5b4;
+    color: #6ab5b4;
+    background-color: unset;
+}
+
+    .btn-outline-toska:hover {
+        background-color: unset;
+    }
+
+.toska {
+    background-color: #6ab5b4 !important;
+}
+
+.layout-document .card {
+    padding: 10px;
+}
+.layout-document .layout-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.layout-document ul li {
+
+}
+
+
+.webkit-line-clamp {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+
+div.error {
+    color: red;
+}

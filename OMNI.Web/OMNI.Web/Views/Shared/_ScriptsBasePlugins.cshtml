@@ -1,0 +1,26 @@
+@*<script src="~/js/vendors.bundle.js"></script>
+<script src="~/js/app.bundle.js"></script>*@
+
+<script src="~/js/vendors.bundle.js"></script>
+<script src="~/js/app.bundle.js"></script>
+
+<script src="~/js/structure.js"></script>
+<script src="~/js/sweetalert2/sweetalert2.bundle.js"></script>
+<script src="~/js/select2/select2.js"></script>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/lib/toastr/toastr.min.js"></script>
+<script src="~/js/datatable/datatable.js"></script>
+<script type="text/javascript">
+    $(document).on('click', `a[data-toggle="modal"]`, function () {
+        let elA = $(this);
+        if (elA.attr("href") !== "#") {
+            $(`${$(elA).data("target")} .modal-content`).load($(this).attr("href"));
+        }
+    });
+
+    // menu multi app
+    $(document).on('click', '.nav-custom .nav-item', function () {
+        $('.nav-custom .nav-item').removeClass('active');
+        $(this).addClass('active');
+    })
+</script>
