@@ -13,7 +13,6 @@ namespace OMNI.Web.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
-        private static readonly string HOME_INDEX = "~/Views/Home/Index.cshtml";
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -23,7 +22,7 @@ namespace OMNI.Web.Controllers
 
         public IActionResult Index()
         {
-            return View(HOME_INDEX);
+            return View();
         }
 
         public IActionResult Privacy()
