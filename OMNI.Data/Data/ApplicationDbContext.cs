@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OMNI.Data.Data
+namespace Simontana.Data.Data
 {
     /// <summary>
     ///     Defines the Entity Framework database context instance used by the application.

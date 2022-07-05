@@ -12,6 +12,7 @@ namespace OMNI.Web.Controllers
     [Layout("~/Views/Shared/Authentication/_Layout.cshtml")]
     public class AuthenticationController : BaseController
     {
+        private static readonly string HOME_INDEX = "~/Views/Home/Index.cshtml";
         public IActionResult Index()
         {
             return View();
@@ -19,7 +20,7 @@ namespace OMNI.Web.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            return View(HOME_INDEX);
         }
     }
 }

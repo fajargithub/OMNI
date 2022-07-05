@@ -2,16 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OMNI.Utility.Constants;
+using OMNI.Utilities.Constants;
 using OMNI.Web.Configurations;
-using OMNI.Data.Data;
-using OMNI.Utility.Constants;
-using OMNI.Web.Configurations;
+using Simontana.Data.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OMNI.Web.Extensions
 {

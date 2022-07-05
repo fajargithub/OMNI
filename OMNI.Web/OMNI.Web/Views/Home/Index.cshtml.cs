@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace OMNI.Web.Views.Authentication
+namespace OMNI.Web.Views.Home
 {
     public class IndexModel : PageModel
     {

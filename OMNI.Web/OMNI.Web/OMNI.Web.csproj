@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\OMNI.Data\OMNI.Data.csproj" />
-    <ProjectReference Include="..\..\OMNI.Utility\OMNI.Utility.csproj" />
+    <ProjectReference Include="..\..\OMNI.Utilities\OMNI.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
