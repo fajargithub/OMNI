@@ -5,15 +5,7 @@
         <a class="nav-link active" data-toggle="pill" href="#simontana">
             <div style="text-align: center;">
                 <i class="fal fa-analytics" style="font-size: 20px;"></i>
-                <label>Simontana</label>
-            </div>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="pill" href="#bonus">
-            <div style="text-align: center;">
-                <i class="fal fa-address-card" style="font-size: 20px;"></i>
-                <label>Bonus</label>
+                <label>OMNI</label>
             </div>
         </a>
     </li>
@@ -21,23 +13,53 @@
 
 <!-- Tab panes -->
 <div class="tab-content nav-custom" style="color: white;margin-left: 50px;">
-    <div class="tab-pane container active" id="simontana">
-        <div class="nav-link-custom" data-i18n="dashboard.dashboarduw">Simontana</div>
+    <div class="tab-pane container active" id="omni">
         <ul class="nav-menu js-nav-menu">
-            <li class="active open">
+            <li>
                 <a href="#" title="Dashboard" data-filter-tags="dashboard">
-                    <i class="fal fa-analytics"></i>
-                    <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Dashboard</span>
+                    <i class="fal fa-list"></i>
+                    <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Master Data</span>
                 </a>
                 <ul>
-                    <li class="active">
-                        <a href="@Url.Action("DashboardUW", "Dashboard")" is-active-route title="Underwater Inspection Dashboard" data-filter-tags="uw underwater inspection dashboard">
-                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Underwater Inspection</span>
+                    <li>
+                        <a href="@Url.Action("Index", "PeralatanOSR")" title="Peralatan OSR" data-filter-tags="peralatan osr">
+                            <i class="fal fa-address-card"></i>
+                            <span class="nav-link-text" data-i18n="peralatanOSR.index">Peralatan OSR</span>
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("DashboardIM", "Dashboard")" is-active-route title="Inspection & Maintenance Dashboard" data-filter-tags="im inspection maintenance dashboard">
-                            <span class="nav-link-text" data-i18n="dashboard.dashboardim">Inspection & Maintenance</span>
+                        <a href="@Url.Action("JenisSpesifikasi", "Index")" is-active-route title="Jenis / Spesifikasi" data-filter-tags="jenis spesifikasi">
+                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Jenis Spesifikasi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("QRCode", "Index")" is-active-route title="QR Code" data-filter-tags="qr code">
+                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">QR Code</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("RekomendasiHublaOSR", "Index")" is-active-route title="Rekomendasi Hubla OSR" data-filter-tags="rekomendasi hubla osr">
+                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Rekomendasi Hubla OSR</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Latihan", "Index")" is-active-route title="Latihan" data-filter-tags="latihan">
+                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Latihan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Latihan", "RekomendasiHubla")" is-active-route title="Rekomendasi Hubla Latihan" data-filter-tags="rekomendasi hubla latihan">
+                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Rekomendasi Hubla Latihan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Personil", "Index")" is-active-route title="Personil" data-filter-tags="personil">
+                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Personil</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Latihan", "RekomendasiHubla")" is-active-route title="Rekomendasi Hubla Latihan" data-filter-tags="rekomendasi hubla latihan">
+                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Rekomendasi Hubla Latihan</span>
                         </a>
                     </li>
                 </ul>
@@ -47,66 +69,6 @@
                     <i class="fal fa-address-card"></i>
                     <span class="nav-link-text" data-i18n="account.index">Account Management</span>
                 </a>
-            </li>
-            <li>
-                <a href="#" title="Master" data-filter-tags="master">
-                    <i class="fal fa-database"></i>
-                    <span class="nav-link-text" data-i18n="master.">Master Data</span>
-                </a>
-                <ul>
-                    <li>
-                        <a href="@Url.Action("Index", "AssetHolder")" is-active-route title="Asset Holder" data-filter-tags="asset holder master">
-                            <span class="nav-link-text" data-i18n="master.holder">Asset Holder</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "Location")" is-active-route title="Location" data-filter-tags="location master">
-                            <span class="nav-link-text" data-i18n="master.location">Location</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "PIC")" is-active-route title="PIC" data-filter-tags="pic master">
-                            <span class="nav-link-text" data-i18n="master.location">PIC</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "SaranaTambat")" is-active-route title="Sarana Tambat Management" data-filter-tags="sarana tambat management">
-                            <span class="nav-link-text" data-i18n="">Sarana Tambat Management</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "Sarbat")" is-active-route title="Sarbat Master" data-filter-tags="sarbat master">
-                            <span class="nav-link-text" data-i18n="">Sarbat Master</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "ItemGroup")" is-active-route title="Sarbat Item Category" data-filter-tags="sarbat item category master">
-                            <span class="nav-link-text" data-i18n="">Sarbat Item Category</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "SarbatItem")" is-active-route title="Sarbat Item" data-filter-tags="sarbat item">
-                            <span class="nav-link-text" data-i18n="">Sarbat Item</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" is-active-route title="Checklist" data-filter-tags="checklist master">
-                            <span class="nav-link-text" data-i18n="master.checklist">Checklist</span>
-                        </a>
-                        <ul>
-                            <li>
-                                <a href="@Url.Action("Index", "ChecklistUW")" title="Underwater Inspection Checklist" data-filter-tags="uw underwater inspection checklist master">
-                                    <span class="nav-link-text" data-i18n="master.checklistuw">Underwater Inspection</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" title="Inspection Maintenance Checklist" data-filter-tags="uw underwater inspection checklist master">
-                                    <span class="nav-link-text" data-i18n="master.checklistim">Inspection & Maintenance</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
             </li>
             <li>
                 <a href="#" title="Report" data-filter-tags="report">

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMNI.Domain", "..\OMNI.Doma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMNI.Utilities", "..\OMNI.Utilities\OMNI.Utilities.csproj", "{218416F4-3EA2-4848-A60F-DE7401507844}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMNI.Data", "..\OMNI.Data\OMNI.Data.csproj", "{9F9F83DE-4842-4232-96B7-98346A865E5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OMNI.Data", "..\OMNI.Data\OMNI.Data.csproj", "{9F9F83DE-4842-4232-96B7-98346A865E5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

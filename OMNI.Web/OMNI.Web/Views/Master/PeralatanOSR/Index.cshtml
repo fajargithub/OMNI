@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Peralatan OSR";
+    ViewData["PageName"] = "master_peralatan";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Peralatan OSR";
+    ViewData["PageDescription"] = "Halaman pengelolaan data master Peralatan Oil Spill Response";
+}
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Peralatan OSR List
+                </h2>
+                <div class="panel-toolbar">
+                    <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <table id="table-akun" class="table table-borderless table-hover table-striped w-100">
+                        <thead>
+                            <tr class="fw-500 text-uppercase">
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Description</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Oil Boom</td>
+                                <td>-</td>
+                                <td class="text-center">
+                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <i class="fal fa-pencil"></i>
+                                    </a>
+                                    <button class="btn-delete btn btn-icon btn-sm btn-danger shadow-0">
+                                        <i class="fal fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Oil Skimmer</td>
+                                <td>-</td>
+                                <td class="text-center">
+                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <i class="fal fa-pencil"></i>
+                                    </a>
+                                    <button class="btn-delete btn btn-icon btn-sm btn-danger shadow-0">
+                                        <i class="fal fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Containment Bag</td>
+                                <td>-</td>
+                                <td class="text-center">
+                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <i class="fal fa-pencil"></i>
+                                    </a>
+                                    <button class="btn-delete btn btn-icon btn-sm btn-danger shadow-0">
+                                        <i class="fal fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Medium })
