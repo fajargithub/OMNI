@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home";
     ViewData["PageName"] = "home";
-    ViewData["Heading"] = "<i class='subheader-icon fal fa-list'></i>  Data Lokasi Balikpapan";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-book'></i>  Data Lokasi Balikpapan";
     ViewData["PageDescription"] = "Halaman pengelolaan data LLP, Latihan dan Personil Oil Spill Response";
 }
 
@@ -27,6 +27,11 @@
 
     .td-edit {
         text-align:center;
+    }
+    .scrolls {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
     }
 </style>
 
@@ -57,234 +62,108 @@
                 </h2>
             </div>
             <div class="panel-container show">
-                <div class="panel-content">
+                <div class="panel-content scrolls">
                     <table id="table-akun" class="table table-bordered table-hover table-striped">
                         <thead>
-                            <tr class="fw-500 text-uppercase">
-                                <th>NO</th>
-                                <th>JENIS</th>
-                                <th>PPKTMP</th>
-                                <th>BUNDLING</th>
-                                <th>REKOMENDASI HUBLA</th>
-                                <th style="width:10px;">SATUAN</th>
-                                <th>KETERANGAN</th>
-                                <th>PERALATAN TERSEDIA</th>
-                                <th>SATUAN</th>
-                                <th>LIFE TIME</th>
-                                <th>KETERANGAN</th>
-                                <th>STATUS</th>
-                                <th>GAP</th>
-                                <th>NILAI PERSENTASE</th>
-                                <th>EDIT</th>
+                            <tr class="fw-500 text-uppercase" style="text-align:center;">
+                                <th style="width:10px;"></th>
+                                <th style="width:10px;">No</th>
+                                <th>Peralatan OSR</th>
+                                <th>Satuan</th>
+                                <th>Detail Existing Lokasi</th>
+                                <th>No Aset</th>
+                                <th>Kondisi</th>
+                                <th>Gambar</th>
+                                <th style="width:10px;">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
-                                <td class="jenis-td" colspan="15">Oil Boom</td>
+                                <td class="jenis-td" colspan="9">Oil Boom</td>
                             </tr>
                             <tr>
+                                <td rowspan="4" class="td-number">
+                                    <a href="javascript:void(0)" id="btn-detail-1" title="Show Detail"><i class="fa fa-plus-circle"></i></a>
+                                </td>
                                 <td rowspan="4" class="td-number">1</td>
                             </tr>
                             <tr>
-                                <td>Solid</td>
-                                <td>500 m</td>
-                                <td>0</td>
-                                <td>550</td>
-                                <td>m</td>
-                                <td>sesuai surat hasil penilaian</td>
-                                <td>1650</td>
-                                <td>m</td>
-                                <td>2.5</td>
-                                <td>-</td>
-                                <td>Sudah Mencukupi</td>
-                                <td>-</td>
-                                <td>100%</td>
-                                <td class="td-edit">
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
+                                <td>Solid Flotation Boom</td>
+                                <td>meter</td>
+                                <td>225</td>
+                                <td><a href="#">QR Code</a></td>
+                                <td>Baik</td>
+                                <td><a href="#">Link Gambar</a></td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
                                     </a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Inflatable</td>
-                                <td>500 m</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>m</td>
-                                <td>sesuai surat hasil penilaian</td>
-                                <td>1650</td>
-                                <td>m</td>
-                                <td>2.5</td>
-                                <td>-</td>
-                                <td>Sudah Mencukupi</td>
-                                <td>-</td>
-                                <td>100%</td>
-                                <td class="td-edit">
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Shore sealing</td>
-                                <td>500 m</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>m</td>
-                                <td>sesuai surat hasil penilaian</td>
-                                <td>1650</td>
-                                <td>m</td>
-                                <td>2.5</td>
-                                <td>-</td>
-                                <td>Sudah Mencukupi</td>
-                                <td>-</td>
-                                <td>100%</td>
-                                <td class="td-edit">
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
-                                <td class="jenis-td" colspan="15">Oil Skimmer</td>
-                            </tr>
-                            <tr>
-                                <td rowspan="4" class="td-number">2</td>
-                            </tr>
-                            <tr>
-                                <td>Weir</td>
-                                <td>500 m</td>
-                                <td>0</td>
-                                <td>550</td>
-                                <td>m</td>
-                                <td>sesuai surat hasil penilaian</td>
-                                <td>1650</td>
-                                <td>m</td>
-                                <td>2.5</td>
-                                <td>-</td>
-                                <td>Sudah Mencukupi</td>
-                                <td>-</td>
-                                <td>100%</td>
-                                <td class="td-edit">
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Adhesive (dish, brush, mop, belt)
-                                </td>
-                                <td>500 m</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>m</td>
-                                <td>sesuai surat hasil penilaian</td>
-                                <td>1650</td>
-                                <td>m</td>
-                                <td>2.5</td>
-                                <td>-</td>
-                                <td>Sudah Mencukupi</td>
-                                <td>-</td>
-                                <td>100%</td>
-                                <td class="td-edit">
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Vacum
-                                </td>
-                                <td>500 m</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>m</td>
-                                <td>sesuai surat hasil penilaian</td>
-                                <td>1650</td>
-                                <td>m</td>
-                                <td>2.5</td>
-                                <td>-</td>
-                                <td>Sudah Mencukupi</td>
-                                <td>-</td>
-                                <td>100%</td>
-                                <td class="td-edit">
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
-                                <td class="jenis-td" colspan="15">Temporary Storage</td>
-                            </tr>
-                            <tr>
-                                <td rowspan="4" class="td-number">3</td>
-                            </tr>
-                            <tr>
-                                <td>Floating</td>
-                                <td>500 m</td>
-                                <td>0</td>
-                                <td>550</td>
-                                <td>m</td>
-                                <td>sesuai surat hasil penilaian</td>
-                                <td>1650</td>
-                                <td>m</td>
-                                <td>2.5</td>
-                                <td>-</td>
-                                <td>Sudah Mencukupi</td>
-                                <td>-</td>
-                                <td>100%</td>
-                                <td class="td-edit">
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    On Land
-                                </td>
-                                <td>500 m</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>m</td>
-                                <td>sesuai surat hasil penilaian</td>
-                                <td>1650</td>
-                                <td>m</td>
-                                <td>2.5</td>
-                                <td>-</td>
-                                <td>Sudah Mencukupi</td>
-                                <td>-</td>
-                                <td>100%</td>
-                                <td class="td-edit">
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Vacum
-                                </td>
-                                <td>500 m</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>m</td>
-                                <td>sesuai surat hasil penilaian</td>
-                                <td>1650</td>
-                                <td>m</td>
-                                <td>2.5</td>
-                                <td>-</td>
-                                <td>Sudah Mencukupi</td>
-                                <td>-</td>
-                                <td>100%</td>
-                                <td class="td-edit">
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
+                            <tr id="tr-detail-1" class="hidden-tr">
+                                <td colspan="9">
+                                    <table class="table table-borderless" style="width: 150px !important;">
+                                        <tr>
+                                            <td>Total Eksisting (Jenis)</td>
+                                            <td width="10">:</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Eksisting (Keseluruhan)</td>
+                                            <td width="10">:</td>
+                                            <td>1825</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Keseluruhan Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selisih Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>1825</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesesuaian PM.58</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total kebutuhan sesuai OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>1275</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selisih OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>125</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesesuaian OSCP</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green;">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                         </tbody>
@@ -296,3 +175,17 @@
 </div>
 
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Medium })
+<script src="https://code.jquery.com/jquery-3.6.0.slim.js"
+        integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY="
+        crossorigin="anonymous"></script>
+<script>
+    $(".hidden-tr").hide();
+
+    $('#btn-detail-1').click(function () {
+        if (!$("#tr-detail-1").is(":visible")) {
+            $("#tr-detail-1").show();
+        } else {
+            $("#tr-detail-1").hide();
+        }
+    })
+</script>
