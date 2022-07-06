@@ -1,8 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Spesifikasi / Jenis Detail";
-    ViewData["PageName"] = "qr_code";
-    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Detail";
-    ViewData["PageDescription"] = "Halaman pengelolaan data master detail Spesifikasi / Jenis Oil Spill Response";
+    ViewData["Title"] = "Master Data Latihan";
+    ViewData["PageName"] = "master_spesifikasi";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Latihan";
+    ViewData["PageDescription"] = "Halaman pengelolaan data master Latihan Oil Spill Response";
 }
 
 <div class="row">
@@ -10,10 +10,10 @@
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Solid Flotation Boom Detail List
+                    Master Data Latihan
                 </h2>
                 <div class="panel-toolbar">
-                    <a asp-action="DetailAddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
             <div class="panel-container show">
@@ -22,22 +22,21 @@
                         <thead>
                             <tr class="fw-500 text-uppercase">
                                 <th>No</th>
-                                <th>Lokasi</th>
-                                <th>Rekomendasi Hubla</th>
-                                <th>QR Code</th>
+                                <th>Name</th>
+                                <th>Description</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>Balikpapan</td>
-                                <td>400</td>
-                                <td>
-                                    <img src="~/img/qrcode.jpg" width="70" />
-                                </td>
+                                <td>Komunikasi dan Pelaporan</td>
+                                <td>-</td>
                                 <td class="text-center">
-                                    <a asp-action="DetailAddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                    <a asp-action="DetailIndex" target=_blank class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" title="Detail">
+                                        <i class="fal fa-external-link"></i>
+                                    </a>
+                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
                                         <i class="fal fa-pencil"></i>
                                     </a>
                                     <button class="btn-delete btn btn-icon btn-sm btn-danger shadow-0">
@@ -47,13 +46,13 @@
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td>Batam</td>
-                                <td>300</td>
-                                <td>
-                                    <img src="~/img/qrcode.jpg" width="70" />
-                                </td>
+                                <td>Latihan Kering (Table Top / Dry Drill)</td>
+                                <td>-</td>
                                 <td class="text-center">
-                                    <a asp-action="DetailAddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                    <a asp-action="DetailIndex" target=_blank class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" title="Detail">
+                                        <i class="fal fa-external-link"></i>
+                                    </a>
+                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
                                         <i class="fal fa-pencil"></i>
                                     </a>
                                     <button class="btn-delete btn btn-icon btn-sm btn-danger shadow-0">
@@ -63,13 +62,13 @@
                             </tr>
                             <tr>
                                 <td>3</td>
-                                <td>Sorong</td>
-                                <td>200</td>
-                                <td>
-                                    <img src="~/img/qrcode.jpg" width="70" />
-                                </td>
+                                <td>Latihan Penggelaran Peralatan (Wet  Drill)</td>
+                                <td>-</td>
                                 <td class="text-center">
-                                    <a asp-action="DetailAddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                    <a asp-action="DetailIndex" target=_blank class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" title="Detail">
+                                        <i class="fal fa-external-link"></i>
+                                    </a>
+                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
                                         <i class="fal fa-pencil"></i>
                                     </a>
                                     <button class="btn-delete btn btn-icon btn-sm btn-danger shadow-0">

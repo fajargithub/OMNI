@@ -1,30 +1,28 @@
 ﻿<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
 
-    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Formulir Add/Edit Spesifikasi / Jenis" })
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Formulir Add/Edit Detail Personil" })
 
     <div class="modal-body">
-        @*<div class="panel-tag">
-            Form input data master Spesifikasi / Jenis OSR
-        </div>*@
-
-        @*@Html.HiddenFor(b => b.ShipId)*@
 
         <div class="form-group">
-            <label class="form-label" for="">Name</label>
-            <input class="form-control">
+            <label class="form-label" for="">Select Lokasi</label>
+            <select class="form-control">
+                <option value="value">Balikpapan</option>
+                <option value="value">Batam</option>
+                <option value="value">Sorong</option>
+            </select>
         </div>
-
         <div class="form-group">
-            <label class="form-label" for="">Description</label>
-            <textarea class="form-control"></textarea>
+            <label class="form-label" for="">Rekomendasi Hubla</label>
+            <input class="form-control" type="number" name="name" value="" />
         </div>
-
     </div>
 
     @await Html.PartialAsync("_ModalFooter")
 </form>
-
+<script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
+
     $(document).on('submit', '#form-akun', function () {
         var form = $('#form-akun');
         var validation = Array.prototype.filter.call(form, function (form) {

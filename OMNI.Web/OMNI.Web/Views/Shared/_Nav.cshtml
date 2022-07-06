@@ -16,6 +16,12 @@
     <div class="tab-pane container active" id="omni">
         <ul class="nav-menu js-nav-menu">
             <li>
+                <a href="@Url.Action("Index", "Home")" title="" data-filter-tags="LLP">
+                    <i class="fal fa-list"></i>
+                    <span class="nav-link-text" data-i18n="account.index">Data Lokasi</span>
+                </a>
+            </li>
+            <li>
                 <a href="#" title="Dashboard" data-filter-tags="dashboard">
                     <i class="fal fa-list"></i>
                     <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Master Data</span>
@@ -28,121 +34,18 @@
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("JenisSpesifikasi", "Index")" is-active-route title="Jenis / Spesifikasi" data-filter-tags="jenis spesifikasi">
-                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Jenis Spesifikasi</span>
+                        <a href="@Url.Action("Index", "Latihan")" is-active-route title="Latihan" data-filter-tags="latihan">
+                            <span class="nav-link-text" data-i18n="latihan.index">Latihan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("QRCode", "Index")" is-active-route title="QR Code" data-filter-tags="qr code">
-                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">QR Code</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("RekomendasiHublaOSR", "Index")" is-active-route title="Rekomendasi Hubla OSR" data-filter-tags="rekomendasi hubla osr">
-                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Rekomendasi Hubla OSR</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Latihan", "Index")" is-active-route title="Latihan" data-filter-tags="latihan">
-                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Latihan</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Latihan", "RekomendasiHubla")" is-active-route title="Rekomendasi Hubla Latihan" data-filter-tags="rekomendasi hubla latihan">
-                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Rekomendasi Hubla Latihan</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Personil", "Index")" is-active-route title="Personil" data-filter-tags="personil">
-                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Personil</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Latihan", "RekomendasiHubla")" is-active-route title="Rekomendasi Hubla Latihan" data-filter-tags="rekomendasi hubla latihan">
-                            <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Rekomendasi Hubla Latihan</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "Account")" title="Account Management" data-filter-tags="account management">
-                    <i class="fal fa-address-card"></i>
-                    <span class="nav-link-text" data-i18n="account.index">Account Management</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" title="Report" data-filter-tags="report">
-                    <i class="fal fa-file"></i>
-                    <span class="nav-link-text" data-i18n="report.index">Report</span>
-                </a>
-                <ul>
-                    <li>
-                        <a href="@Url.Action("Index", "UWReport")" is-active-route title="Underwater Inspection Report" data-filter-tags="uw underwater inspection report">
-                            <span class="nav-link-text" data-i18n="uwreport.index">UW Inspection Report</span>
+                        <a href="@Url.Action("Index", "Personil")" is-active-route title="Personil" data-filter-tags="personil">
+                            <span class="nav-link-text" data-i18n="personil.index">Personil</span>
                         </a>
                     </li>
                 </ul>
             </li>
         </ul>
     </div>
-
-    <div class="tab-pane container" id="bonus">
-        <div class="nav-link-custom" data-i18n="dashboard.dashboarduw">BONUS</div>
-        <ul class="nav-menu js-nav-menu">
-            <li class="active open">
-                <a href="#" title="Dashboard" data-filter-tags="dashboard">
-                    <i class="fal fa-analytics"></i>
-                    <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Dashboard</span>
-                </a>
-                <ul>
-                    @*<li class="active">
-                    <a href="@Url.Action("DashboardUW", "Dashboard")" is-active-route title="Underwater Inspection Dashboard" data-filter-tags="uw underwater inspection dashboard">
-                        <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Underwater Inspection</span>
-                    </a>
-                </li>*@
-                </ul>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "BALapangan")" title="Otorisasi BA Lapangan">
-                    <i class="fal fa-address-card"></i>
-                    <span class="nav-link-text">Otorisasi BA Lapangan</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" title="Master Bonus">
-                    <span class="nav-link-text">Master Data</span>
-                </a>
-                <ul>
-                    <li>
-                        <a href="@Url.Action("Index", "Entity")" is-active-route title="Entity">
-                            <span class="nav-link-text">Entity</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "KegiatanBundling")" is-active-route title="kegiatan Bundling">
-                            <span class="nav-link-text">Kegiatan Bundling</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "KontrakPerjanjian")" title="Kontrak Perjanjian">
-                    <span class="nav-link-text">Kontrak Perjanjian</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "OpenLockClosingPeriod")" title="Open Lock Closing Period">
-                    <span class="nav-link-text">Open Lock Closing Period</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Index", "KKR")" title="Kapal kapal Ringan">
-                    <span class="nav-link-text">Kapal kapal Ringan</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-
-    
 </div>
 

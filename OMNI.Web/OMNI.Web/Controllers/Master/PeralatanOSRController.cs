@@ -24,7 +24,6 @@ namespace OMNI.Web.Controllers.Master
         [HttpGet("Manage/{id:int}")]
         public IActionResult AddEdit(int id)
         {
-            ViewBag.FormTitle = "Add / Edit Peralatan OSR";
             return PartialView(ADD_EDIT);
         }
 

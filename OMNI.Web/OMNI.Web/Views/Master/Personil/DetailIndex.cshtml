@@ -1,8 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Spesifikasi / Jenis Detail";
+    ViewData["Title"] = "Spesifikasi / Detail Personil";
     ViewData["PageName"] = "qr_code";
-    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Detail";
-    ViewData["PageDescription"] = "Halaman pengelolaan data master detail Spesifikasi / Jenis Oil Spill Response";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Detail Personil";
+    ViewData["PageDescription"] = "Halaman pengelolaan data master Detail Personil Oil Spill Response";
 }
 
 <div class="row">
@@ -10,7 +10,7 @@
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Solid Flotation Boom Detail List
+                    IMO Level - 1 Detail List
                 </h2>
                 <div class="panel-toolbar">
                     <a asp-action="DetailAddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
@@ -24,7 +24,6 @@
                                 <th>No</th>
                                 <th>Lokasi</th>
                                 <th>Rekomendasi Hubla</th>
-                                <th>QR Code</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -33,9 +32,6 @@
                                 <td>1</td>
                                 <td>Balikpapan</td>
                                 <td>400</td>
-                                <td>
-                                    <img src="~/img/qrcode.jpg" width="70" />
-                                </td>
                                 <td class="text-center">
                                     <a asp-action="DetailAddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
                                         <i class="fal fa-pencil"></i>
@@ -49,9 +45,6 @@
                                 <td>2</td>
                                 <td>Batam</td>
                                 <td>300</td>
-                                <td>
-                                    <img src="~/img/qrcode.jpg" width="70" />
-                                </td>
                                 <td class="text-center">
                                     <a asp-action="DetailAddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
                                         <i class="fal fa-pencil"></i>
@@ -65,9 +58,6 @@
                                 <td>3</td>
                                 <td>Sorong</td>
                                 <td>200</td>
-                                <td>
-                                    <img src="~/img/qrcode.jpg" width="70" />
-                                </td>
                                 <td class="text-center">
                                     <a asp-action="DetailAddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
                                         <i class="fal fa-pencil"></i>
