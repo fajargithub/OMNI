@@ -28,11 +28,7 @@
     .td-edit {
         text-align:center;
     }
-    .scrolls {
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: nowrap;
-    }
+
 </style>
 
 <div class="row">
@@ -58,42 +54,51 @@
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    LLP 
+                    LLP
                 </h2>
             </div>
             <div class="panel-container show">
-                <div class="panel-content scrolls">
+                <div class="panel-content">
                     <table id="table-akun" class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr class="fw-500 text-uppercase" style="text-align:center;">
-                                <th style="width:10px;"></th>
                                 <th style="width:10px;">No</th>
                                 <th>Peralatan OSR</th>
-                                <th>Satuan</th>
-                                <th>Detail Existing Lokasi</th>
-                                <th>No Aset</th>
-                                <th>Kondisi</th>
-                                <th>Gambar</th>
+                                <th style="width:70px;">Satuan</th>
+                                <th style="width:70px;">Detail Existing Lokasi</th>
+                                <th style="width:70px;">No Aset</th>
+                                <th style="width:80px;">Kondisi</th>
+                                <th style="width:80px;">Gambar</th>
+                                <th style="width:80px;">Total Existing di Lokasi (Jenis)</th>
+                                <th style="width:80px;">Total Exsisting di Lokasi (Keseluruhan)</th>
+                                <th style="width:80px;">Rekomendasi Hubla</th>
+                                <th style="width:80px;">Total kebutuhan sesuai Hubla</th>
+                                <th style="width:80px;">Selisih Hubla</th>
+                                <th style="width:80px;">Kesesuaian PM.58 (Terpenuhi/Kurang)</th>
                                 <th style="width:10px;">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
-                                <td class="jenis-td" colspan="9">Oil Boom</td>
+                                <td class="jenis-td" colspan="14">Oil Boom</td>
                             </tr>
                             <tr>
-                                <td rowspan="4" class="td-number">
-                                    <a href="javascript:void(0)" id="btn-detail-1" title="Show Detail"><i class="fa fa-plus-circle"></i></a>
-                                </td>
                                 <td rowspan="4" class="td-number">1</td>
                             </tr>
+
                             <tr>
-                                <td>Solid Flotation Boom</td>
+                                <td><a href="javascript:void(0)" id="detail-1" class="btn-detail" title="Show Detail">Solid Flotation Boom</a></td>
                                 <td>meter</td>
                                 <td>225</td>
                                 <td><a href="#">QR Code</a></td>
                                 <td>Baik</td>
                                 <td><a href="#">Link Gambar</a></td>
+                                <td>525</td>
+                                <td>1825</td>
+                                <td>400</td>
+                                <td>400</td>
+                                <td>125</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
                                 <td style="text-align:center;">
                                     <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
                                         <b><i class="fal fa-pencil"></i></b>
@@ -101,38 +106,470 @@
                                 </td>
                             </tr>
                             <tr id="tr-detail-1" class="hidden-tr">
-                                <td colspan="9">
-                                    <table class="table table-borderless" style="width: 150px !important;">
+                                <td colspan="13">
+                                    <table class="table table-borderless" style="width: 200px !important;">
                                         <tr>
-                                            <td>Total Eksisting (Jenis)</td>
+                                            <td>Persentase Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi OSCP</td>
                                             <td width="10">:</td>
                                             <td>400</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Eksisting (Keseluruhan)</td>
+                                            <td>Total kebutuhan sesuai OSCP</td>
                                             <td width="10">:</td>
-                                            <td>1825</td>
+                                            <td>1275</td>
                                         </tr>
                                         <tr>
-                                            <td>Rekomendasi Hubla</td>
+                                            <td>Selisih OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>125</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesesuaian OSCP</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green;">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="javascript:void(0)" id="detail-2" class="btn-detail" title="Show Detail">Shore Sealing Boom</a></td>
+                                <td>meter</td>
+                                <td>125</td>
+                                <td><a href="#">QR Code</a></td>
+                                <td>Baik</td>
+                                <td><a href="#">Link Gambar</a></td>
+                                <td>525</td>
+                                <td>1825</td>
+                                <td>400</td>
+                                <td>100</td>
+                                <td>0</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="tr-detail-2" class="hidden-tr">
+                                <td colspan="13">
+                                    <table class="table table-borderless" style="width: 200px !important;">
+                                        <tr>
+                                            <td>Persentase Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi OSCP</td>
                                             <td width="10">:</td>
                                             <td>400</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Keseluruhan Hubla</td>
+                                            <td>Total kebutuhan sesuai OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>1275</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selisih OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>125</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesesuaian OSCP</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green;">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="javascript:void(0)" id="detail-3" class="btn-detail" title="Show Detail">Infalatble Boom</a></td>
+                                <td>meter</td>
+                                <td>100</td>
+                                <td><a href="#">QR Code</a></td>
+                                <td>Baik</td>
+                                <td><a href="#">Link Gambar</a></td>
+                                <td>525</td>
+                                <td>1825</td>
+                                <td>400</td>
+                                <td>400</td>
+                                <td>1200</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="tr-detail-3" class="hidden-tr">
+                                <td colspan="13">
+                                    <table class="table table-borderless" style="width: 200px !important;">
+                                        <tr>
+                                            <td>Persentase Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi OSCP</td>
                                             <td width="10">:</td>
                                             <td>400</td>
                                         </tr>
                                         <tr>
-                                            <td>Selisih Hubla</td>
+                                            <td>Total kebutuhan sesuai OSCP</td>
                                             <td width="10">:</td>
-                                            <td>1825</td>
+                                            <td>1275</td>
                                         </tr>
                                         <tr>
-                                            <td>Kesesuaian PM.58</td>
+                                            <td>Selisih OSCP</td>
                                             <td width="10">:</td>
-                                            <td><b style="color:green">TERPENUHI</b></td>
+                                            <td>125</td>
                                         </tr>
+                                        <tr>
+                                            <td>Kesesuaian OSCP</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green;">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
+                                <td class="jenis-td" colspan="14">Oil Skimmer</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4" class="td-number">2</td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="javascript:void(0)" id="detail-4" class="btn-detail" title="Show Detail">Dish and Brush</a></td>
+                                <td>meter</td>
+                                <td>100</td>
+                                <td><a href="#">QR Code</a></td>
+                                <td>Baik</td>
+                                <td><a href="#">Link Gambar</a></td>
+                                <td>525</td>
+                                <td>1825</td>
+                                <td>400</td>
+                                <td>400</td>
+                                <td>15</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="tr-detail-4" class="hidden-tr">
+                                <td colspan="13">
+                                    <table class="table table-borderless" style="width: 200px !important;">
+                                        <tr>
+                                            <td>Persentase Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total kebutuhan sesuai OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>1275</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selisih OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>125</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesesuaian OSCP</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green;">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="javascript:void(0)" id="detail-5" class="btn-detail" title="Show Detail">Oleophilic</a></td>
+                                <td>meter</td>
+                                <td>300</td>
+                                <td><a href="#">QR Code</a></td>
+                                <td>Baik</td>
+                                <td><a href="#">Link Gambar</a></td>
+                                <td>525</td>
+                                <td>1825</td>
+                                <td>400</td>
+                                <td>400</td>
+                                <td>11</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="tr-detail-5" class="hidden-tr">
+                                <td colspan="13">
+                                    <table class="table table-borderless" style="width: 200px !important;">
+                                        <tr>
+                                            <td>Persentase Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total kebutuhan sesuai OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>1275</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selisih OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>125</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesesuaian OSCP</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green;">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="javascript:void(0)" id="detail-6" class="btn-detail" title="Show Detail">Weir</a></td>
+                                <td>meter</td>
+                                <td>154</td>
+                                <td><a href="#">QR Code</a></td>
+                                <td>Baik</td>
+                                <td><a href="#">Link Gambar</a></td>
+                                <td>525</td>
+                                <td>1825</td>
+                                <td>400</td>
+                                <td>400</td>
+                                <td>125</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="tr-detail-6" class="hidden-tr">
+                                <td colspan="13">
+                                    <table class="table table-borderless" style="width: 200px !important;">
+                                        <tr>
+                                            <td>Persentase Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total kebutuhan sesuai OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>1275</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selisih OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>125</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesesuaian OSCP</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green;">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
+                                <td class="jenis-td" colspan="14">Containment Bag</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4" class="td-number">3</td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="javascript:void(0)" id="detail-7" class="btn-detail" title="Show Detail">Drum</a></td>
+                                <td>meter</td>
+                                <td>154</td>
+                                <td><a href="#">QR Code</a></td>
+                                <td>Baik</td>
+                                <td><a href="#">Link Gambar</a></td>
+                                <td>525</td>
+                                <td>1825</td>
+                                <td>400</td>
+                                <td>400</td>
+                                <td>125</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="tr-detail-7" class="hidden-tr">
+                                <td colspan="13">
+                                    <table class="table table-borderless" style="width: 200px !important;">
+                                        <tr>
+                                            <td>Persentase Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total kebutuhan sesuai OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>1275</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selisih OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>125</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesesuaian OSCP</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green;">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="javascript:void(0)" id="detail-8" class="btn-detail" title="Show Detail">On-land Storage Tank</a></td>
+                                <td>meter</td>
+                                <td>154</td>
+                                <td><a href="#">QR Code</a></td>
+                                <td>Baik</td>
+                                <td><a href="#">Link Gambar</a></td>
+                                <td>525</td>
+                                <td>1825</td>
+                                <td>400</td>
+                                <td>400</td>
+                                <td>125</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="tr-detail-8" class="hidden-tr">
+                                <td colspan="13">
+                                    <table class="table table-borderless" style="width: 200px !important;">
+                                        <tr>
+                                            <td>Persentase Hubla</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rekomendasi OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>400</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total kebutuhan sesuai OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>1275</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selisih OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>125</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kesesuaian OSCP</td>
+                                            <td width="10">:</td>
+                                            <td><b style="color:green;">TERPENUHI</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Persentase OSCP</td>
+                                            <td width="10">:</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="javascript:void(0)" id="detail-9" class="btn-detail" title="Show Detail">Floating Storage Tank</a></td>
+                                <td>meter</td>
+                                <td>154</td>
+                                <td><a href="#">QR Code</a></td>
+                                <td>Baik</td>
+                                <td><a href="#">Link Gambar</a></td>
+                                <td>525</td>
+                                <td>1825</td>
+                                <td>400</td>
+                                <td>400</td>
+                                <td>125</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr id="tr-detail-9" class="hidden-tr">
+                                <td colspan="13">
+                                    <table class="table table-borderless" style="width: 200px !important;">
                                         <tr>
                                             <td>Persentase Hubla</td>
                                             <td width="10">:</td>
@@ -172,6 +609,234 @@
             </div>
         </div>
     </div>
+
+    <div class="col-xl-12">
+        <br />
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    PERSONIL
+                </h2>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <table id="table-akun" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr class="fw-500 text-uppercase" style="text-align:center;">
+                                <th style="width:10px;">No</th>
+                                <th>Nama Personil</th>
+                                <th style="width:70px;">Satuan</th>
+                                <th style="width:70px;">Total Detail Existing</th>
+                                <th style="width:70px;">Lampiran Sertifikat</th>
+                                <th style="width:70px;">Tanggal Pelatihan</th>
+                                <th style="width:70px;">Tanggal Expired</th>
+                                <th style="width:70px;">Sisa Masa Berlaku (Hari)</th>
+                                <th style="width:70px;">Rekomendasi Hubla</th>
+                                <th style="width:70px;">Selisih Hubla</th>
+                                <th style="width:70px;">Kesesuaian dengan PM.58</th>
+                                <th style="width:70px;">Persentase Personil</th>
+                                <th style="width:10px;">Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
+                                <td class="jenis-td" colspan="13">IMO Level - 1</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3" class="td-number">1</td>
+                            </tr>
+                            <tr>
+                                <td>Malih Min Rudy</td>
+                                <td>Orang</td>
+                                <td rowspan="2">2</td>
+                                <td><a href="#">View Sertifikat</a></td>
+                                <td>17-09-2017</td>
+                                <td>17-09-2022</td>
+                                <td>2</td>
+                                <td>12</td>
+                                <td>4</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td>-</td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Martin Lee Minho</td>
+                                <td>Orang</td>
+                                <td><a href="#">View Sertifikat</a></td>
+                                <td>17-09-2017</td>
+                                <td>17-09-2022</td>
+                                <td>2</td>
+                                <td>12</td>
+                                <td>4</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td>-</td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
+                                <td class="jenis-td" colspan="13">IMO Level - 2</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="td-number">2</td>
+                            </tr>
+                            <tr>
+                                <td>Asep Triasep</td>
+                                <td>Orang</td>
+                                <td>1</td>
+                                <td><a href="#">View Sertifikat</a></td>
+                                <td>17-09-2017</td>
+                                <td>17-09-2022</td>
+                                <td>2</td>
+                                <td>12</td>
+                                <td>4</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td>-</td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
+                                <td class="jenis-td" colspan="13">IMO Level - 3</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="td-number">3</td>
+                            </tr>
+                            <tr>
+                                <td>Adam Salsalab</td>
+                                <td>Orang</td>
+                                <td>1</td>
+                                <td><a href="#">View Sertifikat</a></td>
+                                <td>17-09-2017</td>
+                                <td>17-09-2022</td>
+                                <td>2</td>
+                                <td>12</td>
+                                <td>4</td>
+                                <td><b style="color:green">TERPENUHI</b></td>
+                                <td>-</td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-12">
+        <br />
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    LATIHAN
+                </h2>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <table id="table-akun" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr class="fw-500 text-uppercase" style="text-align:center;">
+                                <th style="width:10px;">No</th>
+                                <th style="width:70px;">Satuan</th>
+                                <th style="width:70px;">Tanggal Pelaksanaan</th>
+                                <th style="width:70px;">Laporan Kegiatan</th>
+                                <th style="width:70px;">Rekomendasi Hubla</th>
+                                <th style="width:70px;">Selisih Hubla</th>
+                                <th style="width:70px;">Kesesuaian PM.58</th>
+                                <th style="width:70px;">Persentase Personil</th>
+                                <th style="width:10px;">Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
+                                <td class="jenis-td" colspan="13">Komunikasi dan Pelaporan</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3" class="td-number">1</td>
+                            </tr>
+                            <tr>
+                                <td>tahunan</td>
+                                <td>12/01/2010</td>
+                                <td><a href="#">View Dokumen</a></td>
+                                <td><a href="#">4 kali setahun</a></td>
+                                <td><b style="color:green;">0</b></td>
+                                <td><b style="color:green;">TERPENUHI</b></td>
+                                <td>-</td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>tahunan</td>
+                                <td>05/11/2010</td>
+                                <td><a href="#">View Dokumen</a></td>
+                                <td><a href="#">4 kali setahun</a></td>
+                                <td><b style="color:green;">0</b></td>
+                                <td><b style="color:green;">TERPENUHI</b></td>
+                                <td>-</td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr class="fw-500 text-uppercase" style=" font-size: 10px;">
+                                <td class="jenis-td" colspan="13">Latihan Kering (Table Top / Dry Drill)</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3" class="td-number">2</td>
+                            </tr>
+                            <tr>
+                                <td>tahunan</td>
+                                <td>12/01/2010</td>
+                                <td><a href="#">View Dokumen</a></td>
+                                <td><a href="#">4 kali setahun</a></td>
+                                <td><b style="color:red;">-1</b></td>
+                                <td><b style="color:red;">KURANG</b></td>
+                                <td>-</td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>tahunan</td>
+                                <td>05/11/2010</td>
+                                <td><a href="#">View Dokumen</a></td>
+                                <td><a href="#">4 kali setahun</a></td>
+                                <td><b style="color:red;">-1</b></td>
+                                <td><b style="color:red;">KURANG</b></td>
+                                <td>-</td>
+                                <td style="text-align:center;">
+                                    <a asp-action="AddEdit" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                        <b><i class="fal fa-pencil"></i></b>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Medium })
@@ -181,11 +846,20 @@
 <script>
     $(".hidden-tr").hide();
 
-    $('#btn-detail-1').click(function () {
-        if (!$("#tr-detail-1").is(":visible")) {
-            $("#tr-detail-1").show();
+    $(".btn-detail").click(function () {
+        var id = $(this).attr("id");
+        if (!$("#tr-" + id).is(":visible")) {
+            $("#tr-" + id).show();
         } else {
-            $("#tr-detail-1").hide();
+            $("#tr-" + id).hide();
         }
-    })
+    });
+
+    //$('#btn-detail-1').click(function () {
+    //    if (!$("#tr-detail-1").is(":visible")) {
+    //        $("#tr-detail-1").show();
+    //    } else {
+    //        $("#tr-detail-1").hide();
+    //    }
+    //})
 </script>
