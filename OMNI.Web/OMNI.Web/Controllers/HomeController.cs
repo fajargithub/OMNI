@@ -18,6 +18,8 @@ namespace OMNI.Web.Controllers
         private static readonly string ADD_EDIT_PERSONIL = "~/Views/Home/AddEditPersonil.cshtml";
         private static readonly string ADD_EDIT_LATIHAN = "~/Views/Home/AddEditLatihan.cshtml";
 
+        private static readonly string INDEX_FILE = "~/Views/Home/IndexFile.cshtml";
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -74,6 +76,13 @@ namespace OMNI.Web.Controllers
         public IActionResult AddEditTrxLatihan([FromBody] object account, [FromRoute] int id)
         {
             return Ok();
+        }
+
+        [HttpGet("ManageFile")]
+        [HttpGet("ManageFile/{id:int}")]
+        public IActionResult IndexFile()
+        {
+            return PartialView(INDEX_FILE);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

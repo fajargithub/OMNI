@@ -16,8 +16,8 @@
     }
 
     td {
-        padding:3px !important;
-        vertical-align:middle !important;
+        padding: 3px !important;
+        vertical-align: middle !important;
     }
 
     .td-number {
@@ -26,9 +26,8 @@
     }
 
     .td-edit {
-        text-align:center;
+        text-align: center;
     }
-
 </style>
 
 <div class="row">
@@ -90,9 +89,9 @@
                                 <td><a href="javascript:void(0)" id="detail-1" class="btn-detail" title="Show Detail">Solid Flotation Boom</a></td>
                                 <td>meter</td>
                                 <td>225</td>
-                                <td><a href="#">QR Code</a></td>
+                                <td><a href="#" data-toggle="modal" data-target="#modal-qrcode">QR Code</a></td>
                                 <td>Baik</td>
-                                <td><a href="#">Link Gambar</a></td>
+                                <td><a asp-action="IndexFile" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-file">Link Gambar</a></td>
                                 <td>525</td>
                                 <td>1825</td>
                                 <td>400</td>
@@ -212,7 +211,7 @@
                                 <td>1200</td>
                                 <td><b style="color:green">TERPENUHI</b></td>
                                 <td style="text-align:center;">
-                                    <a asp-action="AddEditLLP" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-add-edit">
+                                    <a asp-action="AddEditLLP" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-file">
                                         <b><i class="fal fa-pencil"></i></b>
                                     </a>
                                 </td>
@@ -649,7 +648,7 @@
                                 <td>Malih Min Rudy</td>
                                 <td>Orang</td>
                                 <td rowspan="2">2</td>
-                                <td><a href="#">View Sertifikat</a></td>
+                                <td><a asp-action="IndexFile" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-file">View Sertifikat</a></td>
                                 <td>17-09-2017</td>
                                 <td>17-09-2022</td>
                                 <td>2</td>
@@ -666,7 +665,7 @@
                             <tr>
                                 <td>Martin Lee Minho</td>
                                 <td>Orang</td>
-                                <td><a href="#">View Sertifikat</a></td>
+                                <td><a asp-action="IndexFile" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-file">View Sertifikat</a></td>
                                 <td>17-09-2017</td>
                                 <td>17-09-2022</td>
                                 <td>2</td>
@@ -691,7 +690,7 @@
                                 <td>Asep Triasep</td>
                                 <td>Orang</td>
                                 <td>1</td>
-                                <td><a href="#">View Sertifikat</a></td>
+                                <td><a asp-action="IndexFile" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-file">View Sertifikat</a></td>
                                 <td>17-09-2017</td>
                                 <td>17-09-2022</td>
                                 <td>2</td>
@@ -716,7 +715,7 @@
                                 <td>Adam Salsalab</td>
                                 <td>Orang</td>
                                 <td>1</td>
-                                <td><a href="#">View Sertifikat</a></td>
+                                <td><a asp-action="IndexFile" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-file">View Sertifikat</a></>
                                 <td>17-09-2017</td>
                                 <td>17-09-2022</td>
                                 <td>2</td>
@@ -771,7 +770,7 @@
                             <tr>
                                 <td>tahunan</td>
                                 <td>12/01/2010</td>
-                                <td><a href="#">View Dokumen</a></td>
+                                <td><a asp-action="IndexFile" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-file">View Dokumen</a></td>
                                 <td><a href="#">4 kali setahun</a></td>
                                 <td><b style="color:green;">0</b></td>
                                 <td><b style="color:green;">TERPENUHI</b></td>
@@ -785,7 +784,7 @@
                             <tr>
                                 <td>tahunan</td>
                                 <td>05/11/2010</td>
-                                <td><a href="#">View Dokumen</a></td>
+                                <td><a asp-action="IndexFile" class="btn-edit shadow-0" data-toggle="modal" data-target="#modal-file">View Dokumen</a></td>
                                 <td><a href="#">4 kali setahun</a></td>
                                 <td><b style="color:green;">0</b></td>
                                 <td><b style="color:green;">TERPENUHI</b></td>
@@ -839,7 +838,31 @@
     </div>
 </div>
 
+<!-- Modal QRCODE -->
+<div id="modal-qrcode" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Solid Flotation Boom</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:center;">
+                    <img src="~/img/qrcode.jpg" width="200">
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Large })
+@await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-file", Type = ModalType.Right, Size = ModalSize.Small })
 <script src="https://code.jquery.com/jquery-3.6.0.slim.js"
         integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY="
         crossorigin="anonymous"></script>
