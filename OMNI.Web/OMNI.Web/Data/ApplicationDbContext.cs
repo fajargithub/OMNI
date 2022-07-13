@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using OMNI.Data.Data;
+using OMNI.Web.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
