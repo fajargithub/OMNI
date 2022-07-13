@@ -6,3 +6,30 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+
+@await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Medium })
+@await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-file", Type = ModalType.Right, Size = ModalSize.Small })
+<script src="https://code.jquery.com/jquery-3.6.0.slim.js"
+        integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY="
+        crossorigin="anonymous"></script>
+<script>
+    $(".hidden-tr").hide();
+
+    $(".btn-detail").click(function () {
+        var id = $(this).attr("id");
+        if (!$("#tr-" + id).is(":visible")) {
+            $("#tr-" + id).show();
+        } else {
+            $("#tr-" + id).hide();
+        }
+    });
+
+    //$('#btn-detail-1').click(function () {
+    //    if (!$("#tr-detail-1").is(":visible")) {
+    //        $("#tr-detail-1").show();
+    //    } else {
+    //        $("#tr-detail-1").hide();
+    //    }
+    //})
+</script>
