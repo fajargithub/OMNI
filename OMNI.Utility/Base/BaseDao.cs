@@ -1,5 +1,7 @@
-﻿using System;
+﻿using OMNI.Utilities.Constants;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace OMNI.Utilities.Base
@@ -8,10 +10,18 @@ namespace OMNI.Utilities.Base
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime? UpdateDt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+        [StringLength(100)]
         public string CreatedBy { get; set; }
-        public string UpdateBy { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public bool IsActive { get; set; } = true;
+
+        [StringLength(400)]
+        public string UpdatedBy { get; set; }
+
+        [StringLength(1)]
+        public string IsDeleted { get; set; } = GeneralConstants.NO;
+
+        [StringLength(1)]
+        public string IsActive { get; set; } = GeneralConstants.YES;
     }
 }

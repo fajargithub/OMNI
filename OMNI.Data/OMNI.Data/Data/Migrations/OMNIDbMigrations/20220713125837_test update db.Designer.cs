@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OMNI.Data.Data;
 
-namespace OMNI.Data.Data.Migrations.OMNIDbcontext
+namespace OMNI.Data.Data.Migrations.OMNIDbMigrations
 {
     [DbContext(typeof(OMNIDbContext))]
-    partial class OMNIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220713125837_test update db")]
+    partial class testupdatedb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,13 +228,16 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
                     b.Property<int?>("LatihanId")
                         .HasColumnType("int");
@@ -240,11 +245,12 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                     b.Property<int>("PortId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -267,13 +273,16 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
                     b.Property<int?>("PersonilId")
                         .HasColumnType("int");
@@ -281,11 +290,12 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                     b.Property<int>("PortId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.Property<float>("Value")
                         .HasColumnType("real");
@@ -308,13 +318,16 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -331,11 +344,12 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                     b.Property<int?>("SpesifikasiJenisId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.HasKey("Id");
 
@@ -355,16 +369,19 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<float>("DetailExisting")
                         .HasColumnType("real");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
                     b.Property<string>("KesesuaianOSCP")
                         .HasColumnType("nvarchar(max)");
@@ -408,11 +425,12 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                     b.Property<int>("UOMId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.HasKey("Id");
 
@@ -432,25 +450,29 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Desc")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Name_TEST")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.HasKey("Id");
 
@@ -468,13 +490,16 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
                     b.Property<string>("KesesuaianPM58")
                         .HasColumnType("nvarchar(max)");
@@ -497,11 +522,12 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                     b.Property<DateTime>("TanggalPelaksanaan")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.HasKey("Id");
 
@@ -521,25 +547,29 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Desc")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.HasKey("Id");
 
@@ -557,25 +587,29 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Desc")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.HasKey("Id");
 
@@ -593,13 +627,16 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
                     b.Property<string>("KesesuaianPM58")
                         .HasColumnType("nvarchar(max)");
@@ -631,11 +668,12 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                     b.Property<float>("TotalDetailExisting")
                         .HasColumnType("real");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.HasKey("Id");
 
@@ -655,16 +693,19 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Desc")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsActive")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                    b.Property<string>("IsDeleted")
+                        .HasColumnType("nvarchar(1)")
+                        .HasMaxLength(1);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -672,11 +713,12 @@ namespace OMNI.Data.Data.Migrations.OMNIDbcontext
                     b.Property<int?>("PeralatanOSRId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdateDt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
 
                     b.HasKey("Id");
 
