@@ -14,7 +14,7 @@ namespace OMNI.Web.Extensions
         public static void ConfigureDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
         {
             var appSettings = configuration.Get<AppSettings>();
-            GeneralConstans.IsProduction = appSettings.IsProduction;
+            GeneralConstants.IsProduction = appSettings.IsProduction;
             var connection = appSettings.IsProduction ? appSettings.ConnectionStrings["ProdConnectionMode"] : appSettings.ConnectionStrings["DevConnectionMode"];
 
             services.AddDbContext<ApplicationDbContext>(options

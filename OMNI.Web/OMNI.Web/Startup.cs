@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OMNI.Web.Extensions;
+using OMNI.Web.Services.Master;
+using OMNI.Web.Services.Master.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,8 @@ namespace OMNI.Web
         {
             services.ConfigureDatabaseConnection(Configuration);
             services.AddControllers();
+
+            services.AddScoped<IPeralatanOSR, PeralatanOSRService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
