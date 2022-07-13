@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\OMNIDbMigrations\20220713023136_Create new tables.cs" />
     <Compile Remove="Data\Migrations\OMNIDbMigrations\20220713023136_Create new tables.Designer.cs" />
+    <Compile Remove="Data\Migrations\OMNIDbMigrations\20220713130715_Create new OMNIDb.cs" />
+    <Compile Remove="Data\Migrations\OMNIDbMigrations\20220713130715_Create new OMNIDb.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\OMNI.Utility\OMNI.Utilities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Migrations\OMNIDbMigrations\" />
   </ItemGroup>
 
 
