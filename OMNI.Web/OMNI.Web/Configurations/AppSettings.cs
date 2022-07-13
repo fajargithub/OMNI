@@ -15,5 +15,6 @@ namespace OMNI.Web.Configurations
         public bool IsProduction { get; set; }
         public IDictionary<string, string> Secret { get; set; }
         public IDictionary<string, string> UrlAPI { get; set; }
+        public IDictionary<string, string> Default { get; set; }
     }
 }

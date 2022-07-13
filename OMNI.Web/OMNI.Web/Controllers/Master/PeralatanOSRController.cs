@@ -20,7 +20,7 @@ namespace OMNI.Web.Controllers.Master
             return View(INDEX);
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet]
         public JsonResult GetAllPeralatan()
         {
             return GetAll();

@@ -15,6 +15,10 @@ namespace OMNI.Utilities.Constants
 {
     public static class GeneralConstants
     {
+        public static string SITConnectionMode = nameof(SITConnectionMode);
+        public static string DevConnectionMode = nameof(DevConnectionMode);
+        public static string ProdConnectionMode = nameof(ProdConnectionMode);
+
         public static bool IsProduction = true;
         /* Activity Type */
         public const string CREATE = nameof(CREATE);
