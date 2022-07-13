@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Data.Dao
 {
-    public class PersonilDetail : BaseDao
+    public class DetailPersonil : BaseDao
     {
         public virtual Personil Personil { get; set; }
         public int PortId { get; set; }
