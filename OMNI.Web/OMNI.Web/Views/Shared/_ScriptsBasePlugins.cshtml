@@ -10,7 +10,11 @@
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/lib/toastr/toastr.min.js"></script>
 <script src="~/js/datatable/datatable.js"></script>
+@*<script src="~/js/jquery-3.5.1.js"></script>
+<script src="~/js/jquery.dataTables.min.js"></script>*@
 <script type="text/javascript">
+    var base_api = "@Context.Request.Scheme://@Context.Request.Host/";
+
     $(document).on('click', `a[data-toggle="modal"]`, function () {
         let elA = $(this);
         if (elA.attr("href") !== "#") {

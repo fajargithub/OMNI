@@ -26,15 +26,13 @@ namespace OMNI.Web.Controllers.Master
             return GetAll();
         }
 
-        [HttpGet("Manage")]
-        [HttpGet("Manage/{id:int}")]
+        [HttpGet]
         public IActionResult AddEdit(int id)
         {
             return PartialView(ADD_EDIT);
         }
 
-        [HttpPost("Manage")]
-        [HttpPost("Manage/{id:int}")]
+        [HttpPost]
         public IActionResult AddEdit([FromBody] object account, [FromRoute] int id)
         {
             return Ok();
