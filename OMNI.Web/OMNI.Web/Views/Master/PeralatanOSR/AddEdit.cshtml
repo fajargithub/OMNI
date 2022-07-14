@@ -1,24 +1,20 @@
-﻿<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+﻿@model OMNI.Web.Models.Master.PeralatanOSRModel
 
-    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Formulir Add/Edit Peralatan OSR" })
+<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Peralatan OSR" })
 
     <div class="modal-body">
-        @*<div class="panel-tag">
-            Form input data master Peralatan OSR
-        </div>*@
-
-        @*@Html.HiddenFor(b => b.ShipId)*@
+        @Html.HiddenFor(b => b.Id)
 
         <div class="form-group">
             <label class="form-label" for="">Name</label>
-            <input class="form-control">
+            <input class="form-control" asp-for="Name" required>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="">Description</label>
-            <textarea class="form-control"></textarea>
+            <textarea class="form-control" asp-for="Desc"></textarea>
         </div>
-
     </div>
 
     @await Html.PartialAsync("_ModalFooter")
@@ -37,22 +33,14 @@
                 var param = new FormParam(
                     form,
                     "Apakah Anda yakin ingin menyimpan akun ini?",
-                    '@Url.Action("ManageAccount")',
+                    '@Url.Action("AddEdit")',
                     null,
                     '#modal-add-edit',
-                    '#table-akun'
+                    '#table1'
                 );
                 initApp.formSubmit(param);
             }
             form.classList.add('was-validated');
         });
-    });
-
-    $(document).ready(function () {
-        $(".select2-placeholder").select2(
-            {
-                placeholder: $(this).data("placeholder"),
-                allowClear: true
-            });
     });
 </script>

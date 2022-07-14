@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OMNI.Web.Controllers.Base;
+using OMNI.Web.Models.Master;
 using OMNI.Web.Services.Master.Interface;
 
 namespace OMNI.Web.Controllers.Master
@@ -29,13 +30,20 @@ namespace OMNI.Web.Controllers.Master
         [HttpGet]
         public IActionResult AddEdit(int id)
         {
-            return PartialView(ADD_EDIT);
+            PeralatanOSRModel model = GetDataById(id);
+            return PartialView(ADD_EDIT, model);
         }
 
         [HttpPost]
-        public IActionResult AddEdit([FromBody] object account, [FromRoute] int id)
+        public JsonResult AddEdit(PeralatanOSRModel model)
         {
-            return Ok();
+            return AddEditFunction(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            return DeleteFunction(id);
         }
     }
 }

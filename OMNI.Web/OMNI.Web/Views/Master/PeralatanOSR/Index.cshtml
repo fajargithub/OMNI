@@ -33,56 +33,6 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @*<tr>
-                                <td>1</td>
-                                <td>Oil Boom</td>
-                                <td>-</td>
-                                <td class="text-center">
-                                    <a asp-controller="SpesifikasiJenis" asp-action="Index" target=_blank class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" title="Spesifikasi / Jenis">
-                                        <i class="fal fa-list"></i>
-                                    </a>
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                    <button class="btn-delete btn btn-icon btn-sm btn-danger shadow-0">
-                                        <i class="fal fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Oil Skimmer</td>
-                                <td>-</td>
-                                <td class="text-center">
-                                    <a asp-controller="SpesifikasiJenis" asp-action="Index" target=_blank class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" title="Spesifikasi / Jenis">
-                                        <i class="fal fa-list"></i>
-                                    </a>
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                    <button class="btn-delete btn btn-icon btn-sm btn-danger shadow-0">
-                                        <i class="fal fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Containment Bag</td>
-                                <td>-</td>
-                                <td class="text-center">
-                                    <a asp-controller="SpesifikasiJenis" asp-action="Index" target=_blank class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" title="Spesifikasi / Jenis">
-                                        <i class="fal fa-list"></i>
-                                    </a>
-                                    <a asp-action="AddEdit" class="btn-edit btn btn-icon btn-sm mr-1 btn-default shadow-0" data-toggle="modal" data-target="#modal-add-edit">
-                                        <i class="fal fa-pencil"></i>
-                                    </a>
-                                    <button class="btn-delete btn btn-icon btn-sm btn-danger shadow-0">
-                                        <i class="fal fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>*@
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -143,13 +93,6 @@
                                 $('#table1-filter').toggle();
                             }
                         },
-                        //{
-                        //    text: '<i class="fal fa-download"></i> Export',
-                        //    className: 'btn btn-sm btn-outline-primary',
-                        //    action: function (e, dt, node, config) {
-                        //        console.log("Export table clicked!")
-                        //    }
-                        //}
                     ],
                     processing: true,
                     //serverSide: true,
@@ -166,7 +109,7 @@
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-action-book' href='/investmentTypeIRING/AddEditInvestmentType?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/PeralatanOSR/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
                                     " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
                             }
                         }
@@ -184,5 +127,26 @@
                 });
             }).draw();
         });
+
+        function deleteAction(id) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'delete',
+                denyButtonText: `cancel`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $.post('../../PeralatanOSR/Delete?id=' + id, function (result) {
+                        //window.location = "/Employee/EmployeeAddEditDeleteResult";
+                        Swal.fire('Deleted!', '', 'success');
+                        location.reload();
+                    });
+                } else if (result.isDenied) {
+
+                }
+            })
+        }
     </script>
 }
