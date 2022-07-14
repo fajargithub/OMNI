@@ -45,7 +45,6 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         $(document).ready(function () {
-            console.log(base_api);
             $(".select2-placeholder").select2(
                 {
                     placeholder: $(this).data("placeholder"),
@@ -133,15 +132,13 @@
                 title: 'Do you want to delete?',
                 showDenyButton: true,
                 showCancelButton: true,
-                confirmButtonText: 'delete',
-                denyButtonText: `cancel`,
+                confirmButtonText: 'Delete',
+                denyButtonText: `Cancel`,
             }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    $.post('../../PeralatanOSR/Delete?id=' + id, function (result) {
-                        //window.location = "/Employee/EmployeeAddEditDeleteResult";
+                if (result.value) {
+                    $.post(base_api + 'PeralatanOSR/DeletePeralatanOSR?id=' + id, function (result) {
                         Swal.fire('Deleted!', '', 'success');
-                        location.reload();
+                        $("#table1").DataTable().ajax.reload(null, false);
                     });
                 } else if (result.isDenied) {
 

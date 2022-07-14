@@ -41,7 +41,7 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpPost]
-        public IActionResult Delete(int id)
+        public IActionResult DeletePeralatanOSR(int id)
         {
             return DeleteFunction(id);
         }
