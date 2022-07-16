@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\OMNI.Data\OMNI.Data\OMNI.Data.csproj" />
     <ProjectReference Include="..\..\OMNI.Utility\OMNI.Utilities.csproj" />
   </ItemGroup>
 

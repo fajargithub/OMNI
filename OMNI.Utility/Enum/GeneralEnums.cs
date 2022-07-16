@@ -9,6 +9,7 @@ namespace OMNI.Utilities.Enums
     public enum DatabaseEnums
     {
         ApplicationDb,
+        CorePTKDb,
         OMNIDb
     }
 }
