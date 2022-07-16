@@ -78,6 +78,7 @@ namespace OMNI.Web.Controllers.Base
                 {
                     SpesifikasiJenis temp = _spesifikasiJenisService.Find(b => b.Id == model.Id);
                     temp.Id = model.Id;
+                    temp.PeralatanOSR = _peralatanOSRService.GetById(int.Parse(model.PeralatanOSR));
                     temp.Name = model.Name;
                     temp.Desc = model.Desc;
                     temp.UpdatedBy = "admin";
@@ -89,6 +90,7 @@ namespace OMNI.Web.Controllers.Base
                 {
                     SpesifikasiJenis temp = new SpesifikasiJenis();
                     temp.Id = model.Id;
+                    temp.PeralatanOSR = _peralatanOSRService.GetById(int.Parse(model.PeralatanOSR));
                     temp.Name = model.Name;
                     temp.Desc = model.Desc;
                     temp.CreatedBy = "admin";

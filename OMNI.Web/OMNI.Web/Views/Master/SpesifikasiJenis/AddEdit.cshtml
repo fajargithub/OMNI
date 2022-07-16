@@ -8,8 +8,8 @@
 
         <div class="form-group">
             <label class="form-label" for="">Select Peralatan</label>
-            @*<select id="peralatanOSRList" asp-for="PeralatanOSR" class="select2-input"
-                    asp-items="@(new SelectList(ViewBag.PeralatanOSRList), "Id", "Name")" required>*@
+            <select name="PeralatanOSR" asp-for="PeralatanOSR" id="peralatanOSR" class="select2-input"
+                    asp-items="@(new SelectList(ViewBag.PeralatanOSRList, "Id","Name"))">
             </select>
         </div>
 
