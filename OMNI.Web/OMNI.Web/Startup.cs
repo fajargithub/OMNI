@@ -61,6 +61,12 @@ namespace OMNI.Web
             }).AddRazorRuntimeCompilation();
 
             services.AddScoped<IPeralatanOSR, PeralatanOSRService>();
+            services.AddScoped<ISpesifikasiJenis, SpesifikasiJenisService>();
+            services.AddScoped<IDetailSpesifikasi, DetailSpesifikasiService>();
+            services.AddScoped<ILatihan, LatihanService>();
+            services.AddScoped<IDetailLatihan, DetailLatihanService>();
+            services.AddScoped<IPersonil, PersonilService>();
+            services.AddScoped<IDetailPersonil, DetailPersonilService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
