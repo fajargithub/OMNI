@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
+using OMNI.Web.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +23,17 @@ namespace OMNI.Web.Extensions
                     );
             });
 
-            services.AddHttpClient("Simontana", o =>
+            services.AddHttpClient("OMNI", o =>
             {
-                o.BaseAddress = new Uri(configuration.GetSection("BaseURL").GetSection("Simontana").Value);
-                //o.DefaultRequestHeaders.Add("X-API-KEY", configuration.GetSection("APIKey").GetSection("Simontana").Value);
-            }).AddHeaderPropagation(options =>
-            {
-                options.Headers.Add("JWT");
+                var serviceProvider = services.BuildServiceProvider();
+                var jwt = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.Request?.Headers["Authorization"];
+
+                var appSettings = configuration.Get<AppSettings>();
+                o.BaseAddress =
+                    appSettings.IsLocalDevelopment ? new Uri(appSettings.BaseURL["Local"]) :
+                    appSettings.IsProduction ? new Uri(appSettings.BaseURL["OMNIProd"]) : new Uri(appSettings.BaseURL["OMNISIT"]);
+
+                o.DefaultRequestHeaders.Add("Authorization", $"{jwt.Value}");
             });
 
             services.AddHttpClient("AUTH", o =>

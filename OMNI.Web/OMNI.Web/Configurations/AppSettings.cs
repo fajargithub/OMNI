@@ -13,8 +13,9 @@ namespace OMNI.Web.Configurations
         public IDictionary<string, string> ConnectionStrings { get; set; }
         public IDictionary<string, string> DataBase { get; set; }
         public bool IsProduction { get; set; }
+        public bool IsLocalDevelopment { get; set; }
         public IDictionary<string, string> Secret { get; set; }
         public IDictionary<string, string> UrlAPI { get; set; }
-        public IDictionary<string, string> Default { get; set; }
+        public IDictionary<string, string> BaseURL { get; set; }
     }
 }

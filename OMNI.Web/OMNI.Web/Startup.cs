@@ -15,6 +15,7 @@ using OMNI.Web.Services.Master.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace OMNI.Web
@@ -31,7 +32,7 @@ namespace OMNI.Web
         //This method gets called by the runtime.Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureDatabaseConnection(Configuration);
+            //services.ConfigureDatabaseConnection(Configuration);
 
             services.ConfigureIdentity(Configuration);
 
@@ -49,11 +50,11 @@ namespace OMNI.Web
 
             services.AddResponseCaching();
 
-            ConnectionConfiguration.GetService(
-                services: services,
-                configuration: Configuration,
-                IsProduction: Configuration.GetValue<bool>("IsProduction")
-                );
+            //ConnectionConfiguration.GetService(
+            //    services: services,
+            //    configuration: Configuration,
+            //    IsProduction: Configuration.GetValue<bool>("IsProduction")
+            //    );
 
             services.AddControllersWithViews(opt =>
             {
@@ -62,15 +63,13 @@ namespace OMNI.Web
                 opt.Filters.Add<ViewBagFilter>();
             }).AddRazorRuntimeCompilation();
 
-            services.AddScoped<IPort, PortService>();
-
-            services.AddScoped<IPeralatanOSR, PeralatanOSRService>();
-            services.AddScoped<ISpesifikasiJenis, SpesifikasiJenisService>();
-            services.AddScoped<IDetailSpesifikasi, DetailSpesifikasiService>();
-            services.AddScoped<ILatihan, LatihanService>();
-            services.AddScoped<IDetailLatihan, DetailLatihanService>();
-            services.AddScoped<IPersonil, PersonilService>();
-            services.AddScoped<IDetailPersonil, DetailPersonilService>();
+            //services.AddScoped<IPeralatanOSR, PeralatanOSRService>();
+            //services.AddScoped<ISpesifikasiJenis, SpesifikasiJenisService>();
+            //services.AddScoped<IDetailSpesifikasi, DetailSpesifikasiService>();
+            //services.AddScoped<ILatihan, LatihanService>();
+            //services.AddScoped<IDetailLatihan, DetailLatihanService>();
+            //services.AddScoped<IPersonil, PersonilService>();
+            //services.AddScoped<IDetailPersonil, DetailPersonilService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,8 +86,27 @@ namespace OMNI.Web
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.Use(async (context, next) =>
+            {
+                context.Request.Headers.Add("authorization", $"Bearer {context.Request.Cookies["JWT"]}");
+                await next();
+            });
+            app.UseStatusCodePages(async context =>
+            {
+                var request = context.HttpContext.Request;
+                var response = context.HttpContext.Response;
 
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+                // you may also check requests path to do this only for specific methods       
+                // && request.Path.Value.StartsWith("/specificPath")
+
+                {
+                    response.Redirect("/authentication/login");
+                }
+            });
+
+            app.UseStaticFiles();
+            app.UseHeaderPropagation();
             app.UseRouting();
 
             app.UseAuthentication();

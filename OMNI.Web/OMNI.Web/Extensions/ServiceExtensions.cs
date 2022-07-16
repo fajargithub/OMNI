@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OMNI.Data.Services.OMNIAPI;
+using OMNI.Domain.OMNI.TestRepo;
+using OMNI.Domain.OMNI.TestRepo.Impl;
 using OMNI.Utilities.Constants;
 using OMNI.Web.Configurations;
 using Simontana.Data.Data;
@@ -11,15 +14,14 @@ namespace OMNI.Web.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void ConfigureDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
-        {
-            var appSettings = configuration.Get<AppSettings>();
-            GeneralConstants.IsProduction = appSettings.IsProduction;
-            var connection = appSettings.IsProduction ? appSettings.ConnectionStrings["ProdConnectionMode"] : appSettings.ConnectionStrings["DevConnectionMode"];
+        //public static void ConfigureDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
+        //{
+        //    var appSettings = configuration.Get<AppSettings>();
+        //    GeneralConstants.IsProduction = appSettings.IsProduction;
+        //    var connection = appSettings.IsProduction ? appSettings.ConnectionStrings["ProdConnectionMode"] : appSettings.ConnectionStrings["DevConnectionMode"];
+        //}
 
-            services.AddDbContext<ApplicationDbContext>(options
-                => options.UseSqlServer(connection + appSettings.DataBase[DatabaseEnums.AppUserDb.ToString()]));
-        }
+
 
         public static void ConfigureIdentity(this IServiceCollection services, IConfiguration configuration)
         {
@@ -35,9 +37,9 @@ namespace OMNI.Web.Extensions
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>()
+            //    .AddDefaultTokenProviders();
 
             //services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
             //options =>
@@ -56,13 +58,13 @@ namespace OMNI.Web.Extensions
 
         public static void ConfigureDataLayer(this IServiceCollection services)
         {
-            //services.AddScoped<AccountService>();
+            services.AddScoped<TestService>();
             //services.AddScoped<PicService>();
         }
 
         public static void ConfigureDomainLayer(this IServiceCollection services)
         {
-            //services.AddScoped<OrderBL>();
+            services.AddScoped<ITestRepo, TestRepoImpl>();
         }
 
         public static void ConfigureSession(this IServiceCollection services)
