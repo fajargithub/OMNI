@@ -28,7 +28,12 @@
 </form>
 
 <script type="text/javascript">
-    $(document).on('submit', '#form-akun', function () {
+    $(document).ready(function () {
+        $('.select2-input').select2({
+            dropdownParent: $('#modal-add-edit')
+        });
+
+        $(document).on('submit', '#form-akun', function () {
         var form = $('#form-akun');
         var validation = Array.prototype.filter.call(form, function (form) {
             if (form.checkValidity() === false) {
@@ -50,4 +55,6 @@
             form.classList.add('was-validated');
         });
     });
+    });
+
 </script>

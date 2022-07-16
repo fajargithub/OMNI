@@ -58,10 +58,11 @@ namespace OMNI.Web.Controllers.Base
             SpesifikasiJenisModel model = new SpesifikasiJenisModel();
             if (id > 0)
             {
-                SpesifikasiJenis data = _spesifikasiJenisService.GetById(id);
+                SpesifikasiJenis data = _spesifikasiJenisService.FindIncluding(b => b.Id == id, b => b.PeralatanOSR);
                 if (data != null)
                 {
                     model.Id = data.Id;
+                    model.PeralatanOSR = data.PeralatanOSR.Id.ToString();
                     model.Name = data.Name;
                     model.Desc = data.Desc;
                 }
