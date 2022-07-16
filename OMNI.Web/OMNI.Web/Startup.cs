@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OMNI.Web.Extensions;
+using OMNI.Web.Services.CorePTK;
+using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master;
 using OMNI.Web.Services.Master.Interface;
 using System;
@@ -59,6 +61,8 @@ namespace OMNI.Web
                 opt.Filters.Add(new AuthorizeFilter(policy));
                 opt.Filters.Add<ViewBagFilter>();
             }).AddRazorRuntimeCompilation();
+
+            services.AddScoped<IPort, PortService>();
 
             services.AddScoped<IPeralatanOSR, PeralatanOSRService>();
             services.AddScoped<ISpesifikasiJenis, SpesifikasiJenisService>();

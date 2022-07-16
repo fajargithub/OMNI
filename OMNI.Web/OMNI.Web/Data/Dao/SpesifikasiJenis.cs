@@ -9,7 +9,10 @@ namespace OMNI.Web.Data.Dao
     public class SpesifikasiJenis : BaseDao
     {
         public virtual PeralatanOSR PeralatanOSR { get; set; }
+        public int PortId { get; set; }
         public string Name { get; set; }
+        public string QRCode { get; set; }
+        public float RekomendasiHubla { get; set; }
         public string Desc { get; set; }
     }
 }

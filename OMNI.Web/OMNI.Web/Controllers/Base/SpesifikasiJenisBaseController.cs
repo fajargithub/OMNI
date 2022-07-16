@@ -2,6 +2,7 @@
 using OMNI.Utilities.Constants;
 using OMNI.Web.Data.Dao;
 using OMNI.Web.Models.Master;
+using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,11 @@ namespace OMNI.Web.Controllers.Base
         protected IPeralatanOSR _peralatanOSRService;
         protected ISpesifikasiJenis _spesifikasiJenisService;
         protected IDetailSpesifikasi _detailSpesifikasiService;
-        public SpesifikasiJenisBaseController(IPeralatanOSR peralatanOSRService, ISpesifikasiJenis spesifikasiJenisService, IDetailSpesifikasi detailSpesifikasiService) : base()
+
+        protected IPort _portService;
+        public SpesifikasiJenisBaseController(IPort portService, IPeralatanOSR peralatanOSRService, ISpesifikasiJenis spesifikasiJenisService, IDetailSpesifikasi detailSpesifikasiService) : base()
         {
+            _portService = portService;
             _peralatanOSRService = peralatanOSRService;
             _spesifikasiJenisService = spesifikasiJenisService;
             _detailSpesifikasiService = detailSpesifikasiService;
@@ -36,7 +40,10 @@ namespace OMNI.Web.Controllers.Base
                     SpesifikasiJenisModel temp = new SpesifikasiJenisModel();
                     temp.Id = list[i].Id;
                     temp.PeralatanOSR = list[i].PeralatanOSR.Name;
+                    temp.PortId = list[i].PortId;
                     temp.Name = list[i].Name;
+                    temp.QRCode = list[i].QRCode;
+                    temp.RekomendasiHubla = list[i].RekomendasiHubla;
                     temp.Desc = list[i].Desc;
                     data.Add(temp);
                 }
@@ -63,7 +70,10 @@ namespace OMNI.Web.Controllers.Base
                 {
                     model.Id = data.Id;
                     model.PeralatanOSR = data.PeralatanOSR.Id.ToString();
+                    model.PortId = data.PortId;
                     model.Name = data.Name;
+                    model.QRCode = data.QRCode;
+                    model.RekomendasiHubla = data.RekomendasiHubla;
                     model.Desc = data.Desc;
                 }
             }
@@ -80,7 +90,9 @@ namespace OMNI.Web.Controllers.Base
                     SpesifikasiJenis temp = _spesifikasiJenisService.Find(b => b.Id == model.Id);
                     temp.Id = model.Id;
                     temp.PeralatanOSR = _peralatanOSRService.GetById(int.Parse(model.PeralatanOSR));
-                    temp.Name = model.Name;
+                    temp.PortId = model.PortId;
+                    temp.QRCode = model.QRCode;
+                    temp.RekomendasiHubla = model.RekomendasiHubla;
                     temp.Desc = model.Desc;
                     temp.UpdatedBy = "admin";
                     temp.UpdatedAt = DateTime.Now;

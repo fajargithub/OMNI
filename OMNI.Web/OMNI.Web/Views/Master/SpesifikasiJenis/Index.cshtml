@@ -5,6 +5,8 @@
     ViewData["PageDescription"] = "Halaman pengelolaan data master Spesifikasi / Jenis Oil Spill Response";
 }
 
+@model OMNI.Web.Models.Master.SpesifikasiJenisModel
+
 <div class="row">
     <div class="col-xl-12">
         <div id="panel-1" class="panel">
@@ -16,6 +18,12 @@
                     <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="form-label" for="">Select Lokasi</label>
+                <select name="PeralatanOSR" asp-for="PortId" id="portId" class="select2-input"
+                        asp-items="@(new SelectList(ViewBag.PortList, "Id","Name"))">
+                </select>
+            </div>
             <div class="panel-container show">
                 <div class="panel-content">
                     <table id="table1" class="table table-borderless table-hover table-striped w-100">
@@ -24,6 +32,8 @@
                                 <th style="width:7%;">No</th>
                                 <th>Peralatan OSR</th>
                                 <th>Nama</th>
+                                <th>QR Code</th>
+                                <th>Rekomendasi Hubla</th>
                                 <th>Description</th>
                                 <th class="text-center" style="width:10%;">Action</th>
                             </tr>
@@ -31,6 +41,8 @@
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Peralatan OSR" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Name" /></th>
+                                <th></th>
+                                <th><input type="text" class="form-control" placeholder="RekomendasiHubla" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Desc" /></th>
                                 <th></th>
                             </tr>
@@ -47,6 +59,8 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         $(document).ready(function () {
+            $('.select2-input').select2();
+
             $(".select2-placeholder").select2(
                 {
                     placeholder: $(this).data("placeholder"),
@@ -80,7 +94,7 @@
                     responsive: true,
                     order: [],
                     columnDefs: [
-                        { "orderable": false, "targets": 4}
+                        { "orderable": false, "targets": 4 }
                     ],
                     dom:
                         "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
@@ -106,6 +120,8 @@
                         { "data": null },
                         { "data": "peralatanOSR" },
                         { "data": "name" },
+                        { "data": "qrCode" },
+                        { "data": "rekomendasiHubla" },
                         { "data": "desc" },
                         {
                             "targets": -1,

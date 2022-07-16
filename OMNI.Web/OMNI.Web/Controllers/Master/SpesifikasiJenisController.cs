@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OMNI.Utilities.Constants;
 using OMNI.Web.Controllers.Base;
 using OMNI.Web.Models.Master;
+using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
 
 namespace OMNI.Web.Controllers.Master
@@ -13,14 +14,16 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string INDEX = "~/Views/Master/SpesifikasiJenis/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/SpesifikasiJenis/AddEdit.cshtml";
 
-        public SpesifikasiJenisController(IPeralatanOSR peralatanOSRService, ISpesifikasiJenis spesifikasiJenisService, IDetailSpesifikasi detailSpesifikasiService) : base(peralatanOSRService, spesifikasiJenisService, detailSpesifikasiService)
+        public SpesifikasiJenisController(IPort portService, IPeralatanOSR peralatanOSRService, ISpesifikasiJenis spesifikasiJenisService, IDetailSpesifikasi detailSpesifikasiService) : base(portService, peralatanOSRService, spesifikasiJenisService, detailSpesifikasiService)
         {
+            _portService = portService;
             _peralatanOSRService = peralatanOSRService;
             _spesifikasiJenisService = spesifikasiJenisService;
             _detailSpesifikasiService = detailSpesifikasiService;
         }
         public IActionResult Index()
         {
+            ViewBag.PortList = _portService.GetAllWithFilter(b => b.IsDeleted == GeneralConstants.NO);
             return View(INDEX);
         }
 

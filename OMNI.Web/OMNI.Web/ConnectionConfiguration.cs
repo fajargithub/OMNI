@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OMNI.Web.Configurations;
 using OMNI.Web.Data;
 using OMNI.Utilities.Constants;
+using OMNI.Web.Data.Dao;
 
 namespace OMNI.Web
 {
@@ -20,8 +21,8 @@ namespace OMNI.Web
             services.AddDbContext<OMNIDbContext>(options
                 => options.UseSqlServer(connection + appSettings.DataBase[DbConstant.OMNIDb.ToString()]));
 
-            //services.AddDbContext<CorePTKContext>(options
-            //    => options.UseSqlServer(connection + appSettings.ConnectionStrings[DbConstant.CorePTKDb.ToString()]));
+            services.AddDbContext<CorePTKContext>(options
+                => options.UseSqlServer(connection + appSettings.ConnectionStrings[DbConstant.CorePTKDb.ToString()]));
         }
 
         public enum DbConstant
