@@ -2,12 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OMNI.Data.Services.OMNIAPI;
-using OMNI.Domain.OMNI.TestRepo;
-using OMNI.Domain.OMNI.TestRepo.Impl;
 using OMNI.Utilities.Constants;
 using OMNI.Web.Configurations;
-using Simontana.Data.Data;
+using OMNI.Web.Services.Master;
+using OMNI.Web.Services.Master.Interface;
 using System;
 
 namespace OMNI.Web.Extensions
@@ -58,13 +56,13 @@ namespace OMNI.Web.Extensions
 
         public static void ConfigureDataLayer(this IServiceCollection services)
         {
-            services.AddScoped<TestService>();
+            services.AddScoped<PeralatanOSRService>();
             //services.AddScoped<PicService>();
         }
 
         public static void ConfigureDomainLayer(this IServiceCollection services)
         {
-            services.AddScoped<ITestRepo, TestRepoImpl>();
+            services.AddScoped<IPeralatanOSR, PeralatanOSRService>();
         }
 
         public static void ConfigureSession(this IServiceCollection services)

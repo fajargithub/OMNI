@@ -15,15 +15,13 @@ namespace OMNI.Web.Controllers.Base
     {
         protected IPeralatanOSR _peralatanOSRService;
         protected ISpesifikasiJenis _spesifikasiJenisService;
-        protected IDetailSpesifikasi _detailSpesifikasiService;
 
         protected IPort _portService;
-        public SpesifikasiJenisBaseController(IPort portService, IPeralatanOSR peralatanOSRService, ISpesifikasiJenis spesifikasiJenisService, IDetailSpesifikasi detailSpesifikasiService) : base()
+        public SpesifikasiJenisBaseController(IPort portService, IPeralatanOSR peralatanOSRService, ISpesifikasiJenis spesifikasiJenisService) : base()
         {
             _portService = portService;
             _peralatanOSRService = peralatanOSRService;
             _spesifikasiJenisService = spesifikasiJenisService;
-            _detailSpesifikasiService = detailSpesifikasiService;
         }
 
         #region SPESIFIKASI JENIS REGION
@@ -89,7 +87,7 @@ namespace OMNI.Web.Controllers.Base
                 {
                     SpesifikasiJenis temp = _spesifikasiJenisService.Find(b => b.Id == model.Id);
                     temp.Id = model.Id;
-                    temp.PeralatanOSR = _peralatanOSRService.GetById(int.Parse(model.PeralatanOSR));
+                    //temp.PeralatanOSR = _peralatanOSRService.GetById(int.Parse(model.PeralatanOSR));
                     temp.PortId = model.PortId;
                     temp.QRCode = model.QRCode;
                     temp.RekomendasiHubla = model.RekomendasiHubla;
@@ -103,7 +101,7 @@ namespace OMNI.Web.Controllers.Base
                 {
                     SpesifikasiJenis temp = new SpesifikasiJenis();
                     temp.Id = model.Id;
-                    temp.PeralatanOSR = _peralatanOSRService.GetById(int.Parse(model.PeralatanOSR));
+                    //temp.PeralatanOSR = _peralatanOSRService.GetById(int.Parse(model.PeralatanOSR));
                     temp.Name = model.Name;
                     temp.Desc = model.Desc;
                     temp.CreatedBy = "admin";

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Services.Master.Interface
 {
-    public interface IPeralatanOSR : IBaseCrud<PeralatanOSR>
+    public interface IPeralatanOSR 
     {
     }
 }

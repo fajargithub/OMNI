@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OMNI.Web.Controllers.Base;
-using OMNI.Web.Models.Master;
-using OMNI.Web.Services.Master.Interface;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace OMNI.Web.Controllers.Master
 {
@@ -12,9 +12,9 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string INDEX = "~/Views/Master/PeralatanOSR/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/PeralatanOSR/AddEdit.cshtml";
 
-        public PeralatanOSRController(IPeralatanOSR peralatanOSRService) : base(peralatanOSRService)
+
+        public PeralatanOSRController(IHttpClientFactory http) : base(http)
         {
-            _peralatanOSRService = peralatanOSRService;
         }
         public IActionResult Index()
         {
@@ -22,28 +22,28 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpGet]
-        public JsonResult GetAllPeralatan()
+        public Task<JsonResult> GetAllPeralatan()
         {
             return GetAll();
         }
 
-        [HttpGet]
-        public IActionResult AddEdit(int id)
-        {
-            PeralatanOSRModel model = GetDataById(id);
-            return PartialView(ADD_EDIT, model);
-        }
+        //[HttpGet]
+        //public IActionResult AddEdit(int id)
+        //{
+        //    PeralatanOSRModel model = GetDataById(id);
+        //    return PartialView(ADD_EDIT, model);
+        //}
 
-        [HttpPost]
-        public JsonResult AddEdit(PeralatanOSRModel model)
-        {
-            return AddEditFunction(model);
-        }
+        //[HttpPost]
+        //public JsonResult AddEdit(PeralatanOSRModel model)
+        //{
+        //    return AddEditFunction(model);
+        //}
 
-        [HttpPost]
-        public IActionResult DeletePeralatanOSR(int id)
-        {
-            return DeleteFunction(id);
-        }
+        //[HttpPost]
+        //public IActionResult DeletePeralatanOSR(int id)
+        //{
+        //    return DeleteFunction(id);
+        //}
     }
 }

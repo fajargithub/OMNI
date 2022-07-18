@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Models.Master
 {
-    public class LatihanTrx : BaseModel
+    public class LatihanTrxModel : BaseModel
     {
         public string Latihan { get; set; }
-        public string Port { get; set; }
+        public int PortId { get; set; }
         public string Satuan { get; set; }
-        public DateTime TanggalPelaksana { get; set; }
+        public string TanggalPelaksana { get; set; }
         public float SelisihHubla { get; set; }
         public string KesesuaianPM58 { get; set; }
-        public float PersentaseLatihan { get; set; }
+        public float PersentasiLatihan { get; set; }
     }
 }

@@ -14,12 +14,11 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string INDEX = "~/Views/Master/SpesifikasiJenis/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/SpesifikasiJenis/AddEdit.cshtml";
 
-        public SpesifikasiJenisController(IPort portService, IPeralatanOSR peralatanOSRService, ISpesifikasiJenis spesifikasiJenisService, IDetailSpesifikasi detailSpesifikasiService) : base(portService, peralatanOSRService, spesifikasiJenisService, detailSpesifikasiService)
+        public SpesifikasiJenisController(IPort portService, IPeralatanOSR peralatanOSRService, ISpesifikasiJenis spesifikasiJenisService) : base(portService, peralatanOSRService, spesifikasiJenisService)
         {
             _portService = portService;
             _peralatanOSRService = peralatanOSRService;
             _spesifikasiJenisService = spesifikasiJenisService;
-            _detailSpesifikasiService = detailSpesifikasiService;
         }
         public IActionResult Index()
         {
@@ -36,7 +35,7 @@ namespace OMNI.Web.Controllers.Master
         [HttpGet]
         public IActionResult AddEdit(int id)
         {
-            ViewBag.PeralatanOSRList = _peralatanOSRService.GetAllWithFilter(b => b.IsDeleted == GeneralConstants.NO);
+            //ViewBag.PeralatanOSRList = _peralatanOSRService.GetAllWithFilter(b => b.IsDeleted == GeneralConstants.NO);
             SpesifikasiJenisModel model = GetSpesifikasiJenisById(id);
             return PartialView(ADD_EDIT, model);
         }

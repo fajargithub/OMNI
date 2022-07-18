@@ -1,11 +1,11 @@
-﻿using System;
+﻿using OMNI.Data.ViewModel;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace OMNI.Web.Models.Master
+namespace OMNI.Data.Model.OMNI
 {
-    public class LLPModel : BaseModel
+    public class LLPTrxModel : BaseModel
     {
         public string Port { get; set; }
         public string SpesifikasiJenis { get; set; }

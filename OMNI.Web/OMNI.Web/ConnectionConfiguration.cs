@@ -18,11 +18,11 @@ namespace OMNI.Web
             //services.AddDbContext<ApplicationDbContext>(options
             //    => options.UseSqlServer(connection + appSettings.DataBase[DbConstant.AppUserDb.ToString()]));
 
-            services.AddDbContext<OMNIDbContext>(options
-                => options.UseSqlServer(connection + appSettings.DataBase[DbConstant.OMNIDb.ToString()]));
+            //services.AddDbContext<OMNIDbContext>(options
+            //    => options.UseSqlServer(connection + appSettings.DataBase[DbConstant.OMNIDb.ToString()]));
 
-            services.AddDbContext<CorePTKContext>(options
-                => options.UseSqlServer(connection + appSettings.ConnectionStrings[DbConstant.CorePTKDb.ToString()]));
+            //services.AddDbContext<CorePTKContext>(options
+            //    => options.UseSqlServer(connection + appSettings.ConnectionStrings[DbConstant.CorePTKDb.ToString()]));
         }
 
         public enum DbConstant

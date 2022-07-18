@@ -29,4 +29,8 @@
     <ProjectReference Include="..\OMNI.Utilities\OMNI.Utilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\CorePTK\" />
+  </ItemGroup>
+
 </Project>

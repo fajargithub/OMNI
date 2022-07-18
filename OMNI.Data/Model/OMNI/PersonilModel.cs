@@ -1,12 +1,11 @@
-﻿using OMNI.Utilities.Base;
+﻿using OMNI.Data.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace OMNI.Web.Data.Dao
+namespace OMNI.Data.Model.OMNI
 {
-    public class Personil : BaseDao
+    public class PersonilModel : BaseModel
     {
         public int PortId { get; set; }
         public string Name { get; set; }

@@ -15,7 +15,7 @@ namespace OMNI.Web.Data.Dao
         public float TotalDetailExisting { get; set; }
         public DateTime TanggalPelatihan { get; set; }
         public DateTime TanggalExpired { get; set; }
-        public int SisaMasaBerlaku { get; set; }
+        public int SisaMasaBerlaki { get; set; }
         public float SelisihHubla { get; set; }
         public string KesesuaianPM58 { get; set; }
         public float PersentasePersonil { get; set; }

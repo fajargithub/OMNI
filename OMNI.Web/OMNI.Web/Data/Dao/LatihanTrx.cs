@@ -11,7 +11,7 @@ namespace OMNI.Web.Data.Dao
         public virtual Latihan Latihan { get; set; }
         public int PortId { get; set; }
         public string Satuan { get; set; }
-        public DateTime TanggalPelaksana { get; set; }
+        public DateTime TanggalPelaksanaan { get; set; }
         public float SelisihHubla { get; set; }
         public string KesesuaianPM58 { get; set; }
         public float PersentaseLatihan { get; set; }
