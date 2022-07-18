@@ -14,8 +14,9 @@ using System.Threading.Tasks;
 
 namespace OMNI.API.Controllers.OMNI
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Produces("application/json")]
     public class PeralatanOSRController : ControllerBase
     {
         private readonly OMNIDbContext _dbOMNI;
@@ -34,7 +35,7 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
         {
             var result = await _dbOMNI.PeralatanOSR.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).FirstOrDefaultAsync(cancellationToken);
@@ -44,46 +45,42 @@ namespace OMNI.API.Controllers.OMNI
         [HttpPost]
         public async Task<IActionResult> AddEdit(PeralatanOSRModel model, CancellationToken cancellationToken)
         {
-            try
+            PeralatanOSR data = new PeralatanOSR();
+            if (model.Id > 0)
             {
-                PeralatanOSR data = new PeralatanOSR();
-                if(model.Id > 0)
-                {
-                    data = await _dbOMNI.PeralatanOSR.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
-                    data.Name = model.Name;
-                    data.Desc = model.Desc;
-                    data.UpdatedAt = DateTime.Now;
-                    data.UpdatedBy = "admin";
-                    _dbOMNI.PeralatanOSR.Update(data);
-                    await _dbOMNI.SaveChangesAsync(cancellationToken);
-                } else
-                {
-                    data.Name = model.Name;
-                    data.Desc = model.Desc;
-                    data.CreatedAt = DateTime.Now;
-                    data.UpdatedBy = "admin";
-                    await _dbOMNI.PeralatanOSR.AddAsync(data, cancellationToken);
-                    await _dbOMNI.SaveChangesAsync(cancellationToken);
-                }
+                data = await _dbOMNI.PeralatanOSR.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
+                data.Name = model.Name;
+                data.Desc = model.Desc;
+                data.UpdatedAt = DateTime.Now;
+                data.UpdatedBy = "admin";
+                _dbOMNI.PeralatanOSR.Update(data);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                data.Name = model.Name;
+                data.Desc = model.Desc;
+                data.CreatedAt = DateTime.Now;
+                data.UpdatedBy = "admin";
+                await _dbOMNI.PeralatanOSR.AddAsync(data, cancellationToken);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
 
-                return Ok(new ReturnJson { Payload = data });
-            }
-            catch (DomainLayerException e)
-            {
-                //await SaveAppLog(GetCurrentMethod(), model.Name, GeneralConstants.FAILED, cancellationToken, errorMessage: e.InnerException?.Message ?? e.Message, info: "API");
-                return StatusCode(500, new ReturnJson { ErrorMsg = e.Message, Code = 500, IsSuccess = false });
-            }
-            catch (Exception e)
-            {
-                //await SaveAppLog(GetCurrentMethod(), model.Name, GeneralConstants.FAILED, cancellationToken, errorMessage: e.InnerException?.Message ?? e.Message, info: "API");
-                throw;
-            }
+            return Ok(new ReturnJson { Payload = data });
         }
 
         // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<PeralatanOSR> Delete([FromRoute] int id, CancellationToken cancellationToken)
         {
+            PeralatanOSR data = await _dbOMNI.PeralatanOSR.Where(b => b.Id == id).FirstOrDefaultAsync(cancellationToken);
+            data.IsDeleted = GeneralConstants.YES;
+            data.UpdatedBy = "admin";
+            data.UpdatedAt = DateTime.Now;
+            _dbOMNI.PeralatanOSR.Update(data);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+            return data;
         }
     }
 }
