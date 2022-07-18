@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OMNI.Web.Controllers.Base;
+using OMNI.Web.Models.Master;
+using OMNI.Web.Services.Master.Interface;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -13,8 +15,9 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/PeralatanOSR/AddEdit.cshtml";
 
 
-        public PeralatanOSRController(IHttpClientFactory http) : base(http)
+        public PeralatanOSRController(IPeralatanOSR peralatanOSRService) : base(peralatanOSRService)
         {
+            _peralatanOSRService = peralatanOSRService;
         }
         public IActionResult Index()
         {
@@ -27,23 +30,23 @@ namespace OMNI.Web.Controllers.Master
             return GetAll();
         }
 
-        //[HttpGet]
-        //public IActionResult AddEdit(int id)
-        //{
-        //    PeralatanOSRModel model = GetDataById(id);
-        //    return PartialView(ADD_EDIT, model);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> AddEdit(int id)
+        {
+            PeralatanOSRModel model = await GetDataById(id);
+            return PartialView(ADD_EDIT, model);
+        }
 
-        //[HttpPost]
-        //public JsonResult AddEdit(PeralatanOSRModel model)
-        //{
-        //    return AddEditFunction(model);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AddEdit(PeralatanOSRModel model)
+        {
+            return await AddEditFunction(model);
+        }
 
-        //[HttpPost]
-        //public IActionResult DeletePeralatanOSR(int id)
-        //{
-        //    return DeleteFunction(id);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> DeletePeralatanOSR(int id)
+        {
+            return await DeleteFunction(id);
+        }
     }
 }
