@@ -11,7 +11,7 @@ namespace OMNI.Web.Services.Master.Interface
 {
     public interface IPeralatanOSR 
     {
-        public Task<List<PeralatanOSR>> GetAllFromHttp();
+        public Task<List<PeralatanOSR>> GetAll();
         public Task<PeralatanOSR> GetById(int id);
         public Task<BaseJson<PeralatanOSRModel>> AddEdit(PeralatanOSRModel model);
 

@@ -18,8 +18,6 @@ namespace OMNI.Web.Data.Dao.CorePTK
         public string Longitude { get; set; }
         public string Pilotage { get; set; }
         public string RegionTime { get; set; }
-        public TimeSpan? OpenTime { get; set; }
-        public TimeSpan? CloseTime { get; set; }
         public string Location { get; set; }
         public string Status { get; set; }
     }

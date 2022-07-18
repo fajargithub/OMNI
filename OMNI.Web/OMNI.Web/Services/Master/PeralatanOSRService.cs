@@ -21,7 +21,7 @@ namespace OMNI.Web.Services.Master
             _httpClient = httpClient;
         }
 
-        public async Task<List<PeralatanOSR>> GetAllFromHttp()
+        public async Task<List<PeralatanOSR>> GetAll()
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
             var result = await client.GetAsync("/Api/PeralatanOSR");

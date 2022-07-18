@@ -31,7 +31,7 @@ namespace OMNI.Web.Extensions
                 var appSettings = configuration.Get<AppSettings>();
                 o.BaseAddress =
                     appSettings.IsLocalDevelopment ? new Uri(appSettings.BaseURL["Local"]) :
-                    appSettings.IsProduction ? new Uri(appSettings.BaseURL["OMNIProd"]) : new Uri(appSettings.BaseURL["OMNISIT"]);
+                    appSettings.IsProduction ? new Uri(appSettings.BaseURL["Production"]) : new Uri(appSettings.BaseURL["SIT"]);
 
                 o.DefaultRequestHeaders.Add("Authorization", $"{jwt.Value}");
             });

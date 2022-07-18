@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OMNI.Utilities.Constants;
 using OMNI.Web.Configurations;
+using OMNI.Web.Services.CorePTK;
+using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master;
 using OMNI.Web.Services.Master.Interface;
 using System;
@@ -56,13 +58,19 @@ namespace OMNI.Web.Extensions
 
         public static void ConfigureDataLayer(this IServiceCollection services)
         {
+            services.AddScoped<PortService>();
+
             services.AddScoped<PeralatanOSRService>();
+            services.AddScoped<SpesifikasiJenisService>();
             //services.AddScoped<PicService>();
         }
 
         public static void ConfigureDomainLayer(this IServiceCollection services)
         {
+            services.AddScoped<IPort, PortService>();
+
             services.AddScoped<IPeralatanOSR, PeralatanOSRService>();
+            services.AddScoped<ISpesifikasiJenis, SpesifikasiJenisService>();
         }
 
         public static void ConfigureSession(this IServiceCollection services)
