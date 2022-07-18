@@ -1,17 +1,17 @@
-﻿using OMNI.Utilities.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OMNI.Data.Data.Dao
+namespace OMNI.API.Model.OMNI
 {
-    public class DetailSpesifikasi : BaseDao
+    public class SpesifikasiJenisModel : BaseModel
     {
-        public virtual SpesifikasiJenis SpesifikasiJenis { get; set; }
+        public string PeralatanOSR { get; set; }
         public int PortId { get; set; }
         public string Name { get; set; }
         public string QRCode { get; set; }
         public float RekomendasiHubla { get; set; }
+        public string Desc { get; set; }
     }
 }

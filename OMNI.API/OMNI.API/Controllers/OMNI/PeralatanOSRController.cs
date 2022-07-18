@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OMNI.Data.Data;
+using OMNI.Data.Data.Dao;
 using OMNI.Utilities.Constants;
 using System;
 using System.Collections.Generic;
@@ -8,34 +9,33 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace OMNI.API.Controllers
+namespace OMNI.API.Controllers.OMNI
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TestController : ControllerBase
+    public class PeralatanOSRController : ControllerBase
     {
-        private readonly CorePTKContext _dbCore;
+        private readonly OMNIDbContext _dbOMNI;
 
-        public TestController(CorePTKContext dbCore)
+        public PeralatanOSRController(OMNIDbContext dbOMNI)
         {
-            _dbCore = dbCore;
+            _dbOMNI = dbOMNI;
         }
 
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<IActionResult> Get(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var result = await _dbCore.Port.Where(b => b.IsDeleted == GeneralConstants.NO).Select(b => b.Name).ToListAsync(cancellationToken);
+            var result = await _dbOMNI.PeralatanOSR.Where(b => b.IsDeleted == GeneralConstants.NO).ToListAsync(cancellationToken);
             return Ok(result);
         }
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
         {
-            return "value";
+            var result = await _dbOMNI.PeralatanOSR.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).FirstOrDefaultAsync(cancellationToken);
+            return Ok(result);
         }
 
         // POST api/<ValuesController>

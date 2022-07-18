@@ -9,5 +9,9 @@
     <ProjectReference Include="..\..\OMNI.Utility\OMNI.Utilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\CorePTK\" />
+  </ItemGroup>
+
 
 </Project>

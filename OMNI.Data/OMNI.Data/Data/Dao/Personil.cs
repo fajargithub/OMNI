@@ -8,7 +8,9 @@ namespace OMNI.Data.Data.Dao
 {
     public class Personil : BaseDao
     {
+        public int PortId { get; set; }
         public string Name { get; set; }
         public string Desc { get; set; }
+        public float Value { get; set; }
     }
 }

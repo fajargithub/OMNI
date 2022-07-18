@@ -1,15 +1,15 @@
-﻿using OMNI.Utilities.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OMNI.Data.Data.Dao
+namespace OMNI.API.Model.OMNI
 {
-    public class DetailPersonil : BaseDao
+    public class PersonilModel : BaseModel
     {
-        public virtual Personil Personil { get; set; }
         public int PortId { get; set; }
+        public string Name { get; set; }
+        public string Desc { get; set; }
         public float Value { get; set; }
     }
 }
