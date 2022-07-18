@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OMNI.API.Model.OMNI;
 using OMNI.Data.Data;
 using OMNI.Data.Data.Dao;
+using OMNI.Domain.AppLogRepo;
 using OMNI.Utilities.Base;
 using OMNI.Utilities.Constants;
 using System;
@@ -19,14 +20,14 @@ namespace OMNI.API.Controllers.OMNI
     {
         private readonly OMNIDbContext _dbOMNI;
 
-        public PeralatanOSRController(OMNIDbContext dbOMNI)
+        public PeralatanOSRController(OMNIDbContext dbOMNI) 
         {
             _dbOMNI = dbOMNI;
         }
 
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
             var result = await _dbOMNI.PeralatanOSR.Where(b => b.IsDeleted == GeneralConstants.NO).ToListAsync(cancellationToken);
             return Ok(result);
@@ -41,7 +42,7 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PeralatanOSRModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddEdit(PeralatanOSRModel model, CancellationToken cancellationToken)
         {
             try
             {
@@ -52,7 +53,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.Name = model.Name;
                     data.Desc = model.Desc;
                     data.UpdatedAt = DateTime.Now;
-                    data.UpdatedBy = model.CreatedBy;
+                    data.UpdatedBy = "admin";
                     _dbOMNI.PeralatanOSR.Update(data);
                     await _dbOMNI.SaveChangesAsync(cancellationToken);
                 } else
@@ -60,22 +61,21 @@ namespace OMNI.API.Controllers.OMNI
                     data.Name = model.Name;
                     data.Desc = model.Desc;
                     data.CreatedAt = DateTime.Now;
-                    data.UpdatedBy = model.CreatedBy;
+                    data.UpdatedBy = "admin";
                     await _dbOMNI.PeralatanOSR.AddAsync(data, cancellationToken);
                     await _dbOMNI.SaveChangesAsync(cancellationToken);
                 }
 
-                //result = await _areaRepo.Add(result, GetUserName(), cancellationToken);
                 return Ok(new ReturnJson { Payload = data });
             }
             catch (DomainLayerException e)
             {
-                //await SaveAppLog(GetCurrentMethod(), vm.Name, GeneralConstant.FAILED, cancellationToken, errorMessage: e.InnerException?.Message ?? e.Message, info: "API");
+                //await SaveAppLog(GetCurrentMethod(), model.Name, GeneralConstants.FAILED, cancellationToken, errorMessage: e.InnerException?.Message ?? e.Message, info: "API");
                 return StatusCode(500, new ReturnJson { ErrorMsg = e.Message, Code = 500, IsSuccess = false });
             }
             catch (Exception e)
             {
-                //await SaveAppLog(GetCurrentMethod(), vm.Name, GeneralConstant.FAILED, cancellationToken, errorMessage: e.InnerException?.Message ?? e.Message, info: "API");
+                //await SaveAppLog(GetCurrentMethod(), model.Name, GeneralConstants.FAILED, cancellationToken, errorMessage: e.InnerException?.Message ?? e.Message, info: "API");
                 throw;
             }
         }

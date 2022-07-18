@@ -28,6 +28,8 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\OMNIDbMigrations\" />
+    <Folder Include="Model\CorePTK\" />
+    <Folder Include="Model\OMNI\" />
   </ItemGroup>
 
 

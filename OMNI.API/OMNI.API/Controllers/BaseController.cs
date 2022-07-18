@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,20 +28,20 @@ namespace OMNI.API.Controllers
         protected string GetCurrentMethod([CallerMemberName] string methodName = "")
             => methodName.ToUpper();
 
-        //protected async Task SaveAppLog(string methodName, string trxId, string status, CancellationToken cancellationToken, string remark = null, string errorMessage = null, string info = null)
-        //    => await _appLog.SaveAppLog(
-        //        controllerName: ControllerContext.RouteData.Values["controller"].ToString().ToUpper(),
-        //        methodName: methodName,
-        //        userName: User?.Identity?.Name ?? null,
-        //        trxId: trxId,
-        //        status: status,
-        //        cancellationToken: cancellationToken,
-        //        remark: remark,
-        //        errorMessage: errorMessage,
-        //        info: info);
+        protected async Task SaveAppLog(string methodName, string trxId, string status, CancellationToken cancellationToken, string remark = null, string errorMessage = null, string info = null)
+            => await _appLog.SaveAppLog(
+                controllerName: ControllerContext.RouteData.Values["controller"].ToString().ToUpper(),
+                methodName: methodName,
+                userName: User?.Identity?.Name ?? null,
+                trxId: trxId,
+                status: status,
+                cancellationToken: cancellationToken,
+                remark: remark,
+                errorMessage: errorMessage,
+                info: info);
 
-        //protected string GetUserName() => User.Claims.FirstOrDefault(b => b.Type == ClaimTypes.Name).Value;
-        //protected string GetEmail() => User.Claims.FirstOrDefault(b => b.Type == ClaimTypes.Email).Value;
+        protected string GetUserName() => User.Claims.FirstOrDefault(b => b.Type == ClaimTypes.Name).Value;
+        protected string GetEmail() => User.Claims.FirstOrDefault(b => b.Type == ClaimTypes.Email).Value;
 
     }
 }
