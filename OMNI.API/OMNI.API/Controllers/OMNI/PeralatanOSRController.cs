@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OMNI.API.Model.OMNI;
 using OMNI.Data.Data;
 using OMNI.Data.Data.Dao;
+using OMNI.Utilities.Base;
 using OMNI.Utilities.Constants;
 using System;
 using System.Collections.Generic;
@@ -38,16 +40,44 @@ namespace OMNI.API.Controllers.OMNI
             return Ok(result);
         }
 
-        // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Create(PeralatanOSRModel model, CancellationToken cancellationToken)
         {
-        }
+            try
+            {
+                PeralatanOSR data = new PeralatanOSR();
+                if(model.Id > 0)
+                {
+                    data = await _dbOMNI.PeralatanOSR.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
+                    data.Name = model.Name;
+                    data.Desc = model.Desc;
+                    data.UpdatedAt = DateTime.Now;
+                    data.UpdatedBy = model.CreatedBy;
+                    _dbOMNI.PeralatanOSR.Update(data);
+                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+                } else
+                {
+                    data.Name = model.Name;
+                    data.Desc = model.Desc;
+                    data.CreatedAt = DateTime.Now;
+                    data.UpdatedBy = model.CreatedBy;
+                    await _dbOMNI.PeralatanOSR.AddAsync(data, cancellationToken);
+                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+                }
 
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+                //result = await _areaRepo.Add(result, GetUserName(), cancellationToken);
+                return Ok(new ReturnJson { Payload = data });
+            }
+            catch (DomainLayerException e)
+            {
+                //await SaveAppLog(GetCurrentMethod(), vm.Name, GeneralConstant.FAILED, cancellationToken, errorMessage: e.InnerException?.Message ?? e.Message, info: "API");
+                return StatusCode(500, new ReturnJson { ErrorMsg = e.Message, Code = 500, IsSuccess = false });
+            }
+            catch (Exception e)
+            {
+                //await SaveAppLog(GetCurrentMethod(), vm.Name, GeneralConstant.FAILED, cancellationToken, errorMessage: e.InnerException?.Message ?? e.Message, info: "API");
+                throw;
+            }
         }
 
         // DELETE api/<ValuesController>/5

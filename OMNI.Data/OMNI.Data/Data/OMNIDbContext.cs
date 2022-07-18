@@ -24,5 +24,6 @@ namespace OMNI.Data.Data
         public DbSet<Personil> Personil { get; set; }
         public DbSet<PersonilTrx> PersonilTrx { get; set; }
         public DbSet<LLPTrx> LLPTrx { get; set; }
+        public DbSet<OMNIActivityLog> OMNIActivityLog { get; set; }
     }
 }
