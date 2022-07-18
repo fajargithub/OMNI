@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OMNI.Data\OMNI.Data\OMNI.Data.csproj" />
+    <ProjectReference Include="..\OMNI.Data\OMNI.Data\OMNI.Migrations.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,11 +15,11 @@ namespace OMNI.API.Controllers.OMNI
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class PeralatanOSRController : ControllerBase
+    public class SpesifikasiJenisController : ControllerBase
     {
         private readonly OMNIDbContext _dbOMNI;
 
-        public PeralatanOSRController(OMNIDbContext dbOMNI) 
+        public SpesifikasiJenisController(OMNIDbContext dbOMNI)
         {
             _dbOMNI = dbOMNI;
         }
@@ -28,7 +28,7 @@ namespace OMNI.API.Controllers.OMNI
         [HttpGet]
         public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.PeralatanOSR.Where(b => b.IsDeleted == GeneralConstants.NO).ToListAsync(cancellationToken);
+            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO).ToListAsync(cancellationToken);
             return Ok(result);
         }
 
@@ -36,22 +36,22 @@ namespace OMNI.API.Controllers.OMNI
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.PeralatanOSR.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).FirstOrDefaultAsync(cancellationToken);
+            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).FirstOrDefaultAsync(cancellationToken);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEdit(PeralatanOSRModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddEdit(SpesifikasiJenisModel model, CancellationToken cancellationToken)
         {
-            PeralatanOSR data = new PeralatanOSR();
+            SpesifikasiJenis data = new SpesifikasiJenis();
             if (model.Id > 0)
             {
-                data = await _dbOMNI.PeralatanOSR.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
+                data = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
                 data.Name = model.Name;
                 data.Desc = model.Desc;
                 data.UpdatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
-                _dbOMNI.PeralatanOSR.Update(data);
+                _dbOMNI.SpesifikasiJenis.Update(data);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
             }
             else
@@ -60,7 +60,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.Desc = model.Desc;
                 data.CreatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
-                await _dbOMNI.PeralatanOSR.AddAsync(data, cancellationToken);
+                await _dbOMNI.SpesifikasiJenis.AddAsync(data, cancellationToken);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
             }
 
@@ -69,13 +69,13 @@ namespace OMNI.API.Controllers.OMNI
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id:int}")]
-        public async Task<PeralatanOSR> Delete([FromRoute] int id, CancellationToken cancellationToken)
+        public async Task<SpesifikasiJenis> Delete([FromRoute] int id, CancellationToken cancellationToken)
         {
-            PeralatanOSR data = await _dbOMNI.PeralatanOSR.Where(b => b.Id == id).FirstOrDefaultAsync(cancellationToken);
+            SpesifikasiJenis data = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == id).FirstOrDefaultAsync(cancellationToken);
             data.IsDeleted = GeneralConstants.YES;
             data.UpdatedBy = "admin";
             data.UpdatedAt = DateTime.Now;
-            _dbOMNI.PeralatanOSR.Update(data);
+            _dbOMNI.SpesifikasiJenis.Update(data);
             await _dbOMNI.SaveChangesAsync(cancellationToken);
 
             return data;
