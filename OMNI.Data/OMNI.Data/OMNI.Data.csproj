@@ -26,5 +26,9 @@
     <ProjectReference Include="..\..\OMNI.Utility\OMNI.Utilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\OMNIDbMigrations\" />
+  </ItemGroup>
+
 
 </Project>

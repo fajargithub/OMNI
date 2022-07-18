@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OMNI.Data.Data
 {
-    public class OMNIDbContext : IdentityDbContext<IdentityUser>
+    public class OMNIDbContext : DbContext
     {
         public OMNIDbContext(DbContextOptions<OMNIDbContext> options) : base(options)
         {
