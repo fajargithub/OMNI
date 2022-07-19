@@ -10,7 +10,7 @@ namespace OMNI.Data.Data.Dao
     {
         public string Name { get; set; }
         public int PortId { get; set; }
-        public float Value { get; set; }
+        public string Satuan { get; set; }
         public string Desc { get; set; }
     }
 }
