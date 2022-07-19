@@ -8,7 +8,7 @@ namespace OMNI.Web.Models.Master
     public class SpesifikasiJenisModel : BaseModel
     {
         public string PeralatanOSR { get; set; }
-        public int PortId { get; set; }
+        public string Port { get; set; }
         public string Name { get; set; }
         public string QRCode { get; set; }
         public float RekomendasiHubla { get; set; }

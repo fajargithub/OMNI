@@ -29,7 +29,23 @@ namespace OMNI.Web.Controllers.Master
 
         public async Task<JsonResult> GetAll()
         {
-            List<SpesifikasiJenis> data = await _spesifikasiJenisService.GetAll();
+            List<SpesifikasiJenisModel> data = new List<SpesifikasiJenisModel>();
+            List<SpesifikasiJenis> list = await _spesifikasiJenisService.GetAll();
+
+            if(list.Count() > 0)
+            {
+                for(int i=0; i < list.Count(); i++)
+                {
+                    SpesifikasiJenisModel temp = new SpesifikasiJenisModel();
+                    temp.Id = list[i].Id;
+                    temp.Name = list[i].Name;
+                    temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
+                    temp.QRCode = list[i].QRCode;
+                    temp.RekomendasiHubla = list[i].RekomendasiHubla;
+                    temp.Desc = list[i].Desc;
+                    data.Add(temp);
+                }
+            }
 
             int count = data.Count();
 
@@ -49,12 +65,6 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpGet]
-        public Task<JsonResult> GetAllSpesifikasiJenis()
-        {
-            return GetAll();
-        }
-
-        [HttpGet]
         public async Task<IActionResult> AddEdit(int id)
         {
             SpesifikasiJenisModel model = new SpesifikasiJenisModel();
@@ -64,6 +74,9 @@ namespace OMNI.Web.Controllers.Master
                 if (data != null)
                 {
                     model.Id = data.Id;
+                    model.Port = data.PortId.ToString();
+                    model.QRCode = data.QRCode;
+                    model.RekomendasiHubla = data.RekomendasiHubla;
                     model.Name = data.Name;
                     model.Desc = data.Desc;
                 }
