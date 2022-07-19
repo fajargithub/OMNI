@@ -25,10 +25,10 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         // GET: api/<ValuesController>
-        [HttpGet]
-        public async Task<IActionResult> Get(CancellationToken cancellationToken)
+        [HttpGet("GetAllByPortId")]
+        public async Task<IActionResult> GetAllByPortId(int id, CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO).Include(b => b.PeralatanOSR).ToListAsync(cancellationToken);
+            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.PortId == id).Include(b => b.PeralatanOSR).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
             return Ok(result);
         }
 
@@ -47,10 +47,13 @@ namespace OMNI.API.Controllers.OMNI
             if (model.Id > 0)
             {
                 data = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).Include(b => b.PeralatanOSR).FirstOrDefaultAsync(cancellationToken);
-                data.PeralatanOSR = (PeralatanOSR)_dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR));
+                data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
                 data.Name = model.Name;
                 data.PortId = int.Parse(model.Port);
-                data.QRCode = model.QRCode;
+                if (!string.IsNullOrEmpty(model.QRCode))
+                {
+                    data.QRCode = model.QRCode;
+                }
                 data.RekomendasiHubla = model.RekomendasiHubla;
                 data.Desc = model.Desc;
                 data.UpdatedAt = DateTime.Now;
@@ -60,10 +63,13 @@ namespace OMNI.API.Controllers.OMNI
             }
             else
             {
-                data.PeralatanOSR = (PeralatanOSR)_dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR));
+                data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
                 data.Name = model.Name;
                 data.PortId = int.Parse(model.Port);
-                data.QRCode = model.QRCode;
+                if (!string.IsNullOrEmpty(model.QRCode))
+                {
+                    data.QRCode = model.QRCode;
+                }
                 data.RekomendasiHubla = model.RekomendasiHubla;
                 data.Desc = model.Desc;
                 data.CreatedAt = DateTime.Now;
@@ -72,7 +78,7 @@ namespace OMNI.API.Controllers.OMNI
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
             }
 
-            return Ok(new ReturnJson { Payload = data });
+            return Ok(new ReturnJson { });
         }
 
         // DELETE api/<ValuesController>/5

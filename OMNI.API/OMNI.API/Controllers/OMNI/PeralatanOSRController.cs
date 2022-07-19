@@ -28,7 +28,7 @@ namespace OMNI.API.Controllers.OMNI
         [HttpGet]
         public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.PeralatanOSR.Where(b => b.IsDeleted == GeneralConstants.NO).ToListAsync(cancellationToken);
+            var result = await _dbOMNI.PeralatanOSR.Where(b => b.IsDeleted == GeneralConstants.NO).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
             return Ok(result);
         }
 
