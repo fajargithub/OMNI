@@ -1,59 +1,118 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OMNI.Utilities.Constants;
+using OMNI.Web.Data.Dao;
+using OMNI.Web.Data.Dao.CorePTK;
+using OMNI.Web.Models;
+using OMNI.Web.Models.Master;
+using OMNI.Web.Services.CorePTK.Interface;
+using OMNI.Web.Services.Master.Interface;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
-    public class PersonilController : BaseController
+    public class PersonilController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/Master/Personil/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/Personil/AddEdit.cshtml";
 
-        private static readonly string DETAIL_INDEX = "~/Views/Master/Personil/DetailIndex.cshtml";
-        private static readonly string DETAIL_ADD_EDIT = "~/Views/Master/Personil/AddEditDetail.cshtml";
-
-        public IActionResult Index()
+        protected IPersonil _PersonilService;
+        public PersonilController(IPersonil PersonilService, IPort portService, IPeralatanOSR peralatanOSRService) : base(portService, peralatanOSRService)
         {
+            _PersonilService = PersonilService;
+        }
+
+        public async Task<JsonResult> GetAll(int portId)
+        {
+            List<PersonilModel> data = new List<PersonilModel>();
+            List<Personil> list = await _PersonilService.GetAllByPortId(portId);
+
+            if (list.Count() > 0)
+            {
+                for (int i = 0; i < list.Count(); i++)
+                {
+                    PersonilModel temp = new PersonilModel();
+                    temp.Id = list[i].Id;
+                    temp.Name = list[i].Name;
+                    temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
+                    temp.Satuan = list[i].Satuan;
+                    temp.Desc = list[i].Desc;
+                    data.Add(temp);
+                }
+            }
+
+            int count = data.Count();
+
+            return Json(new
+            {
+                success = true,
+                recordsTotal = count,
+                recordsFiltered = count,
+                data
+            });
+        }
+
+        public async Task<IActionResult> Index(int? portId)
+        {
+            List<Port> portList = await GetAllPort();
+            ViewBag.PortList = portList;
+
+            if (portId.HasValue)
+            {
+                ViewBag.SelectedPort = portList.Where(b => b.Id == portId).FirstOrDefault();
+            }
+            else
+            {
+                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+            }
+
             return View(INDEX);
         }
 
-        [HttpPost("List")]
-        public IActionResult GetAllAccount()
+        [HttpGet]
+        public async Task<IActionResult> AddEdit(int id, int portId)
         {
-            return Ok();
+            PersonilModel model = new PersonilModel();
+            model.Port = portId.ToString();
+
+            if (id > 0)
+            {
+                Personil data = await _PersonilService.GetById(id);
+                if (data != null)
+                {
+                    model.Id = data.Id;
+                    model.Name = data.Name;
+                    model.Satuan = data.Satuan;
+                    model.Desc = data.Desc;
+                }
+            }
+
+            return PartialView(ADD_EDIT, model);
         }
 
-        [HttpGet("ManagePersonil")]
-        [HttpGet("ManagePersonil/{id:int}")]
-        public IActionResult AddEdit(int id)
+        [HttpPost]
+        public async Task<IActionResult> AddEdit(PersonilModel model)
         {
-            return PartialView(ADD_EDIT);
+            var r = await _PersonilService.AddEdit(model);
+
+            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
+            {
+                return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            }
+
+            return Ok(new JsonResponse());
         }
 
-        [HttpPost("ManagePersonil")]
-        [HttpPost("ManagePersonil/{id:int}")]
-        public IActionResult AddEdit([FromBody] object account, [FromRoute] int id)
+        [HttpPost]
+        public async Task<IActionResult> DeletePersonil(int id)
         {
-            return Ok();
-        }
+            var r = await _PersonilService.Delete(id);
 
-        public IActionResult DetailIndex()
-        {
-            return View(DETAIL_INDEX);
-        }
-
-        [HttpGet("ManageDetailPersonil")]
-        [HttpGet("ManageDetailPersonil/{id:int}")]
-        public IActionResult DetailAddEdit(int id)
-        {
-            return PartialView(DETAIL_ADD_EDIT);
-        }
-
-        [HttpPost("ManageDetailPersonil")]
-        [HttpPost("ManageDetailPersonil/{id:int}")]
-        public IActionResult DetailAddEdit([FromBody] object account, [FromRoute] int id)
-        {
-            return Ok();
+            return Ok(new JsonResponse());
         }
     }
 }

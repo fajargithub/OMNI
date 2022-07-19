@@ -11,7 +11,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label class="form-label" for="">Select Lokasi</label>
-            <select name="PeralatanOSR" asp-for="Port" id="port" class="select2-input"
+            <select asp-for="Port" id="port" class="select2-input"
                     asp-items="@(new SelectList(ViewBag.PortList, "Id","Name"))">
             </select>
         </div> <br />

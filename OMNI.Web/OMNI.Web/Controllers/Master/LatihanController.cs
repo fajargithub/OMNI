@@ -1,59 +1,118 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OMNI.Utilities.Constants;
+using OMNI.Web.Data.Dao;
+using OMNI.Web.Data.Dao.CorePTK;
+using OMNI.Web.Models;
+using OMNI.Web.Models.Master;
+using OMNI.Web.Services.CorePTK.Interface;
+using OMNI.Web.Services.Master.Interface;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
-    public class LatihanController : BaseController
+    public class LatihanController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/Master/Latihan/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/Latihan/AddEdit.cshtml";
 
-        private static readonly string DETAIL_INDEX = "~/Views/Master/Latihan/DetailIndex.cshtml";
-        private static readonly string DETAIL_ADD_EDIT = "~/Views/Master/Latihan/AddEditDetail.cshtml";
-
-        public IActionResult Index()
+        protected ILatihan _latihanService;
+        public LatihanController(ILatihan latihanService, IPort portService, IPeralatanOSR peralatanOSRService) : base(portService, peralatanOSRService)
         {
+            _latihanService = latihanService;
+        }
+
+        public async Task<JsonResult> GetAll(int portId)
+        {
+            List<LatihanModel> data = new List<LatihanModel>();
+            List<Latihan> list = await _latihanService.GetAllByPortId(portId);
+
+            if (list.Count() > 0)
+            {
+                for (int i = 0; i < list.Count(); i++)
+                {
+                    LatihanModel temp = new LatihanModel();
+                    temp.Id = list[i].Id;
+                    temp.Name = list[i].Name;
+                    temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
+                    temp.Satuan = list[i].Satuan;
+                    temp.Desc = list[i].Desc;
+                    data.Add(temp);
+                }
+            }
+
+            int count = data.Count();
+
+            return Json(new
+            {
+                success = true,
+                recordsTotal = count,
+                recordsFiltered = count,
+                data
+            });
+        }
+
+        public async Task<IActionResult> Index(int? portId)
+        {
+            List<Port> portList = await GetAllPort();
+            ViewBag.PortList = portList;
+
+            if (portId.HasValue)
+            {
+                ViewBag.SelectedPort = portList.Where(b => b.Id == portId).FirstOrDefault();
+            }
+            else
+            {
+                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+            }
+
             return View(INDEX);
         }
 
-        [HttpPost("List")]
-        public IActionResult GetAllAccount()
+        [HttpGet]
+        public async Task<IActionResult> AddEdit(int id, int portId)
         {
-            return Ok();
+            LatihanModel model = new LatihanModel();
+            model.Port = portId.ToString();
+
+            if (id > 0)
+            {
+                Latihan data = await _latihanService.GetById(id);
+                if (data != null)
+                {
+                    model.Id = data.Id;
+                    model.Name = data.Name;
+                    model.Satuan = data.Satuan;
+                    model.Desc = data.Desc;
+                }
+            }
+
+            return PartialView(ADD_EDIT, model);
         }
 
-        [HttpGet("ManageLatihan")]
-        [HttpGet("ManageLatihan/{id:int}")]
-        public IActionResult AddEdit(int id)
+        [HttpPost]
+        public async Task<IActionResult> AddEdit(LatihanModel model)
         {
-            return PartialView(ADD_EDIT);
+            var r = await _latihanService.AddEdit(model);
+
+            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
+            {
+                return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            }
+
+            return Ok(new JsonResponse());
         }
 
-        [HttpPost("ManageLatihan")]
-        [HttpPost("ManageLatihan/{id:int}")]
-        public IActionResult AddEdit([FromBody] object account, [FromRoute] int id)
+        [HttpPost]
+        public async Task<IActionResult> DeleteLatihan(int id)
         {
-            return Ok();
-        }
+            var r = await _latihanService.Delete(id);
 
-        public IActionResult DetailIndex()
-        {
-            return View(DETAIL_INDEX);
-        }
-
-        [HttpGet("ManageDetailLatihan")]
-        [HttpGet("ManageDetailLatihan/{id:int}")]
-        public IActionResult DetailAddEdit(int id)
-        {
-            return PartialView(DETAIL_ADD_EDIT);
-        }
-
-        [HttpPost("ManageDetailLatihan")]
-        [HttpPost("ManageDetailLatihan/{id:int}")]
-        public IActionResult DetailAddEdit([FromBody] object account, [FromRoute] int id)
-        {
-            return Ok();
+            return Ok(new JsonResponse());
         }
     }
 }

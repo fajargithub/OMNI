@@ -9,7 +9,7 @@ namespace OMNI.Web.Models.Master
     {
         public string Name { get; set; }
         public string Port { get; set; }
-        public string Value { get; set; }
+        public string Satuan { get; set; }
         public string Desc { get; set; }
     }
 }

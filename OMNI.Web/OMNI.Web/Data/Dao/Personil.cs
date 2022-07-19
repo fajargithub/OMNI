@@ -11,6 +11,6 @@ namespace OMNI.Web.Data.Dao
         public int PortId { get; set; }
         public string Name { get; set; }
         public string Desc { get; set; }
-        public float Value { get; set; }
+        public string Satuan { get; set; }
     }
 }

@@ -62,6 +62,8 @@ namespace OMNI.Web.Extensions
 
             services.AddScoped<PeralatanOSRService>();
             services.AddScoped<SpesifikasiJenisService>();
+            services.AddScoped<LatihanService>();
+            services.AddScoped<PersonilService>();
             //services.AddScoped<PicService>();
         }
 
@@ -71,6 +73,8 @@ namespace OMNI.Web.Extensions
 
             services.AddScoped<IPeralatanOSR, PeralatanOSRService>();
             services.AddScoped<ISpesifikasiJenis, SpesifikasiJenisService>();
+            services.AddScoped<ILatihan, LatihanService>();
+            services.AddScoped<IPersonil, PersonilService>();
         }
 
         public static void ConfigureSession(this IServiceCollection services)
