@@ -28,7 +28,7 @@ namespace OMNI.API.Controllers.OMNI
         [HttpGet]
         public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO).ToListAsync(cancellationToken);
+            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO).Include(b => b.PeralatanOSR).ToListAsync(cancellationToken);
             return Ok(result);
         }
 
@@ -36,7 +36,7 @@ namespace OMNI.API.Controllers.OMNI
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).FirstOrDefaultAsync(cancellationToken);
+            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).Include(b => b.PeralatanOSR).FirstOrDefaultAsync(cancellationToken);
             return Ok(result);
         }
 
@@ -46,8 +46,12 @@ namespace OMNI.API.Controllers.OMNI
             SpesifikasiJenis data = new SpesifikasiJenis();
             if (model.Id > 0)
             {
-                data = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
+                data = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).Include(b => b.PeralatanOSR).FirstOrDefaultAsync(cancellationToken);
+                data.PeralatanOSR = (PeralatanOSR)_dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR));
                 data.Name = model.Name;
+                data.PortId = int.Parse(model.Port);
+                data.QRCode = model.QRCode;
+                data.RekomendasiHubla = model.RekomendasiHubla;
                 data.Desc = model.Desc;
                 data.UpdatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
@@ -56,7 +60,11 @@ namespace OMNI.API.Controllers.OMNI
             }
             else
             {
+                data.PeralatanOSR = (PeralatanOSR)_dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR));
                 data.Name = model.Name;
+                data.PortId = int.Parse(model.Port);
+                data.QRCode = model.QRCode;
+                data.RekomendasiHubla = model.RekomendasiHubla;
                 data.Desc = model.Desc;
                 data.CreatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
