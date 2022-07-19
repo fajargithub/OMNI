@@ -1,5 +1,47 @@
 ﻿@model OMNI.Web.Models.Master.SpesifikasiJenisModel
 
+    <style>
+
+        .qr-code-generator {
+            width: 500px;
+            margin: 0 auto;
+        }
+
+            .qr-code-generator * {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+        #qrcode {
+            width: 128px;
+            height: 128px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+            #qrcode a {
+                font-size: 0.8em;
+            }
+
+        .generate-qr-code {
+            display: block;
+            width: 100%;
+            margin: 0.5em 0 0;
+            padding: 0.25em;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            background-color: #e5554e;
+            color: #fff;
+        }
+
+        canvas {
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+
 <form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
     @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Spesifikasi / Jenis" })
 
@@ -11,11 +53,33 @@
             <select name="PeralatanOSR" asp-for="PeralatanOSR" id="peralatanOSR" class="select2-input"
                     asp-items="@(new SelectList(ViewBag.PeralatanOSRList, "Id","Name"))">
             </select>
+            <input type="hidden" asp-for="Port" required />
         </div>
 
         <div class="form-group">
             <label class="form-label" for="">Name</label>
             <input class="form-control" asp-for="Name" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="">Generate QR Code</label>
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="text" class="form-control qr-url" placeholder="URL or Text">
+                </div>
+            </div>
+
+            <div class="btn generate-qr-code">Generate</div>
+
+            <br>
+
+            <div id="qrcode"></div>
+            <input type="hidden" id="qrcode-value" asp-for="QRCode" required/>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="">Rekomendasi Hubla</label>
+            <input class="form-control" type="number" step=".01" asp-for="RekomendasiHubla" required>
         </div>
 
         <div class="form-group">
@@ -27,8 +91,35 @@
     @await Html.PartialAsync("_ModalFooter")
 </form>
 
+<script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $('.generate-qr-code').on('click', function () {
+
+            // Clear Previous QR Code
+            $('#qrcode').empty();
+
+            // Set Size to Match User Input
+            //$('#qrcode').css({
+            //    'width': $('.qr-size').val(),
+            //    'height': $('.qr-size').val()
+            //})
+
+            $('#qrcode').css({
+                'width': 128,
+                'height': 128
+            })
+
+            // Generate and Output QR Code
+            $('#qrcode').qrcode({ width: $('.qr-size').val(), height: $('.qr-size').val(), text: $('.qr-url').val() });
+
+            var canvas = document.querySelector('canvas');
+            var pngUrl = canvas.toDataURL();
+
+            $("#qrcode-value").val(pngUrl);
+
+        });
+
         $('.select2-input').select2({
             dropdownParent: $('#modal-add-edit')
         });

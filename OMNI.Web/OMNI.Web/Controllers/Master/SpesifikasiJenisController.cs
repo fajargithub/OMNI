@@ -22,15 +22,15 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/SpesifikasiJenis/AddEdit.cshtml";
 
         protected ISpesifikasiJenis _spesifikasiJenisService;
-        public SpesifikasiJenisController(ISpesifikasiJenis spesifikasiJenisService, IPort portService) : base(portService)
+        public SpesifikasiJenisController(ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService) : base(portService, peralatanOSRService)
         {
             _spesifikasiJenisService = spesifikasiJenisService;
         }
 
-        public async Task<JsonResult> GetAll()
+        public async Task<JsonResult> GetAll(int portId)
         {
             List<SpesifikasiJenisModel> data = new List<SpesifikasiJenisModel>();
-            List<SpesifikasiJenis> list = await _spesifikasiJenisService.GetAll();
+            List<SpesifikasiJenis> list = await _spesifikasiJenisService.GetAllByPortId(portId);
 
             if(list.Count() > 0)
             {
@@ -39,6 +39,7 @@ namespace OMNI.Web.Controllers.Master
                     SpesifikasiJenisModel temp = new SpesifikasiJenisModel();
                     temp.Id = list[i].Id;
                     temp.Name = list[i].Name;
+                    temp.PeralatanOSR = list[i].PeralatanOSR.Name;
                     temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
                     temp.QRCode = list[i].QRCode;
                     temp.RekomendasiHubla = list[i].RekomendasiHubla;
@@ -58,23 +59,35 @@ namespace OMNI.Web.Controllers.Master
             });
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? portId)
         {
-            ViewBag.PortList = await GetAllPort();
+            List<Port> portList = await GetAllPort();
+            ViewBag.PortList = portList;
+
+            if (portId.HasValue)
+            {
+                ViewBag.SelectedPort = portList.Where(b => b.Id == portId).FirstOrDefault();
+            } else
+            {
+                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+            }
+            
             return View(INDEX);
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddEdit(int id)
+        public async Task<IActionResult> AddEdit(int id, int portId)
         {
+            ViewBag.PeralatanOSRList = await GetAllPeralatanOSR();
             SpesifikasiJenisModel model = new SpesifikasiJenisModel();
+            model.Port = portId.ToString();
+
             if (id > 0)
             {
                 SpesifikasiJenis data = await _spesifikasiJenisService.GetById(id);
                 if (data != null)
                 {
                     model.Id = data.Id;
-                    model.Port = data.PortId.ToString();
                     model.QRCode = data.QRCode;
                     model.RekomendasiHubla = data.RekomendasiHubla;
                     model.Name = data.Name;

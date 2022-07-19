@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OMNI.Web.Data.Dao;
 using OMNI.Web.Data.Dao.CorePTK;
 using OMNI.Web.Services.CorePTK.Interface;
+using OMNI.Web.Services.Master.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,18 @@ namespace OMNI.Web.Controllers
     public class OMNIBaseController : BaseController
     {
         protected IPort _portService;
-        public OMNIBaseController(IPort portService) : base()
+        protected IPeralatanOSR _peralatanOSRService;
+        public OMNIBaseController(IPort portService, IPeralatanOSR peralatanOSRService) : base()
         {
             _portService = portService;
+            _peralatanOSRService = peralatanOSRService;
+        }
+
+        public async Task<List<PeralatanOSR>> GetAllPeralatanOSR()
+        {
+            List<PeralatanOSR> data = await _peralatanOSRService.GetAll();
+
+            return data;
         }
 
         public async Task<List<Port>> GetAllPort()
