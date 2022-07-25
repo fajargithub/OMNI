@@ -25,12 +25,12 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         // GET: api/<ValuesController>
-        [HttpGet("GetAllByPortId")]
-        public async Task<IActionResult> GetAllByPortId(int id, CancellationToken cancellationToken)
-        {
-            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.PortId == id).Include(b => b.PeralatanOSR).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
-            return Ok(result);
-        }
+        //[HttpGet("GetAllByPortId")]
+        //public async Task<IActionResult> GetAllByPortId(int id, CancellationToken cancellationToken)
+        //{
+        //    var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.PortId == id).Include(b => b.PeralatanOSR).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+        //    return Ok(result);
+        //}
 
         // GET api/<ValuesController>/5
         [HttpGet("{id:int}")]
@@ -40,46 +40,46 @@ namespace OMNI.API.Controllers.OMNI
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddEdit(SpesifikasiJenisModel model, CancellationToken cancellationToken)
-        {
-            SpesifikasiJenis data = new SpesifikasiJenis();
-            if (model.Id > 0)
-            {
-                data = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).Include(b => b.PeralatanOSR).FirstOrDefaultAsync(cancellationToken);
-                data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
-                data.Name = model.Name;
-                data.PortId = int.Parse(model.Port);
-                if (!string.IsNullOrEmpty(model.QRCode))
-                {
-                    data.QRCode = model.QRCode;
-                }
-                data.RekomendasiHubla = model.RekomendasiHubla;
-                data.Desc = model.Desc;
-                data.UpdatedAt = DateTime.Now;
-                data.UpdatedBy = "admin";
-                _dbOMNI.SpesifikasiJenis.Update(data);
-                await _dbOMNI.SaveChangesAsync(cancellationToken);
-            }
-            else
-            {
-                data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
-                data.Name = model.Name;
-                data.PortId = int.Parse(model.Port);
-                if (!string.IsNullOrEmpty(model.QRCode))
-                {
-                    data.QRCode = model.QRCode;
-                }
-                data.RekomendasiHubla = model.RekomendasiHubla;
-                data.Desc = model.Desc;
-                data.CreatedAt = DateTime.Now;
-                data.UpdatedBy = "admin";
-                await _dbOMNI.SpesifikasiJenis.AddAsync(data, cancellationToken);
-                await _dbOMNI.SaveChangesAsync(cancellationToken);
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> AddEdit(SpesifikasiJenisModel model, CancellationToken cancellationToken)
+        //{
+        //    SpesifikasiJenis data = new SpesifikasiJenis();
+        //    if (model.Id > 0)
+        //    {
+        //        data = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).Include(b => b.PeralatanOSR).FirstOrDefaultAsync(cancellationToken);
+        //        data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
+        //        data.Name = model.Name;
+        //        data.PortId = int.Parse(model.Port);
+        //        if (!string.IsNullOrEmpty(model.QRCode))
+        //        {
+        //            data.QRCode = model.QRCode;
+        //        }
+        //        data.RekomendasiHubla = model.RekomendasiHubla;
+        //        data.Desc = model.Desc;
+        //        data.UpdatedAt = DateTime.Now;
+        //        data.UpdatedBy = "admin";
+        //        _dbOMNI.SpesifikasiJenis.Update(data);
+        //        await _dbOMNI.SaveChangesAsync(cancellationToken);
+        //    }
+        //    else
+        //    {
+        //        data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
+        //        data.Name = model.Name;
+        //        data.PortId = int.Parse(model.Port);
+        //        if (!string.IsNullOrEmpty(model.QRCode))
+        //        {
+        //            data.QRCode = model.QRCode;
+        //        }
+        //        data.RekomendasiHubla = model.RekomendasiHubla;
+        //        data.Desc = model.Desc;
+        //        data.CreatedAt = DateTime.Now;
+        //        data.UpdatedBy = "admin";
+        //        await _dbOMNI.SpesifikasiJenis.AddAsync(data, cancellationToken);
+        //        await _dbOMNI.SaveChangesAsync(cancellationToken);
+        //    }
 
-            return Ok(new ReturnJson { });
-        }
+        //    return Ok(new ReturnJson { });
+        //}
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id:int}")]

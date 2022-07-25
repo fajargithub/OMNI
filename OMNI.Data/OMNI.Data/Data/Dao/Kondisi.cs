@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace OMNI.Data.Data.Dao
 {
-    public class SpesifikasiJenis : BaseDao
+    public class Kondisi : BaseDao
     {
-        public virtual PeralatanOSR PeralatanOSR { get; set; }
-        public virtual Jenis Jenis { get; set; }
+        public string Name { get; set; }
+        public string Desc { get; set; }
     }
 }

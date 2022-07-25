@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OMNI.Data.Data.Dao
 {
-    public class LLPTrx : BaseDao
+    public class HistoryLLPTrx : BaseDao
     {
         public virtual SpesifikasiJenis SpesifikasiJenis { get; set; }
         public string Port { get; set; }
