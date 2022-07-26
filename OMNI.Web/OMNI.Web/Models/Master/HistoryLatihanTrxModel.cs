@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Models.Master
 {
-    public class LatihanTrxModel : BaseModel
+    public class HistoryLatihanTrxModel : BaseModel
     {
         public string Latihan { get; set; }
         public string Port { get; set; }

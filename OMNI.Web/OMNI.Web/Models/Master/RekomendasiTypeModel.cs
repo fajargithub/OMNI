@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Models.Master
 {
-    public class SpesifikasiJenisModel : BaseModel
+    public class RekomendasiTypeModel : BaseModel
     {
-        public string PeralatanOSR { get; set; }
-        public string Jenis { get; set; }
+        public string Name { get; set; }
+        public string Desc { get; set; }
     }
 }

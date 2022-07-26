@@ -1,0 +1,46 @@
+﻿@model OMNI.Web.Models.Master.JenisModel
+
+<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Peralatan OSR" })
+
+    <div class="modal-body">
+        @Html.HiddenFor(b => b.Id)
+
+        <div class="form-group">
+            <label class="form-label" for="">Name</label>
+            <input class="form-control" asp-for="Name" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="">Description</label>
+            <textarea class="form-control" asp-for="Desc"></textarea>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_ModalFooter")
+</form>
+
+<script type="text/javascript">
+    $(document).on('submit', '#form-akun', function () {
+        var form = $('#form-akun');
+        var validation = Array.prototype.filter.call(form, function (form) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            else {
+                event.preventDefault();
+                var param = new FormParam(
+                    form,
+                    "Apakah Anda yakin ingin menyimpan akun ini?",
+                    '@Url.Action("AddEdit")',
+                    null,
+                    '#modal-add-edit',
+                    '#table1'
+                );
+                initApp.formSubmit(param);
+            }
+            form.classList.add('was-validated');
+        });
+    });
+</script>

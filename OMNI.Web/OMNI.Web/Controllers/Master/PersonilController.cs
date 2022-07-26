@@ -77,7 +77,7 @@ namespace OMNI.Web.Controllers.Master
         public async Task<IActionResult> AddEdit(int id, int portId)
         {
             PersonilModel model = new PersonilModel();
-            model.Port = portId.ToString();
+           // model.Port = portId.ToString();
 
             if (id > 0)
             {

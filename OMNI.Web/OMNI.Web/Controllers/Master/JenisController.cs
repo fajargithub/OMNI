@@ -15,27 +15,26 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
-    public class LatihanController : OMNIBaseController
+    public class JenisController : BaseController
     {
-        private static readonly string INDEX = "~/Views/Master/Latihan/Index.cshtml";
-        private static readonly string ADD_EDIT = "~/Views/Master/Latihan/AddEdit.cshtml";
+        private static readonly string INDEX = "~/Views/Master/Jenis/Index.cshtml";
+        private static readonly string ADD_EDIT = "~/Views/Master/Jenis/AddEdit.cshtml";
 
-        protected ILatihan _latihanService;
-        public LatihanController(ILatihan latihanService, IPort portService, IPeralatanOSR peralatanOSRService) : base(portService, peralatanOSRService)
+        protected IJenis _jenisService;
+        public JenisController(IJenis jenisService) : base()
         {
-            _latihanService = latihanService;
+            _jenisService = jenisService;
         }
 
-        public async Task<JsonResult> GetAll(int portId)
+        public async Task<JsonResult> GetAll()
         {
-            List<LatihanModel> data = new List<LatihanModel>();
-            List<Latihan> list = await _latihanService.GetAllByPortId(portId);
+            List<Jenis> data = await _jenisService.GetAll();
 
             //if (list.Count() > 0)
             //{
             //    for (int i = 0; i < list.Count(); i++)
             //    {
-            //        LatihanModel temp = new LatihanModel();
+            //        JenisModel temp = new JenisModel();
             //        temp.Id = list[i].Id;
             //        temp.Name = list[i].Name;
             //        temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
@@ -56,32 +55,19 @@ namespace OMNI.Web.Controllers.Master
             });
         }
 
-        public async Task<IActionResult> Index(int? portId)
+        public async Task<IActionResult> Index()
         {
-            List<Port> portList = await GetAllPort();
-            ViewBag.PortList = portList;
-
-            if (portId.HasValue)
-            {
-                ViewBag.SelectedPort = portList.Where(b => b.Id == portId).FirstOrDefault();
-            }
-            else
-            {
-                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-            }
-
             return View(INDEX);
         }
 
         [HttpGet]
         public async Task<IActionResult> AddEdit(int id, int portId)
         {
-            LatihanModel model = new LatihanModel();
-           // model.Port = portId.ToString();
+            JenisModel model = new JenisModel();
 
             if (id > 0)
             {
-                Latihan data = await _latihanService.GetById(id);
+                Jenis data = await _jenisService.GetById(id);
                 if (data != null)
                 {
                     model.Id = data.Id;
@@ -95,9 +81,9 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEdit(LatihanModel model)
+        public async Task<IActionResult> AddEdit(JenisModel model)
         {
-            var r = await _latihanService.AddEdit(model);
+            var r = await _jenisService.AddEdit(model);
 
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {
@@ -108,9 +94,9 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteLatihan(int id)
+        public async Task<IActionResult> DeleteJenis(int id)
         {
-            var r = await _latihanService.Delete(id);
+            var r = await _jenisService.Delete(id);
 
             return Ok(new JsonResponse());
         }

@@ -1,29 +1,19 @@
 ﻿@{
-    ViewData["Title"] = "Master Data Latihan";
-    ViewData["PageName"] = "master_spesifikasi";
-    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Latihan";
-    ViewData["PageDescription"] = "Halaman pengelolaan data master Latihan Oil Spill Response";
+    ViewData["Title"] = "Master Data Jenis";
+    ViewData["PageName"] = "jenis";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Jenis";
+    ViewData["PageDescription"] = "Halaman pengelolaan data master Jenis Oil Spill Response";
 }
 
-@model OMNI.Web.Models.Master.LatihanModel
-
 <div class="row">
-    <div class="col-md-4">
-        @*<div class="form-group">
-            <label class="form-label" for="">Select Lokasi</label>
-            <select asp-for="Port" id="port" class="select2-input"
-                    asp-items="@(new SelectList(ViewBag.PortList, "Id","Name"))">
-            </select>
-        </div> <br />*@
-    </div>
     <div class="col-xl-12">
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Latihan List
+                    Jenis List
                 </h2>
                 <div class="panel-toolbar">
-                    <a asp-action="AddEdit" asp-route-portId="@ViewBag.SelectedPort.Id" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
             <div class="panel-container show">
@@ -33,15 +23,13 @@
                             <tr class="fw-500 text-uppercase">
                                 <th style="width:7%;">No</th>
                                 <th>Nama</th>
-                                <th>Satuan</th>
-                                <th>Rekomendasi Hubla</th>
+                                <th>Description</th>
                                 <th class="text-center" style="width:10%;">Action</th>
                             </tr>
                             <tr id="table1-filter" style="display:none;">
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Name" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Satuan" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Rekomendasi Hubla" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Desc" /></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -57,13 +45,6 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         $(document).ready(function () {
-            var portId = parseInt("@ViewBag.SelectedPort.Id");
-            if (portId > 0) {
-                $("#port").val(portId).change();
-            }
-
-            $('.select2-input').select2();
-
             $(".select2-placeholder").select2(
                 {
                     placeholder: $(this).data("placeholder"),
@@ -98,7 +79,7 @@
                     ordering: false,
                     order: [],
                     columnDefs: [
-                        { "orderable": false, "targets": 4 }
+                        { "orderable": false, "targets": 3 }
                     ],
                     dom:
                         "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
@@ -116,20 +97,19 @@
                     processing: true,
                     //serverSide: true,
                     "ajax": {
-                        "url": base_api + 'Latihan/GetAll?portId=' + portId,
+                        "url": base_api + 'Jenis/GetAll',
                         "type": 'GET'
                         //"data": { searchData: result }
                     },
                     "columns": [
                         { "data": null },
                         { "data": "name" },
-                        { "data": "satuan" },
                         { "data": "desc" },
                         {
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Latihan/AddEdit?id=" + iDisplayIndex.id + "&portId=" + portId + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Jenis/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
                                     " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
                             }
                         }
@@ -138,22 +118,14 @@
                     rowCallback: function (row, data, iDisplayIndex) {
                     },
                     "initComplete": function (settings, json) {
-                    },
-                    "destroy": true
-                }).ajax.reload();
+                    }
+                });
 
             table.on('order.dt search.dt', function () {
                 table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
                     cell.innerHTML = i + 1;
                 });
             }).draw();
-
-            $("#port").on('change', function () {
-                portId = this.value;
-                //initTable(portId);
-
-                window.location.href = base_api + 'Latihan/Index?portId=' + portId;
-            });
         });
 
         function deleteAction(id) {
@@ -165,7 +137,7 @@
                 denyButtonText: `Cancel`,
             }).then((result) => {
                 if (result.value) {
-                    $.post(base_api + 'Latihan/DeleteLatihan?id=' + id, function (result) {
+                    $.post(base_api + 'Jenis/DeleteJenis?id=' + id, function (result) {
                         Swal.fire('Deleted!', '', 'success');
                         $("#table1").DataTable().ajax.reload(null, false);
                     });

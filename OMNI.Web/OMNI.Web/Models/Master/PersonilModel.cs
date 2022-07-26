@@ -7,9 +7,8 @@ namespace OMNI.Web.Models.Master
 {
     public class PersonilModel : BaseModel
     {
-        public string Port { get; set; }
         public string Name { get; set; }
-        public string Desc { get; set; }
         public string Satuan { get; set; }
+        public string Desc { get; set; }
     }
 }

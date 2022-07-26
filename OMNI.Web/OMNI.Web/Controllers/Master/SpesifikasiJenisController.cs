@@ -80,7 +80,7 @@ namespace OMNI.Web.Controllers.Master
         {
             ViewBag.PeralatanOSRList = await GetAllPeralatanOSR();
             SpesifikasiJenisModel model = new SpesifikasiJenisModel();
-            model.Port = portId.ToString();
+            //model.Port = portId.ToString();
 
             //if (id > 0)
             //{
