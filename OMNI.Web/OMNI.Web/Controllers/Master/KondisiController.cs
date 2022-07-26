@@ -15,20 +15,20 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
-    public class JenisController : BaseController
+    public class KondisiController : BaseController
     {
-        private static readonly string INDEX = "~/Views/Master/Jenis/Index.cshtml";
-        private static readonly string ADD_EDIT = "~/Views/Master/Jenis/AddEdit.cshtml";
+        private static readonly string INDEX = "~/Views/Master/Kondisi/Index.cshtml";
+        private static readonly string ADD_EDIT = "~/Views/Master/Kondisi/AddEdit.cshtml";
 
-        protected IJenis _jenisService;
-        public JenisController(IJenis jenisService) : base()
+        protected IKondisi _kondisiService;
+        public KondisiController(IKondisi KondisiService) : base()
         {
-            _jenisService = jenisService;
+            _kondisiService = KondisiService;
         }
 
         public async Task<JsonResult> GetAll()
         {
-            List<Jenis> data = await _jenisService.GetAll();
+            List<Kondisi> data = await _kondisiService.GetAll();
 
             int count = data.Count();
 
@@ -49,16 +49,15 @@ namespace OMNI.Web.Controllers.Master
         [HttpGet]
         public async Task<IActionResult> AddEdit(int id, int portId)
         {
-            JenisModel model = new JenisModel();
+            KondisiModel model = new KondisiModel();
 
             if (id > 0)
             {
-                Jenis data = await _jenisService.GetById(id);
+                Kondisi data = await _kondisiService.GetById(id);
                 if (data != null)
                 {
                     model.Id = data.Id;
                     model.Name = data.Name;
-                    model.Satuan = data.Satuan;
                     model.Desc = data.Desc;
                 }
             }
@@ -67,9 +66,9 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEdit(JenisModel model)
+        public async Task<IActionResult> AddEdit(KondisiModel model)
         {
-            var r = await _jenisService.AddEdit(model);
+            var r = await _kondisiService.AddEdit(model);
 
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {
@@ -80,9 +79,9 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteJenis(int id)
+        public async Task<IActionResult> DeleteKondisi(int id)
         {
-            var r = await _jenisService.Delete(id);
+            var r = await _kondisiService.Delete(id);
 
             return Ok(new JsonResponse());
         }

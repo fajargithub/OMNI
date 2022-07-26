@@ -1,7 +1,7 @@
-﻿@model OMNI.Web.Models.Master.JenisModel
+﻿@model OMNI.Web.Models.Master.KondisiModel
 
 <form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Jenis" })
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Master Kondisi" })
 
     <div class="modal-body">
         @Html.HiddenFor(b => b.Id)
