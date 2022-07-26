@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Data.Dao
 {
-    public class PersonilTrx : BaseDao
+    public class HistoryPersonilTrx : BaseDao
     {
         public virtual Personil Personil { get; set; }
         public string Port { get; set; }
@@ -20,4 +20,3 @@ namespace OMNI.Web.Data.Dao
         public float PersentasePersonil { get; set; }
     }
 }
-

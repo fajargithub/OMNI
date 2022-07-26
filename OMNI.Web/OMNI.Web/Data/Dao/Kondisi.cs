@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Data.Dao
 {
-    public class Personil : BaseDao
+    public class Kondisi : BaseDao
     {
         public string Name { get; set; }
-        public string Satuan { get; set; }
         public string Desc { get; set; }
     }
 }

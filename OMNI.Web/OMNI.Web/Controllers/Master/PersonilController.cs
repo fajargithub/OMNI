@@ -31,19 +31,19 @@ namespace OMNI.Web.Controllers.Master
             List<PersonilModel> data = new List<PersonilModel>();
             List<Personil> list = await _PersonilService.GetAllByPortId(portId);
 
-            if (list.Count() > 0)
-            {
-                for (int i = 0; i < list.Count(); i++)
-                {
-                    PersonilModel temp = new PersonilModel();
-                    temp.Id = list[i].Id;
-                    temp.Name = list[i].Name;
-                    temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
-                    temp.Satuan = list[i].Satuan;
-                    temp.Desc = list[i].Desc;
-                    data.Add(temp);
-                }
-            }
+            //if (list.Count() > 0)
+            //{
+            //    for (int i = 0; i < list.Count(); i++)
+            //    {
+            //        PersonilModel temp = new PersonilModel();
+            //        temp.Id = list[i].Id;
+            //        temp.Name = list[i].Name;
+            //        temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
+            //        temp.Satuan = list[i].Satuan;
+            //        temp.Desc = list[i].Desc;
+            //        data.Add(temp);
+            //    }
+            //}
 
             int count = data.Count();
 

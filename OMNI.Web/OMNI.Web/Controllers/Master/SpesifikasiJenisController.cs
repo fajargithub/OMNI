@@ -32,21 +32,21 @@ namespace OMNI.Web.Controllers.Master
             List<SpesifikasiJenisModel> data = new List<SpesifikasiJenisModel>();
             List<SpesifikasiJenis> list = await _spesifikasiJenisService.GetAllByPortId(portId);
 
-            if(list.Count() > 0)
-            {
-                for(int i=0; i < list.Count(); i++)
-                {
-                    SpesifikasiJenisModel temp = new SpesifikasiJenisModel();
-                    temp.Id = list[i].Id;
-                    temp.Name = list[i].Name;
-                    temp.PeralatanOSR = list[i].PeralatanOSR.Name;
-                    temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
-                    temp.QRCode = list[i].QRCode;
-                    temp.RekomendasiHubla = list[i].RekomendasiHubla;
-                    temp.Desc = list[i].Desc;
-                    data.Add(temp);
-                }
-            }
+            //if(list.Count() > 0)
+            //{
+            //    for(int i=0; i < list.Count(); i++)
+            //    {
+            //        SpesifikasiJenisModel temp = new SpesifikasiJenisModel();
+            //        temp.Id = list[i].Id;
+            //        temp.Name = list[i].Name;
+            //        temp.PeralatanOSR = list[i].PeralatanOSR.Name;
+            //        temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
+            //        temp.QRCode = list[i].QRCode;
+            //        temp.RekomendasiHubla = list[i].RekomendasiHubla;
+            //        temp.Desc = list[i].Desc;
+            //        data.Add(temp);
+            //    }
+            //}
 
             int count = data.Count();
 
@@ -82,18 +82,18 @@ namespace OMNI.Web.Controllers.Master
             SpesifikasiJenisModel model = new SpesifikasiJenisModel();
             model.Port = portId.ToString();
 
-            if (id > 0)
-            {
-                SpesifikasiJenis data = await _spesifikasiJenisService.GetById(id);
-                if (data != null)
-                {
-                    model.Id = data.Id;
-                    model.QRCode = data.QRCode;
-                    model.RekomendasiHubla = data.RekomendasiHubla;
-                    model.Name = data.Name;
-                    model.Desc = data.Desc;
-                }
-            }
+            //if (id > 0)
+            //{
+            //    SpesifikasiJenis data = await _spesifikasiJenisService.GetById(id);
+            //    if (data != null)
+            //    {
+            //        model.Id = data.Id;
+            //        model.QRCode = data.QRCode;
+            //        model.RekomendasiHubla = data.RekomendasiHubla;
+            //        model.Name = data.Name;
+            //        model.Desc = data.Desc;
+            //    }
+            //}
 
             return PartialView(ADD_EDIT, model);
         }

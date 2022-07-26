@@ -8,6 +8,8 @@ using OMNI.Web.Services.CorePTK;
 using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master;
 using OMNI.Web.Services.Master.Interface;
+using OMNI.Web.Services.Trx;
+using OMNI.Web.Services.Trx.Interface;
 using System;
 
 namespace OMNI.Web.Extensions
@@ -60,17 +62,44 @@ namespace OMNI.Web.Extensions
         {
             services.AddScoped<PortService>();
 
-            services.AddScoped<PeralatanOSRService>();
-            services.AddScoped<SpesifikasiJenisService>();
+            services.AddScoped<HistoryLatihanTrxService>();
+            services.AddScoped<HistoryLLPTrxService>();
+            services.AddScoped<HistoryPersonilTrxService>();
+            services.AddScoped<JenisService>();
+            services.AddScoped<KondisiService>();
             services.AddScoped<LatihanService>();
+            services.AddScoped<LatihanTrxService>();
+            services.AddScoped<LLPTrxService>();
+            services.AddScoped<PeralatanOSRService>();
             services.AddScoped<PersonilService>();
-            //services.AddScoped<PicService>();
+            services.AddScoped<PersonilTrxService>();
+            services.AddScoped<RekomendasiJenisService>();
+            services.AddScoped<RekomendasiLatihanService>();
+            services.AddScoped<RekomendasiPersonilService>();
+            services.AddScoped<RekomendasiTypeService>();
+            services.AddScoped<SpesifikasiJenisService>();
+
         }
 
         public static void ConfigureDomainLayer(this IServiceCollection services)
         {
             services.AddScoped<IPort, PortService>();
 
+            services.AddScoped<IHistoryLatihanTrx, HistoryLatihanTrxService>();
+            services.AddScoped<IHistoryLLPTrx, HistoryLLPTrxService>();
+            services.AddScoped<IHistoryPersonilTrx, HistoryPersonilTrxService>();
+            services.AddScoped<ILatihanTrx, LatihanTrxService>();
+            services.AddScoped<ILLPTrx, LLPTrxService>();
+            services.AddScoped<IPersonilTrx, PersonilTrxService>();
+
+            services.AddScoped<IJenis, JenisService>();
+            services.AddScoped<IKondisi, KondisiService>();
+            services.AddScoped<IRekomendasiJenis, RekomendasiJenisService>();
+            services.AddScoped<IRekomendasiLatihan, RekomendasiLatihanService>();
+            services.AddScoped<IRekomendasiPersonil, RekomendasiPersonilService>();
+            services.AddScoped<IRekomendasiType, RekomendasiTypeService>();
+            services.AddScoped<IKondisi, KondisiService>();
+            services.AddScoped<IKondisi, KondisiService>();
             services.AddScoped<IPeralatanOSR, PeralatanOSRService>();
             services.AddScoped<ISpesifikasiJenis, SpesifikasiJenisService>();
             services.AddScoped<ILatihan, LatihanService>();
