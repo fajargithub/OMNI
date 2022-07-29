@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OMNI.API.Model.OMNI
 {
-    public class PersonilTrxModel : BaseModel
+    public class HistoryPersonilTrxModel : BaseModel
     {
         public string Personil { get; set; }
         public string Port { get; set; }

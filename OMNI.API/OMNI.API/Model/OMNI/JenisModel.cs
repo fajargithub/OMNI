@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OMNI.API.Model.OMNI
 {
-    public class PersonilModel : BaseModel
+    public class JenisModel : BaseModel
     {
         public string Name { get; set; }
         public string Satuan { get; set; }
