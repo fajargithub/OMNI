@@ -6,6 +6,7 @@ using OMNI.Data.Data.Dao;
 using OMNI.Utilities.Base;
 using OMNI.Utilities.Constants;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,61 +26,69 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         // GET: api/<ValuesController>
-        //[HttpGet("GetAllByPortId")]
-        //public async Task<IActionResult> GetAllByPortId(int id, CancellationToken cancellationToken)
-        //{
-        //    var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.PortId == id).Include(b => b.PeralatanOSR).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
-        //    return Ok(result);
-        //}
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        {
+            List<SpesifikasiJenisModel> result = new List<SpesifikasiJenisModel>();
+            var list = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO).Include(b => b.PeralatanOSR).Include(b => b.Jenis).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+            if(list.Count() > 0)
+            {
+                for(int i=0; i < list.Count(); i++)
+                {
+                    SpesifikasiJenisModel temp = new SpesifikasiJenisModel();
+                    temp.Id = list[i].Id;
+                    temp.PeralatanOSR = list[i].PeralatanOSR != null ? list[i].PeralatanOSR.Name : "-";
+                    temp.Jenis = list[i].Jenis != null ? list[i].Jenis.Name : "-";
+                    temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
+                    temp.CreatedBy = list[i].CreatedBy;
+                    result.Add(temp);
+                }
+            }
+
+            return Ok(result);
+        }
 
         // GET api/<ValuesController>/5
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).Include(b => b.PeralatanOSR).FirstOrDefaultAsync(cancellationToken);
+            SpesifikasiJenisModel result = new SpesifikasiJenisModel();
+            var data = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).Include(b => b.PeralatanOSR).Include(b => b.Jenis).FirstOrDefaultAsync(cancellationToken);
+            if(data != null)
+            {
+                result.Id = data.Id;
+                result.PeralatanOSR = data.PeralatanOSR != null ? data.PeralatanOSR.Id.ToString() : "0";
+                result.Jenis = data.Jenis != null ? data.Jenis.Id.ToString() : "0";
+            }
             return Ok(result);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddEdit(SpesifikasiJenisModel model, CancellationToken cancellationToken)
-        //{
-        //    SpesifikasiJenis data = new SpesifikasiJenis();
-        //    if (model.Id > 0)
-        //    {
-        //        data = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).Include(b => b.PeralatanOSR).FirstOrDefaultAsync(cancellationToken);
-        //        data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
-        //        data.Name = model.Name;
-        //        data.PortId = int.Parse(model.Port);
-        //        if (!string.IsNullOrEmpty(model.QRCode))
-        //        {
-        //            data.QRCode = model.QRCode;
-        //        }
-        //        data.RekomendasiHubla = model.RekomendasiHubla;
-        //        data.Desc = model.Desc;
-        //        data.UpdatedAt = DateTime.Now;
-        //        data.UpdatedBy = "admin";
-        //        _dbOMNI.SpesifikasiJenis.Update(data);
-        //        await _dbOMNI.SaveChangesAsync(cancellationToken);
-        //    }
-        //    else
-        //    {
-        //        data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
-        //        data.Name = model.Name;
-        //        data.PortId = int.Parse(model.Port);
-        //        if (!string.IsNullOrEmpty(model.QRCode))
-        //        {
-        //            data.QRCode = model.QRCode;
-        //        }
-        //        data.RekomendasiHubla = model.RekomendasiHubla;
-        //        data.Desc = model.Desc;
-        //        data.CreatedAt = DateTime.Now;
-        //        data.UpdatedBy = "admin";
-        //        await _dbOMNI.SpesifikasiJenis.AddAsync(data, cancellationToken);
-        //        await _dbOMNI.SaveChangesAsync(cancellationToken);
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> AddEdit(SpesifikasiJenisModel model, CancellationToken cancellationToken)
+        {
+            SpesifikasiJenis data = new SpesifikasiJenis();
+            if (model.Id > 0)
+            {
+                data = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).Include(b => b.PeralatanOSR).FirstOrDefaultAsync(cancellationToken);
+                data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
+                data.Jenis = await _dbOMNI.Jenis.Where(b => b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+                data.UpdatedAt = DateTime.Now;
+                data.UpdatedBy = "admin";
+                _dbOMNI.SpesifikasiJenis.Update(data);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                data.PeralatanOSR = await _dbOMNI.PeralatanOSR.Where(b => b.Id == int.Parse(model.PeralatanOSR)).FirstOrDefaultAsync(cancellationToken);
+                data.Jenis = await _dbOMNI.Jenis.Where(b => b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+                data.CreatedAt = DateTime.Now;
+                data.CreatedBy = "admin";
+                await _dbOMNI.SpesifikasiJenis.AddAsync(data, cancellationToken);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
 
-        //    return Ok(new ReturnJson { });
-        //}
+            return Ok(new ReturnJson { });
+        }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id:int}")]
