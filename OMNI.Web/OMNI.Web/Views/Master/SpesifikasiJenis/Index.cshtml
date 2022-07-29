@@ -8,14 +8,14 @@
 @model OMNI.Web.Models.Master.SpesifikasiJenisModel
 
 <div class="row">
-    <div class="col-md-4">
+    @*<div class="col-md-4">
         <div class="form-group">
             <label class="form-label" for="">Select Lokasi</label>
             <select asp-for="Port" id="port" class="select2-input"
                     asp-items="@(new SelectList(ViewBag.PortList, "Id","Name"))">
             </select>
         </div> <br />
-    </div>
+    </div>*@
     <div class="col-xl-12">
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
@@ -23,7 +23,7 @@
                     Spesifikasi / Jenis List
                 </h2>
                 <div class="panel-toolbar">
-                    <a asp-action="AddEdit" asp-route-portId="@ViewBag.SelectedPort.Id" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
             <div class="panel-container show">
@@ -33,19 +33,13 @@
                             <tr class="fw-500 text-uppercase">
                                 <th style="width:7%;">No</th>
                                 <th>Peralatan OSR</th>
-                                <th>Nama</th>
-                                <th>QR Code</th>
-                                <th>Rekomendasi Hubla</th>
-                                <th>Description</th>
+                                <th>Jenis</th>
                                 <th class="text-center" style="width:10%;">Action</th>
                             </tr>
                             <tr id="table1-filter" style="display:none;">
                                 <th></th>
-                                <th><input type="text" class="form-control" placeholder="Peralatan OSR" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Name" /></th>
-                                <th></th>
-                                <th><input type="text" class="form-control" placeholder="RekomendasiHubla" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Desc" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Peralatan OSR" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Jenis" /></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -61,11 +55,11 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         $(document).ready(function () {
-            var portId = parseInt("@ViewBag.SelectedPort.Id");
+            @*var portId = parseInt("@ViewBag.SelectedPort.Id");
             if (portId > 0) {
                 $("#port").val(portId).change();
                 $('a').attr('asp-route-portId', portId);
-            }
+            }*@
 
             $('.select2-input').select2();
 
@@ -103,7 +97,7 @@
                     ordering: false,
                     order: [],
                     columnDefs: [
-                        { "orderable": false, "targets": 6 }
+                        { "orderable": false, "targets": 3 }
                     ],
                     dom:
                         "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
@@ -121,30 +115,28 @@
                     processing: true,
                     //serverSide: true,
                     "ajax": {
-                        "url": base_api + 'SpesifikasiJenis/GetAll?portId=' + portId,
+                        "url": base_api + 'SpesifikasiJenis/GetAll',
                         "type": 'GET'
                         //"data": { searchData: result }
                     },
                     "columns": [
                         { "data": null },
                         { "data": "peralatanOSR" },
-                        { "data": "name" },
-                        {
-                            "targets": -1,
-                            "data": null,
-                            "render": function (row, data, iDisplayIndex) {
-                                var image = "<img src='" + iDisplayIndex.qrCode + "' alt='' width='50'>";
+                        { "data": "jenis" },
+                        //{
+                        //    "targets": -1,
+                        //    "data": null,
+                        //    "render": function (row, data, iDisplayIndex) {
+                        //        var image = "<img src='" + iDisplayIndex.qrCode + "' alt='' width='50'>";
 
-                                return image;
-                            }
-                        },
-                        { "data": "rekomendasiHubla" },
-                        { "data": "desc" },
+                        //        return image;
+                        //    }
+                        //},
                         {
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/SpesifikasiJenis/AddEdit?id=" + iDisplayIndex.id + "&portId=" + portId + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/SpesifikasiJenis/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
                                     " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
                             }
                         }
@@ -163,12 +155,12 @@
                 });
             }).draw();
             
-            $("#port").on('change', function () {
-                portId = this.value;
-                //initTable(portId);
+            //$("#port").on('change', function () {
+            //    portId = this.value;
+            //    //initTable(portId);
 
-                window.location.href = base_api + 'SpesifikasiJenis/Index?portId=' + portId;
-            });
+            //    window.location.href = base_api + 'SpesifikasiJenis/Index?portId=' + portId;
+            //});
         });
 
         function deleteAction(id) {

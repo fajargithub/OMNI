@@ -14,15 +14,24 @@ namespace OMNI.Web.Controllers
     {
         protected IPort _portService;
         protected IPeralatanOSR _peralatanOSRService;
-        public OMNIBaseController(IPort portService, IPeralatanOSR peralatanOSRService) : base()
+        protected IJenis _jenisService;
+        public OMNIBaseController(IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base()
         {
             _portService = portService;
             _peralatanOSRService = peralatanOSRService;
+            _jenisService = jenisService;
         }
 
         public async Task<List<PeralatanOSR>> GetAllPeralatanOSR()
         {
             List<PeralatanOSR> data = await _peralatanOSRService.GetAll();
+
+            return data;
+        }
+
+        public async Task<List<Jenis>> GetAllJenis()
+        {
+            List<Jenis> data = await _jenisService.GetAll();
 
             return data;
         }

@@ -21,7 +21,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/Personil/AddEdit.cshtml";
 
         protected IPersonil _PersonilService;
-        public PersonilController(IPersonil PersonilService, IPort portService, IPeralatanOSR peralatanOSRService) : base(portService, peralatanOSRService)
+        public PersonilController(IPersonil PersonilService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(portService, peralatanOSRService, jenisService)
         {
             _PersonilService = PersonilService;
         }

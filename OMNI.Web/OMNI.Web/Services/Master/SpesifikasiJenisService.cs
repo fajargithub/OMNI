@@ -21,27 +21,26 @@ namespace OMNI.Web.Services.Master
             _httpClient = httpClient;
         }
 
-        public async Task<List<SpesifikasiJenis>> GetAllByPortId(int portId)
+        public async Task<List<SpesifikasiJenisModel>> GetAll()
         {
-            var id = portId;
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/SpesifikasiJenis/GetAllByPortId?id={portId}");
+            var result = await client.GetAsync("/api/SpesifikasiJenis/GetAll");
 
             if (result.IsSuccessStatusCode)
 
-                return await result.Content.ReadAsAsync<List<SpesifikasiJenis>>();
+                return await result.Content.ReadAsAsync<List<SpesifikasiJenisModel>>();
 
             throw new Exception();
         }
 
-        public async Task<SpesifikasiJenis> GetById(int id)
+        public async Task<SpesifikasiJenisModel> GetById(int id)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
             var result = await client.GetAsync($"/api/SpesifikasiJenis/{id}");
 
             if (result.IsSuccessStatusCode)
 
-                return await result.Content.ReadAsAsync<SpesifikasiJenis>();
+                return await result.Content.ReadAsAsync<SpesifikasiJenisModel>();
 
             throw new Exception();
         }

@@ -22,28 +22,24 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/SpesifikasiJenis/AddEdit.cshtml";
 
         protected ISpesifikasiJenis _spesifikasiJenisService;
-        public SpesifikasiJenisController(ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService) : base(portService, peralatanOSRService)
+        public SpesifikasiJenisController(ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(portService, peralatanOSRService, jenisService)
         {
             _spesifikasiJenisService = spesifikasiJenisService;
         }
 
-        public async Task<JsonResult> GetAll(int portId)
+        public async Task<JsonResult> GetAll()
         {
-            List<SpesifikasiJenisModel> data = new List<SpesifikasiJenisModel>();
-            List<SpesifikasiJenis> list = await _spesifikasiJenisService.GetAllByPortId(portId);
+            List<SpesifikasiJenisModel> data = await _spesifikasiJenisService.GetAll();
 
-            //if(list.Count() > 0)
+            //if (list.Count() > 0)
             //{
-            //    for(int i=0; i < list.Count(); i++)
+            //    for (int i = 0; i < list.Count(); i++)
             //    {
             //        SpesifikasiJenisModel temp = new SpesifikasiJenisModel();
             //        temp.Id = list[i].Id;
-            //        temp.Name = list[i].Name;
-            //        temp.PeralatanOSR = list[i].PeralatanOSR.Name;
-            //        temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
-            //        temp.QRCode = list[i].QRCode;
-            //        temp.RekomendasiHubla = list[i].RekomendasiHubla;
-            //        temp.Desc = list[i].Desc;
+            //        temp.PeralatanOSR = list[i].PeralatanOSR;
+            //        temp.PeralatanOSR = list[i].Jenis;
+            //        temp.CreateDate = list[i].CreateDate;
             //        data.Add(temp);
             //    }
             //}
@@ -61,39 +57,39 @@ namespace OMNI.Web.Controllers.Master
 
         public async Task<IActionResult> Index(int? portId)
         {
-            List<Port> portList = await GetAllPort();
-            ViewBag.PortList = portList;
+            //List<Port> portList = await GetAllPort();
+            //ViewBag.PortList = portList;
 
-            if (portId.HasValue)
-            {
-                ViewBag.SelectedPort = portList.Where(b => b.Id == portId).FirstOrDefault();
-            } else
-            {
-                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-            }
+            //if (portId.HasValue)
+            //{
+            //    ViewBag.SelectedPort = portList.Where(b => b.Id == portId).FirstOrDefault();
+            //} else
+            //{
+            //    ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+            //}
             
             return View(INDEX);
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddEdit(int id, int portId)
+        public async Task<IActionResult> AddEdit(int id)
         {
             ViewBag.PeralatanOSRList = await GetAllPeralatanOSR();
+            ViewBag.JenisList = await GetAllJenis();
             SpesifikasiJenisModel model = new SpesifikasiJenisModel();
-            //model.Port = portId.ToString();
 
-            //if (id > 0)
-            //{
-            //    SpesifikasiJenis data = await _spesifikasiJenisService.GetById(id);
-            //    if (data != null)
-            //    {
-            //        model.Id = data.Id;
-            //        model.QRCode = data.QRCode;
-            //        model.RekomendasiHubla = data.RekomendasiHubla;
-            //        model.Name = data.Name;
-            //        model.Desc = data.Desc;
-            //    }
-            //}
+            if (id > 0)
+            {
+                model = await _spesifikasiJenisService.GetById(id);
+                //if (data != null)
+                //{
+                //    model.Id = data.Id;
+                //    model.PeralatanOSR = data.PeralatanOSR;
+                //    model.RekomendasiHubla = data.RekomendasiHubla;
+                //    model.Name = data.Name;
+                //    model.Desc = data.Desc;
+                //}
+            }
 
             return PartialView(ADD_EDIT, model);
         }
