@@ -10,7 +10,7 @@ namespace OMNI.Web.Services.Master.Interface
 {
     public interface ILatihan 
     {
-        public Task<List<Latihan>> GetAllByPortId(int portId);
+        public Task<List<Latihan>> GetAll();
         public Task<Latihan> GetById(int id);
         public Task<BaseJson<LatihanModel>> AddEdit(LatihanModel model);
         public Task<Latihan> Delete(int id);

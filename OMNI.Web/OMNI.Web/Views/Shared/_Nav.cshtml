@@ -1,11 +1,21 @@
-﻿
+﻿<style>
+    .nav-menu li > ul li a {
+        color: #b7c1d2;
+        -moz-opacity: 0.8;
+        -khtml-opacity: 0.8;
+        -webkit-opacity: 0.8;
+        opacity: 0.8;
+        padding:10px;
+        padding-left:40px;
+    }
+</style>
 
 <ul class="nav flex-column nav-custom nav-menu" style="float: left;width: 50px;">
     <li class="nav-item active">
         <a class="nav-link active" data-toggle="pill" href="#simontana">
             <div style="text-align: center;">
                 <i class="fal fa-analytics" style="font-size: 20px;"></i>
-                <label>OMNI</label>
+                <label>OSMOSYS</label>
             </div>
         </a>
     </li>
@@ -33,6 +43,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href="@Url.Action("Index", "Kondisi")">
+                            <span class="nav-link-text" data-i18n="Jenis.index">Kondisi</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="@Url.Action("Index", "Jenis")" title="Jenis" data-filter-tags="jenis">
                             <span class="nav-link-text" data-i18n="Jenis.index">Jenis</span>
                         </a>
@@ -40,21 +55,6 @@
                     <li>
                         <a href="@Url.Action("Index", "SpesifikasiJenis")">
                             <span class="nav-link-text" data-i18n="Jenis.index">Spesifikasi / Jenis</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "Kondisi")">
-                            <span class="nav-link-text" data-i18n="Jenis.index">Kondisi</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "Latihan")" is-active-route title="Latihan" data-filter-tags="latihan">
-                            <span class="nav-link-text" data-i18n="latihan.index">Latihan</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "Personil")" is-active-route title="Personil" data-filter-tags="personil">
-                            <span class="nav-link-text" data-i18n="personil.index">Personil</span>
                         </a>
                     </li>
                     <li>
@@ -68,8 +68,18 @@
                         </a>
                     </li>
                     <li>
+                        <a href="@Url.Action("Index", "Latihan")" is-active-route title="Latihan" data-filter-tags="latihan">
+                            <span class="nav-link-text" data-i18n="latihan.index">Latihan</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="@Url.Action("Index", "RekomendasiLatihan")" title="Rekomendasi Latihan">
                             <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Latihan</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Personil")" is-active-route title="Personil" data-filter-tags="personil">
+                            <span class="nav-link-text" data-i18n="personil.index">Personil</span>
                         </a>
                     </li>
                     <li>

@@ -21,11 +21,10 @@ namespace OMNI.Web.Services.Master
             _httpClient = httpClient;
         }
 
-        public async Task<List<Latihan>> GetAllByPortId(int portId)
+        public async Task<List<Latihan>> GetAll()
         {
-            var id = portId;
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/Latihan/GetAllByPortId?id={portId}");
+            var result = await client.GetAsync("/api/Latihan");
 
             if (result.IsSuccessStatusCode)
 

@@ -10,7 +10,7 @@ namespace OMNI.Web.Services.Master.Interface
 {
     public interface IPersonil
     {
-        public Task<List<Personil>> GetAllByPortId(int portId);
+        public Task<List<Personil>> GetAll();
         public Task<Personil> GetById(int id);
         public Task<BaseJson<PersonilModel>> AddEdit(PersonilModel model);
         public Task<Personil> Delete(int id);

@@ -1,24 +1,29 @@
-﻿@model OMNI.Web.Models.Master.PersonilModel
+﻿@model OMNI.Web.Models.Master.RekomendasiLatihanModel
 
 <form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Personil" })
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Rekomendasi Latihan" })
 
     <div class="modal-body">
         @Html.HiddenFor(b => b.Id)
 
         <div class="form-group">
-            <label class="form-label" for="">Name</label>
-            <input class="form-control" asp-for="Name" required>
+            <label class="form-label" for="">Select Latihan</label>
+            <select name="Latihan" asp-for="Latihan" id="latihan" class="select2-input"
+                    asp-items="@(new SelectList(ViewBag.LatihanList, "Id","Name"))">
+            </select>
+            <input type="hidden" name="Port" asp-for="Port" />
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="">Satuan</label>
-            <input class="form-control" asp-for="Satuan" required>
+            <label class="form-label" for="">Select Type</label>
+            <select name="RekomendasiType" asp-for="RekomendasiType" id="rekomendasiType" class="select2-input"
+                    asp-items="@(new SelectList(ViewBag.RekomendasiTypeList, "Id","Name"))">
+            </select>
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="">Description</label>
-            <textarea class="form-control" asp-for="Desc"></textarea>
+            <label class="form-label" for="">Rekomendasi Value</label>
+            <input class="form-control" type="number" name="Value" asp-for="Value" />
         </div>
     </div>
 
@@ -28,6 +33,10 @@
 <script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $('.select2-input').select2({
+            dropdownParent: $('#modal-add-edit')
+        });
 
         $(document).on('submit', '#form-akun', function () {
         var form = $('#form-akun');

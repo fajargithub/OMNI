@@ -8,14 +8,6 @@
 @model OMNI.Web.Models.Master.PersonilModel
 
 <div class="row">
-    <div class="col-md-4">
-        <div class="form-group">
-            <label class="form-label" for="">Select Lokasi</label>
-            <select asp-for="Port" id="port" class="select2-input"
-                    asp-items="@(new SelectList(ViewBag.PortList, "Id","Name"))">
-            </select>
-        </div> <br />
-    </div>
     <div class="col-xl-12">
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
@@ -23,7 +15,7 @@
                     Personil List
                 </h2>
                 <div class="panel-toolbar">
-                    <a asp-action="AddEdit" asp-route-portId="@ViewBag.SelectedPort.Id" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
             <div class="panel-container show">
@@ -34,14 +26,14 @@
                                 <th style="width:7%;">No</th>
                                 <th>Nama</th>
                                 <th>Satuan</th>
-                                <th>Rekomendasi Hubla</th>
+                                <th>Desc</th>
                                 <th class="text-center" style="width:10%;">Action</th>
                             </tr>
                             <tr id="table1-filter" style="display:none;">
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Name" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Satuan" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Rekomendasi Hubla" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Desc" /></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -57,10 +49,6 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         $(document).ready(function () {
-            var portId = parseInt("@ViewBag.SelectedPort.Id");
-            if (portId > 0) {
-                $("#port").val(portId).change();
-            }
 
             $('.select2-input').select2();
 
@@ -116,7 +104,7 @@
                     processing: true,
                     //serverSide: true,
                     "ajax": {
-                        "url": base_api + 'Personil/GetAll?portId=' + portId,
+                        "url": base_api + 'Personil/GetAll',
                         "type": 'GET'
                         //"data": { searchData: result }
                     },
@@ -129,7 +117,7 @@
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Personil/AddEdit?id=" + iDisplayIndex.id + "&portId=" + portId + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Personil/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
                                     " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
                             }
                         }
@@ -147,13 +135,6 @@
                     cell.innerHTML = i + 1;
                 });
             }).draw();
-
-            $("#port").on('change', function () {
-                portId = this.value;
-                //initTable(portId);
-
-                window.location.href = base_api + 'Personil/Index?portId=' + portId;
-            });
         });
 
         function deleteAction(id) {

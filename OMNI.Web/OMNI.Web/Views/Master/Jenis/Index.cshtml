@@ -23,12 +23,14 @@
                             <tr class="fw-500 text-uppercase">
                                 <th style="width:7%;">No</th>
                                 <th>Nama</th>
+                                <th>Satuan</th>
                                 <th>Description</th>
                                 <th class="text-center" style="width:10%;">Action</th>
                             </tr>
                             <tr id="table1-filter" style="display:none;">
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Name" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Satuan" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Desc" /></th>
                                 <th></th>
                             </tr>
@@ -79,7 +81,7 @@
                     ordering: false,
                     order: [],
                     columnDefs: [
-                        { "orderable": false, "targets": 3 }
+                        { "orderable": false, "targets": 4 }
                     ],
                     dom:
                         "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
@@ -104,6 +106,7 @@
                     "columns": [
                         { "data": null },
                         { "data": "name" },
+                        { "data": "satuan" },
                         { "data": "desc" },
                         {
                             "targets": -1,

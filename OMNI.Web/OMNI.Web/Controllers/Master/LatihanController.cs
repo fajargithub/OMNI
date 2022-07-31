@@ -21,29 +21,14 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/Latihan/AddEdit.cshtml";
 
         protected ILatihan _latihanService;
-        public LatihanController(IRekomendasiType rekomendasiTypeService, ILatihan latihanService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public LatihanController(IRekomendasiType rekomendasiTypeService, ILatihan LatihanService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
-            _latihanService = latihanService;
+            _latihanService = LatihanService;
         }
 
-        public async Task<JsonResult> GetAll(int portId)
+        public async Task<JsonResult> GetAll()
         {
-            List<LatihanModel> data = new List<LatihanModel>();
-            List<Latihan> list = await _latihanService.GetAllByPortId(portId);
-
-            //if (list.Count() > 0)
-            //{
-            //    for (int i = 0; i < list.Count(); i++)
-            //    {
-            //        LatihanModel temp = new LatihanModel();
-            //        temp.Id = list[i].Id;
-            //        temp.Name = list[i].Name;
-            //        temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
-            //        temp.Satuan = list[i].Satuan;
-            //        temp.Desc = list[i].Desc;
-            //        data.Add(temp);
-            //    }
-            //}
+            List<Latihan> data = await _latihanService.GetAll();
 
             int count = data.Count();
 
@@ -58,18 +43,6 @@ namespace OMNI.Web.Controllers.Master
 
         public async Task<IActionResult> Index(int? portId)
         {
-            List<Port> portList = await GetAllPort();
-            ViewBag.PortList = portList;
-
-            if (portId.HasValue)
-            {
-                ViewBag.SelectedPort = portList.Where(b => b.Id == portId).FirstOrDefault();
-            }
-            else
-            {
-                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-            }
-
             return View(INDEX);
         }
 
@@ -77,7 +50,7 @@ namespace OMNI.Web.Controllers.Master
         public async Task<IActionResult> AddEdit(int id, int portId)
         {
             LatihanModel model = new LatihanModel();
-           // model.Port = portId.ToString();
+            // model.Port = portId.ToString();
 
             if (id > 0)
             {

@@ -1,21 +1,29 @@
 ﻿@{
-    ViewData["Title"] = "Master Data Latihan";
-    ViewData["PageName"] = "master_spesifikasi";
-    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Latihan";
-    ViewData["PageDescription"] = "Halaman pengelolaan data master Latihan Oil Spill Response";
+    ViewData["Title"] = "Rekomendasi Personil";
+    ViewData["PageName"] = "master_rekomendasi_personil";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Rekomendasi Personil";
+    ViewData["PageDescription"] = "Halaman pengelolaan data master Rekomendasi Personil Oil Spill Response";
 }
 
-@model OMNI.Web.Models.Master.LatihanModel
+@model OMNI.Web.Models.Master.RekomendasiPersonilModel
 
 <div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="form-label" for="">Select Lokasi</label>
+            <select asp-for="Port" id="port" class="select2-input-index"
+                    asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
+            </select>
+        </div> <br />
+    </div>
     <div class="col-xl-12">
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Latihan List
+                    Rekomendasi Personil List
                 </h2>
                 <div class="panel-toolbar">
-                    <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
             <div class="panel-container show">
@@ -24,16 +32,16 @@
                         <thead>
                             <tr class="fw-500 text-uppercase">
                                 <th style="width:7%;">No</th>
-                                <th>Nama</th>
-                                <th>Satuan</th>
-                                <th>Desc</th>
+                                <th>Personil</th>
+                                <th>Rekomendasi Type</th>
+                                <th>Value</th>
                                 <th class="text-center" style="width:10%;">Action</th>
                             </tr>
                             <tr id="table1-filter" style="display:none;">
                                 <th></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Name" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Satuan" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Desc" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Personil" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Type" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Value" /></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -49,8 +57,13 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         $(document).ready(function () {
+            var port = "@ViewBag.SelectedPort.Name";
+            if (port !== null && port !== "") {
+                $("#port").val(port).change();
+                $('a').attr('asp-route-port', port);
+            }
 
-            $('.select2-input').select2();
+            $('.select2-input-index').select2();
 
             $(".select2-placeholder").select2(
                 {
@@ -86,7 +99,7 @@
                     ordering: false,
                     order: [],
                     columnDefs: [
-                        { "orderable": false, "targets": 4 }
+                        { "orderable": false, "targets": 3 }
                     ],
                     dom:
                         "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
@@ -104,20 +117,20 @@
                     processing: true,
                     //serverSide: true,
                     "ajax": {
-                        "url": base_api + 'Latihan/GetAll',
+                        "url": base_api + 'RekomendasiPersonil/GetAll?port=' + port,
                         "type": 'GET'
                         //"data": { searchData: result }
                     },
                     "columns": [
                         { "data": null },
-                        { "data": "name" },
-                        { "data": "satuan" },
-                        { "data": "desc" },
+                        { "data": "personil" },
+                        { "data": "rekomendasiType" },
+                        { "data": "value" },
                         {
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Latihan/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiPersonil/AddEdit?id=" + iDisplayIndex.id + "&port="+ port +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
                                     " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
                             }
                         }
@@ -135,6 +148,13 @@
                     cell.innerHTML = i + 1;
                 });
             }).draw();
+
+            $("#port").on('change', function () {
+                port = this.value;
+                //initTable(portId);
+
+                window.location.href = base_api + 'RekomendasiPersonil/Index?port=' + port;
+            });
         });
 
         function deleteAction(id) {
@@ -146,7 +166,7 @@
                 denyButtonText: `Cancel`,
             }).then((result) => {
                 if (result.value) {
-                    $.post(base_api + 'Latihan/DeleteLatihan?id=' + id, function (result) {
+                    $.post(base_api + 'RekomendasiPersonil/DeleteRekomendasiPersonil?id=' + id, function (result) {
                         Swal.fire('Deleted!', '', 'success');
                         $("#table1").DataTable().ajax.reload(null, false);
                     });

@@ -26,24 +26,9 @@ namespace OMNI.Web.Controllers.Master
             _PersonilService = PersonilService;
         }
 
-        public async Task<JsonResult> GetAll(int portId)
+        public async Task<JsonResult> GetAll()
         {
-            List<PersonilModel> data = new List<PersonilModel>();
-            List<Personil> list = await _PersonilService.GetAllByPortId(portId);
-
-            //if (list.Count() > 0)
-            //{
-            //    for (int i = 0; i < list.Count(); i++)
-            //    {
-            //        PersonilModel temp = new PersonilModel();
-            //        temp.Id = list[i].Id;
-            //        temp.Name = list[i].Name;
-            //        temp.Port = list[i].PortId > 0 ? GetPortById(list[i].PortId).Result.Name : "-";
-            //        temp.Satuan = list[i].Satuan;
-            //        temp.Desc = list[i].Desc;
-            //        data.Add(temp);
-            //    }
-            //}
+            List<Personil> data = await _PersonilService.GetAll();
 
             int count = data.Count();
 
@@ -58,18 +43,6 @@ namespace OMNI.Web.Controllers.Master
 
         public async Task<IActionResult> Index(int? portId)
         {
-            List<Port> portList = await GetAllPort();
-            ViewBag.PortList = portList;
-
-            if (portId.HasValue)
-            {
-                ViewBag.SelectedPort = portList.Where(b => b.Id == portId).FirstOrDefault();
-            }
-            else
-            {
-                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-            }
-
             return View(INDEX);
         }
 
