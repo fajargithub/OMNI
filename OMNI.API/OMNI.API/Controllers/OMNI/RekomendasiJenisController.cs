@@ -38,7 +38,6 @@ namespace OMNI.API.Controllers.OMNI
                 {
                     RekomendasiJenisModel temp = new RekomendasiJenisModel();
                     temp.Id = list[i].Id;
-                    temp.RekomendasiType = list[i].RekomendasiType != null ? list[i].RekomendasiType.Name : "-";
                     temp.PeralatanOSR = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.PeralatanOSR.Name : "-";
                     temp.Jenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Name : "-";
                     temp.RekomendasiType = list[i].RekomendasiType != null ? list[i].RekomendasiType.Name : "-";

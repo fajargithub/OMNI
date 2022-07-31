@@ -29,5 +29,7 @@ namespace OMNI.API.Model
         // UserName for API tracking , dont delete it :)
         public string UserName { get; set; }
         public string AspUserId { get; set; }
+
+        public string CreateDate { get; set; }
     }
 }
