@@ -1,0 +1,182 @@
+﻿@{
+    ViewData["Title"] = "Rekomendasi Jenis";
+    ViewData["PageName"] = "master_rekomendasi_jenis";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Rekomendasi Jenis";
+    ViewData["PageDescription"] = "Halaman pengelolaan data master Rekomendasi Jenis Oil Spill Response";
+}
+
+@model OMNI.Web.Models.Master.RekomendasiJenisModel
+
+<div class="row">
+    <div class="col-md-4">
+            <div class="form-group">
+                <label class="form-label" for="">Select Lokasi</label>
+                <select asp-for="Port" id="port" class="select2-input-index"
+                        asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
+                </select>
+            </div> <br />
+        </div>
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    Rekomendasi Jenis List
+                </h2>
+                <div class="panel-toolbar">
+                    <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <table id="table1" class="table table-borderless table-hover table-striped w-100">
+                        <thead>
+                            <tr class="fw-500 text-uppercase">
+                                <th style="width:7%;">No</th>
+                                <th>Peralatan OSR</th>
+                                <th>Jenis</th>
+                                <th>Type</th>
+                                <th>Value</th>
+                                <th class="text-center" style="width:10%;">Action</th>
+                            </tr>
+                            <tr id="table1-filter" style="display:none;">
+                                <th></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Peralatan OSR" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Jenis" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Type" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Value" /></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Medium })
+@section ScriptsBlock {
+    <script src="~/js/datatable/datatable.js"></script>
+    <script>
+        $(document).ready(function () {
+            var port = "@ViewBag.SelectedPort.Name";
+            if (port !== null && port !== "") {
+                $("#port").val(port).change();
+                $('a').attr('asp-route-port', port);
+            }
+
+            $('.select2-input-index').select2();
+
+            $(".select2-placeholder").select2(
+                {
+                    placeholder: $(this).data("placeholder"),
+                    allowClear: true
+                });
+
+            $('#table1 thead tr:eq(1) th').each(function (i) {
+                $('select', this).on('change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+            var table = $('#table1').DataTable(
+                {
+                    orderCellsTop: true,
+                    fixedHeader: true,
+                    responsive: true,
+                    ordering: false,
+                    order: [],
+                    columnDefs: [
+                        { "orderable": false, "targets": 3 }
+                    ],
+                    dom:
+                        "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    buttons: [
+                        {
+                            text: '<i class="fal fa-filter"></i> Filter',
+                            className: 'btn btn-sm btn-outline-primary',
+                            action: function (e, dt, node, config) {
+                                $('#table1-filter').toggle();
+                            }
+                        },
+                    ],
+                    processing: true,
+                    //serverSide: true,
+                    "ajax": {
+                        "url": base_api + 'RekomendasiJenis/GetAll?port=' + port,
+                        "type": 'GET'
+                        //"data": { searchData: result }
+                    },
+                    "columns": [
+                        { "data": null },
+                        { "data": "peralatanOSR" },
+                        { "data": "jenis" },
+                        { "data": "rekomendasiType" },
+                        { "data": "value" },
+                        {
+                            "targets": -1,
+                            "data": null,
+                            "render": function (row, data, iDisplayIndex) {
+                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiJenis/AddEdit?id=" + iDisplayIndex.id + "&port="+ port +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                    " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
+                            }
+                        }
+                    ],
+                    "order": [[1, 'asc']],
+                    rowCallback: function (row, data, iDisplayIndex) {
+                    },
+                    "initComplete": function (settings, json) {
+                    },
+                    "destroy": true
+                }).ajax.reload();
+
+            table.on('order.dt search.dt', function () {
+                table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            $("#port").on('change', function () {
+                port = this.value;
+                //initTable(portId);
+
+                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port;
+            });
+        });
+
+        function deleteAction(id) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+                denyButtonText: `Cancel`,
+            }).then((result) => {
+                if (result.value) {
+                    $.post(base_api + 'RekomendasiJenis/DeleteRekomendasiJenis?id=' + id, function (result) {
+                        Swal.fire('Deleted!', '', 'success');
+                        $("#table1").DataTable().ajax.reload(null, false);
+                    });
+                } else if (result.isDenied) {
+
+                }
+            })
+        }
+    </script>
+}

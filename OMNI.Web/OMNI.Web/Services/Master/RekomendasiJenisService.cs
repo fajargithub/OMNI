@@ -1,4 +1,9 @@
-﻿using OMNI.Web.Services.Master.Interface;
+﻿using Microsoft.AspNetCore.Mvc;
+using OMNI.Utilities.Base;
+using OMNI.Web.Data;
+using OMNI.Web.Data.Dao;
+using OMNI.Web.Models.Master;
+using OMNI.Web.Services.Master.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +19,63 @@ namespace OMNI.Web.Services.Master
         public RekomendasiJenisService(IHttpClientFactory httpClient)
         {
             _httpClient = httpClient;
+        }
+
+        public async Task<List<RekomendasiJenisModel>> GetAll(string port)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/RekomendasiJenis/GetAll?port={port}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<List<RekomendasiJenisModel>>();
+
+            throw new Exception();
+        }
+
+        public async Task<RekomendasiJenisModel> GetById(int id)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/RekomendasiJenis/{id}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<RekomendasiJenisModel>();
+
+            throw new Exception();
+        }
+
+        public async Task<BaseJson<RekomendasiJenisModel>> AddEdit(RekomendasiJenisModel m)
+        {
+            HttpClient c = _httpClient.CreateClient("OMNI");
+
+            try
+            {
+                var r = await c.PostAsJsonAsync("/api/RekomendasiJenis", m);
+
+                if (r.IsSuccessStatusCode)
+                {
+                    return await r.Content.ReadAsAsync<BaseJson<RekomendasiJenisModel>>();
+                }
+
+                throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<RekomendasiJenis> Delete(int id)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var r = await client.DeleteAsync($"/api/RekomendasiJenis/{id}");
+
+            if (r.IsSuccessStatusCode)
+
+                return await r.Content.ReadAsAsync<RekomendasiJenis>();
+
+            throw new Exception();
         }
     }
 }

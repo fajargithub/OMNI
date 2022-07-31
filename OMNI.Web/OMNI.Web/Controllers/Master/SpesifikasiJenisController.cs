@@ -22,7 +22,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/SpesifikasiJenis/AddEdit.cshtml";
 
         protected ISpesifikasiJenis _spesifikasiJenisService;
-        public SpesifikasiJenisController(ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(portService, peralatanOSRService, jenisService)
+        public SpesifikasiJenisController(IRekomendasiType rekomendasiTypeService, ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _spesifikasiJenisService = spesifikasiJenisService;
         }

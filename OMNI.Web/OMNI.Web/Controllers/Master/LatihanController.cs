@@ -21,7 +21,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/Latihan/AddEdit.cshtml";
 
         protected ILatihan _latihanService;
-        public LatihanController(ILatihan latihanService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(portService, peralatanOSRService, jenisService)
+        public LatihanController(IRekomendasiType rekomendasiTypeService, ILatihan latihanService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _latihanService = latihanService;
         }
