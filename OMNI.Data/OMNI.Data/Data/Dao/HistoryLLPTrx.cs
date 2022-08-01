@@ -11,16 +11,16 @@ namespace OMNI.Data.Data.Dao
         public virtual SpesifikasiJenis SpesifikasiJenis { get; set; }
         public string Port { get; set; }
         public string QRCode { get; set; }
-        public float DetailExisting { get; set; }
+        public decimal DetailExisting { get; set; }
         public string Kondisi { get; set; }
-        public float TotalExistingJenis { get; set; }
-        public float TotalExistingKeseluruhan { get; set; }
-        public float TotalKebutuhanHubla { get; set; }
-        public float SelisihHubla { get; set; }
+        public decimal TotalExistingJenis { get; set; }
+        public decimal TotalExistingKeseluruhan { get; set; }
+        public decimal TotalKebutuhanHubla { get; set; }
+        public decimal SelisihHubla { get; set; }
         public string KesesuaianMP58 { get; set; }
-        public float TotalKebutuhanOSCP { get; set; }
-        public float SelisihOSCP { get; set; }
+        public decimal TotalKebutuhanOSCP { get; set; }
+        public decimal SelisihOSCP { get; set; }
         public string KesesuaianOSCP { get; set; }
-        public float PersentaseOSCP { get; set; }
+        public decimal PersentaseOSCP { get; set; }
     }
 }

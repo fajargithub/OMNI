@@ -11,7 +11,7 @@ namespace OMNI.API.Model.OMNI
         public string PeralatanOSR { get; set; }
         public string Jenis { get; set; }
         public string RekomendasiType { get; set; }
-        public float Value { get; set; }
+        public decimal Value { get; set; }
         public string CreateDate { get; set; }
     }
 }

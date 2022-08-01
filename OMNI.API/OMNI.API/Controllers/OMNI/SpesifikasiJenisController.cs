@@ -48,6 +48,24 @@ namespace OMNI.API.Controllers.OMNI
             return Ok(result);
         }
 
+        [HttpGet("GetAllSpesifikasiJenisByPeralatanOSR")]
+        public async Task<IActionResult> GetAllSpesifikasiJenisByPeralatanOSR(string peralatanOSRId, CancellationToken cancellationToken)
+        {
+            List<SpesifikasiJenisModel> result = new List<SpesifikasiJenisModel>();
+            var data = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.PeralatanOSR.Id == int.Parse(peralatanOSRId)).Include(b => b.PeralatanOSR).Include(b => b.Jenis).ToListAsync(cancellationToken);
+            if (data != null)
+            {
+                for(int i=0; i < data.Count(); i++)
+                {
+                    SpesifikasiJenisModel temp = new SpesifikasiJenisModel();
+                    temp.Id = data[i].Id;
+                    temp.Jenis = data[i].Jenis.Name;
+                    result.Add(temp);
+                }
+            }
+            return Ok(result);
+        }
+
         // GET api/<ValuesController>/5
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
