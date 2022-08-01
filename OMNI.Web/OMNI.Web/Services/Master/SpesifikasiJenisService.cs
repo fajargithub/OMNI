@@ -33,6 +33,18 @@ namespace OMNI.Web.Services.Master
             throw new Exception();
         }
 
+        public async Task<List<SpesifikasiJenisModel>> GetAllSpesifikasiJenisByPeralatanOSR(int id)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/SpesifikasiJenis/GetAllSpesifikasiJenisByPeralatanOSR?peralatanOSRId={id}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<List<SpesifikasiJenisModel>>();
+
+            throw new Exception();
+        }
+
         public async Task<SpesifikasiJenisModel> GetById(int id)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");

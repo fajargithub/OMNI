@@ -85,31 +85,31 @@
 <script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.generate-qr-code').on('click', function () {
+        //$('.generate-qr-code').on('click', function () {
 
-            // Clear Previous QR Code
-            $('#qrcode').empty();
+        //    // Clear Previous QR Code
+        //    $('#qrcode').empty();
 
-            // Set Size to Match User Input
-            //$('#qrcode').css({
-            //    'width': $('.qr-size').val(),
-            //    'height': $('.qr-size').val()
-            //})
+        //    // Set Size to Match User Input
+        //    //$('#qrcode').css({
+        //    //    'width': $('.qr-size').val(),
+        //    //    'height': $('.qr-size').val()
+        //    //})
 
-            $('#qrcode').css({
-                'width': 128,
-                'height': 128
-            })
+        //    $('#qrcode').css({
+        //        'width': 128,
+        //        'height': 128
+        //    })
 
-            // Generate and Output QR Code
-            $('#qrcode').qrcode({ width: $('.qr-size').val(), height: $('.qr-size').val(), text: $('.qr-url').val() });
+        //    // Generate and Output QR Code
+        //    $('#qrcode').qrcode({ width: $('.qr-size').val(), height: $('.qr-size').val(), text: $('.qr-url').val() });
 
-            var canvas = document.querySelector('canvas');
-            var pngUrl = canvas.toDataURL();
+        //    var canvas = document.querySelector('canvas');
+        //    var pngUrl = canvas.toDataURL();
 
-            $("#qrcode-value").val(pngUrl);
+        //    $("#qrcode-value").val(pngUrl);
 
-        });
+        //});
 
         $('.select2-input').select2({
             dropdownParent: $('#modal-add-edit')

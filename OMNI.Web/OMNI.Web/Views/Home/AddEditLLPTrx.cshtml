@@ -1,0 +1,209 @@
+﻿@model OMNI.Web.Models.Master.LLPTrxModel
+
+<style>
+    .qr-code-generator {
+        width: 500px;
+        margin: 0 auto;
+    }
+
+        .qr-code-generator * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+    #qrcode {
+        width: 128px;
+        height: 128px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+        #qrcode a {
+            font-size: 0.8em;
+        }
+
+    .generate-qr-code {
+        display: block;
+        width: 100%;
+        margin: 0.5em 0 0;
+        padding: 0.25em;
+        font-size: 1.2em;
+        border: none;
+        cursor: pointer;
+        background-color: #e5554e;
+        color: #fff;
+    }
+
+    canvas {
+        height: 100px;
+        width: 100px;
+    }
+</style>
+
+<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Rekomendasi Latihan" })
+
+    <div class="modal-body">
+        @Html.HiddenFor(b => b.Id)
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Peralatan OSR</label>
+                    <select name="PeralatanOSR" asp-for="PeralatanOSR" id="peralatanOSR" class="select2-input"
+                            asp-items="@(new SelectList(ViewBag.PeralatanOSRList, "Id","Name"))" required>
+                        <option vlaue="">Select</option>
+                    </select>
+                    <input type="hidden" name="Port" asp-for="Port" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Select Spesifikasi / Jenis</label>
+                    <select name="Jenis" asp-for="Jenis" id="jenis" class="select2-input">
+                    </select>
+                </div>
+            </div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Satuan</label>
+                    <input class="form-control" type="text" name="SatuanJenis" asp-for="SatuanJenis" readonly />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Detail Existing di Lokasi</label>
+                    <input class="form-control" type="number" name="DetailExisting" asp-for="DetailExisting" />
+                </div>
+            </div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Kondisi</label>
+                    <select name="PeralatanOSR" asp-for="Kondisi" id="kondisi" class="select2-input"
+                            asp-items="@(new SelectList(ViewBag.KondisiList, "Id","Name"))">
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Upload Gambar</label>
+                    <input type="file" name="Files" class="form-control" asp-for="Files" />
+                </div>
+            </div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="form-label" for="">Generate QR Code</label>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="text" class="form-control qr-url" placeholder="URL or Text">
+                        </div>
+                    </div>
+
+                    <div class="btn generate-qr-code">Generate</div>
+
+                    <br>
+
+                    <div id="qrcode"></div>
+                    <input type="hidden" id="qrcode-value" asp-for="QRCode" required />
+                </div>
+            </div>
+        </div><br />
+
+
+
+    </div>
+
+    @await Html.PartialAsync("_ModalFooter")
+</form>
+
+<script src="~/js/jquery-qrcode.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#peralatanOSR").on('change', function () {
+            var id = this.value;
+            console.log(id);
+
+            $.ajax({
+                url: base_api + "Home/GetAllSpesifikasiJenisByPeralatanOSR?id=" + id,
+                method: "GET",
+                success: function (result) {
+                    console.log(result);
+                    if (result.data.length > 0) {
+                        var $dropdown = $("#jenis");
+                        $.each(result.data, function () {
+                            console.log(result);
+                            $dropdown.append($("<option />").val(this.id).text(this.jenis));
+                        });
+                    }
+                }, complete: function () {
+
+                }
+            })
+        });
+
+        $('.generate-qr-code').on('click', function () {
+
+            // Clear Previous QR Code
+            $('#qrcode').empty();
+
+            // Set Size to Match User Input
+            //$('#qrcode').css({
+            //    'width': $('.qr-size').val(),
+            //    'height': $('.qr-size').val()
+            //})
+
+            $('#qrcode').css({
+                'width': 128,
+                'height': 128
+            })
+
+            // Generate and Output QR Code
+            $('#qrcode').qrcode({ width: $('.qr-size').val(), height: $('.qr-size').val(), text: $('.qr-url').val() });
+
+            var canvas = document.querySelector('canvas');
+            var pngUrl = canvas.toDataURL();
+
+            $("#qrcode-value").val(pngUrl);
+
+        });
+
+        $('.select2-input').select2({
+            dropdownParent: $('#modal-add-edit')
+        });
+
+        $(document).on('submit', '#form-akun', function () {
+        var form = $('#form-akun');
+        var validation = Array.prototype.filter.call(form, function (form) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            else {
+                event.preventDefault();
+                var param = new FormParam(
+                    form,
+                    "Apakah Anda yakin ingin menyimpan akun ini?",
+                    '@Url.Action("AddEdit")',
+                    null,
+                    '#modal-add-edit',
+                    '#table1'
+                );
+                initApp.formSubmit(param);
+            }
+            form.classList.add('was-validated');
+        });
+    });
+    });
+
+</script>

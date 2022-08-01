@@ -11,12 +11,12 @@ namespace OMNI.Web.Data.Dao
         public virtual Personil Personil { get; set; }
         public string Port { get; set; }
         public string Name { get; set; }
-        public float TotalDetailExisting { get; set; }
+        public decimal TotalDetailExisting { get; set; }
         public DateTime TanggalPelatihan { get; set; }
         public DateTime TanggalExpired { get; set; }
         public int SisaMasaBerlaku { get; set; }
-        public float SelisihHubla { get; set; }
+        public decimal SelisihHubla { get; set; }
         public string KesesuaianPM58 { get; set; }
-        public float PersentasePersonil { get; set; }
+        public decimal PersentasePersonil { get; set; }
     }
 }

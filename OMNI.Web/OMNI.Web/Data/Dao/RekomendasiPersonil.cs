@@ -11,6 +11,6 @@ namespace OMNI.Web.Data.Dao
         public string Port { get; set; }
         public virtual Personil Personil { get; set; }
         public virtual RekomendasiType RekomendasiType { get; set; }
-        public float Value { get; set; }
+        public decimal Value { get; set; }
     }
 }

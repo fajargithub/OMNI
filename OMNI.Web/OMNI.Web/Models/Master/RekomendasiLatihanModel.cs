@@ -10,6 +10,6 @@ namespace OMNI.Web.Models.Master
         public string Port { get; set; }
         public string Latihan { get; set; }
         public string RekomendasiType { get; set; }
-        public float Value { get; set; }
+        public decimal Value { get; set; }
     }
 }

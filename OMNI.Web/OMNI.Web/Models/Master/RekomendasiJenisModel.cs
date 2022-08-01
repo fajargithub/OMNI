@@ -11,6 +11,6 @@ namespace OMNI.Web.Models.Master
         public string PeralatanOSR { get; set; }
         public string Jenis { get; set; }
         public string RekomendasiType { get; set; }
-        public float Value { get; set; }
+        public decimal Value { get; set; }
     }
 }
