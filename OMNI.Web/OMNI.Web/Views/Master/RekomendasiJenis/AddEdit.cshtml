@@ -7,26 +7,28 @@
         @Html.HiddenFor(b => b.Id)
 
         <div class="form-group">
-            <label class="form-label" for="">Select Peralatan</label>
-            <select name="PeralatanOSR" asp-for="PeralatanOSR" id="peralatanOSR" class="select2-input"
-                    asp-items="@(new SelectList(ViewBag.PeralatanOSRList, "Id","Name"))">
-            </select>
-            <input type="hidden" name="Port" asp-for="Port"  />
+            <label class="form-label" for="">Peralatan OSR</label>
+            <input class="form-control" type="text" asp-for="PeralatanOSR" disabled />
+            <input type="hidden" name="Port" asp-for="Port" />
+            <input type="hidden" name="RekomendasiType" asp-for="RekomendasiType" />
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="">Select Jenis</label>
-            <select name="Jenis" asp-for="Jenis" id="jenis" class="select2-input"
-                    asp-items="@(new SelectList(ViewBag.JenisList, "Id","Name"))">
-            </select>
+            <label class="form-label" for="">Jenis</label>
+            <input class="form-control" type="text" asp-for="Jenis" disabled />
         </div>
 
         <div class="form-group">
+            <label class="form-label" for="">Rekomendasi Type</label>
+            <input class="form-control" type="text" asp-for="TypeName" disabled />
+        </div>
+
+        @*<div class="form-group">
             <label class="form-label" for="">Select Type</label>
             <select name="RekomendasiType" asp-for="RekomendasiType" id="rekomendasiType" class="select2-input"
                     asp-items="@(new SelectList(ViewBag.RekomendasiTypeList, "Id","Name"))">
             </select>
-        </div>
+        </div>*@
 
         <div class="form-group">
             <label class="form-label" for="">Rekomendasi Value</label>
@@ -40,6 +42,46 @@
 <script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
+        var selectedJenisId = parseInt("@ViewBag.JenisId");
+        var selectedPeralatanOSR = $("#peralatanOSR").val();
+        if (selectedPeralatanOSR > 0) {
+            $.ajax({
+                url: base_api + "Home/GetAllSpesifikasiJenisByPeralatanOSR?id=" + selectedPeralatanOSR,
+                method: "GET",
+                success: function (result) {
+                    if (result.data.length > 0) {
+                        $('#jenis').find('option').remove().end();
+                        var $dropdown = $("#jenis");
+                        $.each(result.data, function () {
+                            $dropdown.append($("<option />").val(this.id).text(this.jenis));
+                        });
+                    }
+                }, complete: function () {
+                    $("#jenis").val(selectedJenisId).change();
+                }
+            });
+        }
+
+        $("#peralatanOSR").on('change', function () {
+            var id = this.value;
+
+            $.ajax({
+                url: base_api + "Home/GetAllSpesifikasiJenisByPeralatanOSR?id=" + id,
+                method: "GET",
+                success: function (result) {
+                    if (result.data.length > 0) {
+                        $('#jenis').find('option').remove().end();
+                        var $dropdown = $("#jenis");
+                        $.each(result.data, function () {
+                            $dropdown.append($("<option />").val(this.id).text(this.jenis));
+                        });
+                    }
+                }, complete: function () {
+
+                }
+            })
+        });
 
         $('.select2-input').select2({
             dropdownParent: $('#modal-add-edit')

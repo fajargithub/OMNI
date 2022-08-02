@@ -82,10 +82,22 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<JsonResult> GetLLPTrxById(int id)
+        {
+            LLPTrxModel data = await _llpTrxService.GetById(id);
+
+            return Json(new
+            {
+                data
+            });
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AddEditLLPTrx(int id, string port)
         {
             ViewBag.PeralatanOSRList = await GetAllPeralatanOSR();
             ViewBag.KondisiList = await _kondisiService.GetAll();
+            ViewBag.JenisId = 0;
 
             LLPTrxModel model = new LLPTrxModel();
 
@@ -93,6 +105,7 @@ namespace OMNI.Web.Controllers
             if (id > 0)
             {
                 model = await _llpTrxService.GetById(id);
+                ViewBag.JenisId = model.Jenis;
             }
 
             return PartialView(ADD_EDIT_LLPTRX, model);

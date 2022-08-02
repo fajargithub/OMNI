@@ -42,7 +42,7 @@
 </style>
 
 <form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Rekomendasi Latihan" })
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit LLP" })
 
     <div class="modal-body">
         @Html.HiddenFor(b => b.Id)
@@ -53,7 +53,6 @@
                     <label class="form-label" for="">Peralatan OSR</label>
                     <select name="PeralatanOSR" asp-for="PeralatanOSR" id="peralatanOSR" class="select2-input"
                             asp-items="@(new SelectList(ViewBag.PeralatanOSRList, "Id","Name"))" required>
-                        <option vlaue="">Select</option>
                     </select>
                     <input type="hidden" name="Port" asp-for="Port" />
                 </div>
@@ -70,8 +69,10 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="form-label" for="">Satuan</label>
-                    <input class="form-control" type="text" name="SatuanJenis" asp-for="SatuanJenis" readonly />
+                    <label class="form-label" for="">Kondisi</label>
+                    <select name="Kondisi" asp-for="Kondisi" id="kondisi" class="select2-input"
+                            asp-items="@(new SelectList(ViewBag.KondisiList, "Name","Name"))">
+                    </select>
                 </div>
             </div>
             <div class="col-md-6">
@@ -83,15 +84,7 @@
         </div><br />
 
         <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="form-label" for="">Kondisi</label>
-                    <select name="PeralatanOSR" asp-for="Kondisi" id="kondisi" class="select2-input"
-                            asp-items="@(new SelectList(ViewBag.KondisiList, "Id","Name"))">
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label class="form-label" for="">Upload Gambar</label>
                     <input type="file" name="Files" class="form-control" asp-for="Files" />
@@ -129,20 +122,37 @@
 <script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        var selectedJenisId = parseInt("@ViewBag.JenisId");
+        var selectedPeralatanOSR = $("#peralatanOSR").val();
+        if (selectedPeralatanOSR > 0) {
+            $.ajax({
+                url: base_api + "Home/GetAllSpesifikasiJenisByPeralatanOSR?id=" + selectedPeralatanOSR,
+                method: "GET",
+                success: function (result) {
+                    if (result.data.length > 0) {
+                        $('#jenis').find('option').remove().end();
+                        var $dropdown = $("#jenis");
+                        $.each(result.data, function () {
+                            $dropdown.append($("<option />").val(this.id).text(this.jenis));
+                        });
+                    }
+                }, complete: function () {
+                    $("#jenis").val(selectedJenisId).change();
+                }
+            });
+        }
 
         $("#peralatanOSR").on('change', function () {
             var id = this.value;
-            console.log(id);
 
             $.ajax({
                 url: base_api + "Home/GetAllSpesifikasiJenisByPeralatanOSR?id=" + id,
                 method: "GET",
                 success: function (result) {
-                    console.log(result);
                     if (result.data.length > 0) {
+                        $('#jenis').find('option').remove().end();
                         var $dropdown = $("#jenis");
                         $.each(result.data, function () {
-                            console.log(result);
                             $dropdown.append($("<option />").val(this.id).text(this.jenis));
                         });
                     }
@@ -156,12 +166,6 @@
 
             // Clear Previous QR Code
             $('#qrcode').empty();
-
-            // Set Size to Match User Input
-            //$('#qrcode').css({
-            //    'width': $('.qr-size').val(),
-            //    'height': $('.qr-size').val()
-            //})
 
             $('#qrcode').css({
                 'width': 128,
@@ -194,10 +198,10 @@
                 var param = new FormParam(
                     form,
                     "Apakah Anda yakin ingin menyimpan akun ini?",
-                    '@Url.Action("AddEdit")',
+                    '@Url.Action("AddEditLLPTrx")',
                     null,
                     '#modal-add-edit',
-                    '#table1'
+                    '#table-llp'
                 );
                 initApp.formSubmit(param);
             }

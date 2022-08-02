@@ -21,10 +21,10 @@ namespace OMNI.Web.Services.Master
             _httpClient = httpClient;
         }
 
-        public async Task<List<RekomendasiJenisModel>> GetAll(string port)
+        public async Task<List<RekomendasiJenisModel>> GetAll(string port, string typeId)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/RekomendasiJenis/GetAll?port={port}");
+            var result = await client.GetAsync($"/api/RekomendasiJenis/GetAll?port={port}&typeId={typeId}");
 
             if (result.IsSuccessStatusCode)
 
@@ -33,10 +33,10 @@ namespace OMNI.Web.Services.Master
             throw new Exception();
         }
 
-        public async Task<RekomendasiJenisModel> GetById(int id)
+        public async Task<RekomendasiJenisModel> GetById(string id, string port, string typeId)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/RekomendasiJenis/{id}");
+            var result = await client.GetAsync($"/api/RekomendasiJenis/GetById?id={id}&port={port}&typeId={typeId}");
 
             if (result.IsSuccessStatusCode)
 

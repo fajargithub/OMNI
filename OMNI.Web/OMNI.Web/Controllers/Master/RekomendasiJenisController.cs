@@ -32,9 +32,9 @@ namespace OMNI.Web.Controllers.Master
             _portService = portService;
         }
 
-        public async Task<JsonResult> GetAll(string port)
+        public async Task<JsonResult> GetAll(string port, string typeId)
         {
-            List<RekomendasiJenisModel> data = await _rekomendasiJenisService.GetAll(port);
+            List<RekomendasiJenisModel> data = await _rekomendasiJenisService.GetAll(port, typeId);
 
             int count = data.Count();
 
@@ -47,7 +47,7 @@ namespace OMNI.Web.Controllers.Master
             });
         }
 
-        public async Task<IActionResult> Index(string port)
+        public async Task<IActionResult> Index(string port, int typeId)
         {
             List<Port> portList = await GetAllPort();
             ViewBag.PortList = portList;
@@ -61,21 +61,31 @@ namespace OMNI.Web.Controllers.Master
                 ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
             }
 
+            List<RekomendasiType> rekomendasiTypeList = await _rekomendasiTypeService.GetAll();
+            ViewBag.RekomendasiTypeList = rekomendasiTypeList;
+
+            if (typeId > 0)
+            {
+                ViewBag.SelectedRekomendasiType = rekomendasiTypeList.Where(b => b.Id == typeId).FirstOrDefault();
+            }
+            else
+            {
+                ViewBag.SelectedRekomendasiType = rekomendasiTypeList.OrderBy(b => b.Id).FirstOrDefault();
+            }
+
             return View(INDEX);
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddEdit(int id, string port)
+        public async Task<IActionResult> AddEdit(int id, string port, string typeId)
         {
-            ViewBag.PeralatanOSRList = await GetAllPeralatanOSR();
-            ViewBag.JenisList = await GetAllJenis();
-            ViewBag.RekomendasiTypeList = await GetAllRekomendasiType();
             RekomendasiJenisModel model = new RekomendasiJenisModel();
 
             model.Port = port;
             if (id > 0)
             {
-                model = await _rekomendasiJenisService.GetById(id);
+                model = await _rekomendasiJenisService.GetById(id.ToString(), port, typeId);
+                ViewBag.JenisId = model.Jenis;
             }
 
             return PartialView(ADD_EDIT, model);

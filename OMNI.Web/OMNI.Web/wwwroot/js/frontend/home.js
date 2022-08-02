@@ -56,7 +56,14 @@ var table = $('#table-llp').DataTable(
             { "data": "jenis" },
             { "data": "satuanJenis" },
             { "data": "detailExisting" },
-            { "data": "qrCode" },
+            {
+              "targets": -1,
+              "data": null,
+                "render": function (row, data, iDisplayIndex) {
+                    var image = "<a href='javascript:void(0)' onclick='qrcodeClick(" + iDisplayIndex.id + ")'><img src='" + iDisplayIndex.qrCode + "' alt='' width='35' id='qrcode-" + iDisplayIndex.id + "'></a>";
+                    return image;
+                 }
+            },
             { "data": "kondisi" },
             {
                 "targets": -1,
@@ -75,8 +82,8 @@ var table = $('#table-llp').DataTable(
                 "targets": -1,
                 "data": null,
                 "render": function (row, data, iDisplayIndex) {
-                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiLatihan/AddEdit?id=" + iDisplayIndex.id + "&port=" + port + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
-                        " <a href='javascript:void(0)' onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
+                        " <a href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
                 }
             }
         ],
@@ -84,6 +91,7 @@ var table = $('#table-llp').DataTable(
         rowCallback: function (row, data, iDisplayIndex) {
         },
         "initComplete": function (settings, json) {
+   
         },
         "destroy": true
     }).ajax.reload();
@@ -93,3 +101,38 @@ table.on('order.dt search.dt', function () {
         cell.innerHTML = i + 1;
     });
 }).draw();
+
+
+function qrcodeClick(id) {
+    console.log(id);
+
+    $.ajax({
+        url: base_api + "Home/GetLLPTrxById?id=" + id,
+        method: 'GET',
+        success: function (result) {
+            Swal.fire({
+                imageUrl: result.data.qrCode,
+                imageAlt: 'QR Code'
+            })
+        }
+    });
+}
+
+function deleteLLPTrx(id) {
+    Swal.fire({
+        title: 'Do you want to delete?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        denyButtonText: `Cancel`,
+    }).then((result) => {
+        if (result.value) {
+            $.post(base_api + 'Home/DeleteLLPTrx?id=' + id, function (result) {
+                Swal.fire('Deleted!', '', 'success');
+                $("#table-llp").DataTable().ajax.reload(null, false);
+            });
+        } else if (result.isDenied) {
+
+        }
+    })
+}

@@ -10,8 +10,8 @@ namespace OMNI.Web.Services.Master.Interface
 {
     public interface IRekomendasiJenis
     {
-        public Task<List<RekomendasiJenisModel>> GetAll(string port);
-        public Task<RekomendasiJenisModel> GetById(int id);
+        public Task<List<RekomendasiJenisModel>> GetAll(string port, string typeId);
+        public Task<RekomendasiJenisModel> GetById(string id, string port, string typeId);
         public Task<BaseJson<RekomendasiJenisModel>> AddEdit(RekomendasiJenisModel model);
         public Task<RekomendasiJenis> Delete(int id);
     }

@@ -9,22 +9,30 @@
 
 <div class="row">
     <div class="col-md-4">
-            <div class="form-group">
-                <label class="form-label" for="">Select Lokasi</label>
-                <select asp-for="Port" id="port" class="select2-input-index"
-                        asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
-                </select>
-            </div> <br />
-        </div>
+        <div class="form-group">
+            <label class="form-label" for="">Select Lokasi</label>
+            <select asp-for="Port" id="port" class="select2-input-index"
+                    asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
+            </select>
+        </div> <br />
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="form-label" for="">Select Rekomendasi Type</label>
+            <select asp-for="RekomendasiType" id="rekomendasiType" class="select2-input-index"
+                    asp-items="@(new SelectList(ViewBag.RekomendasiTypeList, "Id","Name"))">
+            </select>
+        </div> <br />
+    </div>
     <div class="col-xl-12">
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
                     Rekomendasi Jenis List
                 </h2>
-                <div class="panel-toolbar">
+                @*<div class="panel-toolbar">
                     <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                </div>
+                </div>*@
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -34,7 +42,6 @@
                                 <th style="width:7%;">No</th>
                                 <th>Peralatan OSR</th>
                                 <th>Jenis</th>
-                                <th>Type</th>
                                 <th>Value</th>
                                 <th class="text-center" style="width:10%;">Action</th>
                             </tr>
@@ -42,7 +49,6 @@
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Peralatan OSR" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Jenis" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Type" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Value" /></th>
                                 <th></th>
                             </tr>
@@ -62,7 +68,11 @@
             var port = "@ViewBag.SelectedPort.Name";
             if (port !== null && port !== "") {
                 $("#port").val(port).change();
-                $('a').attr('asp-route-port', port);
+            }
+
+            var typeId = parseInt("@ViewBag.SelectedRekomendasiType.Id");
+            if (typeId > 0) {
+                $("#rekomendasiType").val(typeId).change();
             }
 
             $('.select2-input-index').select2();
@@ -119,7 +129,7 @@
                     processing: true,
                     //serverSide: true,
                     "ajax": {
-                        "url": base_api + 'RekomendasiJenis/GetAll?port=' + port,
+                        "url": base_api + 'RekomendasiJenis/GetAll?port=' + port +"&typeId=" + typeId,
                         "type": 'GET'
                         //"data": { searchData: result }
                     },
@@ -127,14 +137,13 @@
                         { "data": null },
                         { "data": "peralatanOSR" },
                         { "data": "jenis" },
-                        { "data": "rekomendasiType" },
                         { "data": "value" },
                         {
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiJenis/AddEdit?id=" + iDisplayIndex.id + "&port="+ port +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
-                                    " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
+                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiJenis/AddEdit?id=" + iDisplayIndex.id + "&port=" + port + "&typeId="+ typeId +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>";
+                                    /*" <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";*/
                             }
                         }
                     ],
@@ -154,9 +163,16 @@
 
             $("#port").on('change', function () {
                 port = this.value;
-                //initTable(portId);
+                typeId = $("#rekomendasiType").val();
 
-                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port;
+                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId;
+            });
+
+            $("#rekomendasiType").on('change', function () {
+                typeId = this.value;
+                port = $("#port").val();
+
+                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId;
             });
         });
 
