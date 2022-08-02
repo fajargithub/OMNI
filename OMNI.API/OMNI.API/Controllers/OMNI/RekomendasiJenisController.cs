@@ -27,24 +27,45 @@ namespace OMNI.API.Controllers.OMNI
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string port, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(string port, string typeId, CancellationToken cancellationToken)
         {
             List<RekomendasiJenisModel> result = new List<RekomendasiJenisModel>();
-            var list = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.RekomendasiType)
-                .Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.SpesifikasiJenis.Jenis).Include(b => b.RekomendasiType).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+            //var list = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.RekomendasiType)
+            //    .Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.SpesifikasiJenis.Jenis).Include(b => b.RekomendasiType).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+
+            var list = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO).Include(b => b.PeralatanOSR).Include(b => b.Jenis).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+            var rekomenJenisList = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == int.Parse(typeId)).Include(b => b.RekomendasiType)
+                .Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.SpesifikasiJenis.Jenis).Include(b => b.RekomendasiType).OrderBy(b => b.CreatedAt).ToListAsync(cancellationToken);
+
             if (list.Count() > 0)
             {
                 for (int i = 0; i < list.Count(); i++)
                 {
                     RekomendasiJenisModel temp = new RekomendasiJenisModel();
+                    //temp.Id = list[i].Id;
+                    //temp.PeralatanOSR = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.PeralatanOSR.Name : "-";
+                    //temp.Jenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Name : "-";
+                    //temp.RekomendasiType = list[i].RekomendasiType != null ? list[i].RekomendasiType.Name : "-";
+                    //temp.Port = list[i].Port;
+                    //temp.Value = list[i].Value;
+                    //temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
+                    //temp.CreatedBy = list[i].CreatedBy;
+                    //result.Add(temp);
+
                     temp.Id = list[i].Id;
-                    temp.PeralatanOSR = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.PeralatanOSR.Name : "-";
-                    temp.Jenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Name : "-";
-                    temp.RekomendasiType = list[i].RekomendasiType != null ? list[i].RekomendasiType.Name : "-";
-                    temp.Port = list[i].Port;
-                    temp.Value = list[i].Value;
-                    temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
-                    temp.CreatedBy = list[i].CreatedBy;
+                    temp.PeralatanOSR = list[i].PeralatanOSR != null ? list[i].PeralatanOSR.Name : "-";
+                    temp.Jenis = list[i].Jenis != null ? list[i].Jenis.Name : "-";
+
+                    var findRekomenJenis = rekomenJenisList.Find(b => b.SpesifikasiJenis.Id == list[i].Id);
+                    if(findRekomenJenis != null)
+                    {
+                        temp.RekomendasiType = findRekomenJenis.RekomendasiType != null ? findRekomenJenis.RekomendasiType.Name : "-";
+                        temp.Port = findRekomenJenis.Port;
+                        temp.Value = findRekomenJenis.Value;
+                        temp.CreateDate = findRekomenJenis.CreatedAt.ToString("dd MMM yyyy");
+                        temp.CreatedBy = findRekomenJenis.CreatedBy;
+                    }
+                    
                     result.Add(temp);
                 }
             }
@@ -53,18 +74,26 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         // GET api/<ValuesController>/5
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById(string id, string port, string typeId, CancellationToken cancellationToken)
         {
             RekomendasiJenisModel result = new RekomendasiJenisModel();
-            var data = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).Include(b => b.RekomendasiType)
+            var data = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.SpesifikasiJenis.Id == int.Parse(id) && b.Port == port && b.RekomendasiType.Id == int.Parse(typeId)).Include(b => b.RekomendasiType)
                 .Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.SpesifikasiJenis.Jenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
+
+            var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == int.Parse(id)).Include(b => b.PeralatanOSR).Include(b => b.Jenis).FirstOrDefaultAsync(cancellationToken);
+
+            result.PeralatanOSR = findSpesifikasiJenis != null ? findSpesifikasiJenis.PeralatanOSR.Name : "0";
+            result.Jenis = findSpesifikasiJenis != null ? findSpesifikasiJenis.Jenis.Name : "0";
+
+            var findRekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(typeId)).FirstOrDefaultAsync(cancellationToken);
+
+            result.RekomendasiType = findRekomendasiType != null ? findRekomendasiType.Id.ToString() : "0";
+            result.TypeName = findRekomendasiType != null ? findRekomendasiType.Name : "-";
+
             if (data != null)
             {
                 result.Id = data.Id;
-                result.PeralatanOSR = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Id.ToString() : "0";
-                result.Jenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Id.ToString() : "0";
-                result.RekomendasiType = data.RekomendasiType != null ? data.RekomendasiType.Id.ToString() : "0";
                 result.Port = data.Port;
                 result.Value = data.Value;
             }
@@ -76,15 +105,17 @@ namespace OMNI.API.Controllers.OMNI
         {
             RekomendasiJenis data = new RekomendasiJenis();
 
-            var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.PeralatanOSR.Id == int.Parse(model.PeralatanOSR) && b.Jenis.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
-            if(findSpesifikasiJenis != null)
+            //var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.PeralatanOSR.Id == int.Parse(model.PeralatanOSR) && b.Jenis.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+            var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
+            var rekomendasiJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.Port == model.Port && b.SpesifikasiJenis.Id == model.Id && b.RekomendasiType.Id == int.Parse(model.RekomendasiType)).Include(b => b.SpesifikasiJenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
+            if (findSpesifikasiJenis != null)
             {
-                if (model.Id > 0)
+                if (rekomendasiJenis != null)
                 {
-                    data = await _dbOMNI.RekomendasiJenis.Where(b => b.Id == model.Id).Include(b => b.SpesifikasiJenis)
+                    data = await _dbOMNI.RekomendasiJenis.Where(b => b.Id == rekomendasiJenis.Id).Include(b => b.SpesifikasiJenis)
                         .Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.SpesifikasiJenis.Jenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
 
-                    data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == findSpesifikasiJenis.Id).FirstOrDefaultAsync(cancellationToken);
+                    data.SpesifikasiJenis = findSpesifikasiJenis;
                     data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
                     data.Port = model.Port;
                     data.Value = model.Value;
@@ -95,7 +126,7 @@ namespace OMNI.API.Controllers.OMNI
                 }
                 else
                 {
-                    data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == findSpesifikasiJenis.Id).FirstOrDefaultAsync(cancellationToken);
+                    data.SpesifikasiJenis = findSpesifikasiJenis;
                     data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
                     data.Port = model.Port;
                     data.Value = model.Value;

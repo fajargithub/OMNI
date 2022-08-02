@@ -30,7 +30,7 @@ namespace OMNI.API.Controllers.OMNI
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             List<SpesifikasiJenisModel> result = new List<SpesifikasiJenisModel>();
-            var list = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO).Include(b => b.PeralatanOSR).Include(b => b.Jenis).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+            var list = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO).Include(b => b.PeralatanOSR).Include(b => b.Jenis).OrderBy(b => b.CreatedAt).ToListAsync(cancellationToken);
             if(list.Count() > 0)
             {
                 for(int i=0; i < list.Count(); i++)
