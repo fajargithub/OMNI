@@ -49,6 +49,7 @@ namespace OMNI.API.Controllers.OMNI
                 data = await _dbOMNI.Jenis.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
                 data.Name = model.Name;
                 data.Satuan = model.Satuan;
+                data.Kode = model.Kode;
                 data.Desc = model.Desc;
                 data.UpdatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
@@ -59,6 +60,7 @@ namespace OMNI.API.Controllers.OMNI
             {
                 data.Name = model.Name;
                 data.Satuan = model.Satuan;
+                data.Kode = model.Kode;
                 data.Desc = model.Desc;
                 data.CreatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";

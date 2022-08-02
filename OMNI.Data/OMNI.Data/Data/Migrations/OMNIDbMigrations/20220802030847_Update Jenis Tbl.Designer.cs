@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OMNI.Data.Data;
 
-namespace OMNI.Data.Data.Migrations.OMNIDbMigrations
+namespace OMNI.Migrations.Data.Migrations.OMNIDbMigrations
 {
     [DbContext(typeof(OMNIDbContext))]
-    partial class OMNIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220802030847_Update Jenis Tbl")]
+    partial class UpdateJenisTbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,6 +234,9 @@ namespace OMNI.Data.Data.Migrations.OMNIDbMigrations
                         .HasMaxLength(100);
 
                     b.Property<string>("Desc")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InventoryNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IsActive")

@@ -82,69 +82,123 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         // GET api/<ValuesController>/5
-        //[HttpGet("{id:int}")]
-        //public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
-        //{
-        //    RekomendasiLatihanModel result = new RekomendasiLatihanModel();
-        //    var data = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).Include(b => b.RekomendasiType)
-        //        .Include(b => b.Latihan).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
-        //    if (data != null)
-        //    {
-        //        result.Id = data.Id;
-        //        result.Latihan = data.Latihan != null ? data.Latihan.Id.ToString() : "0";
-        //        result.RekomendasiType = data.RekomendasiType != null ? data.RekomendasiType.Id.ToString() : "0";
-        //        result.Port = data.Port;
-        //        result.Value = data.Value;
-        //    }
-        //    return Ok(result);
-        //}
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
+        {
+            LLPTrxModel result = new LLPTrxModel();
+            var data = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id)
+                .Include(b => b.SpesifikasiJenis)
+                .Include(b => b.SpesifikasiJenis.PeralatanOSR)
+                .Include(b => b.SpesifikasiJenis.Jenis)
+                .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
+            if (data != null)
+            {
+                result.Id = data.Id;
+                result.PeralatanOSR = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Id.ToString() : "-";
+                result.Jenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Id.ToString() : "-";
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddEdit(RekomendasiLatihanModel model, CancellationToken cancellationToken)
-        //{
-        //    RekomendasiLatihan data = new RekomendasiLatihan();
+                var findRekomenJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == data.Port && b.SpesifikasiJenis.Id == data.SpesifikasiJenis.Id).FirstOrDefaultAsync(cancellationToken);
+                if(findRekomenJenis != null)
+                {
+                    result.RekomendasiHubla = findRekomenJenis.Value;
+                } else
+                {
+                    result.RekomendasiHubla = 0;
+                }
 
-        //    if (model.Id > 0)
-        //    {
-        //        data = await _dbOMNI.RekomendasiLatihan.Where(b => b.Id == model.Id).Include(b => b.Latihan).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
+                result.SatuanJenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Satuan : "-";
+                result.Port = data.Port;
+                result.QRCode = data.QRCode;
+                result.DetailExisting = data.DetailExisting;
+                result.Kondisi = data.Kondisi;
+                result.TotalExistingJenis = data.TotalExistingJenis;
+                result.TotalExistingKeseluruhan = data.TotalExistingKeseluruhan;
+                result.TotalKebutuhanHubla = data.TotalKebutuhanHubla;
+                result.SelisihHubla = data.SelisihHubla;
+                result.KesesuaianMP58 = data.KesesuaianMP58;
+                result.PersentaseHubla = data.PersentaseHubla;
+                result.TotalKebutuhanOSCP = data.TotalKebutuhanOSCP;
+                result.SelisihOSCP = data.SelisihOSCP;
+                result.KesesuaianOSCP = data.KesesuaianOSCP;
+                result.PersentaseOSCP = data.PersentaseOSCP;
+            }
+            return Ok(result);
+        }
 
-        //        data.Latihan = await _dbOMNI.Latihan.Where(b => b.Id == int.Parse(model.Latihan)).FirstOrDefaultAsync(cancellationToken);
-        //        data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
-        //        data.Port = model.Port;
-        //        data.Value = model.Value;
-        //        data.UpdatedAt = DateTime.Now;
-        //        data.UpdatedBy = "admin";
-        //        _dbOMNI.RekomendasiLatihan.Update(data);
-        //        await _dbOMNI.SaveChangesAsync(cancellationToken);
-        //    }
-        //    else
-        //    {
-        //        data.Latihan = await _dbOMNI.Latihan.Where(b => b.Id == int.Parse(model.Latihan)).FirstOrDefaultAsync(cancellationToken);
-        //        data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
-        //        data.Port = model.Port;
-        //        data.Value = model.Value;
-        //        data.CreatedAt = DateTime.Now;
-        //        data.CreatedBy = "admin";
-        //        await _dbOMNI.RekomendasiLatihan.AddAsync(data, cancellationToken);
-        //        await _dbOMNI.SaveChangesAsync(cancellationToken);
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> AddEdit(LLPTrxModel model, CancellationToken cancellationToken)
+        {
+            LLPTrx data = new LLPTrx();
+
+            if (model.Id > 0)
+            {
+               data = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == model.Id)
+                .Include(b => b.SpesifikasiJenis)
+                .Include(b => b.SpesifikasiJenis.PeralatanOSR)
+                .Include(b => b.SpesifikasiJenis.Jenis)
+                .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
+
+                data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+
+                data.Port = model.Port;
+                data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
+                data.DetailExisting = model.DetailExisting;
+                data.Kondisi = model.Kondisi;
+                data.TotalExistingJenis = model.TotalExistingJenis;
+                data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
+                data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
+                data.SelisihHubla = model.SelisihHubla;
+                data.KesesuaianMP58 = model.KesesuaianMP58;
+                data.PersentaseHubla = model.PersentaseHubla;
+                data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
+                data.SelisihOSCP = model.SelisihOSCP;
+                data.KesesuaianOSCP = model.KesesuaianOSCP;
+                data.PersentaseOSCP = model.PersentaseOSCP;
+                data.UpdatedAt = DateTime.Now;
+                data.UpdatedBy = "admin";
+                _dbOMNI.LLPTrx.Update(data);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+
+                data.Port = model.Port;
+                data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
+                data.DetailExisting = model.DetailExisting;
+                data.Kondisi = model.Kondisi;
+                data.TotalExistingJenis = model.TotalExistingJenis;
+                data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
+                data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
+                data.SelisihHubla = model.SelisihHubla;
+                data.KesesuaianMP58 = model.KesesuaianMP58;
+                data.PersentaseHubla = model.PersentaseHubla;
+                data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
+                data.SelisihOSCP = model.SelisihOSCP;
+                data.KesesuaianOSCP = model.KesesuaianOSCP;
+                data.PersentaseOSCP = model.PersentaseOSCP;
+                data.CreatedAt = DateTime.Now;
+                data.CreatedBy = "admin";
+                await _dbOMNI.LLPTrx.AddAsync(data, cancellationToken);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
 
 
-        //    return Ok(new ReturnJson { });
-        //}
+            return Ok(new ReturnJson { });
+        }
 
         //// DELETE api/<ValuesController>/5
-        //[HttpDelete("{id:int}")]
-        //public async Task<RekomendasiLatihan> Delete([FromRoute] int id, CancellationToken cancellationToken)
-        //{
-        //    RekomendasiLatihan data = await _dbOMNI.RekomendasiLatihan.Where(b => b.Id == id).FirstOrDefaultAsync(cancellationToken);
-        //    data.IsDeleted = GeneralConstants.YES;
-        //    data.UpdatedBy = "admin";
-        //    data.UpdatedAt = DateTime.Now;
-        //    _dbOMNI.RekomendasiLatihan.Update(data);
-        //    await _dbOMNI.SaveChangesAsync(cancellationToken);
+        [HttpDelete("{id:int}")]
+        public async Task<LLPTrx> Delete([FromRoute] int id, CancellationToken cancellationToken)
+        {
+            LLPTrx data = await _dbOMNI.LLPTrx.Where(b => b.Id == id).FirstOrDefaultAsync(cancellationToken);
+            data.IsDeleted = GeneralConstants.YES;
+            data.UpdatedBy = "admin";
+            data.UpdatedAt = DateTime.Now;
+            _dbOMNI.LLPTrx.Update(data);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
 
-        //    return data;
-        //}
+            return data;
+        }
     }
 }
