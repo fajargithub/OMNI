@@ -59,6 +59,8 @@ namespace OMNI.Web.Controllers.Master
                     model.Id = data.Id;
                     model.Name = data.Name;
                     model.Satuan = data.Satuan;
+                    model.Kode = data.Kode;
+                    model.InventoryKode = data.InventoryKode;
                     model.Desc = data.Desc;
                 }
             }
