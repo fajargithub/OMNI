@@ -9,6 +9,7 @@ namespace OMNI.Web.Models.Master
     {
         public string PeralatanOSR { get; set; }
         public string Jenis { get; set; }
+        public string KodeInventory { get; set; }
         public string CreateDate { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace OMNI.Web.Models.Master
         public string Name { get; set; }
         public string Satuan { get; set; }
         public string Kode { get; set; }
-        public string InventoryKode { get; set; }
+        public string KodeInventory { get; set; }
         public string Desc { get; set; }
     }
 }

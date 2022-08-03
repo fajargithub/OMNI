@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OMNI.Utilities.Constants;
+using OMNI.Web.Data.Dao;
 using OMNI.Web.Data.Dao.CorePTK;
 using OMNI.Web.Models;
 using OMNI.Web.Models.Master;
@@ -36,6 +37,7 @@ namespace OMNI.Web.Controllers
             _llpTrxService = llpTrxService;
             _kondisiService = kondisiService;
             _spesifikasiJenisService = spesifikasiJenisService;
+            _portService = portService;
         }
 
         public async Task<JsonResult> GetAllLLPTrx(string port)
@@ -92,21 +94,53 @@ namespace OMNI.Web.Controllers
             });
         }
 
+        public class yearData
+        {
+            public int Value { get; set; }
+            public int Name { get; set; }
+        }
+
+        public List<yearData> GetYearList(int startYear, int endYear)
+        {
+            List<yearData> yearList = new List<yearData>();
+            int yearRange = endYear - startYear;
+            if(yearRange > 0)
+            {
+                for(int i=0; i <= yearRange; i++)
+                {
+                    yearData temp = new yearData();
+                    temp.Value = startYear;
+                    temp.Name = startYear;
+                    yearList.Add(temp);
+
+                    startYear += 1;
+                }
+            }
+
+            return yearList;
+        }
+
         [HttpGet]
         public async Task<IActionResult> AddEditLLPTrx(int id, string port)
         {
-            ViewBag.PeralatanOSRList = await GetAllPeralatanOSR();
+            List<PeralatanOSR> peralatanOSRList = await GetAllPeralatanOSR();
+            ViewBag.PeralatanOSRList = peralatanOSRList;
             ViewBag.KondisiList = await _kondisiService.GetAll();
             ViewBag.JenisId = 0;
+            ViewBag.YearList = GetYearList(2010, 2030);
+            ViewBag.YearNow = DateTime.Now.Year;
+
+            var region = await _portService.GetPortRegion(port);
+            ViewBag.Region = region;
 
             LLPTrxModel model = new LLPTrxModel();
-
             model.Port = port;
+
             if (id > 0)
             {
                 model = await _llpTrxService.GetById(id);
                 ViewBag.JenisId = model.Jenis;
-            }
+            } 
 
             return PartialView(ADD_EDIT_LLPTRX, model);
         }

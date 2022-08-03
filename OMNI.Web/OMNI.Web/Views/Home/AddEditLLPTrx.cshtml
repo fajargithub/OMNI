@@ -42,7 +42,7 @@
 </style>
 
 <form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit LLP" })
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit LLP " })
 
     <div class="modal-body">
         @Html.HiddenFor(b => b.Id)
@@ -92,25 +92,56 @@
             </div>
         </div><br />
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="form-label" for="">Generate QR Code</label>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <input type="text" class="form-control qr-url" placeholder="URL or Text">
-                        </div>
+              <div class="row">
+                  <div class="col-md-3">
+                      <div class="form-group">
+                          <label class="form-label" for="">Inventory No</label>
+                          <input type="text" id="kodeInventory" asp-for="KodeInventory" class="form-control" readonly>
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="form-group">
+                          <label class="form-label" for="">Select Year</label>
+                          <select name="Year" id="year" class="select2-input"
+                                  asp-items="@(new SelectList(ViewBag.YearList, "Name","Name"))">
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="form-group">
+                          <label class="form-label" for="">Region Code</label>
+                          <input type="text" value="@ViewBag.Region" id="region" class="form-control" readonly>
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="form-group">
+                          <label class="form-label" for="">No Aset</label>
+                          <input type="text" value="" id="noAset" class="form-control">
+                          <input type="hidden" id="qrcode-value" asp-for="QRCode" required />
+                      </div>
+                  </div>
+                  <div class="col-md-12">
+                      <br />
+                      <div id="qrcode"></div>
+                  </div>
+                  @*<div class="col-md-12">
+            <div class="form-group">
+                <label class="form-label" for="">Generate QR Code</label>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control qr-url" placeholder="URL or Text">
                     </div>
-
-                    <div class="btn generate-qr-code">Generate</div>
-
-                    <br>
-
-                    <div id="qrcode"></div>
-                    <input type="hidden" id="qrcode-value" asp-for="QRCode" required />
                 </div>
+
+                <div class="btn generate-qr-code">Generate</div>
+
+                <br>
+
+                <div id="qrcode"></div>
+                <input type="hidden" id="qrcode-value" asp-for="QRCode" required />
             </div>
-        </div><br />
+        </div>*@
+              </div><br />
 
 
 
@@ -122,8 +153,36 @@
 <script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        var yearNow = "@ViewBag.YearNow";
+        var region = "@ViewBag.Region";
         var selectedJenisId = parseInt("@ViewBag.JenisId");
         var selectedPeralatanOSR = $("#peralatanOSR").val();
+        var inventoryNumber = "";
+
+        $("#noAset").on('change', function () {
+            var kodeInventory = $("#kodeInventory").val();
+            var year = $("#year").val();
+            var region = $("#region").val();
+
+            inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + this.value;
+
+            $('#qrcode').empty();
+
+            $('#qrcode').css({
+                'width': 128,
+                'height': 128
+            })
+
+            $('#qrcode').qrcode({ width: $('.qr-size').val(), height: $('.qr-size').val(), text: inventoryNumber });
+
+            var canvas = document.querySelector('canvas');
+            var pngUrl = canvas.toDataURL();
+
+            $("#qrcode-value").val(pngUrl);
+        });
+
+        $("#year").val(yearNow).change();
+
         if (selectedPeralatanOSR > 0) {
             $.ajax({
                 url: base_api + "Home/GetAllSpesifikasiJenisByPeralatanOSR?id=" + selectedPeralatanOSR,
@@ -135,6 +194,8 @@
                         $.each(result.data, function () {
                             $dropdown.append($("<option />").val(this.id).text(this.jenis));
                         });
+
+                        selectedJenisId = result.data[0].id;
                     }
                 }, complete: function () {
                     $("#jenis").val(selectedJenisId).change();
@@ -155,7 +216,24 @@
                         $.each(result.data, function () {
                             $dropdown.append($("<option />").val(this.id).text(this.jenis));
                         });
+
+                        selectedJenisId = result.data[0].id;
                     }
+                }, complete: function () {
+                    $("#jenis").val(selectedJenisId).change();
+                }
+            })
+        });
+
+        $("#jenis").on('change', function () {
+            var id = this.value;
+            console.log(id);
+
+            $.ajax({
+                url: base_api + "SpesifikasiJenis/GetById?id=" + id,
+                method: "GET",
+                success: function (result) {
+                    $("#kodeInventory").val(result.kodeInventory);
                 }, complete: function () {
 
                 }
@@ -173,7 +251,9 @@
             })
 
             // Generate and Output QR Code
-            $('#qrcode').qrcode({ width: $('.qr-size').val(), height: $('.qr-size').val(), text: $('.qr-url').val() });
+            /*$('#qrcode').qrcode({ width: $('.qr-size').val(), height: $('.qr-size').val(), text: $('.qr-url').val() });*/
+
+            $('#qrcode').qrcode({ width: $('.qr-size').val(), height: $('.qr-size').val(), text: inventoryNumber });
 
             var canvas = document.querySelector('canvas');
             var pngUrl = canvas.toDataURL();

@@ -142,7 +142,7 @@
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiJenis/AddEdit?id=" + iDisplayIndex.id + "&port=" + port + "&typeId="+ typeId +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>";
+                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiJenis/AddEdit?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20")  + "&typeId="+ typeId +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>";
                                     /*" <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";*/
                             }
                         }

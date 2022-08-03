@@ -27,6 +27,22 @@ namespace OMNI.Web.Controllers.Master
             _spesifikasiJenisService = spesifikasiJenisService;
         }
 
+        public async Task<JsonResult> GetById(int id)
+        {
+            SpesifikasiJenisModel data = await _spesifikasiJenisService.GetById(id);
+
+            string kodeInventory = "";
+            if (data != null)
+            {
+                kodeInventory = data.KodeInventory;
+            }
+
+            return Json(new
+            {
+                kodeInventory
+            });
+        }
+
         public async Task<JsonResult> GetAll()
         {
             List<SpesifikasiJenisModel> data = await _spesifikasiJenisService.GetAll();
