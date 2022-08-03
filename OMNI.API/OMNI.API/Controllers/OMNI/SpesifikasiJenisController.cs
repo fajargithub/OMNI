@@ -77,6 +77,7 @@ namespace OMNI.API.Controllers.OMNI
                 result.Id = data.Id;
                 result.PeralatanOSR = data.PeralatanOSR != null ? data.PeralatanOSR.Id.ToString() : "0";
                 result.Jenis = data.Jenis != null ? data.Jenis.Id.ToString() : "0";
+                result.KodeInventory = data.Jenis != null ? data.Jenis.KodeInventory : "-";
             }
             return Ok(result);
         }

@@ -107,6 +107,7 @@ namespace OMNI.API.Controllers.OMNI
                 }
 
                 result.SatuanJenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Satuan : "-";
+                result.KodeInventory = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.KodeInventory : "-";
                 result.Port = data.Port;
                 result.QRCode = data.QRCode;
                 result.DetailExisting = data.DetailExisting;

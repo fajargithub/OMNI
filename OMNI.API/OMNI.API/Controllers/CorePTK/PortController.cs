@@ -30,7 +30,7 @@ namespace OMNI.API.Controllers.CorePTK
         [HttpGet]
         public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var result = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO).ToListAsync(cancellationToken);
+            var result = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.PAreaSub.Id > 0).Include(b => b.PAreaSub).OrderByDescending(b => b.Id).ToListAsync(cancellationToken);
             return Ok(result);
         }
 
@@ -46,14 +46,17 @@ namespace OMNI.API.Controllers.CorePTK
         public async Task<IActionResult> GetPortRegion(string port, CancellationToken cancellationToken)
         {
             string result = "";
-            var data = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.Name == port).Include(b => b.PAreaSub).Include(b => b.PAreaSub.PArea).FirstOrDefaultAsync(cancellationToken);
+            var data = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.Name == port).Include(b => b.PAreaSub).Include(b => b.PAreaSub.PArea).Include(b => b.PAreaSub.PArea.Region).FirstOrDefaultAsync(cancellationToken);
             if(data != null)
             {
                 if(data.PAreaSub != null)
                 {
                     if(data.PAreaSub.PArea != null)
                     {
-                        result = data.PAreaSub.PArea.Code;
+                        if(data.PAreaSub.PArea.Region != null)
+                        {
+                            result = data.PAreaSub.PArea.Region.Code;
+                        }
                     }
                 }
             }

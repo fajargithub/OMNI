@@ -15,9 +15,9 @@ namespace OMNI.Data.Data
         }
 
         public DbSet<Port> Port { get; set; }
-        public DbSet<PArea> PArea { get; set; }
-        public DbSet<PAreaSub> PAreaSub { get; set; }
-        public DbSet<Region> Region { get; set; }
+        public DbSet<PArea> PAreas { get; set; }
+        public DbSet<PAreaSub> PAreaSubs { get; set; }
+        public DbSet<Region> Regions { get; set; }
         public DbSet<BranchOld> BranchOld { get; set; }
 
     }

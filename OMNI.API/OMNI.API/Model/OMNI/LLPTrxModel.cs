@@ -11,6 +11,7 @@ namespace OMNI.API.Model.OMNI
         public string Jenis { get; set; }
         public string SatuanJenis { get; set; }
         public string Port { get; set; }
+        public string KodeInventory { get; set; }
         public string Region { get; set; }
         public string QRCode { get; set; }
         public decimal DetailExisting { get; set; }
