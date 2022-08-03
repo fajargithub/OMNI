@@ -28,7 +28,7 @@ namespace OMNI.API.Controllers.OMNI
         [HttpGet]
         public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.Jenis.Where(b => b.IsDeleted == GeneralConstants.NO).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+            var result = await _dbOMNI.Jenis.Where(b => b.IsDeleted == GeneralConstants.NO).OrderBy(b => b.CreatedAt).ToListAsync(cancellationToken);
             return Ok(result);
         }
 
@@ -50,6 +50,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.Name = model.Name;
                 data.Satuan = model.Satuan;
                 data.Kode = model.Kode;
+                data.KodeInventory = model.KodeInventory;
                 data.Desc = model.Desc;
                 data.UpdatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
@@ -61,9 +62,10 @@ namespace OMNI.API.Controllers.OMNI
                 data.Name = model.Name;
                 data.Satuan = model.Satuan;
                 data.Kode = model.Kode;
+                data.KodeInventory = model.KodeInventory;
                 data.Desc = model.Desc;
                 data.CreatedAt = DateTime.Now;
-                data.UpdatedBy = "admin";
+                data.CreatedBy = "admin";
                 await _dbOMNI.Jenis.AddAsync(data, cancellationToken);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
             }
