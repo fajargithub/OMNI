@@ -59,6 +59,7 @@ namespace OMNI.API.Controllers.OMNI
                     var findRekomenJenis = rekomenJenisList.Find(b => b.SpesifikasiJenis.Id == list[i].Id);
                     if(findRekomenJenis != null)
                     {
+                        temp.RekomendasiJenisId = findRekomenJenis != null ? findRekomenJenis.Id : 0;
                         temp.RekomendasiType = findRekomenJenis.RekomendasiType != null ? findRekomenJenis.RekomendasiType.Name : "-";
                         temp.Port = findRekomenJenis.Port;
                         temp.Value = findRekomenJenis.Value;
@@ -137,6 +138,56 @@ namespace OMNI.API.Controllers.OMNI
                 }
             }
             
+
+            return Ok(new ReturnJson { });
+        }
+
+        [HttpGet("UpdateValue")]
+        public async Task<IActionResult> UpdateValue(string id, string port, string typeId, string value, CancellationToken cancellationToken)
+        {
+            //RekomendasiJenis data = await _dbOMNI.RekomendasiJenis.Where(b => b.Id == int.Parse(id)).FirstOrDefaultAsync(cancellationToken);
+            //data.Value = decimal.Parse(value);
+            //data.UpdatedBy = "admin";
+            //data.UpdatedAt = DateTime.Now;
+            //_dbOMNI.RekomendasiJenis.Update(data);
+            //await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+            //return data;
+
+            RekomendasiJenis data = new RekomendasiJenis();
+
+            //var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.PeralatanOSR.Id == int.Parse(model.PeralatanOSR) && b.Jenis.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+            var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == int.Parse(id)).FirstOrDefaultAsync(cancellationToken);
+            var rekomendasiJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.Port == port && b.SpesifikasiJenis.Id == int.Parse(id) && b.RekomendasiType.Id == int.Parse(typeId)).Include(b => b.SpesifikasiJenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
+            if (findSpesifikasiJenis != null)
+            {
+                if (rekomendasiJenis != null)
+                {
+                    data = await _dbOMNI.RekomendasiJenis.Where(b => b.Id == rekomendasiJenis.Id).Include(b => b.SpesifikasiJenis)
+                        .Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.SpesifikasiJenis.Jenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
+
+                    data.SpesifikasiJenis = findSpesifikasiJenis;
+                    data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(typeId)).FirstOrDefaultAsync(cancellationToken);
+                    data.Port = port;
+                    data.Value = decimal.Parse(value);
+                    data.UpdatedAt = DateTime.Now;
+                    data.UpdatedBy = "admin";
+                    _dbOMNI.RekomendasiJenis.Update(data);
+                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+                }
+                else
+                {
+                    data.SpesifikasiJenis = findSpesifikasiJenis;
+                    data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(typeId)).FirstOrDefaultAsync(cancellationToken);
+                    data.Port = port;
+                    data.Value = decimal.Parse(value);
+                    data.CreatedAt = DateTime.Now;
+                    data.CreatedBy = "admin";
+                    await _dbOMNI.RekomendasiJenis.AddAsync(data, cancellationToken);
+                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+                }
+            }
+
 
             return Ok(new ReturnJson { });
         }

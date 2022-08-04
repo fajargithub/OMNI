@@ -13,6 +13,6 @@ namespace OMNI.API.Model.OMNI
         public string RekomendasiType { get; set; }
         public string TypeName { get; set; }
         public decimal Value { get; set; }
-        public string CreateDate { get; set; }
+        public int RekomendasiJenisId { get; set; }
     }
 }

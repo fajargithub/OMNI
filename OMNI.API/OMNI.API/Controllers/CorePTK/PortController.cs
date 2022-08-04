@@ -30,7 +30,7 @@ namespace OMNI.API.Controllers.CorePTK
         [HttpGet]
         public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var result = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.PAreaSub.Id > 0).Include(b => b.PAreaSub).OrderByDescending(b => b.Id).ToListAsync(cancellationToken);
+            var result = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.PAreaSub.Id > 0).Include(b => b.PAreaSub).OrderBy(b => b.Id).ToListAsync(cancellationToken);
             return Ok(result);
         }
 
