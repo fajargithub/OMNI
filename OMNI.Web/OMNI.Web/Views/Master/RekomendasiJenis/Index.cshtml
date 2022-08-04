@@ -43,13 +43,13 @@
                                 <th>Peralatan OSR</th>
                                 <th>Jenis</th>
                                 <th>Value</th>
-                                <th class="text-center" style="width:10%;">Action</th>
+                                @*<th class="text-center" style="width:10%;">Action</th>*@
                             </tr>
                             <tr id="table1-filter" style="display:none;">
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Peralatan OSR" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Jenis" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Value" /></th>
+                                @*<th><input type="text" class="form-control" placeholder="Filter Value" /></th>*@
                                 <th></th>
                             </tr>
                         </thead>
@@ -71,6 +71,7 @@
             }
 
             var typeId = parseInt("@ViewBag.SelectedRekomendasiType.Id");
+
             if (typeId > 0) {
                 $("#rekomendasiType").val(typeId).change();
             }
@@ -137,15 +138,21 @@
                         { "data": null },
                         { "data": "peralatanOSR" },
                         { "data": "jenis" },
-                        { "data": "value" },
                         {
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiJenis/AddEdit?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20")  + "&typeId="+ typeId +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>";
-                                    /*" <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";*/
+                                return "<input type='number' onchange='inputValue(" + iDisplayIndex.id + ")' id='value-" + iDisplayIndex.id + "' data-port='" + iDisplayIndex.port + "' data-typeId='" + typeId + "' value='" + iDisplayIndex.value + "' style='width:50px;'>";
                             }
                         }
+                        //{
+                        //    "targets": -1,
+                        //    "data": null,
+                        //    "render": function (row, data, iDisplayIndex) {
+                        //        return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiJenis/AddEdit?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20")  + "&typeId="+ typeId +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>";
+                        //            /*" <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";*/
+                        //    }
+                        //}
                     ],
                     "order": [[1, 'asc']],
                     rowCallback: function (row, data, iDisplayIndex) {
@@ -175,6 +182,20 @@
                 window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId;
             });
         });
+
+        function inputValue(id) {
+            console.log(id);
+            var port = $("#value-" + id).data('port');
+            var typeId = $("#value-" + id).data('typeid');
+            var value = $("#value-" + id).val();
+            console.log(port);
+            console.log(typeId);
+            console.log(value);
+
+            $.post(base_api + 'RekomendasiJenis/UpdateValue?id=' + id + "&port="+ port +"&typeId="+ typeId +"&value=" + value, function (result) {
+
+            });
+        }
 
         function deleteAction(id) {
             Swal.fire({

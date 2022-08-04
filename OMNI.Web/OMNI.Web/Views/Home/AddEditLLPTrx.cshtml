@@ -164,7 +164,14 @@
             var year = $("#year").val();
             var region = $("#region").val();
 
-            inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + this.value;
+            if (this.value !== null && this.value !== "") {
+                inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + this.value;
+            } else {
+                inventoryNumber = "";
+            }
+
+            console.log(inventoryNumber);
+            
 
             $('#qrcode').empty();
 

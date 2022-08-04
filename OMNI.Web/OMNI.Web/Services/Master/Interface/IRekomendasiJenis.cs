@@ -14,5 +14,6 @@ namespace OMNI.Web.Services.Master.Interface
         public Task<RekomendasiJenisModel> GetById(string id, string port, string typeId);
         public Task<BaseJson<RekomendasiJenisModel>> AddEdit(RekomendasiJenisModel model);
         public Task<RekomendasiJenis> Delete(int id);
+        public Task<RekomendasiJenis> UpdateValue(int id, string port, int typeId, decimal value);
     }
 }

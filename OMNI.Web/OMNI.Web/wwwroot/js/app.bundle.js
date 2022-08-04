@@ -594,6 +594,14 @@ var initApp = (function (app) {
                         });
                     });
                 }
+
+                Swal.fire({
+                    title: '<i class="fa fa-cog fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only"> Submiting</span>',
+                    text: 'Saving, please wait',
+                    allowOutsideClick: false,
+                    showConfirmButton: false
+                });
+
                 $.ajax({
                     url: init.submitUrl,
                     type: 'POST',
@@ -634,6 +642,11 @@ var initApp = (function (app) {
                             'error'
                         );
                         $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
+                    },
+                    complete: function () {
+                        setTimeout(function () {
+                            Swal.close();
+                        }, 1500);
                     }
                 });
             } else {

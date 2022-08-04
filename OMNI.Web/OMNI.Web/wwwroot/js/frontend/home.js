@@ -34,21 +34,10 @@ var table = $('#table-llp').DataTable(
             "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        //buttons: [
-        //    {
-        //        text: '<i class="fal fa-filter"></i> Filter',
-        //        className: 'btn btn-sm btn-outline-primary',
-        //        action: function (e, dt, node, config) {
-        //            $('#table-llp-filter').toggle();
-        //        }
-        //    },
-        //],
         processing: true,
-        //serverSide: true,
         "ajax": {
             "url": base_api + 'Home/GetAllLLPTrx?port=' + port,
             "type": 'GET'
-            //"data": { searchData: result }
         },
         "columns": [
             { "data": null },
@@ -64,7 +53,23 @@ var table = $('#table-llp').DataTable(
                     return image;
                  }
             },
-            { "data": "kondisi" },
+            {
+                "targets": -1,
+                "data": null,
+                "render": function (row, data, iDisplayIndex) {
+                    var kondisi = "";
+
+                    if (iDisplayIndex.kondisi == "Baik") {
+                        kondisi = "<b style='color:green;'>Baik</b>";
+                    } else if (iDisplayIndex.kondisi == "Sedang") {
+                        kondisi = "<b style='color:darkorange;'>Sedang</b>";
+                    } else if (iDisplayIndex.kondisi == "Buruk") {
+                        kondisi = "<b style='color:red;'>Buruk</b>";
+                    }
+
+                    return kondisi;
+                }
+            },
             {
                 "targets": -1,
                 "data": null,

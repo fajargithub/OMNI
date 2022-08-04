@@ -13,5 +13,6 @@ namespace OMNI.Web.Models.Master
         public string RekomendasiType { get; set; }
         public string TypeName { get; set; }
         public decimal Value { get; set; }
+        public int RekomendasiJenisId { get; set; }
     }
 }

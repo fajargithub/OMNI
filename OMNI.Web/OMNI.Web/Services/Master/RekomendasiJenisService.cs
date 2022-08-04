@@ -77,5 +77,17 @@ namespace OMNI.Web.Services.Master
 
             throw new Exception();
         }
+
+        public async Task<RekomendasiJenis> UpdateValue(int id, string port, int typeId, decimal value)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var r = await client.GetAsync($"/api/RekomendasiJenis/UpdateValue?id={id}&port={port}&typeId={typeId}&value={value}");
+
+            if (r.IsSuccessStatusCode)
+
+                return await r.Content.ReadAsAsync<RekomendasiJenis>();
+
+            throw new Exception();
+        }
     }
 }

@@ -105,6 +105,14 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpPost]
+        public async Task<IActionResult> UpdateValue(int id, string port, int typeId, decimal value)
+        {
+            var r = await _rekomendasiJenisService.UpdateValue(id, port, typeId, value);
+
+            return Ok(new JsonResponse());
+        }
+
+        [HttpPost]
         public async Task<IActionResult> DeleteRekomendasiJenis(int id)
         {
             var r = await _rekomendasiJenisService.Delete(id);
