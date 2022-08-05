@@ -25,12 +25,22 @@ namespace OMNI.API.Controllers.OMNI
             _dbOMNI = dbOMNI;
         }
 
+        public class CountData
+        {
+            public int TrxId { get; set; }
+            public decimal TotalCount { get; set; }
+        }
+
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll(string port, CancellationToken cancellationToken)
         {
+            int lastPeralatanOSRId = 0;
+            decimal totalKesesuaianHubla = 0;
+
+            List<CountData> countTotalKesesuaianHublaList = new List<CountData>();
             List<LLPTrxModel> result = new List<LLPTrxModel>();
-            List<RekomendasiJenis> rekomenJenisList = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.SpesifikasiJenis).ToListAsync(cancellationToken);
+            List<RekomendasiJenis> rekomenJenisList = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).ToListAsync(cancellationToken);
 
             var list = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port)
                 .Include(b => b.SpesifikasiJenis)
@@ -43,6 +53,7 @@ namespace OMNI.API.Controllers.OMNI
                 {
                     LLPTrxModel temp = new LLPTrxModel();
                     temp.Id = list[i].Id;
+                    temp.PeralatanOSRId = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.PeralatanOSR.Id : 0;
                     temp.PeralatanOSR = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.PeralatanOSR.Name : "-";
                     temp.Jenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Name : "-";
 
@@ -52,6 +63,50 @@ namespace OMNI.API.Controllers.OMNI
                         if(findRekomenJenis != null)
                         {
                             temp.RekomendasiHubla = findRekomenJenis.Value;
+
+                            if (i == 0)
+                            {
+                                lastPeralatanOSRId = list[i].SpesifikasiJenis.PeralatanOSR.Id;
+                                
+                                if (i == (list.Count() - 1))
+                                {
+                                    CountData tempKesesuaianHubla = new CountData();
+                                    tempKesesuaianHubla.TrxId = lastPeralatanOSRId;
+                                    tempKesesuaianHubla.TotalCount = findRekomenJenis.Value;
+                                    countTotalKesesuaianHublaList.Add(tempKesesuaianHubla);
+                                } else
+                                {
+                                    totalKesesuaianHubla += findRekomenJenis.Value;
+                                }
+                            } else
+                            {
+                                if(lastPeralatanOSRId == list[i].SpesifikasiJenis.PeralatanOSR.Id)
+                                {
+                                    totalKesesuaianHubla += findRekomenJenis.Value;
+                                } else
+                                {
+                                    CountData tempKesesuaianHubla1 = new CountData();
+                                    tempKesesuaianHubla1.TrxId = lastPeralatanOSRId;
+                                    tempKesesuaianHubla1.TotalCount = totalKesesuaianHubla;
+                                    countTotalKesesuaianHublaList.Add(tempKesesuaianHubla1);
+
+                                    if (i == (list.Count() - 1))
+                                    {
+                                        lastPeralatanOSRId = list[i].SpesifikasiJenis.PeralatanOSR.Id;
+                                        totalKesesuaianHubla = findRekomenJenis.Value;
+
+                                        CountData tempKesesuaianHubla2 = new CountData();
+                                        tempKesesuaianHubla2.TrxId = lastPeralatanOSRId;
+                                        tempKesesuaianHubla2.TotalCount = findRekomenJenis.Value;
+                                        countTotalKesesuaianHublaList.Add(tempKesesuaianHubla2);
+                                    }
+                                    else
+                                    {
+                                        lastPeralatanOSRId = list[i].SpesifikasiJenis.PeralatanOSR.Id;
+                                        totalKesesuaianHubla = findRekomenJenis.Value;
+                                    }
+                                }
+                            }
                         }
                     } else
                     {
@@ -75,6 +130,18 @@ namespace OMNI.API.Controllers.OMNI
                     temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
                     temp.CreatedBy = list[i].CreatedBy;
                     result.Add(temp);
+                }
+            }
+
+            if (countTotalKesesuaianHublaList.Count() > 0)
+            {
+                for (int i = 0; i < result.Count(); i++)
+                {
+                    var find = countTotalKesesuaianHublaList.Find(b => b.TrxId == result[i].PeralatanOSRId);
+                    if(find != null)
+                    {
+                        result[i].TotalKebutuhanHubla = find.TotalCount;
+                    }
                 }
             }
 
@@ -124,12 +191,6 @@ namespace OMNI.API.Controllers.OMNI
                 result.PersentaseOSCP = data.PersentaseOSCP;
             }
             return Ok(result);
-        }
-
-        public class CountData
-        {
-            public int TrxId { get; set; }
-            public decimal TotalCount { get; set; }
         }
 
         public async Task<int> CountTotalExistingKeseluruhan(string port, CancellationToken cancellationToken)
