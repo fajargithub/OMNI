@@ -188,9 +188,6 @@
             var port = $("#value-" + id).data('port');
             var typeId = $("#value-" + id).data('typeid');
             var value = $("#value-" + id).val();
-            console.log(port);
-            console.log(typeId);
-            console.log(value);
 
             $.post(base_api + 'RekomendasiJenis/UpdateValue?id=' + id + "&port="+ port +"&typeId="+ typeId +"&value=" + value, function (result) {
 
