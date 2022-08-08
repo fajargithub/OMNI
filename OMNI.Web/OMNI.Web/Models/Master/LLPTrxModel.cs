@@ -22,7 +22,7 @@ namespace OMNI.Web.Models.Master
         public decimal TotalExistingKeseluruhan { get; set; }
         public decimal TotalKebutuhanHubla { get; set; }
         public decimal SelisihHubla { get; set; }
-        public string KesesuaianMP58 { get; set; }
+        public string KesesuaianPM58 { get; set; }
         public decimal TotalKebutuhanOSCP { get; set; }
         public decimal SelisihOSCP { get; set; }
         public string KesesuaianOSCP { get; set; }

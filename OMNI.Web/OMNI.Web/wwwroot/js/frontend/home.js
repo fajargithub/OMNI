@@ -82,7 +82,21 @@ var table = $('#table-llp').DataTable(
             { "data": "rekomendasiHubla" },
             { "data": "totalKebutuhanHubla" },
             { "data": "selisihHubla" },
-            { "data": "kesesuaianMP58" },
+            {
+                "targets": -1,
+                "data": null,
+                "render": function (row, data, iDisplayIndex) {
+                    var result = "";
+
+                    if (iDisplayIndex.kesesuaianPM58 == "TERPENUHI") {
+                        result = "<b style='color:green;'>TERPENUHI</b>";
+                    } else if (iDisplayIndex.kesesuaianPM58 == "KURANG") {
+                        result = "<b style='color:red;'>KURANG</b>";
+                    }
+
+                    return result;
+                }
+            },
             {
                 "targets": -1,
                 "data": null,
