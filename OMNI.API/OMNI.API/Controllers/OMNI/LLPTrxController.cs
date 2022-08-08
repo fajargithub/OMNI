@@ -30,6 +30,7 @@ namespace OMNI.API.Controllers.OMNI
             public int TrxId { get; set; }
             public decimal TotalCount { get; set; }
             public decimal SelisihHubla { get; set; }
+            public string KesesuaianPM58 { get; set; }
         }
 
         // GET: api/<ValuesController>
@@ -248,6 +249,22 @@ namespace OMNI.API.Controllers.OMNI
                         temp.TotalExistingKeseluruhan = 0;
                     }
 
+                    //COUNT SELISIH HUBLA
+                    if(countTotalExistingJenis.Count() > 0)
+                    {
+                        for(int j=0; j < countTotalExistingJenis.Count(); j++)
+                        {
+                            var findTotalKebutuhanHubla = countTotalKesesuaianHubla.Find(b => b.TrxId == countTotalExistingJenis[j].TrxId);
+                            if(findTotalKebutuhanHubla != null)
+                            {
+                                countTotalExistingJenis[j].SelisihHubla = countTotalExistingJenis[j].TotalCount - findTotalKebutuhanHubla.TotalCount;
+                            } else
+                            {
+                                countTotalExistingJenis[j].SelisihHubla = countTotalExistingJenis[j].TotalCount;
+                            }
+                        }
+                    }
+
                     temp.SatuanJenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Satuan : "-";
                     temp.Port = list[i].Port;
                     temp.QRCode = list[i].QRCode;
@@ -256,8 +273,8 @@ namespace OMNI.API.Controllers.OMNI
                     //temp.TotalExistingJenis = list[i].TotalExistingJenis;
                     //temp.TotalExistingKeseluruhan = list[i].TotalExistingKeseluruhan;
                     //temp.TotalKebutuhanHubla = list[i].TotalKebutuhanHubla;
-                    temp.SelisihHubla = list[i].SelisihHubla;
-                    temp.KesesuaianMP58 = list[i].KesesuaianMP58;
+                    //temp.SelisihHubla = list[i].SelisihHubla;
+                    //temp.KesesuaianPM58 = list[i].KesesuaianPM58;
                     temp.PersentaseHubla = list[i].PersentaseHubla;
                     temp.TotalKebutuhanOSCP = list[i].TotalKebutuhanOSCP;
                     temp.SelisihOSCP = list[i].SelisihOSCP;
@@ -277,6 +294,14 @@ namespace OMNI.API.Controllers.OMNI
                     if (find != null)
                     {
                         result[i].TotalExistingJenis = find.TotalCount;
+                        result[i].SelisihHubla = find.SelisihHubla;
+                        if(find.SelisihHubla >= 0)
+                        {
+                            result[i].KesesuaianPM58 = "TERPENUHI";
+                        } else
+                        {
+                            result[i].KesesuaianPM58 = "KURANG";
+                        }
                     }
                 }
             }
@@ -343,7 +368,7 @@ namespace OMNI.API.Controllers.OMNI
                 result.TotalExistingKeseluruhan = data.TotalExistingKeseluruhan;
                 result.TotalKebutuhanHubla = data.TotalKebutuhanHubla;
                 result.SelisihHubla = data.SelisihHubla;
-                result.KesesuaianMP58 = data.KesesuaianMP58;
+                //result.KesesuaianPM58 = data.KesesuaianPM58;
                 result.PersentaseHubla = data.PersentaseHubla;
                 result.TotalKebutuhanOSCP = data.TotalKebutuhanOSCP;
                 result.SelisihOSCP = data.SelisihOSCP;
@@ -376,7 +401,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
                 data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
                 data.SelisihHubla = model.SelisihHubla;
-                data.KesesuaianMP58 = model.KesesuaianMP58;
+                //data.KesesuaianPM58 = model.KesesuaianPM58;
                 data.PersentaseHubla = model.PersentaseHubla;
                 data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
                 data.SelisihOSCP = model.SelisihOSCP;
@@ -399,7 +424,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
                 data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
                 data.SelisihHubla = model.SelisihHubla;
-                data.KesesuaianMP58 = model.KesesuaianMP58;
+                //data.KesesuaianPM58 = model.KesesuaianPM58;
                 data.PersentaseHubla = model.PersentaseHubla;
                 data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
                 data.SelisihOSCP = model.SelisihOSCP;
