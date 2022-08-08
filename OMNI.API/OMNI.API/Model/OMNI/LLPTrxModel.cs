@@ -8,6 +8,7 @@ namespace OMNI.API.Model.OMNI
     public class LLPTrxModel : BaseModel
     {
         public int PeralatanOSRId { get; set; }
+        public int SpesifikasiJenisId { get; set; }
         public string PeralatanOSR { get; set; }
         public string Jenis { get; set; }
         public string SatuanJenis { get; set; }

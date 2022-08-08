@@ -29,18 +29,26 @@ namespace OMNI.API.Controllers.OMNI
         {
             public int TrxId { get; set; }
             public decimal TotalCount { get; set; }
+            public decimal SelisihHubla { get; set; }
         }
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll(string port, CancellationToken cancellationToken)
         {
+            int lastSpesifikasiJenisId = 0;
+            int lastSpesifikasiJenisId_2 = 0;
             int lastPeralatanOSRId = 0;
             decimal totalKesesuaianHubla = 0;
+            decimal totalExistingKeseluruhan = 0;
+            decimal totalDetailExisting = 0;
 
-            List<CountData> countTotalKesesuaianHublaList = new List<CountData>();
+            List<CountData> countTotalExistingJenis = new List<CountData>();
+            List<CountData> countTotalKesesuaianHubla = new List<CountData>();
+            List<CountData> countTotalExistingKeseluruhan = new List<CountData>();
+
             List<LLPTrxModel> result = new List<LLPTrxModel>();
-            List<RekomendasiJenis> rekomenJenisList = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).ToListAsync(cancellationToken);
+            List<RekomendasiJenis> rekomenJenisList = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
 
             var list = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port)
                 .Include(b => b.SpesifikasiJenis)
@@ -56,54 +64,180 @@ namespace OMNI.API.Controllers.OMNI
                     temp.PeralatanOSRId = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.PeralatanOSR.Id : 0;
                     temp.PeralatanOSR = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.PeralatanOSR.Name : "-";
                     temp.Jenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Name : "-";
+                    temp.SpesifikasiJenisId = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Id : 0;
 
-                    if(rekomenJenisList.Count() > 0 && list[i].SpesifikasiJenis != null)
+                    if(list[i].SpesifikasiJenis != null)
                     {
-                        var findRekomenJenis = rekomenJenisList.FindAll(b => b.SpesifikasiJenis.Id == list[i].SpesifikasiJenis.Id).FirstOrDefault();
-                        if(findRekomenJenis != null)
+                        // COUNT TOTAL EXISTING JENIS
+                        if (i == 0)
                         {
-                            temp.RekomendasiHubla = findRekomenJenis.Value;
-
-                            if (i == 0)
+                            if (list.Count() == 1)
                             {
-                                lastPeralatanOSRId = list[i].SpesifikasiJenis.PeralatanOSR.Id;
-                                
+                                CountData tempTotalExistingJenis = new CountData();
+                                tempTotalExistingJenis.TrxId = list[i].SpesifikasiJenis.Id;
+                                tempTotalExistingJenis.TotalCount = list[i].DetailExisting;
+                                countTotalExistingJenis.Add(tempTotalExistingJenis);
+                            }
+                            else
+                            {
+                                lastSpesifikasiJenisId = list[i].SpesifikasiJenis.Id;
+                                totalDetailExisting += list[i].DetailExisting;
+                            }
+                        }
+                        else
+                        {
+                            if (lastSpesifikasiJenisId == list[i].SpesifikasiJenis.Id)
+                            {
                                 if (i == (list.Count() - 1))
                                 {
-                                    CountData tempKesesuaianHubla = new CountData();
-                                    tempKesesuaianHubla.TrxId = lastPeralatanOSRId;
-                                    tempKesesuaianHubla.TotalCount = findRekomenJenis.Value;
-                                    countTotalKesesuaianHublaList.Add(tempKesesuaianHubla);
-                                } else
-                                {
-                                    totalKesesuaianHubla += findRekomenJenis.Value;
-                                }
-                            } else
-                            {
-                                if(lastPeralatanOSRId == list[i].SpesifikasiJenis.PeralatanOSR.Id)
-                                {
-                                    totalKesesuaianHubla += findRekomenJenis.Value;
-                                } else
-                                {
-                                    CountData tempKesesuaianHubla1 = new CountData();
-                                    tempKesesuaianHubla1.TrxId = lastPeralatanOSRId;
-                                    tempKesesuaianHubla1.TotalCount = totalKesesuaianHubla;
-                                    countTotalKesesuaianHublaList.Add(tempKesesuaianHubla1);
+                                    totalDetailExisting += list[i].DetailExisting;
 
+                                    CountData tempDetailExisting = new CountData();
+                                    tempDetailExisting.TrxId = lastSpesifikasiJenisId;
+                                    tempDetailExisting.TotalCount = totalDetailExisting;
+                                    countTotalExistingJenis.Add(tempDetailExisting);
+                                }
+                                else
+                                {
+                                    totalDetailExisting += list[i].DetailExisting;
+                                }
+                            }
+                            else
+                            {
+                                CountData tempDetailExisting1 = new CountData();
+                                tempDetailExisting1.TrxId = lastSpesifikasiJenisId;
+                                tempDetailExisting1.TotalCount = totalDetailExisting;
+                                countTotalExistingJenis.Add(tempDetailExisting1);
+
+                                if (i == (list.Count() - 1))
+                                {
+                                    lastSpesifikasiJenisId = list[i].SpesifikasiJenis.Id;
+                                    totalDetailExisting = list[i].DetailExisting;
+
+                                    CountData tempDetailExisting2 = new CountData();
+                                    tempDetailExisting2.TrxId = lastSpesifikasiJenisId;
+                                    tempDetailExisting2.TotalCount = totalDetailExisting;
+                                    countTotalExistingJenis.Add(tempDetailExisting2);
+                                }
+                                else
+                                {
+                                    lastSpesifikasiJenisId = list[i].SpesifikasiJenis.Id;
+                                    totalDetailExisting = list[i].DetailExisting;
+                                }
+                            }
+                        }
+                    }
+
+                    //COUNT TOTAL EXISTING KESELURUHAN
+                    if (i == 0)
+                    {
+                        lastPeralatanOSRId = list[i].SpesifikasiJenis.PeralatanOSR.Id;
+
+                        if (i == (list.Count() - 1))
+                        {
+                            CountData tempExistingKeseluruhan = new CountData();
+                            tempExistingKeseluruhan.TrxId = lastPeralatanOSRId;
+                            tempExistingKeseluruhan.TotalCount = list[i].DetailExisting;
+                            countTotalExistingKeseluruhan.Add(tempExistingKeseluruhan);
+
+
+                        }
+                        else
+                        {
+                            totalExistingKeseluruhan += list[i].DetailExisting;
+                        }
+                    }
+                    else
+                    {
+                        if (lastPeralatanOSRId == list[i].SpesifikasiJenis.PeralatanOSR.Id)
+                        {
+                            totalExistingKeseluruhan += list[i].DetailExisting;
+                        }
+                        else
+                        {
+                            CountData tempExistingKeseluruhan = new CountData();
+                            tempExistingKeseluruhan.TrxId = lastPeralatanOSRId;
+                            tempExistingKeseluruhan.TotalCount = totalExistingKeseluruhan;
+                            countTotalExistingKeseluruhan.Add(tempExistingKeseluruhan);
+
+                            if (i == (list.Count() - 1))
+                            {
+                                lastPeralatanOSRId = list[i].SpesifikasiJenis.PeralatanOSR.Id;
+                                totalExistingKeseluruhan = list[i].DetailExisting;
+
+                                CountData tempExistingKeseluruhan2 = new CountData();
+                                tempExistingKeseluruhan2.TrxId = lastPeralatanOSRId;
+                                tempExistingKeseluruhan2.TotalCount = list[i].DetailExisting;
+                                countTotalExistingKeseluruhan.Add(tempExistingKeseluruhan2);
+                            }
+                            else
+                            {
+                                lastPeralatanOSRId = list[i].SpesifikasiJenis.PeralatanOSR.Id;
+                                totalExistingKeseluruhan = list[i].DetailExisting;
+                            }
+                        }
+                    }
+
+                    if (rekomenJenisList.Count() > 0 && list[i].SpesifikasiJenis != null)
+                    {
+                        var findRekomendasiHubla = rekomenJenisList.FindAll(b => b.SpesifikasiJenis.Id == list[i].SpesifikasiJenis.Id && b.RekomendasiType.Name.Contains("Hubla")).FirstOrDefault();
+                        if(findRekomendasiHubla != null)
+                        {
+                            temp.RekomendasiHubla = findRekomendasiHubla.Value;
+
+                            //COUNT TOTAL KESESUAIAN HUBLA
+                            if (i == 0)
+                            {
+                                if (list.Count() == 1)
+                                {
+                                    CountData tempTotalKesesuaianHubla = new CountData();
+                                    tempTotalKesesuaianHubla.TrxId = findRekomendasiHubla.SpesifikasiJenis.Id;
+                                    tempTotalKesesuaianHubla.TotalCount = temp.RekomendasiHubla;
+                                    countTotalKesesuaianHubla.Add(tempTotalKesesuaianHubla);
+                                }
+                                else
+                                {
+                                    lastSpesifikasiJenisId_2 = findRekomendasiHubla.SpesifikasiJenis.Id;
+                                    totalKesesuaianHubla += temp.RekomendasiHubla;
+                                }
+                            }
+                            else
+                            {
+                                if (lastSpesifikasiJenisId_2 == list[i].SpesifikasiJenis.Id)
+                                {
                                     if (i == (list.Count() - 1))
                                     {
-                                        lastPeralatanOSRId = list[i].SpesifikasiJenis.PeralatanOSR.Id;
-                                        totalKesesuaianHubla = findRekomenJenis.Value;
-
-                                        CountData tempKesesuaianHubla2 = new CountData();
-                                        tempKesesuaianHubla2.TrxId = lastPeralatanOSRId;
-                                        tempKesesuaianHubla2.TotalCount = findRekomenJenis.Value;
-                                        countTotalKesesuaianHublaList.Add(tempKesesuaianHubla2);
+                                        CountData tempTotalKesesuaianHubla1 = new CountData();
+                                        tempTotalKesesuaianHubla1.TrxId = lastSpesifikasiJenisId_2;
+                                        tempTotalKesesuaianHubla1.TotalCount = temp.RekomendasiHubla;
+                                        countTotalKesesuaianHubla.Add(tempTotalKesesuaianHubla1);
                                     }
                                     else
                                     {
-                                        lastPeralatanOSRId = list[i].SpesifikasiJenis.PeralatanOSR.Id;
-                                        totalKesesuaianHubla = findRekomenJenis.Value;
+                                        totalKesesuaianHubla += temp.RekomendasiHubla;
+                                    }
+                                }
+                                else
+                                {
+                                    CountData tempTotalKesesuaianHubla2 = new CountData();
+                                    tempTotalKesesuaianHubla2.TrxId = lastSpesifikasiJenisId_2;
+                                    tempTotalKesesuaianHubla2.TotalCount = totalKesesuaianHubla;
+                                    countTotalKesesuaianHubla.Add(tempTotalKesesuaianHubla2);
+
+                                    if (i == (list.Count() - 1))
+                                    {
+                                        lastSpesifikasiJenisId_2 = findRekomendasiHubla.SpesifikasiJenis.Id;
+                                        totalKesesuaianHubla = temp.RekomendasiHubla;
+
+                                        CountData tempTotalKesesuaianHubla3 = new CountData();
+                                        tempTotalKesesuaianHubla3.TrxId = lastSpesifikasiJenisId_2;
+                                        tempTotalKesesuaianHubla3.TotalCount = temp.RekomendasiHubla;
+                                        countTotalKesesuaianHubla.Add(tempTotalKesesuaianHubla3);
+                                    }
+                                    else
+                                    {
+                                        lastSpesifikasiJenisId_2 = findRekomendasiHubla.SpesifikasiJenis.Id;
+                                        totalKesesuaianHubla = temp.RekomendasiHubla;
                                     }
                                 }
                             }
@@ -111,15 +245,17 @@ namespace OMNI.API.Controllers.OMNI
                     } else
                     {
                         temp.RekomendasiHubla = 0;
+                        temp.TotalExistingKeseluruhan = 0;
                     }
+
                     temp.SatuanJenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Satuan : "-";
                     temp.Port = list[i].Port;
                     temp.QRCode = list[i].QRCode;
                     temp.DetailExisting = list[i].DetailExisting;
                     temp.Kondisi = list[i].Kondisi;
-                    temp.TotalExistingJenis = list[i].TotalExistingJenis;
-                    temp.TotalExistingKeseluruhan = list[i].TotalExistingKeseluruhan;
-                    temp.TotalKebutuhanHubla = list[i].TotalKebutuhanHubla;
+                    //temp.TotalExistingJenis = list[i].TotalExistingJenis;
+                    //temp.TotalExistingKeseluruhan = list[i].TotalExistingKeseluruhan;
+                    //temp.TotalKebutuhanHubla = list[i].TotalKebutuhanHubla;
                     temp.SelisihHubla = list[i].SelisihHubla;
                     temp.KesesuaianMP58 = list[i].KesesuaianMP58;
                     temp.PersentaseHubla = list[i].PersentaseHubla;
@@ -133,14 +269,38 @@ namespace OMNI.API.Controllers.OMNI
                 }
             }
 
-            if (countTotalKesesuaianHublaList.Count() > 0)
+            if (countTotalExistingJenis.Count() > 0)
             {
                 for (int i = 0; i < result.Count(); i++)
                 {
-                    var find = countTotalKesesuaianHublaList.Find(b => b.TrxId == result[i].PeralatanOSRId);
+                    var find = countTotalExistingJenis.Find(b => b.TrxId == result[i].SpesifikasiJenisId);
+                    if (find != null)
+                    {
+                        result[i].TotalExistingJenis = find.TotalCount;
+                    }
+                }
+            }
+
+            if (countTotalKesesuaianHubla.Count() > 0)
+            {
+                for (int i = 0; i < result.Count(); i++)
+                {
+                    var find = countTotalKesesuaianHubla.Find(b => b.TrxId == result[i].SpesifikasiJenisId);
                     if(find != null)
                     {
                         result[i].TotalKebutuhanHubla = find.TotalCount;
+                    }
+                }
+            }
+
+            if (countTotalExistingKeseluruhan.Count() > 0)
+            {
+                for (int i = 0; i < result.Count(); i++)
+                {
+                    var find = countTotalExistingKeseluruhan.Find(b => b.TrxId == result[i].PeralatanOSRId);
+                    if (find != null)
+                    {
+                        result[i].TotalExistingKeseluruhan = find.TotalCount;
                     }
                 }
             }
@@ -191,176 +351,6 @@ namespace OMNI.API.Controllers.OMNI
                 result.PersentaseOSCP = data.PersentaseOSCP;
             }
             return Ok(result);
-        }
-
-        public async Task<int> CountTotalExistingKeseluruhan(string port, CancellationToken cancellationToken)
-        {
-            decimal totalExistingKeseluruhan = 0;
-            int lastPeralatanOSRId = 0;
-            List<CountData> countDataList = new List<CountData>();
-            var llpTrxList = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).ToListAsync(cancellationToken);
-            if (llpTrxList.Count() > 0)
-            {
-                CountData temp = new CountData();
-                for (int i=0; i < llpTrxList.Count(); i++)
-                {
-                    if (i == 0)
-                    {
-                        if (llpTrxList.Count() == 1)
-                        {
-                            llpTrxList[i].TotalExistingKeseluruhan = llpTrxList[i].DetailExisting;
-                            _dbOMNI.LLPTrx.Update(llpTrxList[i]);
-                            await _dbOMNI.SaveChangesAsync(cancellationToken);
-                        }
-                        else
-                        {
-                            lastPeralatanOSRId = llpTrxList[i].SpesifikasiJenis.PeralatanOSR.Id;
-                            totalExistingKeseluruhan += llpTrxList[i].DetailExisting;
-                        }
-                    } 
-                    else
-                    {
-                        if (lastPeralatanOSRId == llpTrxList[i].SpesifikasiJenis.PeralatanOSR.Id)
-                        {
-                            if (i == (llpTrxList.Count() - 1))
-                            {
-                                totalExistingKeseluruhan += llpTrxList[i].DetailExisting;
-
-                                temp.TrxId = lastPeralatanOSRId;
-                                temp.TotalCount = totalExistingKeseluruhan;
-                                countDataList.Add(temp);
-                            }
-                            else
-                            {
-                                totalExistingKeseluruhan += llpTrxList[i].DetailExisting;
-                            }
-                        }
-                        else
-                        {
-
-                            temp.TrxId = lastPeralatanOSRId;
-                            temp.TotalCount = totalExistingKeseluruhan;
-                            countDataList.Add(temp);
-
-                            if (i == (llpTrxList.Count() - 1))
-                            {
-                                lastPeralatanOSRId = llpTrxList[i].SpesifikasiJenis.PeralatanOSR.Id;
-                                totalExistingKeseluruhan = llpTrxList[i].DetailExisting;
-
-                                temp.TrxId = lastPeralatanOSRId;
-                                temp.TotalCount = totalExistingKeseluruhan;
-                                countDataList.Add(temp);
-                            }
-                            else
-                            {
-                                lastPeralatanOSRId = llpTrxList[i].SpesifikasiJenis.PeralatanOSR.Id;
-                                totalExistingKeseluruhan = llpTrxList[i].DetailExisting;
-                            }
-                        }
-                    }
-                }
-
-                if (countDataList.Count() > 0)
-                {
-                    for (int i = 0; i < countDataList.Count(); i++)
-                    {
-                        var findLLPTrx = llpTrxList.FindAll(b => b.SpesifikasiJenis.PeralatanOSR.Id == countDataList[i].TrxId).ToList();
-                        if (findLLPTrx.Count() > 0)
-                        {
-                            for (int j = 0; j < findLLPTrx.Count(); j++)
-                            {
-                                findLLPTrx[j].TotalExistingKeseluruhan = countDataList[i].TotalCount;
-                                _dbOMNI.LLPTrx.Update(findLLPTrx[j]);
-                                await _dbOMNI.SaveChangesAsync(cancellationToken);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return 0;
-        }
-
-        public async Task<int> CountTotalExistingJenis(string port, CancellationToken cancellationToken)
-        {
-            decimal totalDetailExisting = 0;
-            int lastSpesifikasiJenisId = 0;
-            List<CountData> countDataList = new List<CountData>();
-            var llpTrxList = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.SpesifikasiJenis).ToListAsync(cancellationToken);
-            if(llpTrxList.Count() > 0)
-            {
-                CountData temp = new CountData();
-                for(int i=0; i < llpTrxList.Count(); i++)
-                {
-                    if(i == 0)
-                    {
-                        if(llpTrxList.Count() == 1)
-                        {
-                            llpTrxList[i].TotalExistingJenis = llpTrxList[i].DetailExisting;
-                            _dbOMNI.LLPTrx.Update(llpTrxList[i]);
-                            await _dbOMNI.SaveChangesAsync(cancellationToken);
-                        } else
-                        {
-                            lastSpesifikasiJenisId = llpTrxList[i].SpesifikasiJenis.Id;
-                            totalDetailExisting += llpTrxList[i].DetailExisting;
-                        }
-                    } else
-                    {
-                        if(lastSpesifikasiJenisId == llpTrxList[i].SpesifikasiJenis.Id)
-                        {
-                            if(i == (llpTrxList.Count() - 1))
-                            {
-                                totalDetailExisting += llpTrxList[i].DetailExisting;
-
-                                temp.TrxId = lastSpesifikasiJenisId;
-                                temp.TotalCount = totalDetailExisting;
-                                countDataList.Add(temp);
-                            } else
-                            {
-                                totalDetailExisting += llpTrxList[i].DetailExisting;
-                            }
-                        } else
-                        {
-
-                            temp.TrxId = lastSpesifikasiJenisId;
-                            temp.TotalCount = totalDetailExisting;
-                            countDataList.Add(temp);
-
-                            if (i == (llpTrxList.Count() - 1))
-                            {
-                                lastSpesifikasiJenisId = llpTrxList[i].SpesifikasiJenis.Id;
-                                totalDetailExisting = llpTrxList[i].DetailExisting;
-
-                                temp.TrxId = lastSpesifikasiJenisId;
-                                temp.TotalCount = totalDetailExisting;
-                                countDataList.Add(temp);
-                            } else
-                            {
-                                lastSpesifikasiJenisId = llpTrxList[i].SpesifikasiJenis.Id;
-                                totalDetailExisting = llpTrxList[i].DetailExisting;
-                            }
-                        }
-                    }
-                }
-
-                if (countDataList.Count() > 0)
-                {
-                    for (int i = 0; i < countDataList.Count(); i++)
-                    {
-                        var findLLPTrx = llpTrxList.FindAll(b => b.SpesifikasiJenis.Id == countDataList[i].TrxId).ToList();
-                        if (findLLPTrx.Count() > 0)
-                        {
-                            for (int j = 0; j < findLLPTrx.Count(); j++)
-                            {
-                                findLLPTrx[j].TotalExistingJenis = countDataList[i].TotalCount;
-                                _dbOMNI.LLPTrx.Update(findLLPTrx[j]);
-                                await _dbOMNI.SaveChangesAsync(cancellationToken);
-                            }
-                        }
-                    }
-                }
-            }
-            return 0;
         }
 
         [HttpPost]
@@ -421,10 +411,6 @@ namespace OMNI.API.Controllers.OMNI
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
             }
 
-            await CountTotalExistingJenis(model.Port, cancellationToken);
-            await CountTotalExistingKeseluruhan(model.Port, cancellationToken);
-
-
             return Ok(new ReturnJson { });
         }
 
@@ -438,9 +424,6 @@ namespace OMNI.API.Controllers.OMNI
             data.UpdatedAt = DateTime.Now;
             _dbOMNI.LLPTrx.Update(data);
             await _dbOMNI.SaveChangesAsync(cancellationToken);
-
-            await CountTotalExistingJenis(data.Port, cancellationToken);
-            await CountTotalExistingKeseluruhan(data.Port, cancellationToken);
 
             return data;
         }
