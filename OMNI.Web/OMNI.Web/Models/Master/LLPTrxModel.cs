@@ -31,6 +31,6 @@ namespace OMNI.Web.Models.Master
         public decimal RekomendasiHubla { get; set; }
 
         [JsonIgnore]
-        public List<IFormFile> Files { get; set; }
+        public IFormFile Files { get; set; }
     }
 }

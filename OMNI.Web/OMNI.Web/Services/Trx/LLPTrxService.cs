@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace OMNI.Web.Services.Trx
@@ -43,13 +44,54 @@ namespace OMNI.Web.Services.Trx
             throw new Exception();
         }
 
+        //public async Task<BaseJson<LLPTrxModel>> AddEdit(LLPTrxModel m)
+        //{
+        //    HttpClient c = _httpClient.CreateClient("OMNI");
+
+        //    try
+        //    {
+        //        var r = await c.PostAsJsonAsync("/api/LLPTrx", m);
+
+        //        if (r.IsSuccessStatusCode)
+        //        {
+        //            return await r.Content.ReadAsAsync<BaseJson<LLPTrxModel>>();
+        //        }
+
+        //        throw new Exception();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
         public async Task<BaseJson<LLPTrxModel>> AddEdit(LLPTrxModel m)
         {
             HttpClient c = _httpClient.CreateClient("OMNI");
 
             try
             {
-                var r = await c.PostAsJsonAsync("/api/LLPTrx", m);
+                MultipartFormDataContent data = new MultipartFormDataContent();
+
+                data.Add(new StringContent(m.Id.ToString()), "Id");
+                data.Add(new StringContent(m.Port.ToString()), "Port");
+                data.Add(new StringContent(m.Jenis.ToString()), "Jenis");
+                data.Add(new StringContent(m.Kondisi.ToString()), "Kondisi");
+                data.Add(new StringContent(m.QRCode.ToString()), "QRCode");
+                data.Add(new StringContent(m.DetailExisting.ToString()), "DetailExisting");
+                if (m.Files != default)
+                    data.Add(
+                        new StreamContent(m.Files.OpenReadStream())
+                        {
+                            Headers =
+                                {
+                                    ContentLength = m.Files.Length,
+                                    ContentType = new MediaTypeHeaderValue(m.Files.ContentType)
+                                }
+                        }, "Image", m.Files.FileName
+                    );
+
+                var r = await c.PostAsync("/api/LLPTrx", data);
 
                 if (r.IsSuccessStatusCode)
                 {
