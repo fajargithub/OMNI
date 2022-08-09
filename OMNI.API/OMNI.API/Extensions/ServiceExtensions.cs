@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Minio.AspNetCore;
 using OMNI.API.Configurations;
 using OMNI.Data.Data;
 using OMNI.Utilities.Constants;
@@ -28,6 +29,19 @@ namespace OMNI.API.Extensions
 
             services.AddDbContext<CorePTKContext>(options
                 => options.UseSqlServer(connection + appSettings.DataBase[DatabaseEnums.CorePTKDb.ToString()]));
+        }
+
+        public static void ConfigureMinio(this IServiceCollection services, IConfiguration configuration)
+        {
+            var appSettings = configuration.Get<AppSettings>();
+            string a = configuration.GetSection("MinioService").GetSection("AccessKey").Value;
+            string b = appSettings.IsProduction ? configuration.GetSection("MinioService").GetSection("URL").GetSection("Prod").Value : configuration.GetSection("MinioService").GetSection("URL").GetSection("Dev").Value;
+            services.AddMinio(opt =>
+            {
+                opt.Endpoint = appSettings.IsProduction ? configuration.GetSection("MinioService").GetSection("URL").GetSection("Prod").Value : configuration.GetSection("MinioService").GetSection("URL").GetSection("Dev").Value;
+                opt.AccessKey = configuration.GetSection("MinioService").GetSection("AccessKey").Value;
+                opt.SecretKey = configuration.GetSection("MinioService").GetSection("SecretKey").Value;
+            });
         }
     }
 }

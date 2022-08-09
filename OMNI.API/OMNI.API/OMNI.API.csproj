@@ -14,5 +14,9 @@
     <Folder Include="Model\CorePTK\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="12.0.1" />
+  </ItemGroup>
+
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OMNI.Data.Data.Dao.CorePTK;
+using OMNI.Migrations.Data.Dao.CorePTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OMNI.Data.Data.Dao;
+using OMNI.Migrations.Data.Dao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace OMNI.Data.Data
         public DbSet<PersonilTrx> PersonilTrx { get; set; }
         public DbSet<HistoryPersonilTrx> HistoryPersonilTrx { get; set; }
         public DbSet<RekomendasiPersonil> RekomendasiPersonil { get; set; }
+        public DbSet<FileUpload> FileUpload { get; set; }
         public DbSet<OMNIActivityLog> OMNIActivityLog { get; set; }
     }
 }

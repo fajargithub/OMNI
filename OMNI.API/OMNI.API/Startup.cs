@@ -27,6 +27,7 @@ namespace OMNI.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureDatabaseConnection(Configuration);
+            services.ConfigureMinio(Configuration);
             services.AddControllers();
         }
 

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OMNI.API.Model.OMNI
@@ -29,5 +31,7 @@ namespace OMNI.API.Model.OMNI
         public decimal PersentaseOSCP { get; set; }
         public decimal PersentaseHubla { get; set; }
         public decimal RekomendasiHubla { get; set; }
+        [JsonIgnore]
+        public IFormFile Files { get; set; }
     }
 }
