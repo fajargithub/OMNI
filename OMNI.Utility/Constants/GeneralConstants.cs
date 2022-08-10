@@ -15,6 +15,7 @@ namespace OMNI.Utilities.Constants
         public static readonly string REPORT = nameof(REPORT);
         public static readonly string REPORT_EXCEL = nameof(REPORT_EXCEL);
         public static readonly string ACTIVITY = nameof(ACTIVITY);
+        public static readonly string OMNI_LLP = nameof(OMNI_LLP);
         public static readonly string ITEM = nameof(ITEM);
         public static readonly string OPTION_IMAGE = nameof(OPTION_IMAGE);
         public static readonly string UW_ATTACHMENT_FILE = nameof(UW_ATTACHMENT_FILE);

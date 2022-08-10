@@ -24,17 +24,9 @@ namespace OMNI.API.Controllers.OMNI
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class LLPTrxController : ControllerBase
+    public class LLPTrxController : BaseController
     {
-        private readonly OMNIDbContext _dbOMNI;
-        private readonly MinioClient _mc;
-
-        //public LLPTrxController(OMNIDbContext dbOMNI)
-        //{
-        //    _dbOMNI = dbOMNI;
-        //}
-
-        public LLPTrxController(OMNIDbContext dbOMNI, MinioClient mc) 
+        public LLPTrxController(OMNIDbContext dbOMNI, MinioClient mc) : base(dbOMNI, mc)
         {
             _dbOMNI = dbOMNI;
             _mc = mc;
@@ -285,11 +277,6 @@ namespace OMNI.API.Controllers.OMNI
                     temp.QRCode = list[i].QRCode;
                     temp.DetailExisting = list[i].DetailExisting;
                     temp.Kondisi = list[i].Kondisi;
-                    //temp.TotalExistingJenis = list[i].TotalExistingJenis;
-                    //temp.TotalExistingKeseluruhan = list[i].TotalExistingKeseluruhan;
-                    //temp.TotalKebutuhanHubla = list[i].TotalKebutuhanHubla;
-                    //temp.SelisihHubla = list[i].SelisihHubla;
-                    //temp.KesesuaianPM58 = list[i].KesesuaianPM58;
                     temp.PersentaseHubla = list[i].PersentaseHubla;
                     temp.TotalKebutuhanOSCP = list[i].TotalKebutuhanOSCP;
                     temp.SelisihOSCP = list[i].SelisihOSCP;
@@ -451,11 +438,18 @@ namespace OMNI.API.Controllers.OMNI
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
             }
 
-            if (model.Files != null)
-                await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files, Flag: GeneralConstants.ACTIVITY, isUpdate: model.Files != null, remark: GeneralConstants.OPTION_IMAGE);
+            if (model.Files.Count() > 0)
+            {
+                for(int i=0; i < model.Files.Count(); i++)
+                {
+                    await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OMNI_LLP, isUpdate: model.Files != null, remark: null);
+                }
+                
+            }
+                
 
-            _dbOMNI.LLPTrx.Update(data);
-            await _dbOMNI.SaveChangesAsync(cancellationToken);
+            //_dbOMNI.LLPTrx.Update(data);
+            //await _dbOMNI.SaveChangesAsync(cancellationToken);
 
             return Ok(new ReturnJson { });
         }
@@ -472,147 +466,6 @@ namespace OMNI.API.Controllers.OMNI
             await _dbOMNI.SaveChangesAsync(cancellationToken);
 
             return data;
-        }
-
-        private string CreatePath(string path) => Path.Combine(path, DateTime.UtcNow.ToString("yyyyMMdd/"));
-
-        private byte[] CompressImage(IFormFile img)
-        {
-
-            byte[] result = null;
-
-            using (MagickImage image = new MagickImage(img.OpenReadStream()))
-            {
-                //image.Format = image.Format; // Get or Set the format of the image.
-                //image.Resize(40, 40); // fit the image into the requested width and height. 
-                image.Quality = 50; // This is the Compression level.
-                result = image.ToByteArray();
-            }
-            return result;
-            //using (var stream = new FileStream(Path.Combine($"D:/TesUpload/", images.FileName), FileMode.Create))
-            //{
-            //    await stream.WriteAsync(result, 0, result.Length);
-            //}
-        }
-
-        private byte[] CompressImage(byte[] img)
-        {
-
-            byte[] result = null;
-
-            using (MagickImage image = new MagickImage(img))
-            {
-                //image.Format = image.Format; // Get or Set the format of the image.
-                //image.Resize(40, 40); // fit the image into the requested width and height. 
-                image.Quality = 50; // This is the Compression level.
-                result = image.ToByteArray();
-            }
-            return result;
-            //using (var stream = new FileStream(Path.Combine($"D:/TesUpload/", images.FileName), FileMode.Create))
-            //{
-            //    await stream.WriteAsync(result, 0, result.Length);
-            //}
-        }
-
-        public async Task DeleteFile(FileUpload oldFile, string updateBy)
-        {
-            if (oldFile != null)
-            {
-                string fileFrom = Path.Combine(oldFile.FilePath, oldFile.FileName);
-                bool isFileFromExist = false;
-                try
-                {
-                    ObjectStat stat = await _mc.StatObjectAsync("uploaded", fileFrom);
-                    isFileFromExist = true;
-                }
-                catch (ObjectNotFoundException)
-                {
-
-                }
-
-                if (isFileFromExist)
-                {
-                    if (!await _mc.BucketExistsAsync("deleted"))
-                        await _mc.MakeBucketAsync("deleted");
-                    await _mc.CopyObjectAsync("uploaded", fileFrom, "deleted", destObjectName: fileFrom, copyConditions: new CopyConditions());
-                    await _mc.RemoveObjectAsync("uploaded", fileFrom);
-                }
-
-                oldFile.IsDeleted = GeneralConstants.YES;
-                oldFile.UpdatedBy = updateBy;
-                oldFile.BucketName = "deleted";
-                oldFile.UpdatedAt = DateTime.Now;
-
-                _dbOMNI.Set<FileUpload>().Update(oldFile);
-                await _dbOMNI.SaveChangesAsync();
-            }
-        }
-
-        public async Task<FileUpload> UploadFileWithReturn(string path, string createBy, int trxId, IFormFile file, bool isUpdate = false, string Flag = null, bool autoRename = false, string remark = null, bool isCompress = false)
-        {
-            if (file != null)
-            {
-                path = path.EndsWith("/") ? path : path + "/";
-                string filePathView = CreatePath(path);
-                string fileName = file.FileName.ToLower();
-
-                byte[] compresed = null;
-                if (isCompress)
-                    compresed = CompressImage(file);
-
-                FileUpload uploadFile = new FileUpload
-                {
-                    BucketName = "uploaded",
-                    FilePath = filePathView,
-                    FileName = fileName,
-                    ContentType = file.ContentType,
-                    Length = isCompress ? compresed.Length : file.Length,
-                    TrxId = trxId,
-                    CreatedBy = createBy,
-                    Flag = Flag,
-                    Remark = remark
-                };
-                // Delete File First while Update Action
-                if (isUpdate)
-                {
-                    FileUpload oldFile = await _dbOMNI.Set<FileUpload>().SingleOrDefaultAsync(
-                        b =>
-                        b.TrxId == trxId &&
-                        b.Flag == Flag &&
-                        b.Remark == remark &&
-                        b.IsDeleted == GeneralConstants.YES);
-                    await DeleteFile(oldFile, createBy);
-                }
-
-                await _dbOMNI.Set<FileUpload>().AddAsync(uploadFile);
-                await _dbOMNI.SaveChangesAsync();
-
-                if (autoRename)
-                {
-                    uploadFile.FileName = $"{uploadFile.Id}-{uploadFile.FileName}";
-                    fileName = uploadFile.FileName;
-                    _dbOMNI.Set<FileUpload>().Update(uploadFile);
-                }
-
-
-                if (!await _mc.BucketExistsAsync("uploaded"))
-                    await _mc.MakeBucketAsync("uploaded");
-
-
-                using (var ms = new MemoryStream())
-                {
-                    if (isCompress)
-                        await ms.WriteAsync(compresed, 0, compresed.Length);
-                    else
-                        await file.CopyToAsync(ms);
-
-                    ms.Position = 0;
-                    await _mc.PutObjectAsync(bucketName: "uploaded", objectName: Path.Combine(filePathView, uploadFile.FileName), data: ms, size: ms.Length, contentType: file.ContentType);
-                }
-                await _dbOMNI.SaveChangesAsync();
-                return uploadFile;
-            }
-            return null;
         }
     }
 }

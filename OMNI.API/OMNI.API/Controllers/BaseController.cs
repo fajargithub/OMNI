@@ -24,13 +24,12 @@ namespace OMNI.API.Controllers
     public class BaseController : ControllerBase
     {
         //private readonly IAppLogRepo _appLog;
-        private readonly MinioClient _mc;
-        private readonly OMNIDbContext _omniDb;
+        public MinioClient _mc;
+        public OMNIDbContext _dbOMNI;
 
         public BaseController(OMNIDbContext omniDb, MinioClient mc)
         {
-            //_appLog = appLog;
-            _omniDb = omniDb;
+            _dbOMNI = omniDb;
             _mc = mc;
         }
         protected string GetCurrentMethod([CallerMemberName] string methodName = "")
@@ -88,6 +87,26 @@ namespace OMNI.API.Controllers
             //}
         }
 
+        [HttpGet("GetAllFiles")]
+        public async Task<IActionResult> GetAllFiles(string trxId, CancellationToken cancellationToken) {
+            List<FileUpload> fileList = await _dbOMNI.FileUpload.Where(b => b.IsDeleted == GeneralConstants.NO && b.TrxId == int.Parse(trxId)).ToListAsync(cancellationToken);
+            List<FilesModel> result = new List<FilesModel>();
+            if (fileList != null)
+            {
+                for (int i = 0; i < fileList.Count(); i++)
+                {
+                    FilesModel temp = new FilesModel();
+                    temp.Id = fileList[i].Id;
+                    temp.FileName = fileList[i].FileName;
+                    temp.CreateDate = fileList[i].CreatedAt.ToString("dd/MM/yyyy");
+                    temp.CreatedBy = fileList[i].CreatedBy;
+                    result.Add(temp);
+                }
+            }
+
+            return Ok(result);
+        }
+
         private string CreatePath(string path) => Path.Combine(path, DateTime.UtcNow.ToString("yyyyMMdd/"));
 
         public async Task DeleteFile(FileUpload oldFile, string updateBy)
@@ -119,14 +138,14 @@ namespace OMNI.API.Controllers
                 oldFile.BucketName = "deleted";
                 oldFile.UpdatedAt = DateTime.Now;
 
-                _omniDb.Set<FileUpload>().Update(oldFile);
-                await _omniDb.SaveChangesAsync();
+                _dbOMNI.Set<FileUpload>().Update(oldFile);
+                await _dbOMNI.SaveChangesAsync();
             }
         }
 
         public async Task<string> GetFilePath(int id)
         {
-            FileUpload file = await _omniDb.Set<FileUpload>().SingleOrDefaultAsync(b => b.Id == id);
+            FileUpload file = await _dbOMNI.Set<FileUpload>().SingleOrDefaultAsync(b => b.Id == id);
             string result = Path.Combine(file.FilePath + file.FileName);
             try
             {
@@ -139,25 +158,73 @@ namespace OMNI.API.Controllers
             return result;
         }
 
-        public async Task<string> GetFilePath(FileUpload file)
+        //public async Task<string> GetFilePath(FileUpload file)
+        //{
+        //    string result = Path.Combine(file.FilePath + file.FileName);
+        //    try
+        //    {
+        //        ObjectStat stat = await _mc.StatObjectAsync("uploaded", result);
+        //    }
+        //    catch (ObjectNotFoundException)
+        //    {
+        //        throw new FileNotFoundException();
+        //    }
+        //    return result;
+        //}
+
+        //public IActionResult ViewFile(int id)
+        //{
+        //    UploadFile fileData = _uploadFileService.GetAllWithFilter(b => b.TrxId == Id && b.Flag == "ICONSV2").OrderByDescending(b => b.Id).FirstOrDefault();
+        //    MemoryStream pdfStream = new MemoryStream();
+        //    if (fileData == null) return NotFound();
+        //    string filePath = GeneralConstant.URL_DOWNLOAD_UPLOAD_NEW + fileData.FilePath + fileData.FileName;
+        //    byte[] pdfByteArray = System.IO.File.ReadAllBytes(filePath);
+
+        //    if (fileData.ContentType == "application/pdf")
+        //    {
+        //        pdfStream.Write(pdfByteArray, 0, pdfByteArray.Length);
+        //        pdfStream.Position = 0;
+
+        //        return new FileStreamResult(pdfStream, "application/pdf");
+        //    }
+        //    else
+        //    {
+        //        return File(pdfByteArray, fileData.ContentType, fileData.FileName);
+        //    }
+        //}
+
+        [HttpGet("GetContentType")]
+        public async Task<string> GetContentType(string id, CancellationToken cancellationToken)
         {
-            string result = Path.Combine(file.FilePath + file.FileName);
-            try
+            string contentType = "";
+            FileUpload data = await _dbOMNI.FileUpload.Where(b => b.Id == int.Parse(id)).FirstOrDefaultAsync(cancellationToken);
+            if(data != null)
             {
-                ObjectStat stat = await _mc.StatObjectAsync("uploaded", result);
+                contentType = data.ContentType;
             }
-            catch (ObjectNotFoundException)
-            {
-                throw new FileNotFoundException();
-            }
-            return result;
+
+            return contentType;
         }
 
-        public async Task<FileStreamResult> ReadFile(int id, bool isFileNameFromDb = false, string fileName = null)
+        [HttpDelete("DeleteFile")]
+        public async Task<string> DeleteFile(string id, CancellationToken cancellationToken)
+        {
+            FileUpload data = await _dbOMNI.FileUpload.Where(b => b.Id == int.Parse(id)).FirstOrDefaultAsync(cancellationToken);
+            data.IsDeleted = GeneralConstants.YES;
+            data.UpdatedBy = "admin";
+            data.UpdatedAt = DateTime.Now;
+            _dbOMNI.FileUpload.Update(data);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+            return "OK";
+        }
+
+        [HttpGet("ReadFile")]
+        public async Task<FileStreamResult> ReadFile(int id, string flag, bool isFileNameFromDb = false, string fileName = null)
         {
             try
             {
-                FileUpload file = await _omniDb.Set<FileUpload>().SingleOrDefaultAsync(b => b.Id == id && b.IsDeleted == GeneralConstants.NO);
+                FileUpload file = await _dbOMNI.Set<FileUpload>().SingleOrDefaultAsync(b => b.Id == id && b.IsDeleted == GeneralConstants.NO && b.Flag == flag);
                 MemoryStream stream = new MemoryStream();
                 string filePath = file != null ? (Path.Combine(file.FilePath + file.FileName)) : GeneralConstants.IMG_PLACEHOLDER;
 
@@ -201,94 +268,47 @@ namespace OMNI.API.Controllers
             }
         }
 
-        public async Task<FileStreamResult> ReadFile(FileUpload file, bool isFileNameFromDb = false, string fileName = null)
-        {
-            try
-            {
-                MemoryStream stream = new MemoryStream();
-                string filePath = file != null ? (Path.Combine(file.FilePath + file.FileName)) : GeneralConstants.IMG_PLACEHOLDER;
+        //public async Task<ReadFileModel> ReadFileByte(int id, string flag)
+        //{
+        //    FileUpload file = await _dbOMNI.Set<FileUpload>().SingleOrDefaultAsync(b => b.Id == id && b.IsDeleted == GeneralConstants.NO);
+        //    return await ReadFileByte(file);
+        //}
 
-                bool isFileExists = false;
-                if (file != null)
-                {
-                    try
-                    {
-                        ObjectStat stat = await _mc.StatObjectAsync("uploaded", filePath);
-                        isFileExists = true;
-                    }
-                    catch (ObjectNotFoundException)
-                    {
+        //public async Task<ReadFileModel> ReadFileByte(FileUpload file)
+        //{
+        //    string filePath = file != null ? (Path.Combine(file.FilePath + file.FileName)) : GeneralConstants.IMG_PLACEHOLDER;
 
-                    }
-                }
-                if (isFileExists)
-                    using (MemoryStream ms = new MemoryStream())
-                        await _mc.GetObjectAsync("uploaded", filePath, b => b.CopyTo(stream));
+        //    bool isFileExists = false;
+        //    if (file != null)
+        //    {
+        //        try
+        //        {
+        //            ObjectStat stat = await _mc.StatObjectAsync("uploaded", filePath);
+        //            isFileExists = true;
+        //        }
+        //        catch (ObjectNotFoundException)
+        //        {
 
-                else
-                {
-                    byte[] byteArray = await System.IO.File.ReadAllBytesAsync(GeneralConstants.IMG_PLACEHOLDER);
-                    stream.Write(byteArray, 0, byteArray.Length);
-                    stream.Position = 0;
-                }
-                FileStreamResult result = new FileStreamResult(stream, isFileExists && file != null ? file.ContentType : @"image/png");
-                if (isFileNameFromDb)
-                {
-                    result.FileDownloadName = file?.FileName ?? "404";
-                }
-                else if (!string.IsNullOrWhiteSpace(fileName))
-                {
-                    result.FileDownloadName = fileName ?? "404";
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //        }
+        //    }
 
-        public async Task<ReadFileModel> ReadFileByte(int id)
-        {
-            FileUpload file = await _omniDb.Set<FileUpload>().SingleOrDefaultAsync(b => b.Id == id && b.IsDeleted == GeneralConstants.NO);
-            return await ReadFileByte(file);
-        }
+        //    byte[] byteArray = null;
+        //    if (isFileExists)
+        //        using (MemoryStream ms = new MemoryStream())
+        //        {
+        //            await _mc.GetObjectAsync("uploaded", filePath, b => b.CopyTo(ms));
+        //            byteArray = ms.ToArray();
+        //        }
+        //    else
+        //        byteArray = await System.IO.File.ReadAllBytesAsync(GeneralConstants.IMG_PLACEHOLDER);
 
-        public async Task<ReadFileModel> ReadFileByte(FileUpload file)
-        {
-            string filePath = file != null ? (Path.Combine(file.FilePath + file.FileName)) : GeneralConstants.IMG_PLACEHOLDER;
-
-            bool isFileExists = false;
-            if (file != null)
-            {
-                try
-                {
-                    ObjectStat stat = await _mc.StatObjectAsync("uploaded", filePath);
-                    isFileExists = true;
-                }
-                catch (ObjectNotFoundException)
-                {
-
-                }
-            }
-
-            byte[] byteArray = null;
-            if (isFileExists)
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    await _mc.GetObjectAsync("uploaded", filePath, b => b.CopyTo(ms));
-                    byteArray = ms.ToArray();
-                }
-            else
-                byteArray = await System.IO.File.ReadAllBytesAsync(GeneralConstants.IMG_PLACEHOLDER);
-
-            return new ReadFileModel
-            {
-                ContentType = isFileExists ? file.ContentType : @"image/png",
-                FileContents = byteArray,
-                FileName = isFileExists ? file.FileName : "404.jpg"
-            };
-        }
+        //    return new ReadFileModel
+        //    {
+        //        ContentType = isFileExists ? file.ContentType : @"image/png",
+        //        FileContents = byteArray,
+        //        FileName = isFileExists ? file.FileName : "404.jpg"
+        //    };
+        //}
 
         public async Task UploadFile(string path, string createBy, int trxId, IFormFile file, bool isUpdate = false, string Flag = null, string remark = null, bool autoRename = false, bool isCompress = false)
         {
@@ -317,7 +337,7 @@ namespace OMNI.API.Controllers
                 // Delete File First while Update Action
                 if (isUpdate)
                 {
-                    FileUpload oldFile = await _omniDb.Set<FileUpload>().SingleOrDefaultAsync(
+                    FileUpload oldFile = await _dbOMNI.Set<FileUpload>().SingleOrDefaultAsync(
                         b =>
                         b.TrxId == trxId &&
                         b.Flag == Flag &&
@@ -326,14 +346,14 @@ namespace OMNI.API.Controllers
                     await DeleteFile(oldFile, createBy);
                 }
 
-                await _omniDb.Set<FileUpload>().AddAsync(uploadFile);
-                await _omniDb.SaveChangesAsync();
+                await _dbOMNI.Set<FileUpload>().AddAsync(uploadFile);
+                await _dbOMNI.SaveChangesAsync();
 
                 if (autoRename)
                 {
                     uploadFile.FileName = $"{uploadFile.Id}-{uploadFile.FileName}";
                     fileName = uploadFile.FileName;
-                    _omniDb.Set<FileUpload>().Update(uploadFile);
+                    _dbOMNI.Set<FileUpload>().Update(uploadFile);
                 }
 
                 if (!await _mc.BucketExistsAsync("uploaded"))
@@ -353,7 +373,7 @@ namespace OMNI.API.Controllers
                     data: ms,
                     size: ms.Length,
                     contentType: file.ContentType);
-                await _omniDb.SaveChangesAsync();
+                await _dbOMNI.SaveChangesAsync();
             }
         }
 
@@ -384,7 +404,7 @@ namespace OMNI.API.Controllers
                 // Delete File First while Update Action
                 if (isUpdate)
                 {
-                    FileUpload oldFile = await _omniDb.Set<FileUpload>().SingleOrDefaultAsync(
+                    FileUpload oldFile = await _dbOMNI.Set<FileUpload>().SingleOrDefaultAsync(
                         b =>
                         b.TrxId == trxId &&
                         b.Flag == Flag &&
@@ -393,14 +413,14 @@ namespace OMNI.API.Controllers
                     await DeleteFile(oldFile, createBy);
                 }
 
-                await _omniDb.Set<FileUpload>().AddAsync(uploadFile);
-                await _omniDb.SaveChangesAsync();
+                await _dbOMNI.Set<FileUpload>().AddAsync(uploadFile);
+                await _dbOMNI.SaveChangesAsync();
 
                 if (autoRename)
                 {
                     uploadFile.FileName = $"{uploadFile.Id}-{uploadFile.FileName}";
                     fileName = uploadFile.FileName;
-                    _omniDb.Set<FileUpload>().Update(uploadFile);
+                    _dbOMNI.Set<FileUpload>().Update(uploadFile);
                 }
 
 
@@ -418,72 +438,7 @@ namespace OMNI.API.Controllers
                     ms.Position = 0;
                     await _mc.PutObjectAsync(bucketName: "uploaded", objectName: Path.Combine(filePathView, uploadFile.FileName), data: ms, size: ms.Length, contentType: file.ContentType);
                 }
-                await _omniDb.SaveChangesAsync();
-                return uploadFile;
-            }
-            return null;
-        }
-
-        public async Task<FileUpload> UploadFileWithReturn(string path, string createBy, int trxId, ReadFileModel file, bool isUpdate = false, string Flag = null, bool autoRename = false, string remark = null, bool isCompress = false)
-        {
-            if (file != null)
-            {
-                path = path.EndsWith("/") ? path : path + "/";
-                string filePathView = CreatePath(path);
-                string fileName = file.FileName.ToLower();
-                FileUpload uploadFile = new FileUpload
-                {
-                    BucketName = "uploaded",
-                    FilePath = filePathView,
-                    FileName = fileName,
-                    ContentType = file.ContentType,
-                    Length = file.FileContents.Length,
-                    TrxId = trxId,
-                    CreatedBy = createBy,
-                    Flag = Flag,
-                    Remark = remark
-                };
-                // Delete File First while Update Action
-                if (isUpdate)
-                {
-                    FileUpload oldFile = await _omniDb.Set<FileUpload>().SingleOrDefaultAsync(
-                        b =>
-                        b.TrxId == trxId &&
-                        b.Flag == Flag &&
-                        b.Remark == remark &&
-                        b.IsDeleted == GeneralConstants.YES);
-                    await DeleteFile(oldFile, createBy);
-                }
-
-                await _omniDb.Set<FileUpload>().AddAsync(uploadFile);
-                await _omniDb.SaveChangesAsync();
-
-                if (autoRename)
-                {
-                    uploadFile.FileName = $"{uploadFile.Id}-{uploadFile.FileName}";
-                    fileName = uploadFile.FileName;
-                    _omniDb.Set<FileUpload>().Update(uploadFile);
-                }
-
-
-                if (!await _mc.BucketExistsAsync("uploaded"))
-                    await _mc.MakeBucketAsync("uploaded");
-
-
-                using (var ms = new MemoryStream())
-                {
-                    if (isCompress)
-                    {
-                        byte[] compresed = CompressImage(file.FileContents);
-                        await ms.WriteAsync(compresed, 0, compresed.Length);
-                    }
-                    else
-                        await ms.WriteAsync(file.FileContents, 0, file.FileContents.Length);
-
-                    ms.Position = 0;
-                    await _mc.PutObjectAsync(bucketName: "uploaded", objectName: Path.Combine(filePathView, uploadFile.FileName), data: ms, size: ms.Length, contentType: file.ContentType);
-                }
-                await _omniDb.SaveChangesAsync();
+                await _dbOMNI.SaveChangesAsync();
                 return uploadFile;
             }
             return null;

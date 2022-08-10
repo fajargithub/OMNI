@@ -31,7 +31,8 @@ namespace OMNI.API.Model.OMNI
         public decimal PersentaseOSCP { get; set; }
         public decimal PersentaseHubla { get; set; }
         public decimal RekomendasiHubla { get; set; }
+
         [JsonIgnore]
-        public IFormFile Files { get; set; }
+        public IFormFileCollection Files { get; set; }
     }
 }
