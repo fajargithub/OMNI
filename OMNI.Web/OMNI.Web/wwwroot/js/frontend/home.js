@@ -23,7 +23,7 @@ var table = $('#table-llp').DataTable(
     {
         orderCellsTop: true,
         fixedHeader: true,
-        responsive: true,
+        responsive: false,
         ordering: false,
         filter: true,
         order: [],
@@ -74,7 +74,7 @@ var table = $('#table-llp').DataTable(
                 "targets": -1,
                 "data": null,
                 "render": function (row, data, iDisplayIndex) {
-                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiLatihan/AddEdit?id=" + iDisplayIndex.id + "&port=" + port + "' style='color:blue;' title='Gambar'><b><i>Upload Link</i></b></a>";
+                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "' style='color:blue;' title='Gambar'><b><i>Upload Link</i></b></a>";
                 }
             },
             { "data": "totalExistingJenis" },
@@ -149,6 +149,26 @@ function deleteLLPTrx(id) {
             $.post(base_api + 'Home/DeleteLLPTrx?id=' + id, function (result) {
                 Swal.fire('Deleted!', '', 'success');
                 $("#table-llp").DataTable().ajax.reload(null, false);
+            });
+        } else if (result.isDenied) {
+
+        }
+    })
+}
+
+function deleteFile(id) {
+    console.log(id);
+    Swal.fire({
+        title: 'Do you want to delete?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        denyButtonText: `Cancel`,
+    }).then((result) => {
+        if (result.value) {
+            $.post(base_api + 'Home/DeleteFile?id=' + id, function (result) {
+                Swal.fire('Deleted!', '', 'success');
+                $("#table-files").DataTable().ajax.reload(null, false);
             });
         } else if (result.isDenied) {
 

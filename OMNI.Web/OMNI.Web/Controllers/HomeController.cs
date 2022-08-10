@@ -12,6 +12,7 @@ using OMNI.Web.Services.Trx.Interface;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -53,6 +54,45 @@ namespace OMNI.Web.Controllers
                 recordsFiltered = count,
                 data
             });
+        }
+
+        public async Task<JsonResult> GetAllFiles(int trxId)
+        {
+            List<FilesModel> data = await _llpTrxService.GetAllFiles(trxId);
+
+            int count = data.Count();
+
+            return Json(new
+            {
+                success = true,
+                recordsTotal = count,
+                recordsFiltered = count,
+                data
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewFile(int id, string flag)
+        {
+            var r = await _llpTrxService.ReadFile(id, flag);
+            var contentType = await _llpTrxService.GetContentType(id);
+
+            return File(r, @""+contentType);
+        }
+
+        [HttpGet]
+        public IActionResult IndexFile(int trxId)
+        {
+            ViewBag.TrxId = trxId;
+            return PartialView(INDEX_FILE);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteFile(int id)
+        {
+            var r = await _llpTrxService.DeleteFile(id);
+
+            return Ok(new JsonResponse());
         }
 
         [HttpGet]

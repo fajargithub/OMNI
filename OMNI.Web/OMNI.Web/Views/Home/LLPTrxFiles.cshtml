@@ -8,7 +8,7 @@
                 <div id="panel-1" class="panel">
                     <div class="panel-hdr">
                         <h2>
-                            Jenis List
+                           File List
                         </h2>
                     </div>
                     <div class="panel-container show">
@@ -95,23 +95,21 @@
                 processing: true,
                 //serverSide: true,
                 "ajax": {
-                    "url": base_api + 'Home/GetAll',
+                    "url": base_api + 'Home/GetFiles?trxId=@ViewBag.TrxId',
                     "type": 'GET'
                     //"data": { searchData: result }
                 },
                 "columns": [
                     { "data": null },
-                    { "data": "name" },
-                    { "data": "satuan" },
-                    { "data": "kode" },
-                    { "data": "kodeInventory" },
-                    { "data": "desc" },
+                    { "data": "fileName" },
+                    { "data": "createDate" },
+                    { "data": "createdBy" },
                     {
                         "targets": -1,
                         "data": null,
                         "render": function (row, data, iDisplayIndex) {
-                            return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Jenis/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
-                                " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
+                            return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/ViewFile?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                " <div onclick='deleteFile(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
                         }
                     }
                 ],
