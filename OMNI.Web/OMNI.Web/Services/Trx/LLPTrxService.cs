@@ -88,7 +88,7 @@ namespace OMNI.Web.Services.Trx
                                     ContentLength = m.Files.Length,
                                     ContentType = new MediaTypeHeaderValue(m.Files.ContentType)
                                 }
-                        }, "Image", m.Files.FileName
+                        }, "Files", m.Files.FileName
                     );
 
                 var r = await c.PostAsync("/api/LLPTrx", data);
