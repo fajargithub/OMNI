@@ -34,6 +34,10 @@
     .dt-buttons {
         display:none;
     }
+
+    .DTFC_LeftBodyWrapper:before, .DTFC_LeftFootWrapper:before, .DTFC_LeftHeadWrapper:before {
+        background: none;
+    }
 </style>
 
 <div class="row">
@@ -80,6 +84,12 @@
                                 <th style="width:80px;">Total kebutuhan sesuai Hubla</th>
                                 <th style="width:80px;">Selisih Hubla</th>
                                 <th style="width:80px;">Kesesuaian PM.58 (Terpenuhi/Kurang)</th>
+                                <th style="width:80px;">Persentase Hubla</th>
+                                <th style="width:80px;">Rekomendasi OSCP</th>
+                                <th style="width:80px;">Total Kebutuhan Sesuai OSCP</th>
+                                <th style="width:80px;">Selisih OSCP</th>
+                                <th style="width:80px;">Kesesuaian OSCP</th>
+                                <th style="width:80px;">Persentase OSCP</th>
                                 <th style="width:10px;">Action</th>
                             </tr>
                         </thead>
@@ -101,7 +111,7 @@
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
-                    <table id="table-akun" class="table table-borderless table-hover table-striped w-100">
+                    <table id="table-akun" class="table table-borderless table-hover table-striped w-100" style="width:100%;">
                         <thead>
                             <tr class="fw-500 text-uppercase" style="text-align:center;">
                                 <th style="width:10px;">No</th>

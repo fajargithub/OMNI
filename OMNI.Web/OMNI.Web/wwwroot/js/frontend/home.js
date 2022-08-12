@@ -115,6 +115,11 @@
         "processing": true,
         "serverSide": false,
         "ordering": false,
+        "responsive": false,
+        "scrollX": true,
+        "fixedColumns": {
+            leftColumns: 7,
+        },
         "ajax": {
             "url": base_api + 'Home/GetAllLLPTrx?port=' + port,
             "type": 'GET'
@@ -187,6 +192,12 @@
                     return result;
                 }
             },
+            { "data": "persentaseHubla" },
+            { "data": "rekomendasiOSCP" },
+            { "data": "totalKebutuhanOSCP" },
+            { "data": "selisihOSCP" },
+            { "data": "kesesuaianOSCP" },
+            { "data": "persentaseOSCP" },
             {
                 "targets": -1,
                 "data": null,
@@ -302,6 +313,38 @@
             responsiveHelper_datatable_col_reorder.respond();
         }
     });
+}
+
+function qrcodeClick(id) {
+    $.ajax({
+        url: base_api + "Home/GetLLPTrxById?id=" + id,
+        method: 'GET',
+        success: function (result) {
+            Swal.fire({
+                imageUrl: result.data.qrCode,
+                imageAlt: 'QR Code'
+            })
+        }
+    });
+}
+
+function deleteLLPTrx(id) {
+    Swal.fire({
+        title: 'Do you want to delete?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        denyButtonText: `Cancel`,
+    }).then((result) => {
+        if (result.value) {
+            $.post(base_api + 'Home/DeleteLLPTrx?id=' + id, function (result) {
+                Swal.fire('Deleted!', '', 'success');
+                $("#table-llp").DataTable().ajax.reload(null, false);
+            });
+        } else if (result.isDenied) {
+
+        }
+    })
 }
 
 pagefunction();
