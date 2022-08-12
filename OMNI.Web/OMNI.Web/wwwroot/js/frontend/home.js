@@ -1,57 +1,147 @@
-﻿
-$('#table-llp thead tr:eq(1) th').each(function (i) {
-    $('select', this).on('change', function () {
-        if (table.column(i).search() !== this.value) {
-            table
-                .column(i)
-                .search(this.value)
-                .draw();
+﻿var pagefunction = function () {
+    var responsiveHelper_dt_basic = undefined;
+    //var responsiveHelper_table-llp = undefined;
+    var responsiveHelper_datatable_col_reorder = undefined;
+    var responsiveHelper_datatable_tabletools = undefined;
+
+    var breakpointDefinition = {
+        tablet: 1024,
+        phone: 480
+    };
+
+    $('#dt_basic').dataTable({
+        "sDom": "<'Usert-tooViewBaRoleConstantg'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+            "t" +
+            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+        "oLanguage": {
+            "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+        },
+        "autoWidth": true,
+        "preDrawCallback": function () {
+            // Initialize the responsive datatables helper once.
+            if (!responsiveHelper_dt_basic) {
+                responsiveHelper_dt_basic =
+                    new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+            }
+        },
+        "rowCallback": function (nRow) {
+            responsiveHelper_dt_basic.createExpandIcon(nRow);
+        },
+        "drawCallback": function (oSettings) {
+            responsiveHelper_dt_basic.respond();
         }
     });
 
-    $('input', this).on('keyup change', function () {
-        if (table.column(i).search() !== this.value) {
-            table
-                .column(i)
-                .search(this.value)
-                .draw();s
-        }
-    });
-});
+    function format(d) {
 
-var table = $('#table-llp').DataTable(
-    {
-        orderCellsTop: true,
-        fixedHeader: true,
-        responsive: false,
-        ordering: false,
-        filter: true,
-        order: [],
-        columnDefs: [
-            { "orderable": false, "targets": 14 }
-        ],
-        dom:
-            "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        processing: true,
+        var result = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;margin: 5px; text-align:left;">' +
+            '<tr>' +
+            '<td><b>Rekomendasi Hubla</b></td>' +
+            '<td style="padding-right: 10px;">:</td>' +
+            '<td>' + d.rekomendasiHubla + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td><b>Total Kebutuhan Sesuai Hubla</b></td>' +
+            '<td style="padding-right: 10px;">:</td>' +
+            '<td>' + d.totalKebutuhanHubla + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td><b>Selisih Hubla</b></td>' +
+            '<td style="padding-right: 10px;">:</td>' +
+            '<td>' + d.selisihHubla + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td><b>Kesesuaian PM.58</b></td>' +
+            '<td style="padding-right: 10px;">:</td>';
+
+            if (d.kesesuaianPM58 == "TERPENUHI") {
+                result += "<td><b style='color:green;'>TERPENUHI</b></td>";
+            } else if (d.kesesuaianPM58 == "KURANG") {
+                result += "<td><b style='color:red;'>KURANG</b></td>";
+            }
+
+        result += '</tr>';
+            result += '<tr>' +
+            '<td><b>Persentase Hubla</b></td>' +
+            '<td style="padding-right: 10px;">:</td>' +
+            '<td>' + d.persentaseHubla + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td><b>Rekomendasi OSCP</b></td>' +
+            '<td style="padding-right: 10px;">:</td>' +
+            '<td>' + d.rekomendasiOSCP + '</td>' +
+            '</tr>' +
+                '<tr>' +
+                '<td><b>Total Kebutuhan Sesuai OSCP</b></td>' +
+                '<td style="padding-right: 10px;">:</td>' +
+                '<td>' + d.totalKebutuhanOSCP + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td><b>Selisih OSCP</b></td>' +
+                '<td style="padding-right: 10px;">:</td>' +
+                '<td>' + d.selisihOSCP + '</td>' +
+                '</tr>' +
+
+            '<tr>' +
+            '<td><b>Kesesuaian OSCP</b></td>' +
+            '<td style="padding-right: 10px;">:</td>';
+
+        if (d.kesesuaianOSCP == "TERPENUHI") {
+            result += "<td><b style='color:green;'>TERPENUHI</b></td>";
+        } else if (d.kesesuaianOSCP == "KURANG") {
+            result += "<td><b style='color:red;'>KURANG</b></td>";
+        }
+
+        result += '</tr>';
+        result += '<tr>' +
+            '<td><b>Persentase OSCP</b></td>' +
+            '<td style="padding-right: 10px;">:</td>' +
+            '<td>' + d.persentaseOSCP + '</td>' +
+            '</tr>' +
+            '</table>';
+
+        return result;
+    }
+
+
+    /* COLUMN FILTER  */
+    var dt = $('#table-llp').DataTable({
+        "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+            "t" +
+            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+        "oLanguage": {
+            "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+        },
+        "processing": true,
+        "serverSide": false,
+        "ordering": false,
         "ajax": {
             "url": base_api + 'Home/GetAllLLPTrx?port=' + port,
             "type": 'GET'
         },
         "columns": [
+            {
+                "class": "details-control",
+                "orderable": false,
+                "data": null,
+                "defaultContent": "",
+                "render": function (row, data, iDisplayIndex) {
+                    var result = "<a href='javascript:void(0)' style='color:green;'><i class='fa fa-chevron-circle-down'></i></a>";
+                    return result;
+                }
+            },
             { "data": null },
             { "data": "peralatanOSR" },
             { "data": "jenis" },
             { "data": "satuanJenis" },
             { "data": "detailExisting" },
             {
-              "targets": -1,
-              "data": null,
+                "targets": -1,
+                "data": null,
                 "render": function (row, data, iDisplayIndex) {
                     var image = "<a href='javascript:void(0)' onclick='qrcodeClick(" + iDisplayIndex.id + ")'><img src='" + iDisplayIndex.qrCode + "' alt='' width='35' id='qrcode-" + iDisplayIndex.id + "'></a>";
                     return image;
-                 }
+                }
             },
             {
                 "targets": -1,
@@ -110,68 +200,108 @@ var table = $('#table-llp').DataTable(
         rowCallback: function (row, data, iDisplayIndex) {
         },
         "initComplete": function (settings, json) {
-   
+            console.log('complete load table');
+        }
+    });
+
+    dt.on('order.dt search.dt', function () {
+        dt.column(1, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+
+    $("#table-llp thead th input[type=text]").on('keyup change',
+        function () {
+
+            dt
+                .column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+
+        });
+    /* END COLUMN FILTER */
+
+    /* COLUMN SHOW - HIDE */
+    $('#datatable_col_reorder').dataTable({
+        "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
+            "t" +
+            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+        "oLanguage": {
+            "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
         },
-        "destroy": true
-    }).ajax.reload();
-
-table.on('order.dt search.dt', function () {
-    table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-        cell.innerHTML = i + 1;
-    });
-}).draw();
-
-
-function qrcodeClick(id) {
-    console.log(id);
-
-    $.ajax({
-        url: base_api + "Home/GetLLPTrxById?id=" + id,
-        method: 'GET',
-        success: function (result) {
-            Swal.fire({
-                imageUrl: result.data.qrCode,
-                imageAlt: 'QR Code'
-            })
+        "autoWidth": true,
+        "preDrawCallback": function () {
+            // Initialize the responsive datatables helper once.
+            if (!responsiveHelper_datatable_col_reorder) {
+                responsiveHelper_datatable_col_reorder =
+                    new ResponsiveDatatablesHelper($('#datatable_col_reorder'), breakpointDefinition);
+            }
+        },
+        "rowCallback": function (nRow) {
+            responsiveHelper_datatable_col_reorder.createExpandIcon(nRow);
+        },
+        "drawCallback": function (oSettings) {
+            responsiveHelper_datatable_col_reorder.respond();
         }
     });
-}
 
-function deleteLLPTrx(id) {
-    Swal.fire({
-        title: 'Do you want to delete?',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Delete',
-        denyButtonText: `Cancel`,
-    }).then((result) => {
-        if (result.value) {
-            $.post(base_api + 'Home/DeleteLLPTrx?id=' + id, function (result) {
-                Swal.fire('Deleted!', '', 'success');
-                $("#table-llp").DataTable().ajax.reload(null, false);
-            });
-        } else if (result.isDenied) {
+    $('#table-llp tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = dt.row(tr);
 
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
         }
-    })
-}
-
-function deleteFile(id) {
-    console.log(id);
-    Swal.fire({
-        title: 'Do you want to delete?',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Delete',
-        denyButtonText: `Cancel`,
-    }).then((result) => {
-        if (result.value) {
-            $.post(base_api + 'Home/DeleteFile?id=' + id, function (result) {
-                Swal.fire('Deleted!', '', 'success');
-                $("#table-files").DataTable().ajax.reload(null, false);
-            });
-        } else if (result.isDenied) {
-
+        else {
+            // Open this row
+            row.child(format(row.data())).show();
+            tr.addClass('shown');
         }
-    })
+    });
+
+    var detailRows = [];
+
+    dt.on('draw', function () {
+        $.each(detailRows, function (i, id) {
+            $('#' + id + ' td.details-control').trigger('click');
+        });
+    });
+    // Apply the filter
+    $("#table-llp thead th input[type=text]").on('keyup change',
+        function () {
+
+            dt
+                .column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+
+        });
+    /* END COLUMN FILTER */
+
+    /* COLUMN SHOW - HIDE */
+    $('#datatable_col_reorder').dataTable({
+        "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
+            "t" +
+            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+        "oLanguage": {
+            "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+        },
+        "autoWidth": true,
+        "preDrawCallback": function () {
+            // Initialize the responsive datatables helper once.
+            if (!responsiveHelper_datatable_col_reorder) {
+                responsiveHelper_datatable_col_reorder =
+                    new ResponsiveDatatablesHelper($('#datatable_col_reorder'), breakpointDefinition);
+            }
+        },
+        "rowCallback": function (nRow) {
+            responsiveHelper_datatable_col_reorder.createExpandIcon(nRow);
+        },
+        "drawCallback": function (oSettings) {
+            responsiveHelper_datatable_col_reorder.respond();
+        }
+    });
 }
+
+pagefunction();

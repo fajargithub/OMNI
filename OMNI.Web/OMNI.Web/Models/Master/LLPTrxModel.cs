@@ -29,6 +29,7 @@ namespace OMNI.Web.Models.Master
         public decimal PersentaseOSCP { get; set; }
         public decimal PersentaseHubla { get; set; }
         public decimal RekomendasiHubla { get; set; }
+        public decimal RekomendasiOSCP { get; set; }
         
         [JsonIgnore]
         public IFormFileCollection Files { get; set; }
