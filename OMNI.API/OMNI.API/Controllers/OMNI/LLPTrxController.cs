@@ -46,13 +46,18 @@ namespace OMNI.API.Controllers.OMNI
         {
             int lastSpesifikasiJenisId = 0;
             int lastSpesifikasiJenisId_2 = 0;
+            int lastSpesifikasiJenisId_3 = 0;
+            int lastSpesifikasiJenisId_4 = 0;
             int lastPeralatanOSRId = 0;
+            int lastPeralatanOSRId_2 = 0;
             decimal totalKesesuaianHubla = 0;
+            decimal totalKesesuaianOSCP = 0;
             decimal totalExistingKeseluruhan = 0;
             decimal totalDetailExisting = 0;
 
             List<CountData> countTotalExistingJenis = new List<CountData>();
             List<CountData> countTotalKesesuaianHubla = new List<CountData>();
+            List<CountData> countTotalKesesuaianOSCP = new List<CountData>();
             List<CountData> countTotalExistingKeseluruhan = new List<CountData>();
 
             List<LLPTrxModel> result = new List<LLPTrxModel>();
@@ -189,10 +194,11 @@ namespace OMNI.API.Controllers.OMNI
                     if (rekomenJenisList.Count() > 0 && list[i].SpesifikasiJenis != null)
                     {
                         var findRekomendasiHubla = rekomenJenisList.FindAll(b => b.SpesifikasiJenis.Id == list[i].SpesifikasiJenis.Id && b.RekomendasiType.Name.Contains("Hubla")).FirstOrDefault();
-                        if(findRekomendasiHubla != null)
+                        var findRekomendasiOSCP = rekomenJenisList.FindAll(b => b.SpesifikasiJenis.Id == list[i].SpesifikasiJenis.Id && b.RekomendasiType.Name.Contains("OSCP")).FirstOrDefault();
+                        
+                        if (findRekomendasiHubla != null)
                         {
                             temp.RekomendasiHubla = findRekomendasiHubla.Value;
-
                             //COUNT TOTAL KESESUAIAN HUBLA
                             if (i == 0)
                             {
@@ -250,10 +256,66 @@ namespace OMNI.API.Controllers.OMNI
                                 }
                             }
                         }
+
+                        //COUNT TOTAL KETUBUHAN SESUAI OSCP
+                        if(findRekomendasiOSCP != null)
+                        {
+                            temp.RekomendasiOSCP = findRekomendasiOSCP.Value;
+                            if (i == 0)
+                            {
+                                lastPeralatanOSRId_2 = list[i].SpesifikasiJenis.PeralatanOSR.Id;
+
+                                if (i == (list.Count() - 1))
+                                {
+                                    CountData tempTotalKesesuaianOSCP = new CountData();
+                                    tempTotalKesesuaianOSCP.TrxId = lastPeralatanOSRId_2;
+                                    tempTotalKesesuaianOSCP.TotalCount = findRekomendasiOSCP.Value;
+                                    countTotalKesesuaianOSCP.Add(tempTotalKesesuaianOSCP);
+
+
+                                }
+                                else
+                                {
+                                    totalKesesuaianOSCP += findRekomendasiOSCP.Value;
+                                }
+                            }
+                            else
+                            {
+                                if (lastPeralatanOSRId_2 == list[i].SpesifikasiJenis.PeralatanOSR.Id)
+                                {
+                                    totalKesesuaianOSCP += findRekomendasiOSCP.Value;
+                                }
+                                else
+                                {
+                                    CountData tempTotalKesesuaianOSCP = new CountData();
+                                    tempTotalKesesuaianOSCP.TrxId = lastPeralatanOSRId_2;
+                                    tempTotalKesesuaianOSCP.TotalCount = totalKesesuaianOSCP;
+                                    countTotalKesesuaianOSCP.Add(tempTotalKesesuaianOSCP);
+
+                                    if (i == (list.Count() - 1))
+                                    {
+                                        lastPeralatanOSRId_2 = list[i].SpesifikasiJenis.PeralatanOSR.Id;
+                                        totalKesesuaianOSCP = findRekomendasiOSCP.Value;
+
+                                        CountData tempTotalKesesuaianOSCP2 = new CountData();
+                                        tempTotalKesesuaianOSCP2.TrxId = lastPeralatanOSRId_2;
+                                        tempTotalKesesuaianOSCP2.TotalCount = findRekomendasiOSCP.Value;
+                                        countTotalKesesuaianOSCP.Add(tempTotalKesesuaianOSCP2);
+                                    }
+                                    else
+                                    {
+                                        lastPeralatanOSRId_2 = list[i].SpesifikasiJenis.PeralatanOSR.Id;
+                                        totalKesesuaianOSCP = findRekomendasiOSCP.Value;
+                                    }
+                                }
+                            }
+                        }
                     } else
                     {
                         temp.RekomendasiHubla = 0;
+                        temp.RekomendasiOSCP = 0;
                         temp.TotalExistingKeseluruhan = 0;
+                        temp.TotalKebutuhanOSCP = 0;
                     }
 
                     //COUNT SELISIH HUBLA
@@ -332,6 +394,38 @@ namespace OMNI.API.Controllers.OMNI
                 }
             }
 
+            if (countTotalKesesuaianOSCP.Count() > 0)
+            {
+                for (int i = 0; i < result.Count(); i++)
+                {
+                    var find = countTotalKesesuaianOSCP.Find(b => b.TrxId == result[i].PeralatanOSRId);
+                    if (find != null)
+                    {
+                        result[i].TotalKebutuhanOSCP = find.TotalCount;
+                    }
+                }
+            }
+
+            //COUNT SELISIH OSCP
+            if (countTotalExistingJenis.Count() > 0)
+            {
+                for (int j = 0; j < result.Count(); j++)
+                {
+                    var findTotalExistingJenis = countTotalExistingJenis.Find(b => b.TrxId == result[j].SpesifikasiJenisId);
+                    if (findTotalExistingJenis != null)
+                    {
+                        result[j].SelisihOSCP = findTotalExistingJenis.TotalCount - result[j].RekomendasiOSCP;
+                        if(result[j].SelisihOSCP >= 0)
+                        {
+                            result[j].KesesuaianOSCP = "TERPENUHI";
+                        } else
+                        {
+                            result[j].KesesuaianOSCP = "KURANG";
+                        }
+                    }
+                }
+            }
+
             return Ok(result);
         }
 
@@ -351,14 +445,15 @@ namespace OMNI.API.Controllers.OMNI
                 result.PeralatanOSR = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Id.ToString() : "-";
                 result.Jenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Id.ToString() : "-";
 
-                var findRekomenJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == data.Port && b.SpesifikasiJenis.Id == data.SpesifikasiJenis.Id).FirstOrDefaultAsync(cancellationToken);
-                if(findRekomenJenis != null)
-                {
-                    result.RekomendasiHubla = findRekomenJenis.Value;
-                } else
-                {
-                    result.RekomendasiHubla = 0;
-                }
+                //var findRekomenJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == data.Port && b.SpesifikasiJenis.Id == data.SpesifikasiJenis.Id).Include().ToListAsync(cancellationToken);
+                //if(findRekomenJenis.Count() > 0)
+                //{
+                //    result.RekomendasiHubla = findRekomenJenis.Find(b => b.)
+                //    result.RekomendasiOSCP = findRekomenJenis.
+                //} else
+                //{
+                //    result.RekomendasiHubla = 0;
+                //}
 
                 result.SatuanJenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Satuan : "-";
                 result.KodeInventory = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.KodeInventory : "-";
