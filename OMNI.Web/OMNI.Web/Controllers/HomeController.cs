@@ -24,36 +24,43 @@ namespace OMNI.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private static readonly string ADD_EDIT_LLPTRX = "~/Views/Home/AddEditLLPTrx.cshtml";
-        private static readonly string ADD_EDIT_PERSONIL = "~/Views/Home/AddEditPersonil.cshtml";
+        private static readonly string ADD_EDIT_PERSONIL = "~/Views/Home/AddEditPersonilTrx.cshtml";
         private static readonly string ADD_EDIT_LATIHAN = "~/Views/Home/AddEditLatihan.cshtml";
 
         private static readonly string INDEX_FILE = "~/Views/Home/IndexFile.cshtml";
 
         protected ILLPTrx _llpTrxService;
+        protected IPersonilTrx _personilTrxService;
+        protected IPersonil _personilService;
         protected IKondisi _kondisiService;
         protected ISpesifikasiJenis _spesifikasiJenisService;
-        public HomeController(ILogger<HomeController> logger, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public HomeController(ILogger<HomeController> logger, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _logger = logger;
             _llpTrxService = llpTrxService;
             _kondisiService = kondisiService;
             _spesifikasiJenisService = spesifikasiJenisService;
             _portService = portService;
+            _personilTrxService = personilTrxService;
+            _personilService = personilService;
         }
 
-        public async Task<JsonResult> GetAllLLPTrx(string port)
+        [HttpGet]
+        public async Task<IActionResult> Index(string port)
         {
-            List<LLPTrxModel> data = await _llpTrxService.GetAllLLPTrx(port);
+            List<Port> portList = await GetAllPort();
+            ViewBag.PortList = portList;
 
-            int count = data.Count();
-
-            return Json(new
+            if (!string.IsNullOrEmpty(port))
             {
-                success = true,
-                recordsTotal = count,
-                recordsFiltered = count,
-                data
-            });
+                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
+            }
+            else
+            {
+                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+            }
+
+            return View();
         }
 
         public async Task<JsonResult> GetAllFiles(int trxId)
@@ -77,7 +84,7 @@ namespace OMNI.Web.Controllers
             var r = await _llpTrxService.ReadFile(id, flag);
             var contentType = await _llpTrxService.GetContentType(id);
 
-            return File(r, @""+contentType);
+            return File(r, @"" + contentType);
         }
 
         [HttpGet]
@@ -95,22 +102,20 @@ namespace OMNI.Web.Controllers
             return Ok(new JsonResponse());
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index(string port)
+        #region LLPTRX REGION
+        public async Task<JsonResult> GetAllLLPTrx(string port)
         {
-            List<Port> portList = await GetAllPort();
-            ViewBag.PortList = portList;
+            List<LLPTrxModel> data = await _llpTrxService.GetAllLLPTrx(port);
 
-            if (!string.IsNullOrEmpty(port))
-            {
-                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
-            }
-            else
-            {
-                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-            }
+            int count = data.Count();
 
-            return View();
+            return Json(new
+            {
+                success = true,
+                recordsTotal = count,
+                recordsFiltered = count,
+                data
+            });
         }
 
         public async Task<JsonResult> GetAllSpesifikasiJenisByPeralatanOSR(int id)
@@ -144,9 +149,9 @@ namespace OMNI.Web.Controllers
         {
             List<yearData> yearList = new List<yearData>();
             int yearRange = endYear - startYear;
-            if(yearRange > 0)
+            if (yearRange > 0)
             {
-                for(int i=0; i <= yearRange; i++)
+                for (int i = 0; i <= yearRange; i++)
                 {
                     yearData temp = new yearData();
                     temp.Value = startYear;
@@ -180,7 +185,7 @@ namespace OMNI.Web.Controllers
             {
                 model = await _llpTrxService.GetById(id);
                 ViewBag.JenisId = model.Jenis;
-            } 
+            }
 
             return PartialView(ADD_EDIT_LLPTRX, model);
         }
@@ -206,34 +211,6 @@ namespace OMNI.Web.Controllers
             return Ok(new JsonResponse());
         }
 
-        [HttpGet("ManageTrxPersonil")]
-        [HttpGet("ManageTrxPersonil/{id:int}")]
-        public IActionResult AddEditTrxPersonil(int id)
-        {
-            return PartialView(ADD_EDIT_PERSONIL);
-        }
-
-        [HttpPost("ManageTrxPersonil")]
-        [HttpPost("ManageTrxPersonil/{id:int}")]
-        public IActionResult AddEditTrxPersonil([FromBody] object account, [FromRoute] int id)
-        {
-            return Ok();
-        }
-
-        [HttpGet("ManageTrxLatihan")]
-        [HttpGet("ManageTrxLatihan/{id:int}")]
-        public IActionResult AddEditTrxLatihan(int id)
-        {
-            return PartialView(ADD_EDIT_LATIHAN);
-        }
-
-        [HttpPost("ManageTrxLatihan")]
-        [HttpPost("ManageTrxLatihan/{id:int}")]
-        public IActionResult AddEditTrxLatihan([FromBody] object account, [FromRoute] int id)
-        {
-            return Ok();
-        }
-
         [HttpGet("ManageFile")]
         [HttpGet("ManageFile/{id:int}")]
         public IActionResult IndexFile()
@@ -246,5 +223,53 @@ namespace OMNI.Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        #endregion
+
+        #region PERSONIL REGION
+        public async Task<JsonResult> GetAllPersonilTrx(string port)
+        {
+            List<PersonilTrxModel> data = await _personilTrxService.GetAllPersonilTrx(port);
+
+            int count = data.Count();
+
+            return Json(new
+            {
+                success = true,
+                recordsTotal = count,
+                recordsFiltered = count,
+                data
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddEditPersonilTrx(int id, string port)
+        {
+            List<Personil> personilList = await _personilService.GetAll();
+            ViewBag.PersonilList = personilList;
+
+            PersonilTrxModel model = new PersonilTrxModel();
+            model.Port = port;
+
+            if (id > 0)
+            {
+                model = await _personilTrxService.GetById(id);
+            }
+
+            return PartialView(ADD_EDIT_PERSONIL, model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddEditPersonilTrx(PersonilTrxModel model)
+        {
+            var r = await _personilTrxService.AddEdit(model);
+
+            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
+            {
+                return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            }
+
+            return Ok(new JsonResponse());
+        }
+        #endregion
     }
 }

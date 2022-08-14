@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Text.Json.Serialization;
 
 namespace OMNI.Web.Models
 {
@@ -11,6 +13,9 @@ namespace OMNI.Web.Models
         public string UpdatedBy { get; set; }
         public string Activity { get; set; }
         public string StatusMessage { get; set; }
+
+        [JsonIgnore]
+        public IFormFileCollection Files { get; set; }
 
         public string File { get; set; }
         public string FileKTP { get; set; }

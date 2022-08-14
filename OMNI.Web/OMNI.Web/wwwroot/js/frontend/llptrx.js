@@ -1,6 +1,6 @@
 ﻿var pagefunction = function () {
     var responsiveHelper_dt_basic = undefined;
-    //var responsiveHelper_table-llp = undefined;
+    var responsiveHelper_table_llp = undefined;
     var responsiveHelper_datatable_col_reorder = undefined;
     var responsiveHelper_datatable_tabletools = undefined;
 
@@ -103,9 +103,10 @@
         return result;
     }
 
+    $('#table_llp').DataTable().destroy();
 
     /* COLUMN FILTER  */
-    var dt = $('#table-llp').DataTable({
+    var dt = $('#table_llp').DataTable({
         "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
             "t" +
             "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
@@ -125,16 +126,16 @@
             "type": 'GET'
         },
         "columns": [
-            {
-                "class": "details-control",
-                "orderable": false,
-                "data": null,
-                "defaultContent": "",
-                "render": function (row, data, iDisplayIndex) {
-                    var result = "<a href='javascript:void(0)' style='color:green;'><i class='fa fa-chevron-circle-down'></i></a>";
-                    return result;
-                }
-            },
+            //{
+            //    "class": "details-control",
+            //    "orderable": false,
+            //    "data": null,
+            //    "defaultContent": "",
+            //    "render": function (row, data, iDisplayIndex) {
+            //        var result = "<a href='javascript:void(0)' style='color:green;'><i class='fa fa-chevron-circle-down'></i></a>";
+            //        return result;
+            //    }
+            //},
             { "data": null },
             { "data": "peralatanOSR" },
             { "data": "jenis" },
@@ -169,7 +170,7 @@
                 "targets": -1,
                 "data": null,
                 "render": function (row, data, iDisplayIndex) {
-                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "' style='color:blue;' title='Gambar'><b><i>Upload Link</i></b></a>";
+                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "' style='color:blue;' title='Gambar'><b><i>File Gambar</i></b></a>";
                 }
             },
             { "data": "totalExistingJenis" },
@@ -216,12 +217,12 @@
     });
 
     dt.on('order.dt search.dt', function () {
-        dt.column(1, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+        dt.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
             cell.innerHTML = i + 1;
         });
     }).draw();
 
-    $("#table-llp thead th input[type=text]").on('keyup change',
+    $("#table_llp thead th input[type=text]").on('keyup change',
         function () {
 
             dt
@@ -256,30 +257,30 @@
         }
     });
 
-    $('#table-llp tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = dt.row(tr);
+    //$('#table_llp tbody').on('click', 'td.details-control', function () {
+    //    var tr = $(this).closest('tr');
+    //    var row = dt.row(tr);
 
-        if (row.child.isShown()) {
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            row.child(format(row.data())).show();
-            tr.addClass('shown');
-        }
-    });
+    //    if (row.child.isShown()) {
+    //        row.child.hide();
+    //        tr.removeClass('shown');
+    //    }
+    //    else {
+    //        // Open this row
+    //        row.child(format(row.data())).show();
+    //        tr.addClass('shown');
+    //    }
+    //});
 
-    var detailRows = [];
+    //var detailRows = [];
 
-    dt.on('draw', function () {
-        $.each(detailRows, function (i, id) {
-            $('#' + id + ' td.details-control').trigger('click');
-        });
-    });
-    // Apply the filter
-    $("#table-llp thead th input[type=text]").on('keyup change',
+    //dt.on('draw', function () {
+    //    $.each(detailRows, function (i, id) {
+    //        $('#' + id + ' td.details-control').trigger('click');
+    //    });
+    //});
+
+    $("#table_llp thead th input[type=text]").on('keyup change',
         function () {
 
             dt
@@ -339,7 +340,7 @@ function deleteLLPTrx(id) {
         if (result.value) {
             $.post(base_api + 'Home/DeleteLLPTrx?id=' + id, function (result) {
                 Swal.fire('Deleted!', '', 'success');
-                $("#table-llp").DataTable().ajax.reload(null, false);
+                $("#table_llp").DataTable().ajax.reload(null, false);
             });
         } else if (result.isDenied) {
 

@@ -1,0 +1,135 @@
+﻿@model OMNI.Web.Models.Master.PersonilTrxModel
+
+<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Personil " })
+
+    <div class="modal-body">
+        @Html.HiddenFor(b => b.Id)
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label class="form-label" for="">Personil</label>
+                    <select name="PeralatanOSR" asp-for="Personil" id="personil" class="select2-input"
+                            asp-items="@(new SelectList(ViewBag.PersonilList, "Id","Name"))" required>
+                    </select>
+                    <input type="hidden" name="Port" asp-for="Port" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label" for="">Satuan</label>
+                    <input type="text" id="satuan" asp-for="Satuan" name="Satuan" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="form-label" for="">Rekomendasi Hubla</label>
+                    <input type="text" id="rekomendasiHubla" asp-for="RekomendasiHubla" name="RekomendasiHubla" class="form-control" readonly>
+                </div>
+            </div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Nama Personil</label>
+                    <input type="text" id="name" asp-for="Name" name="Name" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Total Detail Existing</label>
+                    <input class="form-control" type="number" name="TotalDetailExisting" asp-for="TotalDetailExisting" />
+                </div>
+            </div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Tanggal Pelatihan</label>
+                    <input type="text" id="tanggalPelatihan" asp-for="TanggalPelatihan" name="TanggalPelatihan" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Total Expired</label>
+                    <input class="form-control" type="text" name="TanggalExpired" asp-for="TanggalExpired" required />
+                </div>
+            </div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="form-label" for="">Upload Sertifikat</label>
+                    <input type="file" name="Files" class="form-control" asp-for="Files" multiple />
+                </div>
+            </div>
+        </div><br />
+    </div>
+
+    @await Html.PartialAsync("_ModalFooter")
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var selectedPersonil = $("#personil").val();
+        var inventoryNumber = "";
+
+        if (selectedPersonil > 0) {
+            //$.ajax({
+            //    url: base_api + "Home/GetRekomendasiPersonil?id=" + selectedPeralatanOSR,
+            //    method: "GET",
+            //    success: function (result) {
+                    
+            //    }, complete: function () {
+
+            //    }
+            //});
+        }
+
+        //$("#personil").on('change', function () {
+        //    var id = this.value;
+
+        //    $.ajax({
+        //        url: base_api + "Home/GetRekomendasiPersonil?id=" + id,
+        //        method: "GET",
+        //        success: function (result) {
+                    
+        //        }, complete: function () {
+                   
+        //        }
+        //    })
+        //});
+
+        $('.select2-input').select2({
+            dropdownParent: $('#modal-add-edit')
+        });
+
+        $(document).on('submit', '#form-akun', function () {
+        var form = $('#form-akun');
+        var validation = Array.prototype.filter.call(form, function (form) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            else {
+                event.preventDefault();
+                var param = new FormParam(
+                    form,
+                    "Apakah Anda yakin ingin menyimpan akun ini?",
+                    '@Url.Action("AddEditPersonilTrx")',
+                    null,
+                    '#modal-add-edit',
+                    '#table_personil_trx'
+                );
+                initApp.formSubmit(param);
+            }
+            form.classList.add('was-validated');
+        });
+    });
+    });
+
+</script>
