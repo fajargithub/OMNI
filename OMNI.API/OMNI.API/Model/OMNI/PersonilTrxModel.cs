@@ -17,5 +17,7 @@ namespace OMNI.API.Model.OMNI
         public decimal SelisihHubla { get; set; }
         public string KesesuaianPM58 { get; set; }
         public decimal PersentasePersonil { get; set; }
+        public decimal RekomendasiHubla { get; set; }
+        public string Satuan { get; set; }
     }
 }
