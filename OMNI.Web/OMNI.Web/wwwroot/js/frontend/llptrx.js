@@ -126,16 +126,6 @@
             "type": 'GET'
         },
         "columns": [
-            //{
-            //    "class": "details-control",
-            //    "orderable": false,
-            //    "data": null,
-            //    "defaultContent": "",
-            //    "render": function (row, data, iDisplayIndex) {
-            //        var result = "<a href='javascript:void(0)' style='color:green;'><i class='fa fa-chevron-circle-down'></i></a>";
-            //        return result;
-            //    }
-            //},
             { "data": null },
             { "data": "peralatanOSR" },
             { "data": "jenis" },
@@ -170,7 +160,7 @@
                 "targets": -1,
                 "data": null,
                 "render": function (row, data, iDisplayIndex) {
-                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "' style='color:blue;' title='Gambar'><b><i>File Gambar</i></b></a>";
+                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LLP' style='color:blue;' title='Gambar'><b><i>File Gambar</i></b></a>";
                 }
             },
             { "data": "totalExistingJenis" },

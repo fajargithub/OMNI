@@ -107,24 +107,32 @@ namespace OMNI.Web.Services.Trx
                 MultipartFormDataContent data = new MultipartFormDataContent();
 
                 data.Add(new StringContent(m.Id.ToString()), "Id");
+                data.Add(new StringContent(m.Personil.ToString()), "Personil");
+                data.Add(new StringContent(m.Name.ToString()), "Name");
+                //data.Add(new StringContent(m.TotalDetailExisting.ToString()), "TotalDetailExisting");
                 data.Add(new StringContent(m.Port.ToString()), "Port");
-                data.Add(new StringContent(m.TanggalPelatihan.ToString()), "Jenis");
-                data.Add(new StringContent(m.TanggalExpired.ToString()), "Kondisi");
-                if (m.Files.Count() > 0)
-                    for (int i = 0; i < m.Files.Count(); i++)
+                data.Add(new StringContent(m.TanggalPelatihan.ToString()), "TanggalPelatihan");
+                data.Add(new StringContent(m.TanggalExpired.ToString()), "TanggalExpired");
+
+                if(m.Files != null)
+                {
+                    if (m.Files.Count() > 0)
                     {
-                        data.Add(
-                        new StreamContent(m.Files[i].OpenReadStream())
+                        for (int i = 0; i < m.Files.Count(); i++)
                         {
-                            Headers =
-                                {
+                            data.Add(
+                            new StreamContent(m.Files[i].OpenReadStream())
+                            {
+                                Headers =
+                                    {
                                     ContentLength = m.Files[i].Length,
                                     ContentType = new MediaTypeHeaderValue(m.Files[i].ContentType)
-                                }
-                        }, "Files", m.Files[i].FileName
-                    );
+                                    }
+                            }, "Files", m.Files[i].FileName
+                        );
+                        }
                     }
-
+                }
 
                 var r = await c.PostAsync("/api/PersonilTrx", data);
 
@@ -139,6 +147,18 @@ namespace OMNI.Web.Services.Trx
             {
                 throw ex;
             }
+        }
+
+        public async Task<RekomendasiPersonil> GetRekomendasiPersonilByPersonilId(int id, string port)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/PersonilTrx/GetRekomendasiPersonilByPersonilId?id={id}&port={port}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<RekomendasiPersonil>();
+
+            throw new Exception();
         }
 
         public async Task<PersonilTrx> Delete(int id)

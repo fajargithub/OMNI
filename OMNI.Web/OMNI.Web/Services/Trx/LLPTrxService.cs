@@ -51,10 +51,10 @@ namespace OMNI.Web.Services.Trx
             catch (Exception e) { throw e; }
         }
 
-        public async Task<List<FilesModel>> GetAllFiles(int trxId)
+        public async Task<List<FilesModel>> GetAllFiles(int trxId, string flag)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/LLPTrx/GetAllFiles?trxId={trxId}");
+            var result = await client.GetAsync($"/api/LLPTrx/GetAllFiles?trxId={trxId}&flag={flag}");
 
             if (result.IsSuccessStatusCode)
 
@@ -112,21 +112,26 @@ namespace OMNI.Web.Services.Trx
                 data.Add(new StringContent(m.Kondisi.ToString()), "Kondisi");
                 data.Add(new StringContent(m.QRCode.ToString()), "QRCode");
                 data.Add(new StringContent(m.DetailExisting.ToString()), "DetailExisting");
-                if (m.Files.Count() > 0)
-                    for(int i=0; i < m.Files.Count(); i++)
+
+                if(m.Files != null)
+                {
+                    if (m.Files.Count() > 0)
                     {
-                        data.Add(
-                        new StreamContent(m.Files[i].OpenReadStream())
+                        for (int i = 0; i < m.Files.Count(); i++)
                         {
-                            Headers =
-                                {
+                            data.Add(
+                            new StreamContent(m.Files[i].OpenReadStream())
+                            {
+                                Headers =
+                                    {
                                     ContentLength = m.Files[i].Length,
                                     ContentType = new MediaTypeHeaderValue(m.Files[i].ContentType)
-                                }
-                        }, "Files", m.Files[i].FileName
-                    );
+                                    }
+                            }, "Files", m.Files[i].FileName
+                        );
+                        }
                     }
-                    
+                }               
 
                 var r = await c.PostAsync("/api/LLPTrx", data);
 

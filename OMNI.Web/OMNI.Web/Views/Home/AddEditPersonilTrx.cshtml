@@ -10,7 +10,7 @@
             <div class="col-md-5">
                 <div class="form-group">
                     <label class="form-label" for="">Personil</label>
-                    <select name="PeralatanOSR" asp-for="Personil" id="personil" class="select2-input"
+                    <select name="Personil" asp-for="Personil" id="personil" class="select2-input"
                             asp-items="@(new SelectList(ViewBag.PersonilList, "Id","Name"))" required>
                     </select>
                     <input type="hidden" name="Port" asp-for="Port" />
@@ -31,31 +31,31 @@
         </div><br />
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label class="form-label" for="">Nama Personil</label>
                     <input type="text" id="name" asp-for="Name" name="Name" class="form-control" required>
                 </div>
             </div>
-            <div class="col-md-6">
+            @*<div class="col-md-6">
                 <div class="form-group">
                     <label class="form-label" for="">Total Detail Existing</label>
                     <input class="form-control" type="number" name="TotalDetailExisting" asp-for="TotalDetailExisting" />
                 </div>
-            </div>
+            </div>*@
         </div><br />
 
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="form-label" for="">Tanggal Pelatihan</label>
-                    <input type="text" id="tanggalPelatihan" asp-for="TanggalPelatihan" name="TanggalPelatihan" class="form-control" required>
+                    <input type="text" id="tanggalPelatihan" asp-for="TanggalPelatihan" name="TanggalPelatihan" class="form-control datepicker" style="width: 100% !important;" required>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="form-label" for="">Total Expired</label>
-                    <input class="form-control" type="text" name="TanggalExpired" asp-for="TanggalExpired" required />
+                    <label class="form-label" for="">Tanggal Expired</label>
+                    <input class="form-control datepicker" type="text" name="TanggalExpired" asp-for="TanggalExpired" style="width: 100% !important;" required />
                 </div>
             </div>
         </div><br />
@@ -76,33 +76,48 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var selectedPersonil = $("#personil").val();
+        var port = "@ViewBag.Port";
+
+        $(".datepicker").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-10:+10"
+        });
+
         var inventoryNumber = "";
 
         if (selectedPersonil > 0) {
-            //$.ajax({
-            //    url: base_api + "Home/GetRekomendasiPersonil?id=" + selectedPeralatanOSR,
-            //    method: "GET",
-            //    success: function (result) {
-                    
-            //    }, complete: function () {
+            $.ajax({
+                url: base_api + "Home/GetRekomendasiPersonilByPersonilId?id=" + selectedPersonil + "&port=" + port,
+                method: "GET",
+                success: function (result) {
+                    if (result.data !== null) {
+                        $("#satuan").val(result.data.personil.satuan);
+                        $("#rekomendasiHubla").val(result.data.value);
+                    }
+                }, complete: function () {
 
-            //    }
-            //});
+                }
+            });
         }
 
-        //$("#personil").on('change', function () {
-        //    var id = this.value;
+        $("#personil").on('change', function () {
+            selectedPersonil = this.value;
 
-        //    $.ajax({
-        //        url: base_api + "Home/GetRekomendasiPersonil?id=" + id,
-        //        method: "GET",
-        //        success: function (result) {
-                    
-        //        }, complete: function () {
-                   
-        //        }
-        //    })
-        //});
+            $.ajax({
+                url: base_api + "Home/GetRekomendasiPersonilByPersonilId?id=" + selectedPersonil + "&port=" + port,
+                method: "GET",
+                success: function (result) {
+                    if (result.data !== null) {
+                        $("#satuan").val(result.data.personil.satuan);
+                        $("#rekomendasiHubla").val(result.data.value);
+                    }
+                }, complete: function () {
+
+                }
+            })
+        });
 
         $('.select2-input').select2({
             dropdownParent: $('#modal-add-edit')

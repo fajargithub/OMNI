@@ -80,7 +80,7 @@
                 "targets": -1,
                 "data": null,
                 "render": function (row, data, iDisplayIndex) {
-                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "' style='color:blue;' title='Gambar'><b><i>Upload Link</i></b></a>";
+                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_PERSONIL' style='color:blue;' title='Gambar'><b><i>File Sertifikat</i></b></a>";
                 }
             },
             { "data": "tanggalPelatihan" },
@@ -88,13 +88,27 @@
             { "data": "sisaMasaBerlaku" },
             { "data": "rekomendasiHubla" },
             { "data": "selisihHubla" },
-            { "data": "kesesuaianPM58" },
+            {
+                "targets": -1,
+                "data": null,
+                "render": function (row, data, iDisplayIndex) {
+                    var result = "";
+
+                    if (iDisplayIndex.kesesuaianPM58 == "TERPENUHI") {
+                        result = "<b style='color:green;'>TERPENUHI</b>";
+                    } else if (iDisplayIndex.kesesuaianPM58 == "KURANG") {
+                        result = "<b style='color:red;'>KURANG</b>";
+                    }
+
+                    return result;
+                }
+            },
             { "data": "persentasePersonil" },
             {
                 "targets": -1,
                 "data": null,
                 "render": function (row, data, iDisplayIndex) {
-                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
+                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditPersonilTrx?id=" + iDisplayIndex.id + "&port=" + port + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
                         " <a href='javascript:void(0)' onclick='deletePersonilTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
                 }
             }

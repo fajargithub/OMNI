@@ -94,7 +94,7 @@
                 processing: true,
                 //serverSide: true,
                 "ajax": {
-                    "url": base_api + 'Home/GetAllFiles?trxId=@ViewBag.TrxId',
+                    "url": base_api + 'Home/GetAllFiles?trxId=@ViewBag.TrxId&flag=@ViewBag.Flag',
                     "type": 'GET'
                     //"data": { searchData: result }
                 },
@@ -113,7 +113,7 @@
                         "targets": -1,
                         "data": null,
                         "render": function (row, data, iDisplayIndex) {
-                            return " <a href='javascript:void(0)' onclick='deleteFile(" + iDisplayIndex.id + ")' class='delete-file' data-id='" + iDisplayIndex.id + "' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                            return " <a href='javascript:void(0)' onclick='deleteDoc(" + iDisplayIndex.id + ")' class='delete-file' data-id='" + iDisplayIndex.id + "' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
                         }
                     }
                 ],
@@ -131,4 +131,23 @@
             });
         }).draw();
     });
+
+    function deleteDoc(id) {
+        Swal.fire({
+            title: 'Do you want to delete?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            denyButtonText: `Cancel`,
+        }).then((result) => {
+            if (result.value) {
+                $.post(base_api + 'Home/DeleteFile?id=' + id, function (result) {
+                    Swal.fire('Deleted!', '', 'success');
+                    $("#table-files").DataTable().ajax.reload(null, false);
+                });
+            } else if (result.isDenied) {
+
+            }
+        })
+    }
 </script>

@@ -18,6 +18,7 @@ namespace OMNI.Web.Services.Trx.Interface
         public Task<string> DeleteFile(int id);
         public Task<List<PersonilTrxModel>> GetAllPersonilTrx(string port);
         public Task<PersonilTrxModel> GetById(int id);
+        public Task<RekomendasiPersonil> GetRekomendasiPersonilByPersonilId(int id, string port);
         public Task<BaseJson<PersonilTrxModel>> AddEdit(PersonilTrxModel model);
         public Task<PersonilTrx> Delete(int id);
     }

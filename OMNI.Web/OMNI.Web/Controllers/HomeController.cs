@@ -63,9 +63,9 @@ namespace OMNI.Web.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetAllFiles(int trxId)
+        public async Task<JsonResult> GetAllFiles(int trxId, string flag)
         {
-            List<FilesModel> data = await _llpTrxService.GetAllFiles(trxId);
+            List<FilesModel> data = await _llpTrxService.GetAllFiles(trxId, flag);
 
             int count = data.Count();
 
@@ -88,9 +88,10 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult IndexFile(int trxId)
+        public IActionResult IndexFile(int trxId, string flag)
         {
             ViewBag.TrxId = trxId;
+            ViewBag.Flag = flag;
             return PartialView(INDEX_FILE);
         }
 
@@ -246,6 +247,7 @@ namespace OMNI.Web.Controllers
         {
             List<Personil> personilList = await _personilService.GetAll();
             ViewBag.PersonilList = personilList;
+            ViewBag.Port = port;
 
             PersonilTrxModel model = new PersonilTrxModel();
             model.Port = port;
@@ -269,6 +271,16 @@ namespace OMNI.Web.Controllers
             }
 
             return Ok(new JsonResponse());
+        }
+
+        public async Task<JsonResult> GetRekomendasiPersonilByPersonilId(int id, string port)
+        {
+            RekomendasiPersonil data = await _personilTrxService.GetRekomendasiPersonilByPersonilId(id, port);
+
+            return Json(new
+            {
+                data
+            });
         }
         #endregion
     }
