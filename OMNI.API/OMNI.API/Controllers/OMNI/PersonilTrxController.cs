@@ -36,16 +36,18 @@ namespace OMNI.API.Controllers.OMNI
         {
             public int TrxId { get; set; }
             public decimal TotalCount { get; set; }
-            public decimal SelisihHubla { get; set; }
-            public string KesesuaianPM58 { get; set; }
         }
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll(string port, CancellationToken cancellationToken)
         {
+            int lastPersonilId = 0;
+            decimal totalDetailExisting = 0;
+            List<CountData> countTotalDetailExisting = new List<CountData>();
+
             List<PersonilTrxModel> result = new List<PersonilTrxModel>();
-            List<RekomendasiPersonil> rekomenPersonilList = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
+            List<RekomendasiPersonil> rekomenPersonilList = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
 
             var list = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port)
                 .Include(b => b.Personil)
@@ -54,161 +56,209 @@ namespace OMNI.API.Controllers.OMNI
             {
                 for (int i = 0; i < list.Count(); i++)
                 {
+                    //COUNT TOTAL DETAIL EXISTING 
+                    if (i == 0)
+                    {
+                        if (i == (list.Count() - 1))
+                        {
+                            CountData tempTotalDetailExisting = new CountData();
+                            tempTotalDetailExisting.TrxId = list[i].Personil.Id;
+                            tempTotalDetailExisting.TotalCount = 1;
+                            countTotalDetailExisting.Add(tempTotalDetailExisting);
+                        }
+                        else
+                        {
+                            lastPersonilId = list[i].Personil.Id;
+                            totalDetailExisting += 1;
+                        }
+                    }
+                    else
+                    {
+                        if (lastPersonilId == list[i].Personil.Id)
+                        {
+                            if (i == (list.Count() - 1))
+                            {
+                                totalDetailExisting += 1;
+                                CountData tempTotalDetailExisting1 = new CountData();
+                                tempTotalDetailExisting1.TrxId = lastPersonilId;
+                                tempTotalDetailExisting1.TotalCount = totalDetailExisting;
+                                countTotalDetailExisting.Add(tempTotalDetailExisting1);
+                            }
+                            else
+                            {
+                                totalDetailExisting += 1;
+                            }
+                        }
+                        else
+                        {
+                            CountData tempTotalDetailExisting = new CountData();
+                            tempTotalDetailExisting.TrxId = lastPersonilId;
+                            tempTotalDetailExisting.TotalCount = totalDetailExisting;
+                            countTotalDetailExisting.Add(tempTotalDetailExisting);
+
+                            if (i == (list.Count() - 1))
+                            {
+                                lastPersonilId = list[i].Personil.Id;
+                                totalDetailExisting = 1;
+
+                                CountData tempTotalDetailExisting_2 = new CountData();
+                                tempTotalDetailExisting_2.TrxId = lastPersonilId;
+                                tempTotalDetailExisting_2.TotalCount = 1;
+                                countTotalDetailExisting.Add(tempTotalDetailExisting_2);
+                            }
+                            else
+                            {
+                                lastPersonilId = list[i].Personil.Id;
+                                totalDetailExisting += 1;
+                            }
+                        }
+                    }
+
                     PersonilTrxModel temp = new PersonilTrxModel();
+                    int diffDays = 0;
+
+                    diffDays = (list[i].TanggalExpired - list[i].TanggalPelatihan).Days;
+                    var findRekomendasiHubla = rekomenPersonilList.Find(b => b.Personil.Id == list[i].Personil.Id);
+
+                    if (findRekomendasiHubla != null)
+                    {
+                        temp.RekomendasiHubla = findRekomendasiHubla.Value;
+                    }
+
                     temp.Id = list[i].Id;
                     temp.Personil = list[i].Personil != null ? list[i].Personil.Name : "-";
+                    temp.PersonilId = list[i].Personil != null ? list[i].Personil.Id : 0;
                     temp.Satuan = list[i].Personil != null ? list[i].Personil.Satuan : "-";
                     temp.Name = list[i].Name;
-                    temp.TotalDetailExisting = list[i].TotalDetailExisting;
+                    //temp.TotalDetailExisting = list[i].TotalDetailExisting;
                     temp.TanggalPelatihan = list[i].TanggalPelatihan != null ? list[i].TanggalPelatihan.ToString("dd/MM/yyyy") : "-";
                     temp.TanggalExpired = list[i].TanggalExpired != null ? list[i].TanggalExpired.ToString("dd/MM/yyyy") : "-";
-                    temp.SelisihHubla = list[i].SelisihHubla;
-                    temp.KesesuaianPM58 = list[i].KesesuaianPM58;
+                    temp.SisaMasaBerlaku = diffDays;
                     temp.PersentasePersonil = list[i].PersentasePersonil;
-                    temp.SisaMasaBerlaku = list[i].SisaMasaBerlaku;
-                    temp.RekomendasiHubla = 0;
                     temp.Port = list[i].Port;
                     temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
                     temp.CreatedBy = list[i].CreatedBy;
                     result.Add(temp);
+                }
+
+                if (countTotalDetailExisting.Count() > 0)
+                {
+                    for (int i = 0; i < result.Count(); i++)
+                    {
+                        var find = countTotalDetailExisting.Find(b => b.TrxId == result[i].PersonilId);
+                        if (find != null)
+                        {
+                            result[i].TotalDetailExisting = find.TotalCount;
+                            result[i].SelisihHubla = find.TotalCount - result[i].RekomendasiHubla;
+
+                            if(result[i].SelisihHubla >= 0)
+                            {
+                                result[i].KesesuaianPM58 = "TERPENUHI";
+                            } else
+                            {
+                                result[i].KesesuaianPM58 = "KURANG";
+                            }
+                        }
+                    }
                 }
             }
 
             return Ok(result);
         }
 
-        // GET api/<ValuesController>/5
-        //[HttpGet("{id:int}")]
-        //public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
-        //{
-        //    PersonilTrxModel result = new PersonilTrxModel();
-        //    var data = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id)
-        //        .Include(b => b.SpesifikasiJenis)
-        //        .Include(b => b.SpesifikasiJenis.PeralatanOSR)
-        //        .Include(b => b.SpesifikasiJenis.Jenis)
-        //        .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
-        //    if (data != null)
-        //    {
-        //        result.Id = data.Id;
-        //        result.PeralatanOSR = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Id.ToString() : "-";
-        //        result.Jenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Id.ToString() : "-";
+        [HttpGet("GetRekomendasiPersonilByPersonilId")]
+        public async Task<IActionResult> GetRekomendasiPersonilByPersonilId(string id, string port, CancellationToken cancellationToken)
+        {
+            RekomendasiPersonil result = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Personil.Id == int.Parse(id) && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.Personil).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
 
-        //        //var findRekomenJenis = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == data.Port && b.SpesifikasiJenis.Id == data.SpesifikasiJenis.Id).Include().ToListAsync(cancellationToken);
-        //        //if(findRekomenJenis.Count() > 0)
-        //        //{
-        //        //    result.RekomendasiHubla = findRekomenJenis.Find(b => b.)
-        //        //    result.RekomendasiOSCP = findRekomenJenis.
-        //        //} else
-        //        //{
-        //        //    result.RekomendasiHubla = 0;
-        //        //}
+            return Ok(result);
+        }
 
-        //        result.SatuanJenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Satuan : "-";
-        //        result.KodeInventory = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.KodeInventory : "-";
-        //        result.Port = data.Port;
-        //        result.QRCode = data.QRCode;
-        //        result.DetailExisting = data.DetailExisting;
-        //        result.Kondisi = data.Kondisi;
-        //        result.TotalExistingJenis = data.TotalExistingJenis;
-        //        result.TotalExistingKeseluruhan = data.TotalExistingKeseluruhan;
-        //        result.TotalKebutuhanHubla = data.TotalKebutuhanHubla;
-        //        result.SelisihHubla = data.SelisihHubla;
-        //        //result.KesesuaianPM58 = data.KesesuaianPM58;
-        //        result.PersentaseHubla = data.PersentaseHubla;
-        //        result.TotalKebutuhanOSCP = data.TotalKebutuhanOSCP;
-        //        result.SelisihOSCP = data.SelisihOSCP;
-        //        result.KesesuaianOSCP = data.KesesuaianOSCP;
-        //        result.PersentaseOSCP = data.PersentaseOSCP;
-        //    }
-        //    return Ok(result);
-        //}
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
+        {
+            PersonilTrxModel result = new PersonilTrxModel();
+            var data = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id)
+                .Include(b => b.Personil)
+                .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
+            if (data != null)
+            {
+                result.Id = data.Id;
+                result.Personil = data.Personil != null ? data.Personil.Id.ToString() : "0";
+                result.Port = data.Port;
+                result.Name = data.Name;
+                //result.TotalDetailExisting = data.TotalDetailExisting;
+                result.TanggalPelatihan = data.TanggalPelatihan != null ? data.TanggalPelatihan.ToString("MM/dd/yyyy") : null;
+                result.TanggalExpired = data.TanggalPelatihan != null ? data.TanggalPelatihan.ToString("MM/dd/yyyy") : null;
+            }
+            return Ok(result);
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddEdit([FromForm] PersonilTrxModel model, CancellationToken cancellationToken)
-        //{
-        //    PersonilTrx data = new PersonilTrx();
+        [HttpPost]
+        public async Task<IActionResult> AddEdit([FromForm] PersonilTrxModel model, CancellationToken cancellationToken)
+        {
+            DateTime nullDate = new DateTime();
+            PersonilTrx data = new PersonilTrx();
 
-        //    if (model.Id > 0)
-        //    {
-        //        data = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == model.Id)
-        //         .Include(b => b.SpesifikasiJenis)
-        //         .Include(b => b.SpesifikasiJenis.PeralatanOSR)
-        //         .Include(b => b.SpesifikasiJenis.Jenis)
-        //         .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
+            if (model.Id > 0)
+            {
+                data.Id = model.Id;
+                data = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == model.Id)
+                 .Include(b => b.Personil)
+                 .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
 
-        //        data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+                data.Personil = await _dbOMNI.Personil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Personil)).FirstOrDefaultAsync(cancellationToken);
+                data.Port = model.Port;
+                data.Name = model.Name;
+               // data.TotalDetailExisting = model.TotalDetailExisting;
+                data.TanggalPelatihan = !string.IsNullOrEmpty(model.TanggalPelatihan) ? DateTime.ParseExact(model.TanggalPelatihan, "MM/dd/yyyy", null) : nullDate;
+                data.TanggalExpired = !string.IsNullOrEmpty(model.TanggalExpired) ? DateTime.ParseExact(model.TanggalExpired, "MM/dd/yyyy", null) : nullDate;
+                data.UpdatedAt = DateTime.Now;
+                data.UpdatedBy = "admin";
+                _dbOMNI.PersonilTrx.Update(data);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                data.Personil = await _dbOMNI.Personil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Personil)).FirstOrDefaultAsync(cancellationToken);
+                data.Port = model.Port;
+                data.Name = model.Name;
+                //data.TotalDetailExisting = model.TotalDetailExisting;
+                data.TanggalPelatihan = !string.IsNullOrEmpty(model.TanggalPelatihan) ? DateTime.ParseExact(model.TanggalPelatihan, "MM/dd/yyyy", null) : nullDate;
+                data.TanggalExpired = !string.IsNullOrEmpty(model.TanggalExpired) ? DateTime.ParseExact(model.TanggalExpired, "MM/dd/yyyy", null) : nullDate;
+                data.CreatedAt = DateTime.Now;
+                data.CreatedBy = "admin";
+                await _dbOMNI.PersonilTrx.AddAsync(data, cancellationToken);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
 
-        //        data.Port = model.Port;
-        //        data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
-        //        data.DetailExisting = model.DetailExisting;
-        //        data.Kondisi = model.Kondisi;
-        //        data.TotalExistingJenis = model.TotalExistingJenis;
-        //        data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
-        //        data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
-        //        data.SelisihHubla = model.SelisihHubla;
-        //        //data.KesesuaianPM58 = model.KesesuaianPM58;
-        //        data.PersentaseHubla = model.PersentaseHubla;
-        //        data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
-        //        data.SelisihOSCP = model.SelisihOSCP;
-        //        data.KesesuaianOSCP = model.KesesuaianOSCP;
-        //        data.PersentaseOSCP = model.PersentaseOSCP;
-        //        data.UpdatedAt = DateTime.Now;
-        //        data.UpdatedBy = "admin";
-        //        _dbOMNI.PersonilTrx.Update(data);
-        //        await _dbOMNI.SaveChangesAsync(cancellationToken);
-        //    }
-        //    else
-        //    {
-        //        data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+            if(model.Files != null)
+            {
+                if (model.Files.Count() > 0)
+                {
+                    for (int i = 0; i < model.Files.Count(); i++)
+                    {
+                        await UploadFileWithReturn(path: $"OMNI/PERSONIL/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OMNI_PERSONIL, isUpdate: model.Files != null, remark: null);
+                    }
 
-        //        data.Port = model.Port;
-        //        data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
-        //        data.DetailExisting = model.DetailExisting;
-        //        data.Kondisi = model.Kondisi;
-        //        data.TotalExistingJenis = model.TotalExistingJenis;
-        //        data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
-        //        data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
-        //        data.SelisihHubla = model.SelisihHubla;
-        //        //data.KesesuaianPM58 = model.KesesuaianPM58;
-        //        data.PersentaseHubla = model.PersentaseHubla;
-        //        data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
-        //        data.SelisihOSCP = model.SelisihOSCP;
-        //        data.KesesuaianOSCP = model.KesesuaianOSCP;
-        //        data.PersentaseOSCP = model.PersentaseOSCP;
-        //        data.CreatedAt = DateTime.Now;
-        //        data.CreatedBy = "admin";
-        //        await _dbOMNI.PersonilTrx.AddAsync(data, cancellationToken);
-        //        await _dbOMNI.SaveChangesAsync(cancellationToken);
-        //    }
+                }
+            }
+            
+            return Ok(new ReturnJson { });
+        }
 
-        //    if (model.Files.Count() > 0)
-        //    {
-        //        for (int i = 0; i < model.Files.Count(); i++)
-        //        {
-        //            await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OMNI_LLP, isUpdate: model.Files != null, remark: null);
-        //        }
+        //// DELETE api/<ValuesController>/5
+        [HttpDelete("{id:int}")]
+        public async Task<PersonilTrx> Delete([FromRoute] int id, CancellationToken cancellationToken)
+        {
+            PersonilTrx data = await _dbOMNI.PersonilTrx.Where(b => b.Id == id).Include(b => b.Personil).FirstOrDefaultAsync(cancellationToken);
+            data.IsDeleted = GeneralConstants.YES;
+            data.UpdatedBy = "admin";
+            data.UpdatedAt = DateTime.Now;
+            _dbOMNI.PersonilTrx.Update(data);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
 
-        //    }
-
-
-        //    //_dbOMNI.PersonilTrx.Update(data);
-        //    //await _dbOMNI.SaveChangesAsync(cancellationToken);
-
-        //    return Ok(new ReturnJson { });
-        //}
-
-        ////// DELETE api/<ValuesController>/5
-        //[HttpDelete("{id:int}")]
-        //public async Task<PersonilTrx> Delete([FromRoute] int id, CancellationToken cancellationToken)
-        //{
-        //    PersonilTrx data = await _dbOMNI.PersonilTrx.Where(b => b.Id == id).Include(b => b.SpesifikasiJenis).FirstOrDefaultAsync(cancellationToken);
-        //    data.IsDeleted = GeneralConstants.YES;
-        //    data.UpdatedBy = "admin";
-        //    data.UpdatedAt = DateTime.Now;
-        //    _dbOMNI.PersonilTrx.Update(data);
-        //    await _dbOMNI.SaveChangesAsync(cancellationToken);
-
-        //    return data;
-        //}
+            return data;
+        }
     }
 }

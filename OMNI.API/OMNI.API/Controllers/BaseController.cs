@@ -88,8 +88,8 @@ namespace OMNI.API.Controllers
         }
 
         [HttpGet("GetAllFiles")]
-        public async Task<IActionResult> GetAllFiles(string trxId, CancellationToken cancellationToken) {
-            List<FileUpload> fileList = await _dbOMNI.FileUpload.Where(b => b.IsDeleted == GeneralConstants.NO && b.TrxId == int.Parse(trxId)).ToListAsync(cancellationToken);
+        public async Task<IActionResult> GetAllFiles(string trxId, string flag, CancellationToken cancellationToken) {
+            List<FileUpload> fileList = await _dbOMNI.FileUpload.Where(b => b.IsDeleted == GeneralConstants.NO && b.TrxId == int.Parse(trxId) && b.Flag == flag).ToListAsync(cancellationToken);
             List<FilesModel> result = new List<FilesModel>();
             if (fileList != null)
             {
