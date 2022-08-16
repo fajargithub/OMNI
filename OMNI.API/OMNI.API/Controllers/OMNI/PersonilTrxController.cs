@@ -210,7 +210,6 @@ namespace OMNI.API.Controllers.OMNI
                 data.Personil = await _dbOMNI.Personil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Personil)).FirstOrDefaultAsync(cancellationToken);
                 data.Port = model.Port;
                 data.Name = model.Name;
-               // data.TotalDetailExisting = model.TotalDetailExisting;
                 data.TanggalPelatihan = !string.IsNullOrEmpty(model.TanggalPelatihan) ? DateTime.ParseExact(model.TanggalPelatihan, "MM/dd/yyyy", null) : nullDate;
                 data.TanggalExpired = !string.IsNullOrEmpty(model.TanggalExpired) ? DateTime.ParseExact(model.TanggalExpired, "MM/dd/yyyy", null) : nullDate;
                 data.UpdatedAt = DateTime.Now;

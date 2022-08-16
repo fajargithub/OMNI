@@ -13,6 +13,6 @@ namespace OMNI.Data.Data.Dao
         public DateTime TanggalPelaksanaan { get; set; }
         public float SelisihHubla { get; set; }
         public string KesesuaianPM58 { get; set; }
-        public float PersentaseLatihan { get; set; }
+        public decimal PersentaseLatihan { get; set; }
     }
 }
