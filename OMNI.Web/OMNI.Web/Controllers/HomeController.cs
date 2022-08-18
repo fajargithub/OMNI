@@ -25,7 +25,7 @@ namespace OMNI.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private static readonly string ADD_EDIT_LLPTRX = "~/Views/Home/AddEditLLPTrx.cshtml";
         private static readonly string ADD_EDIT_PERSONIL = "~/Views/Home/AddEditPersonilTrx.cshtml";
-        private static readonly string ADD_EDIT_LATIHAN = "~/Views/Home/AddEditLatihan.cshtml";
+        private static readonly string ADD_EDIT_LATIHAN = "~/Views/Home/AddEditLatihanTrx.cshtml";
 
         private static readonly string INDEX_FILE = "~/Views/Home/IndexFile.cshtml";
 
@@ -34,7 +34,9 @@ namespace OMNI.Web.Controllers
         protected IPersonil _personilService;
         protected IKondisi _kondisiService;
         protected ISpesifikasiJenis _spesifikasiJenisService;
-        public HomeController(ILogger<HomeController> logger, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        protected ILatihan _latihanService;
+        protected ILatihanTrx _latihanTrxService;
+        public HomeController(ILogger<HomeController> logger,ILatihan latihanService, ILatihanTrx latihanTrxService, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _logger = logger;
             _llpTrxService = llpTrxService;
@@ -43,6 +45,8 @@ namespace OMNI.Web.Controllers
             _portService = portService;
             _personilTrxService = personilTrxService;
             _personilService = personilService;
+            _latihanService = latihanService;
+            _latihanTrxService = latihanTrxService;
         }
 
         [HttpGet]
@@ -281,6 +285,80 @@ namespace OMNI.Web.Controllers
             {
                 data
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePersonilTrx(int id)
+        {
+            var r = await _personilTrxService.Delete(id);
+
+            return Ok(new JsonResponse());
+        }
+        #endregion
+
+        #region LATIHAN TRX REGION
+        public async Task<JsonResult> GetAllLatihanTrx(string port)
+        {
+            List<LatihanTrxModel> data = await _latihanTrxService.GetAllLatihanTrx(port);
+
+            int count = data.Count();
+
+            return Json(new
+            {
+                success = true,
+                recordsTotal = count,
+                recordsFiltered = count,
+                data
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddEditLatihanTrx(int id, string port)
+        {
+            List<Latihan> latihanList = await _latihanService.GetAll();
+            ViewBag.LatihanList = latihanList;
+            ViewBag.Port = port;
+
+            LatihanTrxModel model = new LatihanTrxModel();
+            model.Port = port;
+
+            if (id > 0)
+            {
+                model = await _latihanTrxService.GetById(id);
+            }
+
+            return PartialView(ADD_EDIT_LATIHAN, model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddEditLatihanTrx(LatihanTrxModel model)
+        {
+            var r = await _latihanTrxService.AddEdit(model);
+
+            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
+            {
+                return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            }
+
+            return Ok(new JsonResponse());
+        }
+
+        public async Task<JsonResult> GetRekomendasiLatihanByLatihanId(int id, string port)
+        {
+            RekomendasiLatihan data = await _latihanTrxService.GetRekomendasiLatihanByLatihanId(id, port);
+
+            return Json(new
+            {
+                data
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteLatihanTrx(int id)
+        {
+            var r = await _latihanTrxService.Delete(id);
+
+            return Ok(new JsonResponse());
         }
         #endregion
     }

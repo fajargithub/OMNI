@@ -80,7 +80,7 @@
                 "targets": -1,
                 "data": null,
                 "render": function (row, data, iDisplayIndex) {
-                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_PERSONIL' style='color:blue;' title='Gambar'><b><i>File Sertifikat</i></b></a>";
+                    return "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_PERSONIL' style='color:blue;' title='Gambar'><b><i>File Sertifikat</i></b></a>";
                 }
             },
             { "data": "tanggalPelatihan" },

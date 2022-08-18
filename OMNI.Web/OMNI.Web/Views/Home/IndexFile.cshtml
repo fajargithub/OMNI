@@ -104,7 +104,7 @@
                         "targets": -1,
                         "data": null,
                         "render": function (row, data, iDisplayIndex) {
-                            return "<a target='_blank' href='/Home/ViewFile?id=" + iDisplayIndex.id + "&flag=OMNI_LLP' title='View File'>" + iDisplayIndex.fileName + "</a>";
+                            return "<a target='_blank' href='/Home/ViewFile?id=" + iDisplayIndex.id + "&flag=@ViewBag.Flag' title='View File'>" + iDisplayIndex.fileName + "</a>";
                         }
                     },
                     { "data": "createDate" },
@@ -141,7 +141,7 @@
             denyButtonText: `Cancel`,
         }).then((result) => {
             if (result.value) {
-                $.post(base_api + 'Home/DeleteFile?id=' + id, function (result) {
+                $.post(base_api + 'Home/DeleteFilViewBagiewBag?id=' + id, function (result) {
                     Swal.fire('Deleted!', '', 'success');
                     $("#table-files").DataTable().ajax.reload(null, false);
                 });

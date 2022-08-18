@@ -1,30 +1,32 @@
-﻿@model OMNI.Web.Models.Master.PersonilTrxModel
+﻿@model OMNI.Web.Models.Master.LatihanTrxModel  
 
 <form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Personil " })
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Latihan " })
 
     <div class="modal-body">
         @Html.HiddenFor(b => b.Id)
 
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-12">
                 <div class="form-group">
-                    <label class="form-label" for="">Personil</label>
-                    <select name="Personil" asp-for="Personil" id="personil" class="select2-input"
-                            asp-items="@(new SelectList(ViewBag.PersonilList, "Id","Name"))" required>
+                    <label class="form-label" for="">Select Latihan</label>
+                    <select name="Latihan" asp-for="Latihan" id="latihan" class="select2-input"
+                            asp-items="@(new SelectList(ViewBag.LatihanList, "Id","Name"))" required>
                     </select>
                     <input type="hidden" name="Port" asp-for="Port" />
                 </div>
             </div>
-            <div class="col-md-3">
+        </div><br />
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="form-label" for="">Satuan</label>
                     <input type="text" id="satuan" asp-for="Satuan" name="Satuan" class="form-control" readonly>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label class="form-label" for="">Rekomendasi Hubla</label>
+                    <label class="form-label" for="">Rek. Hubla</label>
                     <input type="text" id="rekomendasiHubla" asp-for="RekomendasiHubla" name="RekomendasiHubla" class="form-control" readonly>
                 </div>
             </div>
@@ -33,33 +35,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label class="form-label" for="">Nama Personil</label>
-                    <input type="text" id="name" asp-for="Name" name="Name" class="form-control" required>
-                </div>
-            </div>
-            @*<div class="col-md-6">
-                <div class="form-group">
-                    <label class="form-label" for="">Total Detail Existing</label>
-                    <input class="form-control" type="number" name="TotalDetailExisting" asp-for="TotalDetailExisting" />
-                </div>
-            </div>*@
-        </div><br />
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="form-label" for="">Tanggal Pelatihan</label>
-                    <input type="text" id="tanggalPelatihan" asp-for="TanggalPelatihan" name="TanggalPelatihan" class="form-control datepicker" style="width: 100% !important;" required>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="form-label" for="">Tanggal Expired</label>
-                    <input class="form-control datepicker" type="text" name="TanggalExpired" asp-for="TanggalExpired" style="width: 100% !important;" required />
+                    <label class="form-label" for="">Tanggal Pelaksanaan</label>
+                    <input type="text" id="tanggalPelaksanaan" asp-for="TanggalPelaksanaan" name="TanggalPelaksanaan" class="form-control datepicker" style="width: 100% !important;" required>
                 </div>
             </div>
         </div><br />
-
+ 
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -82,18 +63,18 @@
             yearRange: "-10:+10"
         });
 
-        var selectedPersonil = $("#personil").val();
+        var selectedPelatihan = $("#latihan").val();
         var port = "@ViewBag.Port";
 
         var inventoryNumber = "";
 
-        if (selectedPersonil > 0) {
+        if (selectedPelatihan > 0) {
             $.ajax({
-                url: base_api + "Home/GetRekomendasiPersonilByPersonilId?id=" + selectedPersonil + "&port=" + port,
+                url: base_api + "Home/GetRekomendasiLatihanByLatihanId?id=" + selectedPelatihan + "&port=" + port,
                 method: "GET",
                 success: function (result) {
                     if (result.data !== null) {
-                        $("#satuan").val(result.data.personil.satuan);
+                        $("#satuan").val(result.data.latihan.satuan);
                         $("#rekomendasiHubla").val(result.data.value);
                     }
                 }, complete: function () {
@@ -102,15 +83,15 @@
             });
         }
 
-        $("#personil").on('change', function () {
-            selectedPersonil = this.value;
+        $("#latihan").on('change', function () {
+            selectedPelatihan = this.value;
 
             $.ajax({
-                url: base_api + "Home/GetRekomendasiPersonilByPersonilId?id=" + selectedPersonil + "&port=" + port,
+                url: base_api + "Home/GetRekomendasiLatihanByLatihanId?id=" + selectedPelatihan + "&port=" + port,
                 method: "GET",
                 success: function (result) {
                     if (result.data !== null) {
-                        $("#satuan").val(result.data.personil.satuan);
+                        $("#satuan").val(result.data.latihan.satuan);
                         $("#rekomendasiHubla").val(result.data.value);
                     }
                 }, complete: function () {
@@ -135,10 +116,10 @@
                 var param = new FormParam(
                     form,
                     "Apakah Anda yakin ingin menyimpan akun ini?",
-                    '@Url.Action("AddEditPersonilTrx")',
+                    '@Url.Action("AddEditLatihanTrx")',
                     null,
                     '#modal-add-edit',
-                    '#table_personil_trx'
+                    '#table_latihan_trx'
                 );
                 initApp.formSubmit(param);
             }
