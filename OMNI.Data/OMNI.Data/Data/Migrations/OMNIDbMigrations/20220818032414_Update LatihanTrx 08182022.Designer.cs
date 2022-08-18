@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OMNI.Data.Data;
 
-namespace OMNI.Data.Data.Migrations.OMNIDbMigrations
+namespace OMNI.Migrations.Data.Migrations.OMNIDbMigrations
 {
     [DbContext(typeof(OMNIDbContext))]
-    partial class OMNIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220818032414_Update LatihanTrx 08182022")]
+    partial class UpdateLatihanTrx08182022
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

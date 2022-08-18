@@ -47,64 +47,26 @@ namespace OMNI.API.Controllers.OMNI
             List<CountData> countTanggalPelaksanaan = new List<CountData>();
 
             List<LatihanTrxModel> result = new List<LatihanTrxModel>();
-            List<RekomendasiLatihan> rekomendasiLatihanList = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
+            List<RekomendasiLatihan> rekomendasiLatihanList = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.Latihan).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
 
-            var list = await _dbOMNI.LatihanTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port)
-                .Include(b => b.Latihan)
-                .OrderBy(b => b.CreatedAt).ToListAsync(cancellationToken);
-            if (list.Count() > 0)
+            try
             {
-                for (int i = 0; i < list.Count(); i++)
+                var list = await _dbOMNI.LatihanTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port)
+                .Include(b => b.Latihan)
+                .OrderBy(b => b.Latihan.Id).ToListAsync(cancellationToken);
+                if (list.Count() > 0)
                 {
-                    //COUNT TOTAL TANGGAL PELAKSANAAN
-                    if (i == 0)
+                    for (int i = 0; i < list.Count(); i++)
                     {
-                        if (i == (list.Count() - 1))
-                        {
-                            CountData tempTanggalPelaksanaan = new CountData();
-                            tempTanggalPelaksanaan.TrxId = list[i].Latihan.Id;
-                            tempTanggalPelaksanaan.TotalCount = 1;
-                            countTanggalPelaksanaan.Add(tempTanggalPelaksanaan);
-                        }
-                        else
-                        {
-                            lastLatihanId = list[i].Latihan.Id;
-                            totalDetailExisting += 1;
-                        }
-                    }
-                    else
-                    {
-                        if (lastLatihanId == list[i].Latihan.Id)
+                        //COUNT TOTAL TANGGAL PELAKSANAAN
+                        if (i == 0)
                         {
                             if (i == (list.Count() - 1))
                             {
-                                totalDetailExisting += 1;
-                                CountData tempTanggalPelaksanaan1 = new CountData();
-                                tempTanggalPelaksanaan1.TrxId = lastLatihanId;
-                                tempTanggalPelaksanaan1.TotalCount = totalDetailExisting;
-                                countTanggalPelaksanaan.Add(tempTanggalPelaksanaan1);
-                            }
-                            else
-                            {
-                                totalDetailExisting += 1;
-                            }
-                        }
-                        else
-                        {
-                            CountData tempTanggalPelaksanaan = new CountData();
-                            tempTanggalPelaksanaan.TrxId = lastLatihanId;
-                            tempTanggalPelaksanaan.TotalCount = totalDetailExisting;
-                            countTanggalPelaksanaan.Add(tempTanggalPelaksanaan);
-
-                            if (i == (list.Count() - 1))
-                            {
-                                lastLatihanId = list[i].Latihan.Id;
-                                totalDetailExisting = 1;
-
-                                CountData tempTanggalPelaksanaan_2 = new CountData();
-                                tempTanggalPelaksanaan_2.TrxId = lastLatihanId;
-                                tempTanggalPelaksanaan_2.TotalCount = 1;
-                                countTanggalPelaksanaan.Add(tempTanggalPelaksanaan_2);
+                                CountData tempTanggalPelaksanaan = new CountData();
+                                tempTanggalPelaksanaan.TrxId = list[i].Latihan.Id;
+                                tempTanggalPelaksanaan.TotalCount = 1;
+                                countTanggalPelaksanaan.Add(tempTanggalPelaksanaan);
                             }
                             else
                             {
@@ -112,50 +74,96 @@ namespace OMNI.API.Controllers.OMNI
                                 totalDetailExisting += 1;
                             }
                         }
-                    }
-
-                    LatihanTrxModel temp = new LatihanTrxModel();
-
-                    var findRekomendasiHubla = rekomendasiLatihanList.Find(b => b.Latihan.Id == list[i].Latihan.Id);
-
-                    if (findRekomendasiHubla != null)
-                    {
-                        temp.RekomendasiHubla = findRekomendasiHubla.Value;
-                    }
-
-                    temp.Id = list[i].Id;
-                    temp.Latihan = list[i].Latihan != null ? list[i].Latihan.Name : "-";
-                    temp.LatihanId = list[i].Latihan != null ? list[i].Latihan.Id : 0;
-                    temp.Satuan = list[i].Latihan != null ? list[i].Latihan.Satuan : "-";
-                    temp.TanggalPelaksanaan = list[i].TanggalPelaksanaan != null ? list[i].TanggalPelaksanaan.ToString("dd/MM/yyyy") : "-";
-                    temp.PersentaseLatihan = list[i].PersentaseLatihan;
-                    temp.Port = list[i].Port;
-                    temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
-                    temp.CreatedBy = list[i].CreatedBy;
-                    result.Add(temp);
-                }
-
-                if (countTanggalPelaksanaan.Count() > 0)
-                {
-                    for (int i = 0; i < result.Count(); i++)
-                    {
-                        var find = countTanggalPelaksanaan.Find(b => b.TrxId == result[i].LatihanId);
-                        if (find != null)
+                        else
                         {
-                            result[i].TotalTanggalPelaksanaan = find.TotalCount;
-                            result[i].SelisihHubla = find.TotalCount - result[i].RekomendasiHubla;
-
-                            if (result[i].SelisihHubla >= 0)
+                            if (lastLatihanId == list[i].Latihan.Id)
                             {
-                                result[i].KesesuaianPM58 = "TERPENUHI";
+                                if (i == (list.Count() - 1))
+                                {
+                                    totalDetailExisting += 1;
+                                    CountData tempTanggalPelaksanaan1 = new CountData();
+                                    tempTanggalPelaksanaan1.TrxId = lastLatihanId;
+                                    tempTanggalPelaksanaan1.TotalCount = totalDetailExisting;
+                                    countTanggalPelaksanaan.Add(tempTanggalPelaksanaan1);
+                                }
+                                else
+                                {
+                                    totalDetailExisting += 1;
+                                }
                             }
                             else
                             {
-                                result[i].KesesuaianPM58 = "KURANG";
+                                CountData tempTanggalPelaksanaan = new CountData();
+                                tempTanggalPelaksanaan.TrxId = lastLatihanId;
+                                tempTanggalPelaksanaan.TotalCount = totalDetailExisting;
+                                countTanggalPelaksanaan.Add(tempTanggalPelaksanaan);
+
+                                totalDetailExisting = 0;
+
+                                if (i == (list.Count() - 1))
+                                {
+                                    lastLatihanId = list[i].Latihan.Id;
+                                    totalDetailExisting = 1;
+
+                                    CountData tempTanggalPelaksanaan_2 = new CountData();
+                                    tempTanggalPelaksanaan_2.TrxId = lastLatihanId;
+                                    tempTanggalPelaksanaan_2.TotalCount = 1;
+                                    countTanggalPelaksanaan.Add(tempTanggalPelaksanaan_2);
+                                }
+                                else
+                                {
+                                    lastLatihanId = list[i].Latihan.Id;
+                                    totalDetailExisting += 1;
+                                }
+                            }
+                        }
+
+                        LatihanTrxModel temp = new LatihanTrxModel();
+
+                        var findRekomendasiHubla = rekomendasiLatihanList.Find(b => b.Latihan.Id == list[i].Latihan.Id);
+
+                        if (findRekomendasiHubla != null)
+                        {
+                            temp.RekomendasiHubla = findRekomendasiHubla.Value;
+                        }
+
+                        temp.Id = list[i].Id;
+                        temp.Latihan = list[i].Latihan != null ? list[i].Latihan.Name : "-";
+                        temp.LatihanId = list[i].Latihan != null ? list[i].Latihan.Id : 0;
+                        temp.Satuan = list[i].Latihan != null ? list[i].Latihan.Satuan : "-";
+                        temp.TanggalPelaksanaan = list[i].TanggalPelaksanaan != null ? list[i].TanggalPelaksanaan.ToString("dd/MM/yyyy") : "-";
+                        temp.PersentaseLatihan = list[i].PersentaseLatihan;
+                        temp.Port = list[i].Port;
+                        temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
+                        temp.CreatedBy = list[i].CreatedBy;
+                        result.Add(temp);
+                    }
+
+                    if (countTanggalPelaksanaan.Count() > 0)
+                    {
+                        for (int i = 0; i < result.Count(); i++)
+                        {
+                            var find = countTanggalPelaksanaan.Find(b => b.TrxId == result[i].LatihanId);
+                            if (find != null)
+                            {
+                                result[i].TotalTanggalPelaksanaan = find.TotalCount;
+                                result[i].SelisihHubla = find.TotalCount - result[i].RekomendasiHubla;
+
+                                if (result[i].SelisihHubla >= 0)
+                                {
+                                    result[i].KesesuaianPM58 = "TERPENUHI";
+                                }
+                                else
+                                {
+                                    result[i].KesesuaianPM58 = "KURANG";
+                                }
                             }
                         }
                     }
                 }
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
             return Ok(result);
