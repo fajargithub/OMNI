@@ -18,6 +18,7 @@ namespace OMNI.API.Model.OMNI
         public string KodeInventory { get; set; }
         public string Region { get; set; }
         public string QRCode { get; set; }
+        public string QRCodeText { get; set; }
         public decimal DetailExisting { get; set; }
         public string Kondisi { get; set; }
         public decimal TotalExistingJenis { get; set; }

@@ -7,6 +7,6 @@ namespace OMNI.API.Model.OMNI
 {
     public class FilesModel : BaseModel
     {
-        public string UploadedBy { get; set; }
+        public string c { get; set; }
     }
 }

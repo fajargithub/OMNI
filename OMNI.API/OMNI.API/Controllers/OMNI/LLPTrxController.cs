@@ -444,21 +444,11 @@ namespace OMNI.API.Controllers.OMNI
                 result.Id = data.Id;
                 result.PeralatanOSR = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Id.ToString() : "-";
                 result.Jenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Id.ToString() : "-";
-
-                //var findRekomenJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == data.Port && b.SpesifikasiJenis.Id == data.SpesifikasiJenis.Id).Include().ToListAsync(cancellationToken);
-                //if(findRekomenJenis.Count() > 0)
-                //{
-                //    result.RekomendasiHubla = findRekomenJenis.Find(b => b.)
-                //    result.RekomendasiOSCP = findRekomenJenis.
-                //} else
-                //{
-                //    result.RekomendasiHubla = 0;
-                //}
-
                 result.SatuanJenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Satuan : "-";
                 result.KodeInventory = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.KodeInventory : "-";
                 result.Port = data.Port;
                 result.QRCode = data.QRCode;
+                result.QRCodeText = data.QRCodeText;
                 result.DetailExisting = data.DetailExisting;
                 result.Kondisi = data.Kondisi;
                 result.TotalExistingJenis = data.TotalExistingJenis;
@@ -492,13 +482,13 @@ namespace OMNI.API.Controllers.OMNI
 
                 data.Port = model.Port;
                 data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
+                data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
                 data.DetailExisting = model.DetailExisting;
                 data.Kondisi = model.Kondisi;
                 data.TotalExistingJenis = model.TotalExistingJenis;
                 data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
                 data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
                 data.SelisihHubla = model.SelisihHubla;
-                //data.KesesuaianPM58 = model.KesesuaianPM58;
                 data.PersentaseHubla = model.PersentaseHubla;
                 data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
                 data.SelisihOSCP = model.SelisihOSCP;
@@ -515,13 +505,13 @@ namespace OMNI.API.Controllers.OMNI
 
                 data.Port = model.Port;
                 data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
+                data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
                 data.DetailExisting = model.DetailExisting;
                 data.Kondisi = model.Kondisi;
                 data.TotalExistingJenis = model.TotalExistingJenis;
                 data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
                 data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
                 data.SelisihHubla = model.SelisihHubla;
-                //data.KesesuaianPM58 = model.KesesuaianPM58;
                 data.PersentaseHubla = model.PersentaseHubla;
                 data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
                 data.SelisihOSCP = model.SelisihOSCP;
@@ -533,19 +523,18 @@ namespace OMNI.API.Controllers.OMNI
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
             }
 
-            if (model.Files.Count() > 0)
+            if(model.Files != null)
             {
-                for(int i=0; i < model.Files.Count(); i++)
+                if (model.Files.Count() > 0)
                 {
-                    await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OMNI_LLP, isUpdate: model.Files != null, remark: null);
+                    for (int i = 0; i < model.Files.Count(); i++)
+                    {
+                        await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OMNI_LLP, isUpdate: model.Files != null, remark: null);
+                    }
+
                 }
-                
             }
                 
-
-            //_dbOMNI.LLPTrx.Update(data);
-            //await _dbOMNI.SaveChangesAsync(cancellationToken);
-
             return Ok(new ReturnJson { });
         }
 
@@ -561,6 +550,26 @@ namespace OMNI.API.Controllers.OMNI
             await _dbOMNI.SaveChangesAsync(cancellationToken);
 
             return data;
+        }
+
+        [HttpPost("AddEditFiles")]
+        public async Task<IActionResult> AddEditFiles([FromForm] FilesModel model, CancellationToken cancellationToken)
+        {
+
+            FilesModel data = new FilesModel();
+            data = model;
+            data.CreatedBy = "admin";
+
+            if (model.Files.Count() > 0)
+            {
+                for (int i = 0; i < model.Files.Count(); i++)
+                {
+                    await UploadFileWithReturn(path: $"OMNI/{data.TrxId}/Files/", createBy: data.CreatedBy, trxId: int.Parse(data.TrxId), file: model.Files[i], Flag: model.Flag, isUpdate: model.Files != null, remark: null);
+                }
+
+            }
+
+            return Ok(new ReturnJson { });
         }
     }
 }
