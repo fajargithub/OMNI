@@ -1,33 +1,25 @@
 ﻿<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
 
-    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Spesifikasi / Jenis Files" })
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Files list" })
 
     <div class="modal-body">
         <div class="row">
             <div class="col-xl-12">
                 <div id="panel-1" class="panel">
                     <div class="panel-hdr">
-                        <h2>
-                            File List
-                        </h2>
+                        <div class="panel-toolbar">
+                            <a asp-action="AddEditFile" asp-route-trxId="@ViewBag.TrxId" asp-route-flag="@ViewBag.Flag" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit-file"><i class="fal fa-plus"></i>  Add</a>
+                        </div>
                     </div>
                     <div class="panel-container show">
                         <div class="panel-content">
-                            <table id="table-files" class="table table-borderless table-hover table-striped w-100">
+                            <table id="table_files" class="table table-borderless table-hover table-striped w-100">
                                 <thead>
                                     <tr class="fw-500 text-uppercase">
-                                        <th style="width:7%;">No</th>
-                                        <th>File Name</th>
-                                        <th>Uploaded At</th>
-                                        <th>Uploaded By</th>
-                                        <th class="text-center" style="width:10%;">Action</th>
-                                    </tr>
-                                    <tr id="table-files" style="display:none;">
-                                        <th></th>
-                                        <th><input type="text" class="form-control" placeholder="Filter File Name" /></th>
-                                        <th><input type="text" class="form-control" placeholder="Filter Uploaded At" /></th>
-                                        <th><input type="text" class="form-control" placeholder="Filter Uploaded By" /></th>
-                                        <th></th>
+                                        <th style="width:5%;">No</th>
+                                        <th style="width:50%;">File Name</th>
+                                        <th style="width:20px;">Uploaded At</th>
+                                        <th class="text-center" style="width:10px;">Action</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -48,7 +40,7 @@
                 allowClear: true
             });
 
-        $('#table-files thead tr:eq(1) th').each(function (i) {
+        $('#table_files thead tr:eq(1) th').each(function (i) {
             $('select', this).on('change', function () {
                 if (table.column(i).search() !== this.value) {
                     table
@@ -68,7 +60,7 @@
             });
         });
 
-        var table = $('#table-files').DataTable(
+        var table = $('#table_files').DataTable(
             {
                 orderCellsTop: true,
                 fixedHeader: true,
@@ -76,7 +68,7 @@
                 ordering: false,
                 order: [],
                 columnDefs: [
-                    { "orderable": false, "targets": 4 }
+                    { "orderable": false, "targets": 3 }
                 ],
                 dom:
                     "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
@@ -87,7 +79,7 @@
                         text: '<i class="fal fa-filter"></i> Filter',
                         className: 'btn btn-sm btn-outline-primary',
                         action: function (e, dt, node, config) {
-                            $('#table-files-filter').toggle();
+                            $('#table_files-filter').toggle();
                         }
                     },
                 ],
@@ -108,7 +100,6 @@
                         }
                     },
                     { "data": "createDate" },
-                    { "data": "createdBy" },
                     {
                         "targets": -1,
                         "data": null,
@@ -141,9 +132,9 @@
             denyButtonText: `Cancel`,
         }).then((result) => {
             if (result.value) {
-                $.post(base_api + 'Home/DeleteFilViewBagiewBag?id=' + id, function (result) {
+                $.post(base_api + 'Home/DeleteFile?id=' + id, function (result) {
                     Swal.fire('Deleted!', '', 'success');
-                    $("#table-files").DataTable().ajax.reload(null, false);
+                    $("#table_files").DataTable().ajax.reload(null, false);
                 });
             } else if (result.isDenied) {
 

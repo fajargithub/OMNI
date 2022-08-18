@@ -21,6 +21,7 @@ namespace OMNI.Web.Services.Trx.Interface
         public Task<LLPTrxModel> GetById(int id);
         public Task<BaseJson<LLPTrxModel>> AddEdit(LLPTrxModel model);
         public Task<LLPTrx> Delete(int id);
+        public Task<BaseJson<FilesModel>> AddEditFiles(FilesModel model);
 
     }
 }

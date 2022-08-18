@@ -7,7 +7,6 @@ namespace OMNI.Web.Models
 {
     public class FilesModel : BaseModel
     {
-        public string CreateDate { get; set; }
         public string UploadedBy { get; set; }
     }
 }

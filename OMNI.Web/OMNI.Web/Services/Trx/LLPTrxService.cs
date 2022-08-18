@@ -111,6 +111,7 @@ namespace OMNI.Web.Services.Trx
                 data.Add(new StringContent(m.Jenis.ToString()), "Jenis");
                 data.Add(new StringContent(m.Kondisi.ToString()), "Kondisi");
                 data.Add(new StringContent(m.QRCode.ToString()), "QRCode");
+                data.Add(new StringContent(m.QRCodeText.ToString()), "QRCodeText");
                 data.Add(new StringContent(m.DetailExisting.ToString()), "DetailExisting");
 
                 if(m.Files != null)
@@ -158,6 +159,52 @@ namespace OMNI.Web.Services.Trx
                 return await r.Content.ReadAsAsync<LLPTrx>();
 
             throw new Exception();
+        }
+
+        public async Task<BaseJson<FilesModel>> AddEditFiles(FilesModel m)
+        {
+            HttpClient c = _httpClient.CreateClient("OMNI");
+
+            try
+            {
+                MultipartFormDataContent data = new MultipartFormDataContent();
+
+                data.Add(new StringContent(m.TrxId.ToString()), "TrxId");
+                data.Add(new StringContent(m.Flag.ToString()), "Flag");
+
+                if (m.Files != null)
+                {
+                    if (m.Files.Count() > 0)
+                    {
+                        for (int i = 0; i < m.Files.Count(); i++)
+                        {
+                            data.Add(
+                            new StreamContent(m.Files[i].OpenReadStream())
+                            {
+                                Headers =
+                                    {
+                                    ContentLength = m.Files[i].Length,
+                                    ContentType = new MediaTypeHeaderValue(m.Files[i].ContentType)
+                                    }
+                            }, "Files", m.Files[i].FileName
+                        );
+                        }
+                    }
+                }
+
+                var r = await c.PostAsync("/api/LLPTrx/AddEditFiles", data);
+
+                if (r.IsSuccessStatusCode)
+                {
+                    return await r.Content.ReadAsAsync<BaseJson<FilesModel>>();
+                }
+
+                throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

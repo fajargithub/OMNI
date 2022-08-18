@@ -1,0 +1,50 @@
+﻿@model OMNI.Web.Models.FilesModel
+
+<form id="form-file" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add Files" })
+
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="form-label" for="">Upload Gambar</label>
+                    <input type="file" name="Files" class="form-control" asp-for="Files" multiple />
+                    <input type="hidden" asp-for="TrxId" name="TrxId" value="@ViewBag.TrxId" />
+                    <input type="hidden" asp-for="Flag" name="Flag" value="@ViewBag.Flag" />
+                </div>
+            </div>
+        </div><br />
+    </div>
+
+    @await Html.PartialAsync("_ModalFooter")
+</form>
+
+<script src="~/js/jquery-qrcode.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on('submit', '#form-file', function () {
+        var form = $('#form-file');
+        var validation = Array.prototype.filter.call(form, function (form) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            else {
+                event.preventDefault();
+                var param = new FormParam(
+                    form,
+                    "Apakah Anda yakin ingin menyimpan akun ini?",
+                    '@Url.Action("AddEditFiles")',
+                    null,
+                    '#modal-add-edit-file',
+                    '#table_files'
+                );
+                initApp.formSubmit(param);
+            }
+            form.classList.add('was-validated');
+        });
+    });
+    });
+
+</script>

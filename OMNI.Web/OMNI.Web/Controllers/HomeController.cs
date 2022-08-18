@@ -28,6 +28,7 @@ namespace OMNI.Web.Controllers
         private static readonly string ADD_EDIT_LATIHAN = "~/Views/Home/AddEditLatihanTrx.cshtml";
 
         private static readonly string INDEX_FILE = "~/Views/Home/IndexFile.cshtml";
+        private static readonly string ADD_EDIT_FILE = "~/Views/Home/AddEditFile.cshtml";
 
         protected ILLPTrx _llpTrxService;
         protected IPersonilTrx _personilTrxService;
@@ -67,6 +68,19 @@ namespace OMNI.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddEditLatihanTrx(LatihanTrxModel model)
+        {
+            var r = await _latihanTrxService.AddEdit(model);
+
+            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
+            {
+                return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            }
+
+            return Ok(new JsonResponse());
+        }
+
         public async Task<JsonResult> GetAllFiles(int trxId, string flag)
         {
             List<FilesModel> data = await _llpTrxService.GetAllFiles(trxId, flag);
@@ -97,6 +111,28 @@ namespace OMNI.Web.Controllers
             ViewBag.TrxId = trxId;
             ViewBag.Flag = flag;
             return PartialView(INDEX_FILE);
+        }
+
+        [HttpGet]
+        public IActionResult AddEditFile(int trxId, string flag)
+        {
+            ViewBag.TrxId = trxId;
+            ViewBag.Flag = flag;
+
+            return PartialView(ADD_EDIT_FILE);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddEditFiles(FilesModel model)
+        {
+            var r = await _llpTrxService.AddEditFiles(model);
+
+            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
+            {
+                return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            }
+
+            return Ok(new JsonResponse());
         }
 
         [HttpPost]
@@ -179,6 +215,8 @@ namespace OMNI.Web.Controllers
             ViewBag.JenisId = 0;
             ViewBag.YearList = GetYearList(2010, 2030);
             ViewBag.YearNow = DateTime.Now.Year;
+            ViewBag.Year = "";
+            ViewBag.NoAsset = "";
 
             var region = await _portService.GetPortRegion(port);
             ViewBag.Region = region;
@@ -190,6 +228,16 @@ namespace OMNI.Web.Controllers
             {
                 model = await _llpTrxService.GetById(id);
                 ViewBag.JenisId = model.Jenis;
+
+                if (!string.IsNullOrEmpty(model.QRCodeText))
+                {
+                    var arr = model.QRCodeText.Split("-");
+                    if (arr.Count() > 0)
+                    {
+                        ViewBag.QRCodeYear = arr[1];
+                        ViewBag.NoAsset = arr[3];
+                    }
+                }
             }
 
             return PartialView(ADD_EDIT_LLPTRX, model);
@@ -328,19 +376,6 @@ namespace OMNI.Web.Controllers
             }
 
             return PartialView(ADD_EDIT_LATIHAN, model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddEditLatihanTrx(LatihanTrxModel model)
-        {
-            var r = await _latihanTrxService.AddEdit(model);
-
-            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
-            {
-                return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
-            }
-
-            return Ok(new JsonResponse());
         }
 
         public async Task<JsonResult> GetRekomendasiLatihanByLatihanId(int id, string port)

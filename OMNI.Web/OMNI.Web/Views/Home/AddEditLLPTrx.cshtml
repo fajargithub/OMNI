@@ -118,29 +118,13 @@
                           <label class="form-label" for="">No Aset</label>
                           <input type="text" value="" id="noAset" class="form-control">
                           <input type="hidden" id="qrcode-value" asp-for="QRCode" required />
+                          <input type="hidden" id="qrcode-text" asp-for="QRCodeText" required />
                       </div>
                   </div>
                   <div class="col-md-12">
                       <br />
                       <div id="qrcode"></div>
                   </div>
-                  @*<div class="col-md-12">
-            <div class="form-group">
-                <label class="form-label" for="">Generate QR Code</label>
-                <div class="row">
-                    <div class="col-md-12">
-                        <input type="text" class="form-control qr-url" placeholder="URL or Text">
-                    </div>
-                </div>
-
-                <div class="btn generate-qr-code">Generate</div>
-
-                <br>
-
-                <div id="qrcode"></div>
-                <input type="hidden" id="qrcode-value" asp-for="QRCode" required />
-            </div>
-        </div>*@
               </div><br />
 
 
@@ -155,24 +139,31 @@
     $(document).ready(function () {
         var yearNow = "@ViewBag.YearNow";
         var region = "@ViewBag.Region";
+        var qrCodeYear = "@ViewBag.QRCodeYear";
+        var noAsset = "@ViewBag.noAsset";
+
+        if (qrCodeYear !== null && qrCodeYear !== undefined && qrCodeYear !== "") {
+            $("#year").val(qrCodeYear).change();
+        }
+
+        $("#noAset").val(noAsset);
+
         var selectedJenisId = parseInt("@ViewBag.JenisId");
         var selectedPeralatanOSR = $("#peralatanOSR").val();
         var inventoryNumber = "";
 
-        $("#noAset").on('change', function () {
+        $("#submit").on('click', function () {
             var kodeInventory = $("#kodeInventory").val();
             var year = $("#year").val();
             var region = $("#region").val();
 
-            if (this.value !== null && this.value !== "") {
-                inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + this.value;
+            if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
+                inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + $("#noAset").val();
+                console.log(inventoryNumber);
             } else {
                 inventoryNumber = "";
             }
-
-            console.log(inventoryNumber);
-            
-
+           
             $('#qrcode').empty();
 
             $('#qrcode').css({
@@ -181,6 +172,8 @@
             })
 
             $('#qrcode').qrcode({ width: $('.qr-size').val(), height: $('.qr-size').val(), text: inventoryNumber });
+            console.log(inventoryNumber);
+            $("#qrcode-text").val(inventoryNumber);
 
             var canvas = document.querySelector('canvas');
             var pngUrl = canvas.toDataURL();
