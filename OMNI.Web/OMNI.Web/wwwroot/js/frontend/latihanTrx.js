@@ -1,139 +1,115 @@
-﻿var pageFunction_3 = function () {
-    var responsiveHelper_dt_3_basic = undefined;
-    var responsiveHelper_table_latihan = undefined;
-    var responsiveHelper_datatable_col_reorder = undefined;
-    var responsiveHelper_datatable_tabletools = undefined;
+﻿$('#table_latihan_trx').DataTable().destroy();
 
-    var breakpointDefinition = {
-        tablet: 1024,
-        phone: 480
-    };
-
-    $('#dt_3_basic').dataTable({
-        "sDom": "<'Usert-tooViewBaRoleConstantg'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
-            "t" +
-            "<'dt_3-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-        "oLanguage": {
-            "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+/* COLUMN FILTER  */
+var table_latihan_trx = $('#table_latihan_trx').DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+        {
+            extend: 'excelHtml5',
+            text: '<i class="fal fa-download"></i> Export Excel',
+            titleAttr: 'Generate Excel',
+            className: 'btn btn-sm btn-outline-primary',
+            title: 'Data Latihan ' + formattedToday,
+            exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6, 7, 8]
+            }
+        }
+    ],
+    "columnDefs": [
+        { "text-align": "left", "targets": 1 },
+    ],
+    "ordering": false,
+    "scrollX": true,
+    "ajax": {
+        "url": base_api + 'Home/GetAllLatihanTrx?port=' + port,
+        "type": 'GET'
+    },
+    "columns": [
+        //{
+        //    name: 'no',
+        //    title: 'No',
+        //    data: null
+        //},
+        {
+            name: 'latihan',
+            title: 'Latihan',
+            data: 'latihan'
         },
-        "autoWidt_3h": true,
-        "preDrawCallback": function () {
-            // Initialize the responsive datatables helper once.
-            if (!responsiveHelper_dt_3_basic) {
-                responsiveHelper_dt_3_basic =
-                    new ResponsiveDatatablesHelper($('#dt_3_basic'), breakpointDefinition);
+        {
+            name: 'satuan',
+            title: 'Satuan',
+            data: 'satuan'
+        },
+        { "data": "tanggalPelaksanaan" },
+        {
+            "targets": -1,
+            "data": null,
+            "render": function (row, data, iDisplayIndex) {
+                return "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LATIHAN' style='color:blue;' title='Gambar'><b><i>File Dokumen</i></b></a>";
             }
         },
-        "rowCallback": function (nRow) {
-            responsiveHelper_dt_3_basic.createExpandIcon(nRow);
+        {
+            name: 'rekomendasiHubla',
+            title: 'Rekomendasi Hubla',
+            data: 'rekomendasiHubla'
         },
-        "drawCallback": function (oSettings) {
-            responsiveHelper_dt_3_basic.respond();
-        }
-    });
+        {
+            name: 'selisihHubla',
+            title: 'Selisih Hubla',
+            data: 'selisihHubla'
+        },
+        {
+            name: 'kesesuaianPM58',
+            title: 'Kesesuaian PM.58',
+            target: -1,
+            data: 'kesesuaianPM58',
+            render: function (row, data, iDisplayIndex) {
+                var result = "";
 
-    function format(d) {
-        var result = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;margin: 5px; text-align:left;"><tr>' +
-            '<td><b>Persentase OSCP</b></td>' +
-            '<td style="padding-right: 10px;">:</td>' +
-            '<td>' + d.latihan + '</td>' +
-            '</tr>' +
-            '</table>';
+                if (iDisplayIndex.kesesuaianPM58 == "TERPENUHI") {
+                    result = "<b style='color:green;'>TERPENUHI</b>";
+                } else if (iDisplayIndex.kesesuaianPM58 == "KURANG") {
+                    result = "<b style='color:red;'>KURANG</b>";
+                }
 
-        return result;
+                return result;
+            }
+        },
+        {
+            name: 'persentaseLatihan',
+            title: 'Persentase Latihan',
+            data: 'persentaseLatihan'
+        },
+        {
+            "targets": -1,
+            "data": null,
+            "render": function (row, data, iDisplayIndex) {
+                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
+                    " <a href='javascript:void(0)' onclick='deleteLatihanTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+            }
+        },
+    ],
+    rowsGroup: [
+        'latihan:name',
+        'satuan:name',
+        'rekomendasiHubla:name',
+        'selisihHubla:name',
+        'kesesuaianPM58:name',
+        'persentaseLatihan:name'
+    ],
+    "order": [[1, 'asc']],
+    rowCallback: function (row, data, iDisplayIndex) {
+    },
+    "initComplete": function (settings, json) {
+        console.log('complete load table');
     }
+});
 
-
-    /* COLUMN FILTER  */
-    var dt_3 = $('#table_latihan_trx').DataTable({
-        "sDom": "<'dt_3-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
-            "t" +
-            "<'dt_3-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-        "oLanguage": {
-            "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-        },
-        "processing": true,
-        "serverSide": false,
-        "ordering": false,
-        "responsive": false,
-        "ajax": {
-            "url": base_api + 'Home/GetAllLatihanTrx?port=' + port,
-            "type": 'GET'
-        },
-        "columns": [
-            { "data": null },
-            { "data": "latihan" },
-            { "data": "satuan" },
-            { "data": "tanggalPelaksanaan" },
-            {
-                "targets": -1,
-                "data": null,
-                "render": function (row, data, iDisplayIndex) {
-                    return "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LATIHAN' style='color:blue;' title='Gambar'><b><i>File Dokumen</i></b></a>";
-                }
-            },
-            { "data": "rekomendasiHubla" },
-            { "data": "selisihHubla" },
-            {
-                "targets": -1,
-                "data": null,
-                "render": function (row, data, iDisplayIndex) {
-                    var result = "";
-
-                    if (iDisplayIndex.kesesuaianPM58 == "TERPENUHI") {
-                        result = "<b style='color:green;'>TERPENUHI</b>";
-                    } else if (iDisplayIndex.kesesuaianPM58 == "KURANG") {
-                        result = "<b style='color:red;'>KURANG</b>";
-                    }
-
-                    return result;
-                }
-            },
-            { "data": "persentaseLatihan" },
-            {
-                "targets": -1,
-                "data": null,
-                "render": function (row, data, iDisplayIndex) {
-                    return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
-                        " <a href='javascript:void(0)' onclick='deleteLatihanTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
-                }
-            }
-        ],
-        "order": [[1, 'asc']],
-        rowCallback: function (row, data, iDisplayIndex) {
-        },
-        "initComplete": function (settings, json) {
-            console.log('complete load table');
-        }
-    });
-
-    dt_3.on('order.dt_3 search.dt_3', function () {
-        dt_3.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-            cell.innerHTML = i + 1;
-        });
-    }).draw();
-
-    $("#table_latihan_trx thead th input[type=text]").on('keyup change',
-        function () {
-
-            dt_3
-                .column($(this).parent().index() + ':visible')
-                .search(this.value)
-                .draw();
-
-        });
-
-    // Apply the filter
-    $("#table_latihan_trx thead th input[type=text]").on('keyup change',
-        function () {
-
-            dt_3
-                .column($(this).parent().index() + ':visible')
-                .search(this.value)
-                .draw();
-
-        });
-}
+//table_latihan_trx.on('order.table_latihan_trx search.table_latihan_trx', function () {
+//    table_latihan_trx.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+//        cell.innerHTML = i + 1;
+//    });
+//}).draw();
 
 function deleteLatihanTrx(id) {
     Swal.fire({
@@ -153,5 +129,3 @@ function deleteLatihanTrx(id) {
         }
     })
 }
-
-pageFunction_3();
