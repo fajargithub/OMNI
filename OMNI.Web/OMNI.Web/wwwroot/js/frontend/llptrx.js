@@ -171,8 +171,6 @@ var dt = $('#table_llp_trx').DataTable({
     rowsGroup: [
         'peralatanOSR:name',
         'satuanJenis:name',
-        'detailExisting:name',
-        'kondisi:name',
         'totalExistingJenis:name',
         'totalExistingKeseluruhan:name',
         'rekomendasiHubla:name',
