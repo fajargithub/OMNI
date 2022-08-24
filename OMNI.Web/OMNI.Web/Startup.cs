@@ -265,7 +265,7 @@ namespace OMNI.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Test}/{action=Index}");
+                    pattern: "{controller=MainPage}/{action=Index}");
             });
         }
     }
