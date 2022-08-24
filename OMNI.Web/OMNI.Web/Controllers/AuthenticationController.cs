@@ -11,6 +11,7 @@ namespace OMNI.Web.Controllers
     [Layout("~/Views/Shared/Authentication/_Layout.cshtml")]
     public class AuthenticationController : BaseController
     {
+        //private static readonly string LOGIN_URL = "~/Views/Authentication/Login.cshtml";
         public IActionResult Index()
         {
             return View();
