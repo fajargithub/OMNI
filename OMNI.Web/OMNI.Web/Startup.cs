@@ -42,9 +42,9 @@ namespace OMNI.Web
         {
             //services.ConfigureDatabaseConnection(Configuration);
 
-            //services.ConfigureIdentity(Configuration);
+           // services.ConfigureIdentity(Configuration);
 
-            //services.ConfigureSession();
+           // services.ConfigureSession();
 
             services.ConfigureDataLayer();
 
@@ -71,7 +71,6 @@ namespace OMNI.Web
             {
                 options.AddPolicy("osmosys.user.read", policy => policy.RequireClaim("scope", "osmosys.user.read"));
                 options.AddPolicy("osmosys.user.delete", policy => policy.RequireClaim("scope", "osmosys.user.delete"));
-                //options.AddPolicy("prove.sertifakte.approver", policy => policy.RequireClaim("scope", "prove.sertifakte.approver"));
             });
 
             services.AddAuthentication(opt =>
@@ -101,17 +100,10 @@ namespace OMNI.Web
                 opt.Scope.Add("user.read");
                 opt.Scope.Add("user.readAll");
                 opt.Scope.Add("user.whiteList.readAll");
-                //opt.Scope.Add("user.whiteList.read");
-                //opt.Scope.Add("position.whiteList.read");
                 opt.Scope.Add("position.whiteList.readAll");
-                //opt.Scope.Add("unit.whiteList.read");
                 opt.Scope.Add("unit.whiteList.readAll");
                 opt.Scope.Add("position.read");
                 opt.Scope.Add("position.readAll");
-                //opt.Scope.Add("hr.organization.read");
-                //opt.Scope.Add("hr.organization.readAll");
-                //opt.Scope.Add("hr.user.readAll");
-                //opt.Scope.Add("hr.position.readAll");
                 opt.Scope.Add("unit.readAll");
                 opt.Scope.Add("unit.read");
                 opt.Scope.Add("offline_access");
@@ -128,9 +120,6 @@ namespace OMNI.Web
                         var jsonToken = handler.ReadJwtToken(e.TokenEndpointResponse.AccessToken);
                         e.Principal.Identities.First().AddClaims(jsonToken.Claims.Where(b => b.Type.Equals(Models.Oid.Scope)).Select(c => new Claim("scope", c.Value)));
 
-                        //string token = e.SecurityToken.RawData;
-                        //var handler = new JwtSecurityTokenHandler();
-                        //var jsonToken = handler.ReadJwtToken(e.TokenEndpointResponse.AccessToken);
                         var url = $"https://rest.qa.idaman.pertamina.com/v1/users/{jsonToken.Claims.FirstOrDefault(c => c.Type.Equals(Models.Oid.Email)).Value}";
                         var client = new HttpClient();
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", e.TokenEndpointResponse.AccessToken);
@@ -142,8 +131,6 @@ namespace OMNI.Web
                             e.Principal.Identities.First().AddClaim(new Claim("position_id", emp.position.id));
                             e.Principal.Identities.First().AddClaim(new Claim("organization_id", emp.position.organization.id));
                             e.Principal.Identities.First().AddClaim(new Claim("company_name", emp.companyName));
-                            //e.Principal.Identities.First().AddClaim(new Claim("company_code", emp.companyCode));
-                            e.Principal.Identities.First().AddClaim(new Claim("job_title", emp.jobTitle));
                             e.Principal.Identities.First().AddClaim(new Claim("position_name", emp.position.name));
                             e.Principal.Identities.First().AddClaim(new Claim("organization_name", emp.position.organization.name));
                             e.Principal.Identities.First().AddClaim(new Claim("is_head_pos", emp.position.isHead.ToString()));
