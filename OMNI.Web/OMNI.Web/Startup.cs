@@ -42,9 +42,9 @@ namespace OMNI.Web
         {
             //services.ConfigureDatabaseConnection(Configuration);
 
-           // services.ConfigureIdentity(Configuration);
+           services.ConfigureIdentity(Configuration);
 
-           // services.ConfigureSession();
+           services.ConfigureSession();
 
             services.ConfigureDataLayer();
 
@@ -53,11 +53,11 @@ namespace OMNI.Web
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            //services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
             services.ConfigureHTTPClientFactory(Configuration);
 
-            //services.AddResponseCaching();
+            services.AddResponseCaching();
 
 
             services.AddControllersWithViews(opt =>
@@ -217,24 +217,24 @@ namespace OMNI.Web
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            //app.Use(async (context, next) =>
-            //{
-            //    context.Request.Headers.Add("authorization", $"Bearer {context.Request.Cookies["JWT"]}");
-            //    await next();
-            //});
-            //app.UseStatusCodePages(async context =>
-            //{
-            //    var request = context.HttpContext.Request;
-            //    var response = context.HttpContext.Response;
+            app.Use(async (context, next) =>
+            {
+                context.Request.Headers.Add("authorization", $"Bearer {context.Request.Cookies["JWT"]}");
+                await next();
+            });
+            app.UseStatusCodePages(async context =>
+            {
+                var request = context.HttpContext.Request;
+                var response = context.HttpContext.Response;
 
-            //    if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
-            //    // you may also check requests path to do this only for specific methods       
-            //    // && request.Path.Value.StartsWith("/specificPath")
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+                // you may also check requests path to do this only for specific methods       
+                // && request.Path.Value.StartsWith("/specificPath")
 
-            //    {
-            //        response.Redirect("/authentication/login");
-            //    }
-            //});
+                {
+                    response.Redirect("/authentication/login");
+                }
+            });
 
             app.UseStaticFiles();
             //app.UseHeaderPropagation();

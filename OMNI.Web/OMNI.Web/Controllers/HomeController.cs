@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Controllers
 {
-    [AllowAnonymous]
+    [Authorize(Policy = "osmosys.user.read")]
     public class HomeController : OMNIBaseController
     {
         private readonly ILogger<HomeController> _logger;
