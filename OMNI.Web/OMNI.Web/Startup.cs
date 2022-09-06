@@ -232,7 +232,7 @@ namespace OMNI.Web
                 // && request.Path.Value.StartsWith("/specificPath")
 
                 {
-                    response.Redirect("/authentication/login");
+                    response.Redirect("/MainPage/Index");
                 }
             });
 
