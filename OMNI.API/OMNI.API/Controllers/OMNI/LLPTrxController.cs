@@ -46,8 +46,8 @@ namespace OMNI.API.Controllers.OMNI
         {
             int lastSpesifikasiJenisId = 0;
             int lastSpesifikasiJenisId_2 = 0;
-            int lastSpesifikasiJenisId_3 = 0;
-            int lastSpesifikasiJenisId_4 = 0;
+            //int lastSpesifikasiJenisId_3 = 0;
+            //int lastSpesifikasiJenisId_4 = 0;
             int lastPeralatanOSRId = 0;
             int lastPeralatanOSRId_2 = 0;
             decimal totalKesesuaianHubla = 0;
@@ -67,7 +67,7 @@ namespace OMNI.API.Controllers.OMNI
                 .Include(b => b.SpesifikasiJenis)
                 .Include(b => b.SpesifikasiJenis.PeralatanOSR)
                 .Include(b => b.SpesifikasiJenis.Jenis)
-                .OrderBy(b => b.SpesifikasiJenis.PeralatanOSR).OrderBy(b => b.SpesifikasiJenis.Id).ToListAsync(cancellationToken);
+                .OrderBy(b => b.SpesifikasiJenis.PeralatanOSR).ToListAsync(cancellationToken);
             if (list.Count() > 0)
             {
                 for (int i = 0; i < list.Count(); i++)
@@ -152,8 +152,6 @@ namespace OMNI.API.Controllers.OMNI
                             tempExistingKeseluruhan.TrxId = lastPeralatanOSRId;
                             tempExistingKeseluruhan.TotalCount = list[i].DetailExisting;
                             countTotalExistingKeseluruhan.Add(tempExistingKeseluruhan);
-
-
                         }
                         else
                         {
@@ -165,6 +163,18 @@ namespace OMNI.API.Controllers.OMNI
                         if (lastPeralatanOSRId == list[i].SpesifikasiJenis.PeralatanOSR.Id)
                         {
                             totalExistingKeseluruhan += list[i].DetailExisting;
+
+                            if (i == (list.Count() - 1))
+                            {
+                                CountData tempExistingKeseluruhan1 = new CountData();
+                                tempExistingKeseluruhan1.TrxId = lastPeralatanOSRId;
+                                tempExistingKeseluruhan1.TotalCount = totalExistingKeseluruhan;
+                                countTotalExistingKeseluruhan.Add(tempExistingKeseluruhan1);
+                            }
+                            else
+                            {
+                                totalExistingKeseluruhan += temp.RekomendasiHubla;
+                            }
                         }
                         else
                         {
