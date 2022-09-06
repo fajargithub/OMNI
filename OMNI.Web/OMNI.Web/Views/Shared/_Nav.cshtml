@@ -48,44 +48,70 @@
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", "Jenis")" title="Jenis" data-filter-tags="jenis">
-                            <span class="nav-link-text" data-i18n="Jenis.index">Jenis</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "SpesifikasiJenis")">
-                            <span class="nav-link-text" data-i18n="Jenis.index">Spesifikasi / Jenis</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="@Url.Action("Index", "RekomendasiType")" title="Rekomendasi Type">
                             <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Type</span>
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", "RekomendasiJenis")" title="Rekomendasi Jenis">
-                            <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Jenis</span>
+                        <a href="#" title="Dashboard" data-filter-tags="dashboard">
+                            <i class="fal fa-list"></i>
+                            <span class="nav-link-text" data-i18n="master.jenis">Jenis</span>
                         </a>
+                        <ul>
+                            <li>
+                                <a href="@Url.Action("Index", "Jenis")" title="Jenis" data-filter-tags="jenis">
+                                    <span class="nav-link-text" data-i18n="Jenis.index">Master Jenis</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "SpesifikasiJenis")">
+                                    <span class="nav-link-text" data-i18n="Jenis.index">Spesifikasi / Jenis</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "RekomendasiJenis")" title="Rekomendasi Jenis">
+                                    <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Jenis</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
                     <li>
-                        <a href="@Url.Action("Index", "Latihan")" is-active-route title="Latihan" data-filter-tags="latihan">
-                            <span class="nav-link-text" data-i18n="latihan.index">Latihan</span>
+                        <a href="#" title="Dashboard" data-filter-tags="dashboard">
+                            <i class="fal fa-list"></i>
+                            <span class="nav-link-text" data-i18n="master.latihan">Latihan</span>
                         </a>
+                        <ul>
+                            <li>
+                                <a href="@Url.Action("Index", "Latihan")" is-active-route title="Latihan" data-filter-tags="latihan">
+                                    <span class="nav-link-text" data-i18n="latihan.index">Master Latihan</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "RekomendasiLatihan")" title="Rekomendasi Latihan">
+                                    <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Latihan</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
                     <li>
-                        <a href="@Url.Action("Index", "RekomendasiLatihan")" title="Rekomendasi Latihan">
-                            <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Latihan</span>
+                        <a href="#" title="Dashboard" data-filter-tags="dashboard">
+                            <i class="fal fa-list"></i>
+                            <span class="nav-link-text" data-i18n="master.personil">Master Personil</span>
                         </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "Personil")" is-active-route title="Personil" data-filter-tags="personil">
-                            <span class="nav-link-text" data-i18n="personil.index">Personil</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "RekomendasiPersonil")" title="Rekomendasi Personil">
-                            <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Personil</span>
-                        </a>
+                        <ul>
+                            <li>
+                                <a href="@Url.Action("Index", "Personil")" is-active-route title="Personil" data-filter-tags="personil">
+                                    <span class="nav-link-text" data-i18n="personil.index">Master Personil</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "RekomendasiPersonil")" title="Rekomendasi Personil">
+                                    <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Personil</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </li>
