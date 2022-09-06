@@ -42,9 +42,9 @@ namespace OMNI.Web
         {
             //services.ConfigureDatabaseConnection(Configuration);
 
-           services.ConfigureIdentity(Configuration);
+            services.ConfigureIdentity(Configuration);
 
-           services.ConfigureSession();
+            services.ConfigureSession();
 
             services.ConfigureDataLayer();
 
@@ -232,7 +232,7 @@ namespace OMNI.Web
                 // && request.Path.Value.StartsWith("/specificPath")
 
                 {
-                    response.Redirect("/MainPage/Index");
+                    response.Redirect("/authentication/login");
                 }
             });
 
