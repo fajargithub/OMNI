@@ -43,14 +43,14 @@
                                 <th>Peralatan OSR</th>
                                 <th>Jenis</th>
                                 <th>Value</th>
-                                @*<th class="text-center" style="width:10%;">Action</th>*@
+                                <th>Satuan</th>
                             </tr>
                             <tr id="table1-filter" style="display:none;">
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Peralatan OSR" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Jenis" /></th>
-                                @*<th><input type="text" class="form-control" placeholder="Filter Value" /></th>*@
                                 <th></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Satuan" /></th>
                             </tr>
                         </thead>
                     </table>
@@ -144,7 +144,8 @@
                             "render": function (row, data, iDisplayIndex) {
                                 return "<input type='number' onchange='inputValue(" + iDisplayIndex.id + ")' id='value-" + iDisplayIndex.id + "' data-port='" + port + "' data-typeId='" + typeId + "' value='" + iDisplayIndex.value + "' style='width:50px;'>";
                             }
-                        }
+                        },
+                        { "data": "satuan" }
                         //{
                         //    "targets": -1,
                         //    "data": null,

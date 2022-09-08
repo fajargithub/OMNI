@@ -1,32 +1,56 @@
 <div class="dropdown-header bg-primary-700 d-flex flex-row py-4 rounded-top">
-	<div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
-		<span class="mr-2">
-			<img src="~/img/@ViewBag.Avatar" class="rounded-circle profile-image" alt="@ViewBag.User">
-		</span>
-		<div class="info-card-text">
-			<div class="fs-lg text-truncate text-truncate-lg">@User.Identity.Name</div>
-			<span class="text-truncate text-truncate-md opacity-80">@ViewBag.Email</span>
-		</div>
-	</div>
+    <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
+        <span class="mr-2">
+            <img src="~/img/@ViewBag.Avatar" class="rounded-circle profile-image" alt="@ViewBag.User">
+        </span>
+        <div class="info-card-text">
+            <div class="fs-lg text-truncate text-truncate-lg">@User.Identity.Name</div>
+            <span class="text-truncate text-truncate-md opacity-80">@ViewBag.Email</span>
+        </div>
+    </div>
 </div>
 <div class="dropdown-divider m-0"></div>
 @*<a href="#" class="dropdown-item" data-action="app-reset">
-	<span data-i18n="drpdwn.reset_layout">Reset Layout</span>
-</a>*@
+        <span data-i18n="drpdwn.reset_layout">Reset Layout</span>
+    </a>*@
 @*<a href="#" class="dropdown-item" data-toggle="modal" data-target=".js-modal-settings">
-	<span data-i18n="drpdwn.settings">Settings</span>
-</a>*@
+        <span data-i18n="drpdwn.settings">Settings</span>
+    </a>*@
 <div class="dropdown-divider m-0"></div>
 <a href="#" class="dropdown-item" data-action="app-fullscreen">
-	<span data-i18n="drpdwn.fullscreen">Fullscreen</span> 
-	<i class="float-right text-muted fw-n">F11</i>
+    <span data-i18n="drpdwn.fullscreen">Fullscreen</span>
+    <i class="float-right text-muted fw-n">F11</i>
 </a>
 <a href="#" class="dropdown-item" data-action="app-print">
-	<span data-i18n="drpdwn.print">Print</span> 
-	<i class="float-right text-muted fw-n">Ctrl + P</i>
+    <span data-i18n="drpdwn.print">Print</span>
+    <i class="float-right text-muted fw-n">Ctrl + P</i>
 </a>
 <div class="dropdown-divider m-0"></div>
-<a class="dropdown-item fw-500 pt-3 pb-3" asp-action="Logout" asp-controller="MainPage">
+<a class="dropdown-item fw-500 pt-3 pb-3" id="logout2">
     <span data-i18n="drpdwn.page-logout">Logout</span>
     <span class="float-right fw-n">&commat;@User.Identity.Name</span>
 </a>
+
+<script src="~/js/front/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        function funcLogout() {
+            window.onbeforeunload = function () { return "Your work will be lost."; };
+            window.location.replace("https://login.qa.idaman.pertamina.com/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3D3c46bba8-7dbd-4649-be13-bc823db6b423%26redirect_uri%3Dhttps%253A%252F%252Flocalhost%253A44311%252Fsignin-oidc%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520api.auth%2520email%2520user.role%2520user.read%2520user.readAll%2520user.whiteList.readAll%2520position.whiteList.readAll%2520unit.whiteList.readAll%2520position.read%2520position.readAll%2520unit.readAll%2520unit.read%2520offline_access%2520osmosys.user.read%26response_mode%3Dform_post%26nonce%3D637982081556530385.ZWRiNDQ1NmItZGJhMS00YTMxLTkyYTktNzI5MjNkMzM2NzFlMWQxOWE2NzYtZGVmOC00ZWZlLTk1MzUtZjIwNjRkNTRmZmE0%26state%3DCfDJ8DoAvgsMvYxEiqz7l7cGa0kADLzTM5R3lnwcdtKH5WIXBdjFFucqFLfqJIjtZUcUCuXQEdPyNVSDg3JmeTL44oovQu6tSqs43ZWCqMtqF1qzGt9C9ijza5LcFprxLttFD0kTpv2LF5A_jdykgTHRkjz9OoYh6X4dw64mtWLfBGBzE9cqSiWnZLZ8vM7OaxwbF4-Gyq2jWZqxJf0mAkBGCarN0C_qgBW4pDv1NtO6cErZRMFIFOaEugqukcQTwg-DNzCIxPrrPvMHG-QbIVOcGVe7XXvOffUIvuswSIOT5aph%26x-client-SKU%3DID_NETSTANDARD2_0%26x-client-ver%3D5.6.0.0");
+        }
+        $("#logout2").click(function () {
+            $.ajax({
+                url: funcLogout(),
+                type: "GET",
+                success: function (res) {
+                    console.log(res);
+                }, error: function () {
+
+                }, complete: function () {
+
+                }
+            })
+        });
+    });
+</script>

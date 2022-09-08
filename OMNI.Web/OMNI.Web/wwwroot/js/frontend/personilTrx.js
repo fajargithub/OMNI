@@ -1,6 +1,4 @@
-﻿
-
-var table_personil_trx = $('#table_personil_trx').DataTable({
+﻿var table_personil_trx = $('#table_personil_trx').DataTable({
     dom: 'Bfrtip',
     buttons: [
         {
@@ -81,7 +79,23 @@ var table_personil_trx = $('#table_personil_trx').DataTable({
         {
             name: 'persentasePersonil',
             title: 'Persentase Personil',
-            data: 'persentasePersonil'
+            data: 'persentasePersonil',
+            render: function (row, data, iDisplayIndex) {
+                var result = "";
+
+                if (iDisplayIndex.personil == "Total Persentase") {
+                    result = "<b><i id='totalPersentaseHublaPersonil'></i></b>";
+                } else {
+                    if (iDisplayIndex.rekomendasiHubla > 0) {
+                        result = iDisplayIndex.persentasePersonil + "%";
+                    } else {
+                        result = "-";
+                    }
+                }
+                
+
+                return result;
+            }
         },
         {
             "targets": -1,
@@ -101,11 +115,67 @@ var table_personil_trx = $('#table_personil_trx').DataTable({
         'kesesuaianPM58:name',
         'persentasePersonil:name'
     ],
+    createdRow: function (row, data, dataIndex) {
+        if (data.personil === 'Total Persentase') {
+            // Add COLSPAN attribute
+            $('td:eq(0)', row).attr('colspan', 3);
+
+            // Center horizontally
+            $('td:eq(0)', row).attr('align', 'center');
+
+            // Hide required number of columns
+            // next to the cell with COLSPAN attribute
+            $('td:eq(2)', row).css('display', 'none');
+            $('td:eq(3)', row).css('display', 'none');
+            $('td:eq(4)', row).css('display', 'none');
+            $('td:eq(5)', row).css('display', 'none');
+
+            // Update cell data
+            this.api().cell($('td:eq(0)', row)).data('<b>Total Persentase Hubla</b>');
+            this.api().cell($('td:eq(3)', row)).data('');
+            this.api().cell($('td:eq(7)', row)).data('');
+            this.api().cell($('td:eq(8)', row)).data('');
+            this.api().cell($('td:eq(9)', row)).data('');
+        }
+    },
     "order": [[1, 'asc']],
     rowCallback: function (row, data, iDisplayIndex) {
     },
     "initComplete": function (settings, json) {
-        console.log('complete load table');
+        var countRekomendasiHublaPersonil = 0;
+        var totalPersentasePersonil = 0;
+        var lastPersonil = "";
+        $.ajax({
+            url: base_api + 'Home/GetAllPersonilTrx?port=' + port,
+            method: "GET",
+            success: function (result) {
+                console.log(result.data);
+                if (result.data.length > 0) {
+                    for (var i = 0; i < result.data.length; i++) {
+                        if (lastPersonil == "") {
+                            lastPersonil = result.data[i].personil;
+                            if (result.data[i].rekomendasiHubla > 0) {
+                                countRekomendasiHublaPersonil += 1;
+                                totalPersentasePersonil += result.data[i].persentasePersonil;
+                            }
+                        } else if (lastPersonil != result.data[i].personil) {
+                            lastPersonil = result.data[i].personil;
+                            if (result.data[i].rekomendasiHubla > 0) {
+                                countRekomendasiHublaPersonil += 1;
+                                totalPersentasePersonil += result.data[i].persentasePersonil;
+                            }
+                        }
+                        
+                    }
+                }
+            }, complete: function() {
+                console.log(countRekomendasiHublaPersonil);
+                console.log(totalPersentasePersonil);
+                var resultPersentaseHublaPersonil = totalPersentasePersonil / (countRekomendasiHublaPersonil * 100) * 100;
+
+                $("#totalPersentaseHublaPersonil").text(resultPersentaseHublaPersonil.toFixed(2) + "%");
+            }
+        });
     }
 });
 

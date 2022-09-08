@@ -1,5 +1,7 @@
 ﻿$('#table_llp_trx').DataTable().destroy();
 
+var totalPersentaseHubla = 0;
+var totalPersentaseOSCP = 0;
 /* COLUMN FILTER  */
 var dt = $('#table_llp_trx').DataTable({
     dom: 'Bfrtip',
@@ -32,7 +34,14 @@ var dt = $('#table_llp_trx').DataTable({
         {
             name: 'peralatanOSR',
             title: 'Peralatan OSR',
-            data: 'peralatanOSR'
+            data: 'peralatanOSR',
+            render : function (row, data, iDisplayIndex) {
+                var result = iDisplayIndex.peralatanOSR;
+                if (result == "Total Persentase") {
+                    result = "<b>Total Persentase</b>";
+                }
+                return result;
+            }
         },
         { "data": "jenis" },
         {
@@ -72,7 +81,11 @@ var dt = $('#table_llp_trx').DataTable({
             "targets": -1,
             "data": null,
             "render": function (row, data, iDisplayIndex) {
-                return "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LLP' style='color:blue;' title='Gambar'><b><i>File Gambar</i></b></a>";
+                var result = "";
+                if (iDisplayIndex.peralatanOSR != "Total Persentase") {
+                    result = "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LLP' style='color:blue;' title='Gambar'><b><i>File Gambar</i></b></a>"
+                }
+                return result;
             }
         },
         {
@@ -120,7 +133,25 @@ var dt = $('#table_llp_trx').DataTable({
         {
             name: 'persentaseHubla',
             title: 'Persentase Hubla',
-            data: 'persentaseHubla'
+            data: 'persentaseHubla',
+            render: function (row, data, iDisplayIndex) {
+                result = "";
+                if (iDisplayIndex.peralatanOSR == "Total Persentase") {
+                    result = "<b><i id='totalPersentaseHubla'></i></b>";
+                } else {
+                    if (iDisplayIndex.persentaseHubla !== null) {
+                        if (iDisplayIndex.rekomendasiHubla > 0) {
+                            result = iDisplayIndex.persentaseHubla + "%";
+                            totalPersentaseHubla += parseFloat(iDisplayIndex.persentaseHubla);
+                        } else {
+                            result = "-";
+                        }
+
+                    }
+                }
+
+                return result;
+            }
         },
         {
             name: 'rekomendasiOSCP',
@@ -157,7 +188,26 @@ var dt = $('#table_llp_trx').DataTable({
         {
             name: 'persentaseOSCP',
             title: 'Persentase OSCP',
-            data: 'persentaseOSCP'
+            data: 'persentaseOSCP',
+            render: function (row, data, iDisplayIndex) {
+                result = "";
+                if (iDisplayIndex.peralatanOSR == "Total Persentase") {
+                    result = "<b><i id='totalPersentaseOSCP'></i></b>";
+                } else {
+                    if (iDisplayIndex.persentaseOSCP !== null) {
+                        if (iDisplayIndex.persentaseOSCP > 0) {
+                            result = iDisplayIndex.persentaseOSCP + "%";
+                            totalPersentaseOSCP += parseFloat(iDisplayIndex.persentaseOSCP);
+                        } else {
+                            result = "-";
+                        }
+
+                    }
+                }
+                
+
+                return result;
+            }
         },
         {
             "targets": -1,
@@ -168,6 +218,31 @@ var dt = $('#table_llp_trx').DataTable({
             }
         }
     ],
+    createdRow: function (row, data, dataIndex) {
+        if (data.peralatanOSR === 'Total Persentase') {
+            // Add COLSPAN attribute
+            $('td:eq(0)', row).attr('colspan', 3);
+
+            // Center horizontally
+            $('td:eq(0)', row).attr('align', 'center');
+
+            // Hide required number of columns
+            // next to the cell with COLSPAN attribute
+            $('td:eq(3)', row).css('display', 'none');
+            $('td:eq(4)', row).css('display', 'none');
+
+            // Update cell data
+            this.api().cell($('td:eq(0)', row)).data('<b>Total Persentase Hubla & OSCP</b>');
+            this.api().cell($('td:eq(7)', row)).data('');
+            this.api().cell($('td:eq(8)', row)).data('');
+            this.api().cell($('td:eq(9)', row)).data('');
+            this.api().cell($('td:eq(10)', row)).data('');
+            this.api().cell($('td:eq(11)', row)).data('');
+            this.api().cell($('td:eq(14)', row)).data('');
+            this.api().cell($('td:eq(15)', row)).data('');
+            this.api().cell($('td:eq(16)', row)).data('');
+        }
+    },
     rowsGroup: [
         'peralatanOSR:name',
         'satuanJenis:name',
@@ -188,15 +263,57 @@ var dt = $('#table_llp_trx').DataTable({
     rowCallback: function (row, data, iDisplayIndex) {
     },
     "initComplete": function (settings, json) {
-        console.log('complete load table');
+        var lastJenis = "";
+        var totalPersentaseHubla = 0;
+        var totalPersentaseOSCP = 0;
+        var countRekomendasiHubla = 0;
+        var countRekomendasiOSCP = 0;
+        //count total persentase hubla
+        $.ajax({
+            url: base_api + 'Home/GetAllLLPTrx?port=' + port,
+            method: "GET",
+            success: function (result) {
+
+                
+                if (result.data !== null && result.data !== undefined) {
+                    for (var i = 0; i < result.data.length; i++) {
+                        if (lastJenis == "") {
+                            lastJenis = result.data[i].jenis;
+                            if (result.data[i].rekomendasiHubla > 0) {
+                                totalPersentaseHubla += result.data[i].persentaseHubla;
+                                countRekomendasiHubla += 1;
+                            }
+
+                            if (result.data[i].rekomendasiOSCP > 0) {
+                                totalPersentaseOSCP += result.data[i].persentaseOSCP;
+                                countRekomendasiOSCP += 1;
+                            }
+                            
+                        } else if (lastJenis != result.data[i].jenis) {
+                            lastJenis = result.data[i].jenis;
+                            if (result.data[i].rekomendasiHubla > 0) {
+                                totalPersentaseHubla += result.data[i].persentaseHubla;
+                                countRekomendasiHubla += 1;
+                            }
+
+                            if (result.data[i].rekomendasiOSCP > 0) {
+                                totalPersentaseOSCP += result.data[i].persentaseOSCP;
+                                countRekomendasiOSCP += 1;
+                            }
+                        }
+                    }
+                }
+            }, complete: function () {
+                var resultPersentaseHubla = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
+                var resultPersentaseOSCP = totalPersentaseOSCP / (countRekomendasiOSCP * 100) * 100;
+
+                $("#totalPersentaseHubla").text(resultPersentaseHubla.toFixed(2) + "%");
+                $("#totalPersentaseOSCP").text(resultPersentaseOSCP.toFixed(2) + "%");
+            }
+        })
     }
 });
 
-//dt.on('order.dt search.dt', function () {
-//    dt.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-//        cell.innerHTML = i + 1;
-//    });
-//}).draw();
 
 $("#table_llp_trx thead th input[type=text]").on('keyup change',
     function () {

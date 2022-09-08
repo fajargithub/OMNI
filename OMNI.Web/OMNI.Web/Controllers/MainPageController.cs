@@ -27,7 +27,8 @@ namespace OMNI.Web.Controllers
             foreach (string cookie in myCookies)
                 Response.Cookies.Delete(cookie);
             await HttpContext.SignOutAsync();
-            return SignOut("Cookies", "oidc");
+           SignOut("Cookies", "oidc");
+            return RedirectToAction("Index", "MainPage");
         }
     }
 }
