@@ -42,19 +42,11 @@ namespace OMNI.API.Controllers.OMNI
                 for (int i = 0; i < list.Count(); i++)
                 {
                     RekomendasiJenisModel temp = new RekomendasiJenisModel();
-                    //temp.Id = list[i].Id;
-                    //temp.PeralatanOSR = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.PeralatanOSR.Name : "-";
-                    //temp.Jenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Name : "-";
-                    //temp.RekomendasiType = list[i].RekomendasiType != null ? list[i].RekomendasiType.Name : "-";
-                    //temp.Port = list[i].Port;
-                    //temp.Value = list[i].Value;
-                    //temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
-                    //temp.CreatedBy = list[i].CreatedBy;
-                    //result.Add(temp);
 
                     temp.Id = list[i].Id;
                     temp.PeralatanOSR = list[i].PeralatanOSR != null ? list[i].PeralatanOSR.Name : "-";
                     temp.Jenis = list[i].Jenis != null ? list[i].Jenis.Name : "-";
+                    temp.Satuan = list[i].Jenis != null ? list[i].Jenis.Satuan : "-";
 
                     var findRekomenJenis = rekomenJenisList.Find(b => b.SpesifikasiJenis.Id == list[i].Id);
                     if(findRekomenJenis != null)

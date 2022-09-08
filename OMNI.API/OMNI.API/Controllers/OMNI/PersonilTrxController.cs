@@ -150,6 +150,12 @@ namespace OMNI.API.Controllers.OMNI
                         {
                             result[i].TotalDetailExisting = find.TotalCount;
                             result[i].SelisihHubla = find.TotalCount - result[i].RekomendasiHubla;
+                            result[i].PersentasePersonil = Math.Round(find.TotalCount / result[i].RekomendasiHubla * 100, 2);
+
+                            if(result[i].PersentasePersonil > 100)
+                            {
+                                result[i].PersentasePersonil = 100;
+                            }
 
                             if(result[i].SelisihHubla >= 0)
                             {
@@ -161,6 +167,10 @@ namespace OMNI.API.Controllers.OMNI
                         }
                     }
                 }
+
+                PersonilTrxModel totalModel = new PersonilTrxModel();
+                totalModel.Personil = "Total Persentase";
+                result.Add(totalModel);
             }
 
             return Ok(result);
