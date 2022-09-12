@@ -24,6 +24,32 @@ namespace OMNI.Web.Controllers
             _jenisService = jenisService;
         }
 
+        public class yearData
+        {
+            public int Value { get; set; }
+            public int Name { get; set; }
+        }
+
+        public List<yearData> GetYearList(int startYear, int endYear)
+        {
+            List<yearData> yearList = new List<yearData>();
+            int yearRange = endYear - startYear;
+            if (yearRange > 0)
+            {
+                for (int i = 0; i <= yearRange; i++)
+                {
+                    yearData temp = new yearData();
+                    temp.Value = startYear;
+                    temp.Name = startYear;
+                    yearList.Add(temp);
+
+                    startYear += 1;
+                }
+            }
+
+            return yearList;
+        }
+
         public async Task<List<PeralatanOSR>> GetAllPeralatanOSR()
         {
             List<PeralatanOSR> data = await _peralatanOSRService.GetAll();

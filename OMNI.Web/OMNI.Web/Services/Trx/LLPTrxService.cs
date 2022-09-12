@@ -74,10 +74,10 @@ namespace OMNI.Web.Services.Trx
             throw new Exception();
         }
 
-        public async Task<List<LLPTrxModel>> GetAllLLPTrx(string port)
+        public async Task<List<LLPTrxModel>> GetAllLLPTrx(string port, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/LLPTrx/GetAll?port={port}");
+            var result = await client.GetAsync($"/api/LLPTrx/GetAll?port={port}&year={year}");
 
             if (result.IsSuccessStatusCode)
 
@@ -108,6 +108,7 @@ namespace OMNI.Web.Services.Trx
 
                 data.Add(new StringContent(m.Id.ToString()), "Id");
                 data.Add(new StringContent(m.Port.ToString()), "Port");
+                data.Add(new StringContent(m.Year.ToString()), "Year");
                 data.Add(new StringContent(m.Jenis.ToString()), "Jenis");
                 data.Add(new StringContent(m.Kondisi.ToString()), "Kondisi");
                 data.Add(new StringContent(m.QRCode.ToString()), "QRCode");

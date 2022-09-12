@@ -10,18 +10,31 @@
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
-            <label class="form-label" for="">Select Lokasi</label>
+            <label class="form-label" for="">Lokasi</label>
             <select asp-for="Port" id="port" class="select2-input-index"
                     asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
             </select>
         </div> <br />
     </div>
-    <div class="col-md-4">
+    <div class="col-md-2">
         <div class="form-group">
-            <label class="form-label" for="">Select Rekomendasi Type</label>
+            <label class="form-label" for="">Rekomendasi Type</label>
             <select asp-for="RekomendasiType" id="rekomendasiType" class="select2-input-index"
                     asp-items="@(new SelectList(ViewBag.RekomendasiTypeList, "Id","Name"))">
             </select>
+        </div> <br />
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label class="form-label" for="">Year</label>
+            <select name="Year" id="year-lokasi" class="select2-input-index"
+                    asp-items="@(new SelectList(ViewBag.YearList, "Name","Name"))">
+            </select>
+        </div> <br />
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <a href="javascript:void(0)" class="btn btn-primary" id="searchLokasi" style="margin-top: 22px;"><i class="fa fa-search"></i> Search</a>
         </div> <br />
     </div>
     <div class="col-xl-12">
@@ -30,9 +43,6 @@
                 <h2>
                     Rekomendasi Jenis List
                 </h2>
-                @*<div class="panel-toolbar">
-                    <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                </div>*@
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -69,6 +79,11 @@
             if (port !== null && port !== "") {
                 $("#port").val(port).change();
             }
+
+            var selectedYear = parseInt("@ViewBag.ThisYear");
+            console.log(selectedYear);
+
+            $("#year-lokasi").val(selectedYear).change();
 
             var typeId = parseInt("@ViewBag.SelectedRekomendasiType.Id");
 
@@ -128,11 +143,9 @@
                         },
                     ],
                     processing: true,
-                    //serverSide: true,
                     "ajax": {
-                        "url": base_api + 'RekomendasiJenis/GetAll?port=' + port +"&typeId=" + typeId,
+                        "url": base_api + 'RekomendasiJenis/GetAll?port=' + port +"&typeId=" + typeId + "&year=" + selectedYear,
                         "type": 'GET'
-                        //"data": { searchData: result }
                     },
                     "columns": [
                         { "data": null },
@@ -142,18 +155,10 @@
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<input type='number' onchange='inputValue(" + iDisplayIndex.id + ")' id='value-" + iDisplayIndex.id + "' data-port='" + port + "' data-typeId='" + typeId + "' value='" + iDisplayIndex.value + "' style='width:50px;'>";
+                                return "<input type='number' onchange='inputValue(" + iDisplayIndex.id + ")' id='value-" + iDisplayIndex.id + "' data-port='" + port + "' data-typeId='" + typeId + "' data-year='" + selectedYear + "' value='" + iDisplayIndex.value + "' style='width:50px;'>";
                             }
                         },
                         { "data": "satuan" }
-                        //{
-                        //    "targets": -1,
-                        //    "data": null,
-                        //    "render": function (row, data, iDisplayIndex) {
-                        //        return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiJenis/AddEdit?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20")  + "&typeId="+ typeId +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>";
-                        //            /*" <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";*/
-                        //    }
-                        //}
                     ],
                     "order": [[1, 'asc']],
                     rowCallback: function (row, data, iDisplayIndex) {
@@ -180,17 +185,32 @@
                 typeId = this.value;
                 port = $("#port").val();
 
-                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId;
+                /*window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId + "&year=" + selectedYear;*/
             });
+
+            $("#year-lokasi").on('change', function () {
+                selectedYear = this.value;
+            });
+
+            $("#port").on('change', function () {
+                port = this.value;
+            });
+
+            $("#searchLokasi").click(function () {
+                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId + "&year=" + selectedYear;
+            })
         });
 
         function inputValue(id) {
             console.log(id);
             var port = $("#value-" + id).data('port');
             var typeId = $("#value-" + id).data('typeid');
+            var year = $("#value-" + id).data('year');
             var value = $("#value-" + id).val();
 
-            $.post(base_api + 'RekomendasiJenis/UpdateValue?id=' + id + "&port="+ port +"&typeId="+ typeId +"&value=" + value, function (result) {
+            console.log(year);
+
+            $.post(base_api + 'RekomendasiJenis/UpdateValue?id=' + id + "&port=" + port + "&typeId=" + typeId + "&value=" + value + "&year=" + year, function (result) {
 
             });
         }

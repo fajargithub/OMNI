@@ -60,6 +60,19 @@
                     </select>
                 </div> <br />
             </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label" for="">Select Year</label>
+                    <select name="Year" id="year-lokasi" class="select2-input-index"
+                            asp-items="@(new SelectList(ViewBag.YearList, "Name","Name"))">
+                    </select>
+                </div> <br />
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <a href="javascript:void(0)" class="btn btn-primary" id="searchLokasi" style="margin-top: 22px;"><i class="fa fa-search"></i> Search</a>
+                </div> <br />
+            </div>
         </div>
     </div>
     <div class="col-xl-12">
@@ -70,7 +83,7 @@
                     LLP
                 </h2>
                 <div class="panel-toolbar">
-                    <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort.Name" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
             <div class="panel-container show">
@@ -103,7 +116,6 @@
                         <tbody style="text-align:center;">
                         </tbody>
                     </table>
-                    <b>Total Persentase OSCP: <i id="totalPersentaseOSCP"></i></b>
                 </div>
             </div>
         </div>
@@ -117,7 +129,7 @@
                     PERSONIL
                 </h2>
                 <div class="panel-toolbar">
-                    <a asp-action="AddEditPersonilTrx" asp-route-port="@ViewBag.SelectedPort.Name" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    <a asp-action="AddEditPersonilTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
             <div class="panel-container show">
@@ -125,8 +137,6 @@
                     <table id="table_personil_trx" class="table table-borderless table-hover table-striped w-100" style="width:100%;">
                         <thead>
                             <tr class="fw-500 text-uppercase" style="text-align:center;">
-                                @*<th style="width:10px;"></th>*@
-                                @*<th style="width:10px;">No</th>*@
                                 <th>Personil</th>
                                 <th>Nama Personil</th>
                                 <th style="width:70px;">Satuan</th>
@@ -166,10 +176,10 @@
                     <table id="table_latihan_trx" class="table table-borderless table-hover table-striped w-100">
                         <thead>
                             <tr class="fw-500 text-uppercase" style="text-align:center;">
-                                @*<th style="width:10px;">No</th>*@
                                 <th style="width:70px;">Latihan</th>
                                 <th style="width:70px;">Satuan</th>
                                 <th style="width:70px;">Tanggal Pelaksanaan</th>
+                                <th style="width:70px;">Jumlah Tgl Pelaksanaan</th>
                                 <th style="width:70px;">Laporan Kegiatan</th>
                                 <th style="width:70px;">Rekomendasi Hubla</th>
                                 <th style="width:70px;">Selisih Hubla</th>
@@ -222,17 +232,25 @@
 
     <script>
         var port = "@ViewBag.SelectedPort.Name";
+        var selectedYear = parseInt("@ViewBag.ThisYear");
+
+        $("#year-lokasi").val(selectedYear).change();
 
             if (port !== null && port !== "") {
                 $("#port").val(port).change();
-            }
+        }
+
+        $("#year-lokasi").on('change', function () {
+            selectedYear = this.value;
+        });
 
             $("#port").on('change', function () {
                 port = this.value;
-                //initTable(portId);
-
-                window.location.href = base_api + 'Home/Index?port=' + port;
             });
+
+        $("#searchLokasi").click(function () {
+            window.location.href = base_api + 'Home/Index?port=' + port + "&year=" + selectedYear;
+        })
 
             $('.select2-input-index').select2();
 

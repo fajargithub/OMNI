@@ -74,10 +74,10 @@ namespace OMNI.Web.Services.Trx
             throw new Exception();
         }
 
-        public async Task<List<PersonilTrxModel>> GetAllPersonilTrx(string port)
+        public async Task<List<PersonilTrxModel>> GetAllPersonilTrx(string port, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/PersonilTrx/GetAll?port={port}");
+            var result = await client.GetAsync($"/api/PersonilTrx/GetAll?port={port}&year={year}");
 
             if (result.IsSuccessStatusCode)
 
@@ -109,7 +109,7 @@ namespace OMNI.Web.Services.Trx
                 data.Add(new StringContent(m.Id.ToString()), "Id");
                 data.Add(new StringContent(m.Personil.ToString()), "Personil");
                 data.Add(new StringContent(m.Name.ToString()), "Name");
-                //data.Add(new StringContent(m.TotalDetailExisting.ToString()), "TotalDetailExisting");
+                data.Add(new StringContent(m.Year.ToString()), "Year");
                 data.Add(new StringContent(m.Port.ToString()), "Port");
                 data.Add(new StringContent(m.TanggalPelatihan.ToString()), "TanggalPelatihan");
                 data.Add(new StringContent(m.TanggalExpired.ToString()), "TanggalExpired");
@@ -149,10 +149,10 @@ namespace OMNI.Web.Services.Trx
             }
         }
 
-        public async Task<RekomendasiPersonil> GetRekomendasiPersonilByPersonilId(int id, string port)
+        public async Task<RekomendasiPersonil> GetRekomendasiPersonilByPersonilId(int id, string port, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/PersonilTrx/GetRekomendasiPersonilByPersonilId?id={id}&port={port}");
+            var result = await client.GetAsync($"/api/PersonilTrx/GetRekomendasiPersonilByPersonilId?id={id}&port={port}&year={year}");
 
             if (result.IsSuccessStatusCode)
 

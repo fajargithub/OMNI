@@ -21,10 +21,10 @@ namespace OMNI.Web.Services.Master
             _httpClient = httpClient;
         }
 
-        public async Task<List<RekomendasiJenisModel>> GetAll(string port, string typeId)
+        public async Task<List<RekomendasiJenisModel>> GetAll(string port, string typeId, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/RekomendasiJenis/GetAll?port={port}&typeId={typeId}");
+            var result = await client.GetAsync($"/api/RekomendasiJenis/GetAll?port={port}&typeId={typeId}&year={year}");
 
             if (result.IsSuccessStatusCode)
 
@@ -33,10 +33,10 @@ namespace OMNI.Web.Services.Master
             throw new Exception();
         }
 
-        public async Task<RekomendasiJenisModel> GetById(string id, string port, string typeId)
+        public async Task<RekomendasiJenisModel> GetById(string id, string port, string typeId, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/RekomendasiJenis/GetById?id={id}&port={port}&typeId={typeId}");
+            var result = await client.GetAsync($"/api/RekomendasiJenis/GetById?id={id}&port={port}&typeId={typeId}&year={year}");
 
             if (result.IsSuccessStatusCode)
 
@@ -78,10 +78,10 @@ namespace OMNI.Web.Services.Master
             throw new Exception();
         }
 
-        public async Task<RekomendasiJenis> UpdateValue(int id, string port, int typeId, decimal value)
+        public async Task<RekomendasiJenis> UpdateValue(int id, string port, int typeId, decimal value, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var r = await client.GetAsync($"/api/RekomendasiJenis/UpdateValue?id={id}&port={port}&typeId={typeId}&value={value}");
+            var r = await client.GetAsync($"/api/RekomendasiJenis/UpdateValue?id={id}&port={port}&typeId={typeId}&value={value}&year={year}");
 
             if (r.IsSuccessStatusCode)
 

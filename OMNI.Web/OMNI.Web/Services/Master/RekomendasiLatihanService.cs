@@ -21,10 +21,10 @@ namespace OMNI.Web.Services.Master
             _httpClient = httpClient;
         }
 
-        public async Task<List<RekomendasiLatihanModel>> GetAll(string port)
+        public async Task<List<RekomendasiLatihanModel>> GetAll(string port, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/RekomendasiLatihan/GetAll?port={port}");
+            var result = await client.GetAsync($"/api/RekomendasiLatihan/GetAll?port={port}&year={year}");
 
             if (result.IsSuccessStatusCode)
 

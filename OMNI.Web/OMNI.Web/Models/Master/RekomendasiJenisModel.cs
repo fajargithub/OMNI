@@ -15,5 +15,6 @@ namespace OMNI.Web.Models.Master
         public decimal Value { get; set; }
         public string Satuan { get; set; }
         public int RekomendasiJenisId { get; set; }
+        public int Year { get; set; }
     }
 }

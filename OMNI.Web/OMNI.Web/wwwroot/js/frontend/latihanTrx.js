@@ -11,25 +11,21 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
             className: 'btn btn-sm btn-outline-primary',
             title: 'Data Latihan ' + formattedToday,
             exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7, 8]
+                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
             }
         }
     ],
     "columnDefs": [
         { "text-align": "left", "targets": 1 },
     ],
+    "iDisplayLength": -1,
     "ordering": false,
     "scrollX": true,
     "ajax": {
-        "url": base_api + 'Home/GetAllLatihanTrx?port=' + port,
+        "url": base_api + 'Home/GetAllLatihanTrx?port=' + port + "&year=" = selectedYear,
         "type": 'GET'
     },
     "columns": [
-        //{
-        //    name: 'no',
-        //    title: 'No',
-        //    data: null
-        //},
         {
             name: 'latihan',
             title: 'Latihan',
@@ -41,6 +37,11 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
             data: 'satuan'
         },
         { "data": "tanggalPelaksanaan" },
+        {
+            name: 'totalTanggalPelaksanaan',
+            title: 'Jumlah Pelaksanaan',
+            data: 'totalTanggalPelaksanaan'
+        },
         {
             "targets": -1,
             "data": null,
@@ -78,38 +79,107 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
         {
             name: 'persentaseLatihan',
             title: 'Persentase Latihan',
-            data: 'persentaseLatihan'
+            data: 'persentaseLatihan',
+            render: function (row, data, iDisplayIndex) {
+                var result = "";
+                if (iDisplayIndex.latihan == "Total Persentase") {
+                    result = "<b><i id='totalPersentaseHublaLatihan'></i></b>";
+                } else {
+                    if (iDisplayIndex.rekomendasiHubla > 0) {
+                        result = iDisplayIndex.persentaseLatihan + "%";
+                    } else {
+                        result = "-";
+                    }
+                }
+              
+                return result;
+            }
         },
         {
             "targets": -1,
             "data": null,
             "render": function (row, data, iDisplayIndex) {
-                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
-                    " <a href='javascript:void(0)' onclick='deleteLatihanTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                var result = "";
+
+                if (iDisplayIndex.latihan != "Total Persentase") {
+                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year="+ selectedYear +"' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
+                        " <a href='javascript:void(0)' onclick='deleteLatihanTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                }
+                return result;
             }
         },
     ],
     rowsGroup: [
         'latihan:name',
         'satuan:name',
+        'totalTanggalPelaksanaan:name',
         'rekomendasiHubla:name',
         'selisihHubla:name',
         'kesesuaianPM58:name',
         'persentaseLatihan:name'
     ],
+    createdRow: function (row, data, dataIndex) {
+        if (data.latihan === 'Total Persentase') {
+            // Add COLSPAN attribute
+            $('td:eq(0)', row).attr('colspan', 3);
+
+            // Center horizontally
+            $('td:eq(0)', row).attr('align', 'center');
+
+            // Hide required number of columns
+            // next to the cell with COLSPAN attribute
+            $('td:eq(2)', row).css('display', 'none');
+            $('td:eq(4)', row).css('display', 'none');
+            $('td:eq(5)', row).css('display', 'none');
+            $('td:eq(6)', row).css('display', 'none');
+
+            // Update cell data
+            this.api().cell($('td:eq(0)', row)).data('<b>Total Persentase Hubla</b>');
+            this.api().cell($('td:eq(3)', row)).data('');
+            this.api().cell($('td:eq(5)', row)).data('');
+            this.api().cell($('td:eq(6)', row)).data('');
+        }
+    },
     "order": [[1, 'asc']],
     rowCallback: function (row, data, iDisplayIndex) {
     },
     "initComplete": function (settings, json) {
-        console.log('complete load table');
+        var countRekomendasiHubla = 0;
+        var totalPersentaseHubla = 0;
+        var lastLatihan = "";
+        $.ajax({
+            url: base_api + 'Home/GetAllLatihanTrx?port=' + port + "&year=" + selectedYear,
+            method: "GET",
+            success: function (result) {
+                console.log(result.data);
+                if (result.data.length > 0) {
+                    for (var i = 0; i < result.data.length; i++) {
+                        if (lastLatihan == "") {
+                            lastLatihan = result.data[i].latihan;
+                            if (result.data[i].rekomendasiHubla > 0) {
+                                countRekomendasiHubla += 1;
+                                totalPersentaseHubla += result.data[i].persentaseLatihan;
+                            }
+                        } else if (lastLatihan != result.data[i].latihan) {
+                            lastLatihan = result.data[i].latihan;
+                            if (result.data[i].rekomendasiHubla > 0) {
+                                countRekomendasiHubla += 1;
+                                totalPersentaseHubla += result.data[i].persentaseLatihan;
+                            }
+                        }
+
+                    }
+                }
+            }, complete: function () {
+                console.log(countRekomendasiHubla);
+                console.log(totalPersentaseHubla);
+                var resultPersentaseHublalatihan = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
+
+                $("#totalPersentaseHublaLatihan").text(resultPersentaseHublalatihan.toFixed(2) + "%");
+            }
+        });
     }
 });
-
-//table_latihan_trx.on('order.table_latihan_trx search.table_latihan_trx', function () {
-//    table_latihan_trx.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-//        cell.innerHTML = i + 1;
-//    });
-//}).draw();
 
 function deleteLatihanTrx(id) {
     Swal.fire({

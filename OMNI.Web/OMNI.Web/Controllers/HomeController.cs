@@ -19,7 +19,8 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Controllers
 {
-    [Authorize(Policy = "osmosys.user.read")]
+    //[Authorize(Policy = "osmosys.user.read")]
+    [AllowAnonymous]
     public class HomeController : OMNIBaseController
     {
         private readonly ILogger<HomeController> _logger;
@@ -51,8 +52,18 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string port)
+        public async Task<IActionResult> Index(string port, int year)
         {
+            var thisYear = DateTime.Now.Year;
+
+            ViewBag.YearList = GetYearList(2010, 2030);
+
+            ViewBag.ThisYear = thisYear;
+            if(year > 0)
+            {
+                ViewBag.ThisYear = year;
+            }
+
             List<Port> portList = await GetAllPort();
             ViewBag.PortList = portList;
 
@@ -144,9 +155,9 @@ namespace OMNI.Web.Controllers
         }
 
         #region LLPTRX REGION
-        public async Task<JsonResult> GetAllLLPTrx(string port)
+        public async Task<JsonResult> GetAllLLPTrx(string port, int year)
         {
-            List<LLPTrxModel> data = await _llpTrxService.GetAllLLPTrx(port);
+            List<LLPTrxModel> data = await _llpTrxService.GetAllLLPTrx(port, year);
 
             int count = data.Count();
 
@@ -180,34 +191,8 @@ namespace OMNI.Web.Controllers
             });
         }
 
-        public class yearData
-        {
-            public int Value { get; set; }
-            public int Name { get; set; }
-        }
-
-        public List<yearData> GetYearList(int startYear, int endYear)
-        {
-            List<yearData> yearList = new List<yearData>();
-            int yearRange = endYear - startYear;
-            if (yearRange > 0)
-            {
-                for (int i = 0; i <= yearRange; i++)
-                {
-                    yearData temp = new yearData();
-                    temp.Value = startYear;
-                    temp.Name = startYear;
-                    yearList.Add(temp);
-
-                    startYear += 1;
-                }
-            }
-
-            return yearList;
-        }
-
         [HttpGet]
-        public async Task<IActionResult> AddEditLLPTrx(int id, string port)
+        public async Task<IActionResult> AddEditLLPTrx(int id, string port, int year)
         {
             List<PeralatanOSR> peralatanOSRList = await GetAllPeralatanOSR();
             ViewBag.PeralatanOSRList = peralatanOSRList;
@@ -223,6 +208,7 @@ namespace OMNI.Web.Controllers
 
             LLPTrxModel model = new LLPTrxModel();
             model.Port = port;
+            model.Year = year;
 
             if (id > 0)
             {
@@ -279,9 +265,9 @@ namespace OMNI.Web.Controllers
         #endregion
 
         #region PERSONIL REGION
-        public async Task<JsonResult> GetAllPersonilTrx(string port)
+        public async Task<JsonResult> GetAllPersonilTrx(string port, int year)
         {
-            List<PersonilTrxModel> data = await _personilTrxService.GetAllPersonilTrx(port);
+            List<PersonilTrxModel> data = await _personilTrxService.GetAllPersonilTrx(port, year);
 
             int count = data.Count();
 
@@ -295,11 +281,12 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddEditPersonilTrx(int id, string port)
+        public async Task<IActionResult> AddEditPersonilTrx(int id, string port, int year)
         {
             List<Personil> personilList = await _personilService.GetAll();
             ViewBag.PersonilList = personilList;
             ViewBag.Port = port;
+            ViewBag.Year = year;
 
             PersonilTrxModel model = new PersonilTrxModel();
             model.Port = port;
@@ -325,9 +312,9 @@ namespace OMNI.Web.Controllers
             return Ok(new JsonResponse());
         }
 
-        public async Task<JsonResult> GetRekomendasiPersonilByPersonilId(int id, string port)
+        public async Task<JsonResult> GetRekomendasiPersonilByPersonilId(int id, string port, int year)
         {
-            RekomendasiPersonil data = await _personilTrxService.GetRekomendasiPersonilByPersonilId(id, port);
+            RekomendasiPersonil data = await _personilTrxService.GetRekomendasiPersonilByPersonilId(id, port, year);
 
             return Json(new
             {

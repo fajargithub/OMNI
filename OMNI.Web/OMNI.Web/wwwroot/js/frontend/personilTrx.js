@@ -18,7 +18,7 @@
     "ordering": false,
     "scrollX": true,
     "ajax": {
-        "url": base_api + 'Home/GetAllPersonilTrx?port=' + port,
+        "url": base_api + 'Home/GetAllPersonilTrx?port=' + port + "&year=" + selectedYear,
         "type": 'GET'
     },
     "columns": [
@@ -101,8 +101,13 @@
             "targets": -1,
             "data": null,
             "render": function (row, data, iDisplayIndex) {
-                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditPersonilTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
-                    " <a href='javascript:void(0)' onclick='deletePersonilTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                var result = "";
+
+                if (iDisplayIndex.personil != "Total Persentase") {
+                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditPersonilTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
+                        " <a href='javascript:void(0)' onclick='deletePersonilTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                }
+                return result;
             }
         }
     ],
@@ -146,10 +151,9 @@
         var totalPersentasePersonil = 0;
         var lastPersonil = "";
         $.ajax({
-            url: base_api + 'Home/GetAllPersonilTrx?port=' + port,
+            url: base_api + 'Home/GetAllPersonilTrx?port=' + port + "&year=" + selectedYear,
             method: "GET",
             success: function (result) {
-                console.log(result.data);
                 if (result.data.length > 0) {
                     for (var i = 0; i < result.data.length; i++) {
                         if (lastPersonil == "") {
@@ -169,8 +173,6 @@
                     }
                 }
             }, complete: function() {
-                console.log(countRekomendasiHublaPersonil);
-                console.log(totalPersentasePersonil);
                 var resultPersentaseHublaPersonil = totalPersentasePersonil / (countRekomendasiHublaPersonil * 100) * 100;
 
                 $("#totalPersentaseHublaPersonil").text(resultPersentaseHublaPersonil.toFixed(2) + "%");

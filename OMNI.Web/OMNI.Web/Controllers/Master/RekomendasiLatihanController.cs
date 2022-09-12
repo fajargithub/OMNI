@@ -31,9 +31,9 @@ namespace OMNI.Web.Controllers.Master
             _portService = portService;
         }
 
-        public async Task<JsonResult> GetAll(string port)
+        public async Task<JsonResult> GetAll(string port, int year)
         {
-            List<RekomendasiLatihanModel> data = await _rekomendasiLatihanModel.GetAll(port);
+            List<RekomendasiLatihanModel> data = await _rekomendasiLatihanModel.GetAll(port, year);
 
             int count = data.Count();
 
@@ -46,10 +46,20 @@ namespace OMNI.Web.Controllers.Master
             });
         }
 
-        public async Task<IActionResult> Index(string port)
+        public async Task<IActionResult> Index(string port, int year)
         {
             List<Port> portList = await GetAllPort();
             ViewBag.PortList = portList;
+
+            var thisYear = DateTime.Now.Year;
+
+            ViewBag.YearList = GetYearList(2010, 2030);
+
+            ViewBag.ThisYear = thisYear;
+            if (year > 0)
+            {
+                ViewBag.ThisYear = year;
+            }
 
             if (!string.IsNullOrEmpty(port))
             {
@@ -64,10 +74,11 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddEdit(int id, string port)
+        public async Task<IActionResult> AddEdit(int id, string port, int year)
         {
             ViewBag.LatihanList = await _latihanService.GetAll();
             ViewBag.RekomendasiTypeList = await GetAllRekomendasiType();
+            ViewBag.Year = year;
             RekomendasiLatihanModel model = new RekomendasiLatihanModel();
 
             model.Port = port;

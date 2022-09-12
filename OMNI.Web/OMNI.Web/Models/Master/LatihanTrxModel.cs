@@ -11,10 +11,11 @@ namespace OMNI.Web.Models.Master
         public string Port { get; set; }
         public string Satuan { get; set; }
         public string TanggalPelaksanaan { get; set; }
+        public decimal TotalTanggalPelaksanaan { get; set; }
         public float SelisihHubla { get; set; }
         public string KesesuaianPM58 { get; set; }
         public float PersentaseLatihan { get; set; }
-
         public decimal RekomendasiHubla { get; set; }
+        public int Year { get; set; }
     }
 }

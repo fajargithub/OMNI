@@ -16,6 +16,19 @@
             </select>
         </div> <br />
     </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label class="form-label" for="">Select Year</label>
+            <select name="Year" id="year-lokasi" class="select2-input-index"
+                    asp-items="@(new SelectList(ViewBag.YearList, "Name","Name"))">
+            </select>
+        </div> <br />
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <a href="javascript:void(0)" class="btn btn-primary" id="searchLokasi" style="margin-top: 22px;"><i class="fa fa-search"></i> Search</a>
+        </div> <br />
+    </div>
     <div class="col-xl-12">
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
@@ -23,7 +36,7 @@
                     Rekomendasi Latihan List
                 </h2>
                 <div class="panel-toolbar">
-                    <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
             <div class="panel-container show">
@@ -58,6 +71,10 @@
     <script>
         $(document).ready(function () {
             var port = "@ViewBag.SelectedPort.Name";
+            var selectedYear = parseInt("@ViewBag.ThisYear");
+
+            $("#year-lokasi").val(selectedYear).change();
+
             if (port !== null && port !== "") {
                 $("#port").val(port).change();
                 $('a').attr('asp-route-port', port);
@@ -117,9 +134,8 @@
                     processing: true,
                     //serverSide: true,
                     "ajax": {
-                        "url": base_api + 'RekomendasiLatihan/GetAll?port=' + port,
+                        "url": base_api + 'RekomendasiLatihan/GetAll?port=' + port + "&year=" + selectedYear,
                         "type": 'GET'
-                        //"data": { searchData: result }
                     },
                     "columns": [
                         { "data": null },
@@ -130,7 +146,7 @@
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiLatihan/AddEdit?id=" + iDisplayIndex.id + "&port="+ port +"' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiLatihan/AddEdit?id=" + iDisplayIndex.id + "&port=" + port + "&year=" + selectedYear + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
                                     " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
                             }
                         }
@@ -149,12 +165,17 @@
                 });
             }).draw();
 
+            $("#year-lokasi").on('change', function () {
+                selectedYear = this.value;
+            });
+
             $("#port").on('change', function () {
                 port = this.value;
-                //initTable(portId);
-
-                window.location.href = base_api + 'RekomendasiLatihan/Index?port=' + port;
             });
+
+            $("#searchLokasi").click(function () {
+                window.location.href = base_api + 'RekomendasiLatihan/Index?port=' + port + "&year=" + selectedYear;
+            })
         });
 
         function deleteAction(id) {

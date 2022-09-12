@@ -8,5 +8,6 @@ namespace OMNI.Web.Models
     public class HomeModel : BaseModel
     {
         public string Port { get; set; }
+        public int Year { get; set; }
     }
 }

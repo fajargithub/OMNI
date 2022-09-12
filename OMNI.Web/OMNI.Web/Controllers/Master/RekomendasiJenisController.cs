@@ -32,9 +32,9 @@ namespace OMNI.Web.Controllers.Master
             _portService = portService;
         }
 
-        public async Task<JsonResult> GetAll(string port, string typeId)
+        public async Task<JsonResult> GetAll(string port, string typeId, int year)
         {
-            List<RekomendasiJenisModel> data = await _rekomendasiJenisService.GetAll(port, typeId);
+            List<RekomendasiJenisModel> data = await _rekomendasiJenisService.GetAll(port, typeId, year);
 
             int count = data.Count();
 
@@ -47,10 +47,20 @@ namespace OMNI.Web.Controllers.Master
             });
         }
 
-        public async Task<IActionResult> Index(string port, int typeId)
+        public async Task<IActionResult> Index(string port, int typeId, int year)
         {
             List<Port> portList = await GetAllPort();
             ViewBag.PortList = portList;
+
+            var thisYear = DateTime.Now.Year;
+
+            ViewBag.YearList = GetYearList(2010, 2030);
+
+            ViewBag.ThisYear = thisYear;
+            if (year > 0)
+            {
+                ViewBag.ThisYear = year;
+            }
 
             if (!string.IsNullOrEmpty(port))
             {
@@ -77,14 +87,14 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddEdit(int id, string port, string typeId)
+        public async Task<IActionResult> AddEdit(int id, string port, string typeId, int year)
         {
             RekomendasiJenisModel model = new RekomendasiJenisModel();
-
+            ViewBag.Year = year;
             model.Port = port;
             if (id > 0)
             {
-                model = await _rekomendasiJenisService.GetById(id.ToString(), port, typeId);
+                model = await _rekomendasiJenisService.GetById(id.ToString(), port, typeId, year);
                 ViewBag.JenisId = model.Jenis;
             }
 
@@ -105,9 +115,9 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateValue(int id, string port, int typeId, decimal value)
+        public async Task<IActionResult> UpdateValue(int id, string port, int typeId, decimal value, int year)
         {
-            var r = await _rekomendasiJenisService.UpdateValue(id, port, typeId, value);
+            var r = await _rekomendasiJenisService.UpdateValue(id, port, typeId, value, year);
 
             return Ok(new JsonResponse());
         }
