@@ -40,18 +40,18 @@ namespace OMNI.API.Controllers.OMNI
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string port, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
         {
             int lastLatihanId = 0;
             decimal totalDetailExisting = 0;
             List<CountData> countTanggalPelaksanaan = new List<CountData>();
 
             List<LatihanTrxModel> result = new List<LatihanTrxModel>();
-            List<RekomendasiLatihan> rekomendasiLatihanList = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.Latihan).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
+            List<RekomendasiLatihan> rekomendasiLatihanList = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year && b.RekomendasiType.Id == 1).Include(b => b.Latihan).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
 
             try
             {
-                var list = await _dbOMNI.LatihanTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port)
+                var list = await _dbOMNI.LatihanTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year)
                 .Include(b => b.Latihan)
                 .OrderBy(b => b.Latihan.Id).ToListAsync(cancellationToken);
                 if (list.Count() > 0)
@@ -180,9 +180,9 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         [HttpGet("GetRekomendasiLatihanByLatihanId")]
-        public async Task<IActionResult> GetRekomendasiLatihanByLatihanId(string id, string port, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetRekomendasiLatihanByLatihanId(string id, string port, int year, CancellationToken cancellationToken)
         {
-            RekomendasiLatihan result = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Latihan.Id == int.Parse(id) && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.Latihan).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
+            RekomendasiLatihan result = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Latihan.Id == int.Parse(id) && b.Port == port && b.Year == year && b.RekomendasiType.Id == 1).Include(b => b.Latihan).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
 
             return Ok(result);
         }
@@ -219,6 +219,7 @@ namespace OMNI.API.Controllers.OMNI
 
                 data.Latihan = await _dbOMNI.Latihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Latihan)).FirstOrDefaultAsync(cancellationToken);
                 data.Port = model.Port;
+                data.Year = model.Year;
                 data.TanggalPelaksanaan = !string.IsNullOrEmpty(model.TanggalPelaksanaan) ? DateTime.ParseExact(model.TanggalPelaksanaan, "MM/dd/yyyy", null) : nullDate;
                 data.UpdatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
@@ -229,6 +230,7 @@ namespace OMNI.API.Controllers.OMNI
             {
                 data.Latihan = await _dbOMNI.Latihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Latihan)).FirstOrDefaultAsync(cancellationToken);
                 data.Port = model.Port;
+                data.Year = model.Year;
                 data.TanggalPelaksanaan = !string.IsNullOrEmpty(model.TanggalPelaksanaan) ? DateTime.ParseExact(model.TanggalPelaksanaan, "MM/dd/yyyy", null) : nullDate;
                 data.CreatedAt = DateTime.Now;
                 data.CreatedBy = "admin";

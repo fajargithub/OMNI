@@ -368,8 +368,6 @@ namespace OMNI.API.Controllers.OMNI
                     result.Add(totalPersentase);
                 }
 
-
-
                 if (countTotalExistingJenis.Count() > 0)
                 {
                     for (int i = 0; i < result.Count(); i++)
@@ -471,7 +469,6 @@ namespace OMNI.API.Controllers.OMNI
                 Console.WriteLine(Ex);
             }
            
-
             return Ok(result);
         }
 
@@ -518,72 +515,119 @@ namespace OMNI.API.Controllers.OMNI
 
             if (model.Id > 0)
             {
-               data = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == model.Id)
-                .Include(b => b.SpesifikasiJenis)
-                .Include(b => b.SpesifikasiJenis.PeralatanOSR)
-                .Include(b => b.SpesifikasiJenis.Jenis)
-                .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
+                bool enableUpdate = false;
 
-                data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+                data = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == model.Id)
+                 .Include(b => b.SpesifikasiJenis)
+                 .Include(b => b.SpesifikasiJenis.PeralatanOSR)
+                 .Include(b => b.SpesifikasiJenis.Jenis)
+                 .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
 
-                data.Port = model.Port;
-                data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
-                data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
-                data.DetailExisting = model.DetailExisting;
-                data.Kondisi = model.Kondisi;
-                data.TotalExistingJenis = model.TotalExistingJenis;
-                data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
-                data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
-                data.SelisihHubla = model.SelisihHubla;
-                data.PersentaseHubla = model.PersentaseHubla;
-                data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
-                data.SelisihOSCP = model.SelisihOSCP;
-                data.KesesuaianOSCP = model.KesesuaianOSCP;
-                data.PersentaseOSCP = model.PersentaseOSCP;
-                data.Year = model.Year;
-                data.UpdatedAt = DateTime.Now;
-                data.UpdatedBy = "admin";
-                _dbOMNI.LLPTrx.Update(data);
-                await _dbOMNI.SaveChangesAsync(cancellationToken);
-            }
-            else
-            {
-                data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
-
-                data.Port = model.Port;
-                data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
-                data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
-                data.DetailExisting = model.DetailExisting;
-                data.Kondisi = model.Kondisi;
-                data.TotalExistingJenis = model.TotalExistingJenis;
-                data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
-                data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
-                data.SelisihHubla = model.SelisihHubla;
-                data.PersentaseHubla = model.PersentaseHubla;
-                data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
-                data.SelisihOSCP = model.SelisihOSCP;
-                data.KesesuaianOSCP = model.KesesuaianOSCP;
-                data.PersentaseOSCP = model.PersentaseOSCP;
-                data.Year = model.Year;
-                data.CreatedAt = DateTime.Now;
-                data.CreatedBy = "admin";
-                await _dbOMNI.LLPTrx.AddAsync(data, cancellationToken);
-                await _dbOMNI.SaveChangesAsync(cancellationToken);
-            }
-
-            if(model.Files != null)
-            {
-                if (model.Files.Count() > 0)
+                if(data.QRCodeText == model.QRCodeText)
                 {
-                    for (int i = 0; i < model.Files.Count(); i++)
+                    enableUpdate = true;
+                } else
+                {
+                    var checkNoAsset = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText == model.QRCodeText).FirstOrDefaultAsync(cancellationToken);
+                    if (checkNoAsset != null)
                     {
-                        await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OMNI_LLP, isUpdate: model.Files != null, remark: null);
+                        enableUpdate = false;
+                    } else
+                    {
+                        enableUpdate = true;
+                    }
+                }
+
+                if (enableUpdate)
+                {
+                    data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+
+                    data.Port = model.Port;
+                    data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
+                    data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
+                    data.DetailExisting = model.DetailExisting;
+                    data.Kondisi = model.Kondisi;
+                    data.TotalExistingJenis = model.TotalExistingJenis;
+                    data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
+                    data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
+                    data.SelisihHubla = model.SelisihHubla;
+                    data.PersentaseHubla = model.PersentaseHubla;
+                    data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
+                    data.SelisihOSCP = model.SelisihOSCP;
+                    data.KesesuaianOSCP = model.KesesuaianOSCP;
+                    data.PersentaseOSCP = model.PersentaseOSCP;
+                    data.Year = model.Year;
+                    data.UpdatedAt = DateTime.Now;
+                    data.UpdatedBy = "admin";
+                    _dbOMNI.LLPTrx.Update(data);
+                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                    if (model.Files != null)
+                    {
+                        if (model.Files.Count() > 0)
+                        {
+                            for (int i = 0; i < model.Files.Count(); i++)
+                            {
+                                await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OMNI_LLP, isUpdate: model.Files != null, remark: null);
+                            }
+
+                        }
                     }
 
+                    return Ok(new ReturnJson { });
+                } else
+                {
+                    return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "No Asset already exist" });
                 }
             }
-                
-            return Ok(new ReturnJson { });
+            else
+            { 
+                var checkNoAsset = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText == model.QRCodeText).FirstOrDefaultAsync(cancellationToken);
+                if (checkNoAsset != null)
+                {
+                    return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "No Asset already exist" });
+                }
+                else
+                {
+                    data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+
+                    data.Port = model.Port;
+                    data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
+                    data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
+                    data.DetailExisting = model.DetailExisting;
+                    data.Kondisi = model.Kondisi;
+                    data.TotalExistingJenis = model.TotalExistingJenis;
+                    data.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
+                    data.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
+                    data.SelisihHubla = model.SelisihHubla;
+                    data.PersentaseHubla = model.PersentaseHubla;
+                    data.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
+                    data.SelisihOSCP = model.SelisihOSCP;
+                    data.KesesuaianOSCP = model.KesesuaianOSCP;
+                    data.PersentaseOSCP = model.PersentaseOSCP;
+                    data.Year = model.Year;
+                    data.CreatedAt = DateTime.Now;
+                    data.CreatedBy = "admin";
+                    await _dbOMNI.LLPTrx.AddAsync(data, cancellationToken);
+                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                    if (model.Files != null)
+                    {
+                        if (model.Files.Count() > 0)
+                        {
+                            for (int i = 0; i < model.Files.Count(); i++)
+                            {
+                                await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OMNI_LLP, isUpdate: model.Files != null, remark: null);
+                            }
+
+                        }
+                    }
+
+                    return Ok(new ReturnJson { });
+                }
+            }
+
+            //return Ok(new ReturnJson { });
         }
 
         //// DELETE api/<ValuesController>/5
