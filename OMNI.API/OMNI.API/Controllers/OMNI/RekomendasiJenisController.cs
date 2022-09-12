@@ -27,14 +27,14 @@ namespace OMNI.API.Controllers.OMNI
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string port, string typeId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(string port, string typeId, int year, CancellationToken cancellationToken)
         {
             List<RekomendasiJenisModel> result = new List<RekomendasiJenisModel>();
             //var list = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.RekomendasiType)
             //    .Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.SpesifikasiJenis.Jenis).Include(b => b.RekomendasiType).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
 
             var list = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO).Include(b => b.PeralatanOSR).Include(b => b.Jenis).OrderBy(b => b.CreatedAt).ToListAsync(cancellationToken);
-            var rekomenJenisList = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == int.Parse(typeId)).Include(b => b.RekomendasiType)
+            var rekomenJenisList = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year && b.RekomendasiType.Id == int.Parse(typeId)).Include(b => b.RekomendasiType)
                 .Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.SpesifikasiJenis.Jenis).Include(b => b.RekomendasiType).OrderBy(b => b.CreatedAt).ToListAsync(cancellationToken);
 
             if (list.Count() > 0)
@@ -68,10 +68,10 @@ namespace OMNI.API.Controllers.OMNI
 
         // GET api/<ValuesController>/5
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(string id, string port, string typeId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetById(string id, string port, string typeId, int year, CancellationToken cancellationToken)
         {
             RekomendasiJenisModel result = new RekomendasiJenisModel();
-            var data = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.SpesifikasiJenis.Id == int.Parse(id) && b.Port == port && b.RekomendasiType.Id == int.Parse(typeId)).Include(b => b.RekomendasiType)
+            var data = await _dbOMNI.RekomendasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.SpesifikasiJenis.Id == int.Parse(id) && b.Port == port && b.Year == year && b.RekomendasiType.Id == int.Parse(typeId)).Include(b => b.RekomendasiType)
                 .Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.PeralatanOSR).Include(b => b.SpesifikasiJenis.Jenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
 
             var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == int.Parse(id)).Include(b => b.PeralatanOSR).Include(b => b.Jenis).FirstOrDefaultAsync(cancellationToken);
@@ -97,10 +97,8 @@ namespace OMNI.API.Controllers.OMNI
         public async Task<IActionResult> AddEdit(RekomendasiJenisModel model, CancellationToken cancellationToken)
         {
             RekomendasiJenis data = new RekomendasiJenis();
-
-            //var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.PeralatanOSR.Id == int.Parse(model.PeralatanOSR) && b.Jenis.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
             var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
-            var rekomendasiJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.Port == model.Port && b.SpesifikasiJenis.Id == model.Id && b.RekomendasiType.Id == int.Parse(model.RekomendasiType)).Include(b => b.SpesifikasiJenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
+            var rekomendasiJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.Port == model.Port && b.SpesifikasiJenis.Id == model.Id && b.Year == model.Year && b.RekomendasiType.Id == int.Parse(model.RekomendasiType)).Include(b => b.SpesifikasiJenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
             if (findSpesifikasiJenis != null)
             {
                 if (rekomendasiJenis != null)
@@ -111,6 +109,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.SpesifikasiJenis = findSpesifikasiJenis;
                     data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
                     data.Port = model.Port;
+                    data.Year = model.Year;
                     data.Value = model.Value;
                     data.UpdatedAt = DateTime.Now;
                     data.UpdatedBy = "admin";
@@ -122,6 +121,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.SpesifikasiJenis = findSpesifikasiJenis;
                     data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
                     data.Port = model.Port;
+                    data.Year = model.Year;
                     data.Value = model.Value;
                     data.CreatedAt = DateTime.Now;
                     data.CreatedBy = "admin";
@@ -135,7 +135,7 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         [HttpGet("UpdateValue")]
-        public async Task<IActionResult> UpdateValue(string id, string port, string typeId, string value, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateValue(string id, string port, string typeId, string value, int year, CancellationToken cancellationToken)
         {
             //RekomendasiJenis data = await _dbOMNI.RekomendasiJenis.Where(b => b.Id == int.Parse(id)).FirstOrDefaultAsync(cancellationToken);
             //data.Value = decimal.Parse(value);
@@ -150,7 +150,7 @@ namespace OMNI.API.Controllers.OMNI
 
             //var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.PeralatanOSR.Id == int.Parse(model.PeralatanOSR) && b.Jenis.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
             var findSpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.Id == int.Parse(id)).FirstOrDefaultAsync(cancellationToken);
-            var rekomendasiJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.Port == port && b.SpesifikasiJenis.Id == int.Parse(id) && b.RekomendasiType.Id == int.Parse(typeId)).Include(b => b.SpesifikasiJenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
+            var rekomendasiJenis = await _dbOMNI.RekomendasiJenis.Where(b => b.Port == port && b.SpesifikasiJenis.Id == int.Parse(id) && b.Year == year && b.RekomendasiType.Id == int.Parse(typeId)).Include(b => b.SpesifikasiJenis).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
             if (findSpesifikasiJenis != null)
             {
                 if (rekomendasiJenis != null)
@@ -161,6 +161,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.SpesifikasiJenis = findSpesifikasiJenis;
                     data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(typeId)).FirstOrDefaultAsync(cancellationToken);
                     data.Port = port;
+                    data.Year = year;
                     data.Value = decimal.Parse(value);
                     data.UpdatedAt = DateTime.Now;
                     data.UpdatedBy = "admin";
@@ -172,6 +173,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.SpesifikasiJenis = findSpesifikasiJenis;
                     data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(typeId)).FirstOrDefaultAsync(cancellationToken);
                     data.Port = port;
+                    data.Year = year;
                     data.Value = decimal.Parse(value);
                     data.CreatedAt = DateTime.Now;
                     data.CreatedBy = "admin";

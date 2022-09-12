@@ -40,7 +40,7 @@ namespace OMNI.API.Controllers.OMNI
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string port, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
         {
             int lastPersonilId = 0;
             decimal totalDetailExisting = 0;
@@ -49,9 +49,9 @@ namespace OMNI.API.Controllers.OMNI
             List<PersonilTrxModel> result = new List<PersonilTrxModel>();
             List<RekomendasiPersonil> rekomenPersonilList = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
 
-            var list = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port)
+            var list = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year)
                 .Include(b => b.Personil)
-                .OrderBy(b => b.CreatedAt).ToListAsync(cancellationToken);
+                .OrderBy(b => b.Personil.Id).ToListAsync(cancellationToken);
             if (list.Count() > 0)
             {
                 for (int i = 0; i < list.Count(); i++)
@@ -118,7 +118,7 @@ namespace OMNI.API.Controllers.OMNI
                     int diffDays = 0;
 
                     diffDays = (list[i].TanggalExpired - list[i].TanggalPelatihan).Days;
-                    var findRekomendasiHubla = rekomenPersonilList.Find(b => b.Personil.Id == list[i].Personil.Id);
+                    var findRekomendasiHubla = rekomenPersonilList.Find(b => b.Personil.Id == list[i].Personil.Id && b.Year == year);
 
                     if (findRekomendasiHubla != null)
                     {
@@ -177,9 +177,9 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         [HttpGet("GetRekomendasiPersonilByPersonilId")]
-        public async Task<IActionResult> GetRekomendasiPersonilByPersonilId(string id, string port, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetRekomendasiPersonilByPersonilId(string id, string port, int year, CancellationToken cancellationToken)
         {
-            RekomendasiPersonil result = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Personil.Id == int.Parse(id) && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.Personil).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
+            RekomendasiPersonil result = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Personil.Id == int.Parse(id) && b.Port == port && b.RekomendasiType.Id == 1 && b.Year == year).Include(b => b.Personil).Include(b => b.RekomendasiType).FirstOrDefaultAsync(cancellationToken);
 
             return Ok(result);
         }
@@ -197,6 +197,7 @@ namespace OMNI.API.Controllers.OMNI
                 result.Personil = data.Personil != null ? data.Personil.Id.ToString() : "0";
                 result.Port = data.Port;
                 result.Name = data.Name;
+                result.Year = data.Year;
                 //result.TotalDetailExisting = data.TotalDetailExisting;
                 result.TanggalPelatihan = data.TanggalPelatihan != null ? data.TanggalPelatihan.ToString("MM/dd/yyyy") : null;
                 result.TanggalExpired = data.TanggalPelatihan != null ? data.TanggalPelatihan.ToString("MM/dd/yyyy") : null;
@@ -223,6 +224,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.TanggalPelatihan = !string.IsNullOrEmpty(model.TanggalPelatihan) ? DateTime.ParseExact(model.TanggalPelatihan, "MM/dd/yyyy", null) : nullDate;
                 data.TanggalExpired = !string.IsNullOrEmpty(model.TanggalExpired) ? DateTime.ParseExact(model.TanggalExpired, "MM/dd/yyyy", null) : nullDate;
                 data.UpdatedAt = DateTime.Now;
+                data.Year = model.Year;
                 data.UpdatedBy = "admin";
                 _dbOMNI.PersonilTrx.Update(data);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
@@ -232,6 +234,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.Personil = await _dbOMNI.Personil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Personil)).FirstOrDefaultAsync(cancellationToken);
                 data.Port = model.Port;
                 data.Name = model.Name;
+                data.Year = model.Year;
                 //data.TotalDetailExisting = model.TotalDetailExisting;
                 data.TanggalPelatihan = !string.IsNullOrEmpty(model.TanggalPelatihan) ? DateTime.ParseExact(model.TanggalPelatihan, "MM/dd/yyyy", null) : nullDate;
                 data.TanggalExpired = !string.IsNullOrEmpty(model.TanggalExpired) ? DateTime.ParseExact(model.TanggalExpired, "MM/dd/yyyy", null) : nullDate;

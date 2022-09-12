@@ -27,10 +27,10 @@ namespace OMNI.API.Controllers.OMNI
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string port, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
         {
             List<RekomendasiLatihanModel> result = new List<RekomendasiLatihanModel>();
-            var list = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).Include(b => b.RekomendasiType)
+            var list = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year).Include(b => b.RekomendasiType)
                 .Include(b => b.Latihan).Include(b => b.RekomendasiType).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
             if (list.Count() > 0)
             {
@@ -81,6 +81,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.Latihan = await _dbOMNI.Latihan.Where(b => b.Id == int.Parse(model.Latihan)).FirstOrDefaultAsync(cancellationToken);
                 data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
                 data.Port = model.Port;
+                data.Year = model.Year;
                 data.Value = model.Value;
                 data.UpdatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
@@ -92,6 +93,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.Latihan = await _dbOMNI.Latihan.Where(b => b.Id == int.Parse(model.Latihan)).FirstOrDefaultAsync(cancellationToken);
                 data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
                 data.Port = model.Port;
+                data.Year = model.Year;
                 data.Value = model.Value;
                 data.CreatedAt = DateTime.Now;
                 data.CreatedBy = "admin";
