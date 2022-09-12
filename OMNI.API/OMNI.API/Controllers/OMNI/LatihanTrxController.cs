@@ -149,6 +149,12 @@ namespace OMNI.API.Controllers.OMNI
                                 result[i].TotalTanggalPelaksanaan = find.TotalCount;
                                 result[i].SelisihHubla = find.TotalCount - result[i].RekomendasiHubla;
 
+                                if(result[i].RekomendasiHubla > 0)
+                                {
+                                    result[i].PersentaseLatihan = find.TotalCount / result[i].RekomendasiHubla * 100;
+                                }
+                                
+
                                 if (result[i].SelisihHubla >= 0)
                                 {
                                     result[i].KesesuaianPM58 = "TERPENUHI";
@@ -160,6 +166,10 @@ namespace OMNI.API.Controllers.OMNI
                             }
                         }
                     }
+
+                    LatihanTrxModel totalPersentaseModel = new LatihanTrxModel();
+                    totalPersentaseModel.Latihan = "Total Persentase";
+                    result.Add(totalPersentaseModel);
                 }
             } catch (Exception ex)
             {

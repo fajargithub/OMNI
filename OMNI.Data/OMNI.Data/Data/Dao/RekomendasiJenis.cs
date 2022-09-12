@@ -12,5 +12,6 @@ namespace OMNI.Data.Data.Dao
         public virtual SpesifikasiJenis SpesifikasiJenis { get; set; }
         public virtual RekomendasiType RekomendasiType { get; set; }
         public decimal Value { get; set; }
+        public int Year { get; set; }
     }
 }
