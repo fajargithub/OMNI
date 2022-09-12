@@ -20,5 +20,6 @@ namespace OMNI.API.Model.OMNI
         public decimal PersentasePersonil { get; set; }
         public decimal RekomendasiHubla { get; set; }
         public string Satuan { get; set; }
+        public int Year { get; set; }
     }
 }

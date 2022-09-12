@@ -42,7 +42,7 @@ namespace OMNI.API.Controllers.OMNI
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string port, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
         {
             int lastSpesifikasiJenisId = 0;
             int lastSpesifikasiJenisId_2 = 0;
@@ -65,7 +65,7 @@ namespace OMNI.API.Controllers.OMNI
 
             try
             {
-                var list = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port)
+                var list = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year)
                .Include(b => b.SpesifikasiJenis)
                .Include(b => b.SpesifikasiJenis.PeralatanOSR)
                .Include(b => b.SpesifikasiJenis.Jenis)
@@ -540,6 +540,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.SelisihOSCP = model.SelisihOSCP;
                 data.KesesuaianOSCP = model.KesesuaianOSCP;
                 data.PersentaseOSCP = model.PersentaseOSCP;
+                data.Year = model.Year;
                 data.UpdatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
                 _dbOMNI.LLPTrx.Update(data);
@@ -563,6 +564,7 @@ namespace OMNI.API.Controllers.OMNI
                 data.SelisihOSCP = model.SelisihOSCP;
                 data.KesesuaianOSCP = model.KesesuaianOSCP;
                 data.PersentaseOSCP = model.PersentaseOSCP;
+                data.Year = model.Year;
                 data.CreatedAt = DateTime.Now;
                 data.CreatedBy = "admin";
                 await _dbOMNI.LLPTrx.AddAsync(data, cancellationToken);
