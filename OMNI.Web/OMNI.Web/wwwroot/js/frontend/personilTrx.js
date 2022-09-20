@@ -174,6 +174,9 @@
                 }
             }, complete: function() {
                 var resultPersentaseHublaPersonil = totalPersentasePersonil / (countRekomendasiHublaPersonil * 100) * 100;
+                if (Number.isNaN(resultPersentaseHublaPersonil)) {
+                    resultPersentaseHublaPersonil = 0;
+                }
 
                 $("#totalPersentaseHublaPersonil").text(resultPersentaseHublaPersonil.toFixed(2) + "%");
             }

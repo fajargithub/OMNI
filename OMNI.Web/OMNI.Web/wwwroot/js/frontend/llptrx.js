@@ -310,7 +310,14 @@ var dt = $('#table_llp_trx').DataTable({
                 }
             }, complete: function () {
                 var resultPersentaseHubla = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
+                if (Number.isNaN(resultPersentaseHubla)) {
+                    resultPersentaseHubla = 0;
+                }
+
                 var resultPersentaseOSCP = totalPersentaseOSCP / (countRekomendasiOSCP * 100) * 100;
+                if (Number.isNaN(resultPersentaseOSCP)) {
+                    resultPersentaseOSCP = 0;
+                }
 
                 $("#totalPersentaseHubla").text(resultPersentaseHubla.toFixed(2) + "%");
                 $("#totalPersentaseOSCP").text(resultPersentaseOSCP.toFixed(2) + "%");
@@ -335,15 +342,22 @@ function qrcodeClick(id) {
         url: base_api + "Home/GetLLPTrxById?id=" + id,
         method: 'GET',
         success: function (result) {
-            console.log(result.data);
             Swal.fire({
                 imageUrl: result.data.qrCode,
                 imageAlt: 'QR Code',
-                text: result.data.qrCodeText,
+                html: '<a href="javascript:void(0)" class="openimage" data-base64="' + result.data.qrCode + '">' + result.data.qrCodeText + '</a> '
             })
         }
     });
 }
+
+$(document).on('click', '.openimage', function () {
+    var base64 = $(this).attr("data-base64");
+    var image = new Image();
+    image.src = base64;
+    var w = window.open("");
+    w.document.write(image.outerHTML);
+});
 
 function deleteLLPTrx(id) {
     Swal.fire({

@@ -14,6 +14,7 @@
                             asp-items="@(new SelectList(ViewBag.LatihanList, "Id","Name"))" required>
                     </select>
                     <input type="hidden" name="Port" asp-for="Port" />
+                    <input type="hidden" name="Year" asp-for="Year" />
                 </div>
             </div>
         </div><br />
@@ -65,12 +66,12 @@
 
         var selectedPelatihan = $("#latihan").val();
         var port = "@ViewBag.Port";
-
-        var inventoryNumber = "";
+        var year = parseInt("@ViewBag.Year");
+        //var inventoryNumber = "";
 
         if (selectedPelatihan > 0) {
             $.ajax({
-                url: base_api + "Home/GetRekomendasiLatihanByLatihanId?id=" + selectedPelatihan + "&port=" + port,
+                url: base_api + "Home/GetRekomendasiLatihanByLatihanId?id=" + selectedPelatihan + "&port=" + port +"&year=" + year,
                 method: "GET",
                 success: function (result) {
                     if (result.data !== null) {
@@ -87,7 +88,7 @@
             selectedPelatihan = this.value;
 
             $.ajax({
-                url: base_api + "Home/GetRekomendasiLatihanByLatihanId?id=" + selectedPelatihan + "&port=" + port,
+                url: base_api + "Home/GetRekomendasiLatihanByLatihanId?id=" + selectedPelatihan + "&port=" + port + "&year=" + year,
                 method: "GET",
                 success: function (result) {
                     if (result.data !== null) {

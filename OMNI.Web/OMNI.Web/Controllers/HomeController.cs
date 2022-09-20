@@ -332,9 +332,9 @@ namespace OMNI.Web.Controllers
         #endregion
 
         #region LATIHAN TRX REGION
-        public async Task<JsonResult> GetAllLatihanTrx(string port)
+        public async Task<JsonResult> GetAllLatihanTrx(string port, int year)
         {
-            List<LatihanTrxModel> data = await _latihanTrxService.GetAllLatihanTrx(port);
+            List<LatihanTrxModel> data = await _latihanTrxService.GetAllLatihanTrx(port, year);
 
             int count = data.Count();
 
@@ -348,14 +348,16 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddEditLatihanTrx(int id, string port)
+        public async Task<IActionResult> AddEditLatihanTrx(int id, string port, int year)
         {
             List<Latihan> latihanList = await _latihanService.GetAll();
             ViewBag.LatihanList = latihanList;
             ViewBag.Port = port;
+            ViewBag.Year = year;
 
             LatihanTrxModel model = new LatihanTrxModel();
             model.Port = port;
+            model.Year = year;
 
             if (id > 0)
             {
@@ -365,9 +367,9 @@ namespace OMNI.Web.Controllers
             return PartialView(ADD_EDIT_LATIHAN, model);
         }
 
-        public async Task<JsonResult> GetRekomendasiLatihanByLatihanId(int id, string port)
+        public async Task<JsonResult> GetRekomendasiLatihanByLatihanId(int id, string port, int year)
         {
-            RekomendasiLatihan data = await _latihanTrxService.GetRekomendasiLatihanByLatihanId(id, port);
+            RekomendasiLatihan data = await _latihanTrxService.GetRekomendasiLatihanByLatihanId(id, port, year);
 
             return Json(new
             {

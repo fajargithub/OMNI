@@ -22,7 +22,7 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
     "ordering": false,
     "scrollX": true,
     "ajax": {
-        "url": base_api + 'Home/GetAllLatihanTrx?port=' + port + "&year=" = selectedYear,
+        "url": base_api + 'Home/GetAllLatihanTrx?port=' + port + "&year=" + selectedYear,
         "type": 'GET'
     },
     "columns": [
@@ -151,7 +151,6 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
             url: base_api + 'Home/GetAllLatihanTrx?port=' + port + "&year=" + selectedYear,
             method: "GET",
             success: function (result) {
-                console.log(result.data);
                 if (result.data.length > 0) {
                     for (var i = 0; i < result.data.length; i++) {
                         if (lastLatihan == "") {
@@ -174,6 +173,9 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
                 console.log(countRekomendasiHubla);
                 console.log(totalPersentaseHubla);
                 var resultPersentaseHublalatihan = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
+                if (Number.isNaN(resultPersentaseHublalatihan)) {
+                    resultPersentaseHublalatihan = 0;
+                }
 
                 $("#totalPersentaseHublaLatihan").text(resultPersentaseHublalatihan.toFixed(2) + "%");
             }

@@ -619,6 +619,7 @@ var initApp = (function (app) {
                             }).then(() => {
                                 $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
                                 if (init.returnUrl == null) {
+                                    location.reload();
                                     $(init.modalId).modal('hide');
                                     $(init.tableId).DataTable().ajax.reload(null, false);
                                 } else {
@@ -646,7 +647,7 @@ var initApp = (function (app) {
                     complete: function () {
                         setTimeout(function () {
                             Swal.close();
-                        }, 1500);
+                        }, 5000);
                     }
                 });
             } else {

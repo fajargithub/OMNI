@@ -74,10 +74,10 @@ namespace OMNI.Web.Services.Trx
             throw new Exception();
         }
 
-        public async Task<List<LatihanTrxModel>> GetAllLatihanTrx(string port)
+        public async Task<List<LatihanTrxModel>> GetAllLatihanTrx(string port, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/LatihanTrx/GetAll?port={port}");
+            var result = await client.GetAsync($"/api/LatihanTrx/GetAll?port={port}&year={year}");
 
             if (result.IsSuccessStatusCode)
 
@@ -107,6 +107,7 @@ namespace OMNI.Web.Services.Trx
                 MultipartFormDataContent data = new MultipartFormDataContent();
 
                 data.Add(new StringContent(m.Id.ToString()), "Id");
+                data.Add(new StringContent(m.Year.ToString()), "Year");
                 data.Add(new StringContent(m.Port.ToString()), "Port");
                 data.Add(new StringContent(m.Latihan.ToString()), "Latihan");
                 data.Add(new StringContent(m.Satuan.ToString()), "Satuan");
@@ -147,10 +148,10 @@ namespace OMNI.Web.Services.Trx
             }
         }
 
-        public async Task<RekomendasiLatihan> GetRekomendasiLatihanByLatihanId(int id, string port)
+        public async Task<RekomendasiLatihan> GetRekomendasiLatihanByLatihanId(int id, string port, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/LatihanTrx/GetRekomendasiLatihanByLatihanId?id={id}&port={port}");
+            var result = await client.GetAsync($"/api/LatihanTrx/GetRekomendasiLatihanByLatihanId?id={id}&port={port}&year={year}");
 
             if (result.IsSuccessStatusCode)
 
