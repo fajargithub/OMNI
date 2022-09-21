@@ -138,6 +138,7 @@
 <script src="~/js/qr-code-styling.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $("#submit").hide();
         var yearNow = "@ViewBag.YearNow";
         var region = "@ViewBag.Region";
         var qrCodeYear = "@ViewBag.QRCodeYear";
@@ -198,6 +199,8 @@
                     var pngUrl = canvas.toDataURL();
 
                     $("#qrcode-value").val(pngUrl);
+
+                    $("#submit").show();
                 }
             })
         });

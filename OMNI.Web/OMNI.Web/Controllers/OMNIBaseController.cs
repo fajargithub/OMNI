@@ -54,6 +54,11 @@ namespace OMNI.Web.Controllers
         {
             List<PeralatanOSR> data = await _peralatanOSRService.GetAll();
 
+            if(data.Count() > 0)
+            {
+                data = data.OrderBy(b => b.Id).ToList();
+            }
+
             return data;
         }
 
