@@ -226,6 +226,10 @@ var dt = $('#table_llp_trx').DataTable({
         }
     ],
     createdRow: function (row, data, dataIndex) {
+        console.log(dataIndex);
+        console.log(row);
+        console.log(data);
+
         if (data.peralatanOSR === 'Total Persentase') {
             // Add COLSPAN attribute
             $('td:eq(0)', row).attr('colspan', 3);
