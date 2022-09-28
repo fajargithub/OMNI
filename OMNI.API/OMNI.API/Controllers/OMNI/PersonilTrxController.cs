@@ -197,6 +197,7 @@ namespace OMNI.API.Controllers.OMNI
                 result.Personil = data.Personil != null ? data.Personil.Id.ToString() : "0";
                 result.Port = data.Port;
                 result.Name = data.Name;
+                result.Satuan = data.Personil != null ? data.Personil.Satuan : "";
                 result.Year = data.Year;
                 //result.TotalDetailExisting = data.TotalDetailExisting;
                 result.TanggalPelatihan = data.TanggalPelatihan != null ? data.TanggalPelatihan.ToString("MM/dd/yyyy") : null;
