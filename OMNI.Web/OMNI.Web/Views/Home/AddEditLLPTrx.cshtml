@@ -179,30 +179,60 @@
             qrCode.append(document.getElementById("qrcode"));
         }
 
+        $("#year").on("change", function () {
+            $("#submit").hide();
+            var kodeInventory = $("#kodeInventory").val();
+            var year = this.value;
+            var region = $("#region").val();
+
+            if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
+                inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + $("#noAset").val();
+
+                $.ajax({
+                    url: generateQRCode(),
+                    complete: function () {
+                        $("#qrcode-text").val(inventoryNumber);
+
+                        var canvas = document.querySelector('canvas');
+                        var pngUrl = canvas.toDataURL();
+
+                        $("#qrcode-value").val(pngUrl);
+
+                        $("#submit").show();
+                    }
+                });
+            } else {
+                $("#submit").hide();
+                inventoryNumber = "";
+            }
+        });
+
         $("#noAset").on('change', function () {
+            $("#submit").hide();
             var kodeInventory = $("#kodeInventory").val();
             var year = $("#year").val();
             var region = $("#region").val();
 
             if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
                 inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + $("#noAset").val();
+
+                $.ajax({
+                    url: generateQRCode(),
+                    complete: function () {
+                        $("#qrcode-text").val(inventoryNumber);
+
+                        var canvas = document.querySelector('canvas');
+                        var pngUrl = canvas.toDataURL();
+
+                        $("#qrcode-value").val(pngUrl);
+
+                        $("#submit").show();
+                    }
+                });
             } else {
+                $("#submit").hide();
                 inventoryNumber = "";
             }
-
-            $.ajax({
-                url: generateQRCode(),
-                complete: function () {
-                    $("#qrcode-text").val(inventoryNumber);
-
-                    var canvas = document.querySelector('canvas');
-                    var pngUrl = canvas.toDataURL();
-
-                    $("#qrcode-value").val(pngUrl);
-
-                    $("#submit").show();
-                }
-            })
         });
 
         $("#year").val(yearNow).change();
