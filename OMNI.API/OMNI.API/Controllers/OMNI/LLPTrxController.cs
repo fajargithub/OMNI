@@ -379,7 +379,7 @@ namespace OMNI.API.Controllers.OMNI
 
                             if(result[i].RekomendasiHubla > 0)
                             {
-                                result[i].PersentaseHubla = find.TotalCount / result[i].RekomendasiHubla * 100;
+                                result[i].PersentaseHubla = Math.Round(find.TotalCount / result[i].RekomendasiHubla * 100, 2);
                                 if (result[i].PersentaseHubla > 100)
                                 {
                                     result[i].PersentaseHubla = 100;
@@ -388,7 +388,7 @@ namespace OMNI.API.Controllers.OMNI
                            
                             if(result[i].RekomendasiOSCP > 0)
                             {
-                                result[i].PersentaseOSCP = find.TotalCount / result[i].RekomendasiOSCP * 100;
+                                result[i].PersentaseOSCP = Math.Round(find.TotalCount / result[i].RekomendasiOSCP * 100, 2);
                                 if (result[i].PersentaseOSCP > 100)
                                 {
                                     result[i].PersentaseOSCP = 100;
