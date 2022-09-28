@@ -47,6 +47,17 @@ namespace OMNI.Web.Controllers.Master
         }
 
         [HttpGet]
+        public async Task<JsonResult> GetById(int id)
+        {
+            Personil data = await _PersonilService.GetById(id);
+
+            return Json(new
+            {
+                data
+            });
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AddEdit(int id, int portId)
         {
             PersonilModel model = new PersonilModel();

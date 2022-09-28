@@ -77,7 +77,8 @@ namespace OMNI.Web.Controllers.Master
         public async Task<IActionResult> AddEdit(int id, string port, int year)
         {
             ViewBag.LatihanList = await _latihanService.GetAll();
-            ViewBag.RekomendasiTypeList = await GetAllRekomendasiType();
+            var rekomendasiTypeList = await GetAllRekomendasiType();
+            ViewBag.RekomendasiTypeList = rekomendasiTypeList.FindAll(b => b.Id == 1).ToList();
             ViewBag.Year = year;
             RekomendasiLatihanModel model = new RekomendasiLatihanModel();
 

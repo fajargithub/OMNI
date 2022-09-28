@@ -210,6 +210,16 @@ var dt = $('#table_llp_trx').DataTable({
             }
         },
         {
+            name: 'createdBy',
+            title: 'Created By',
+            data: 'createdBy'
+        },
+        {
+            name: 'createDate',
+            title: 'Created At',
+            data: 'createDate'
+        },
+        {
             "targets": -1,
             "data": null,
             "render": function (row, data, iDisplayIndex) {
@@ -226,9 +236,9 @@ var dt = $('#table_llp_trx').DataTable({
         }
     ],
     createdRow: function (row, data, dataIndex) {
-        console.log(dataIndex);
-        console.log(row);
-        console.log(data);
+        //if ((dataIndex % 2) == 0) {
+        //    $(row).css("background-color", "#dde2ea1c");
+        //}
 
         if (data.peralatanOSR === 'Total Persentase') {
             // Add COLSPAN attribute

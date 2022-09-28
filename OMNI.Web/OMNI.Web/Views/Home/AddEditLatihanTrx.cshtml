@@ -37,7 +37,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="form-label" for="">Tanggal Pelaksanaan</label>
-                    <input type="text" id="tanggalPelaksanaan" asp-for="TanggalPelaksanaan" name="TanggalPelaksanaan" class="form-control datepicker" style="width: 100% !important;" required>
+                    <input type="text" id="tanggalPelaksanaan" asp-for="TanggalPelaksanaan" name="TanggalPelaksanaan" class="form-control datepicker2" style="width: 100% !important;" required>
                 </div>
             </div>
         </div><br />
@@ -57,17 +57,29 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $(".datepicker").datepicker({
-            dateFormat: 'dd/mm/yy',
-            changeMonth: true,
-            changeYear: true,
-            yearRange: "-10:+10"
-        });
-
         var selectedPelatihan = $("#latihan").val();
         var port = "@ViewBag.Port";
         var year = parseInt("@ViewBag.Year");
-        //var inventoryNumber = "";
+
+        $(".datepicker2").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: false,
+            changeYear: false,
+            defaultViewDate: { year: String(year) }
+        });
+
+        $("#tanggalPelaksanaan").on('change', function () {
+            console.log(this.value);
+            var status = this.value.includes(String(year));
+            if (!status) {
+                Swal.fire(
+                    'Invalid Year',
+                    'Please select year ' + year,
+                    'error'
+                )
+                $("#tanggalPelaksanaan").val(null);
+            }
+        });
 
         if (selectedPelatihan > 0) {
             $.ajax({
