@@ -24,6 +24,7 @@ var dt = $('#table_llp_trx').DataTable({
     "paging": false,
     "fixedColumns": {
         leftColumns: 7,
+        rightColumns: 1
     },
     "ajax": {
         "url": base_api + 'Home/GetAllLLPTrx?port=' + port +"&year=" + selectedYear,
@@ -208,6 +209,16 @@ var dt = $('#table_llp_trx').DataTable({
 
                 return result;
             }
+        },
+        {
+            name: 'brand',
+            title: 'Brand',
+            data: 'brand'
+        },
+        {
+            name: 'serialNumber',
+            title: 'Serial Number',
+            data: 'serialNumber'
         },
         {
             name: 'createdBy',

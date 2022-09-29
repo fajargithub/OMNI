@@ -85,10 +85,34 @@
         </div><br />
 
         <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Brand</label>
+                    <input class="form-control" name="Brand" asp-for="Brand" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Serial Number</label>
+                    <input class="form-control" name="SerialNumber" asp-for="SerialNumber" />
+                </div>
+            </div>
+        </div><br />
+
+        <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="form-label" for="">Upload Gambar</label>
-                    <input type="file" name="Files" class="form-control" asp-for="Files" multiple />
+                    <input type="file" name="Files" class="form-control" asp-for="Files" multiple accept="image/jpeg,image/png,application/pdf" required />
+                </div>
+            </div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="form-label" for="">Remark</label>
+                    <textarea class="form-control" asp-for="Remark"></textarea>
                 </div>
             </div>
         </div><br />
@@ -122,6 +146,7 @@
                     <input type="hidden" id="qrcode-text" asp-for="QRCodeText" required />
                 </div>
             </div>
+
             <div class="col-md-12">
                 <br />
                 <div id="qrcode"></div>

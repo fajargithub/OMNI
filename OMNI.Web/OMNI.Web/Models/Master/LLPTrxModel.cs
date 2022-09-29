@@ -31,6 +31,8 @@ namespace OMNI.Web.Models.Master
         public decimal PersentaseHubla { get; set; }
         public decimal RekomendasiHubla { get; set; }
         public decimal RekomendasiOSCP { get; set; }
+        public string Brand { get; set; }
+        public string SerialNumber { get; set; }
         public int Year { get; set; }
     }
 }

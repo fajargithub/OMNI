@@ -233,12 +233,10 @@ namespace OMNI.Web.Controllers
         public async Task<IActionResult> AddEditLLPTrx(LLPTrxModel model)
         {
             var r = await _llpTrxService.AddEdit(model);
-
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {
                 return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
             }
-
             return Ok(new JsonResponse());
         }
 
@@ -246,7 +244,6 @@ namespace OMNI.Web.Controllers
         public async Task<IActionResult> DeleteLLPTrx(int id)
         {
             var r = await _llpTrxService.Delete(id);
-
             return Ok(new JsonResponse());
         }
 

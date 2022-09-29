@@ -30,10 +30,6 @@
         text-align: center;
     }
 
-    /*  .dt-buttons {
-        display: none;
-    }*/
-
     .dataTables_filter{
         margin-top:15px;
     }
@@ -44,16 +40,16 @@
     }
 
     .DTFC_LeftBodyWrapper:before, .DTFC_LeftFootWrapper:before, .DTFC_LeftHeadWrapper:before {
-        background: none;
+        content: none !important;
     }
 
     .table-bordered {
-        border: 0px solid #97a7c31c !important
+        border: 0px solid #97a7c31c !important;
     }
 
-        .table-bordered th, .table-bordered td {
-            border: 0.5px solid #97a7c31c !important
-        }
+    .table-bordered th, .table-bordered td {
+        border: 0.5px solid #97a7c31c !important;
+    }
 </style>
 <link href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.bootstrap.min.css" rel="stylesheet" />
 
@@ -118,6 +114,8 @@
                                 <th style="width:80px;">Selisih OSCP</th>
                                 <th style="width:80px;">Kesesuaian OSCP</th>
                                 <th style="width:80px;">Persentase OSCP</th>
+                                <th style="width:80px;">Brand</th>
+                                <th style="width:80px;">Serial Number</th>
                                 <th style="width:80px;">Created By</th>
                                 <th style="width:80px;">Created At</th>
                                 <th style="width:10px;">Action</th>
