@@ -34,6 +34,8 @@ namespace OMNI.API.Model.OMNI
         public decimal RekomendasiHubla { get; set; }
         public decimal RekomendasiOSCP { get; set; }
         public int Year { get; set; }
+        public string Brand { get; set; }
+        public string SerialNumber { get; set; }
 
         [JsonIgnore]
         public IFormFileCollection Files { get; set; }

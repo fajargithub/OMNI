@@ -358,6 +358,9 @@ namespace OMNI.API.Controllers.OMNI
                         temp.SelisihOSCP = list[i].SelisihOSCP;
                         temp.KesesuaianOSCP = list[i].KesesuaianOSCP;
                         temp.PersentaseOSCP = list[i].PersentaseOSCP;
+                        temp.Brand = list[i].Brand;
+                        temp.SerialNumber = list[i].SerialNumber;
+                        temp.Remark = list[i].Remark;
                         temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
                         temp.CreatedBy = list[i].CreatedBy;
                         result.Add(temp);
@@ -498,6 +501,9 @@ namespace OMNI.API.Controllers.OMNI
                 result.TotalExistingKeseluruhan = data.TotalExistingKeseluruhan;
                 result.TotalKebutuhanHubla = data.TotalKebutuhanHubla;
                 result.SelisihHubla = data.SelisihHubla;
+                result.Brand = data.Brand;
+                result.SerialNumber = data.SerialNumber;
+                result.Remark = data.Remark;
                 //result.KesesuaianPM58 = data.KesesuaianPM58;
                 result.PersentaseHubla = data.PersentaseHubla;
                 result.TotalKebutuhanOSCP = data.TotalKebutuhanOSCP;
@@ -557,6 +563,9 @@ namespace OMNI.API.Controllers.OMNI
                     data.KesesuaianOSCP = model.KesesuaianOSCP;
                     data.PersentaseOSCP = model.PersentaseOSCP;
                     data.Year = model.Year;
+                    data.Brand = model.Brand;
+                    data.SerialNumber = model.SerialNumber;
+                    data.Remark = model.Remark;
                     data.UpdatedAt = DateTime.Now;
                     data.UpdatedBy = "admin";
                     _dbOMNI.LLPTrx.Update(data);
@@ -606,6 +615,9 @@ namespace OMNI.API.Controllers.OMNI
                     data.KesesuaianOSCP = model.KesesuaianOSCP;
                     data.PersentaseOSCP = model.PersentaseOSCP;
                     data.Year = model.Year;
+                    data.Brand = model.Brand;
+                    data.SerialNumber = model.SerialNumber;
+                    data.Remark = model.Remark;
                     data.CreatedAt = DateTime.Now;
                     data.CreatedBy = "admin";
                     await _dbOMNI.LLPTrx.AddAsync(data, cancellationToken);
