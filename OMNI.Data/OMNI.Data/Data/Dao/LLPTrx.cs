@@ -24,6 +24,9 @@ namespace OMNI.Data.Data.Dao
         public string KesesuaianOSCP { get; set; }
         public decimal PersentaseOSCP { get; set; }
         public decimal PersentaseHubla { get; set; }
+        public string Brand { get; set; }
+        public string SerialNumber { get; set; }
+        public string Remark { get; set; }
         public int Year { get; set; }
     }
 }
