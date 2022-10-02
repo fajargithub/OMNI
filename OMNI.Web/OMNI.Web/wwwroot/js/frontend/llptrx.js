@@ -2,6 +2,64 @@
 
 var totalPersentaseHubla = 0;
 var totalPersentaseOSCP = 0;
+
+function countTotalPercentageLLPTrx() {
+    console.log('on count percentage llptrx!');
+    var lastJenis = "";
+    var totalPersentaseHubla = 0;
+    var totalPersentaseOSCP = 0;
+    var countRekomendasiHubla = 0;
+    var countRekomendasiOSCP = 0;
+    //count total persentase hubla
+    $.ajax({
+        url: base_api + 'Home/GetAllLLPTrx?port=' + port + "&year=" + selectedYear,
+        method: "GET",
+        success: function (result) {
+            if (result.data !== null && result.data !== undefined) {
+                for (var i = 0; i < result.data.length; i++) {
+                    if (lastJenis == "") {
+                        lastJenis = result.data[i].jenis;
+                        if (result.data[i].rekomendasiHubla > 0) {
+                            totalPersentaseHubla += result.data[i].persentaseHubla;
+                            countRekomendasiHubla += 1;
+                        }
+
+                        if (result.data[i].rekomendasiOSCP > 0) {
+                            totalPersentaseOSCP += result.data[i].persentaseOSCP;
+                            countRekomendasiOSCP += 1;
+                        }
+
+                    } else if (lastJenis != result.data[i].jenis) {
+                        lastJenis = result.data[i].jenis;
+                        if (result.data[i].rekomendasiHubla > 0) {
+                            totalPersentaseHubla += result.data[i].persentaseHubla;
+                            countRekomendasiHubla += 1;
+                        }
+
+                        if (result.data[i].rekomendasiOSCP > 0) {
+                            totalPersentaseOSCP += result.data[i].persentaseOSCP;
+                            countRekomendasiOSCP += 1;
+                        }
+                    }
+                }
+            }
+        }, complete: function () {
+            var resultPersentaseHubla = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
+            if (Number.isNaN(resultPersentaseHubla)) {
+                resultPersentaseHubla = 0;
+            }
+
+            var resultPersentaseOSCP = totalPersentaseOSCP / (countRekomendasiOSCP * 100) * 100;
+            if (Number.isNaN(resultPersentaseOSCP)) {
+                resultPersentaseOSCP = 0;
+            }
+
+            $("#totalPersentaseHubla").text(resultPersentaseHubla.toFixed(2) + "%");
+            $("#totalPersentaseOSCP").text(resultPersentaseOSCP.toFixed(2) + "%");
+        }
+    })
+}
+
 /* COLUMN FILTER  */
 var dt = $('#table_llp_trx').DataTable({
     dom: 'Bfrtip',
@@ -294,61 +352,63 @@ var dt = $('#table_llp_trx').DataTable({
     "order": [[1, 'asc']],
     rowCallback: function (row, data, iDisplayIndex) {
     },
-    "initComplete": function (settings, json) {
-        var lastJenis = "";
-        var totalPersentaseHubla = 0;
-        var totalPersentaseOSCP = 0;
-        var countRekomendasiHubla = 0;
-        var countRekomendasiOSCP = 0;
-        //count total persentase hubla
-        $.ajax({
-            url: base_api + 'Home/GetAllLLPTrx?port=' + port + "&year=" + selectedYear,
-            method: "GET",
-            success: function (result) {
-                if (result.data !== null && result.data !== undefined) {
-                    for (var i = 0; i < result.data.length; i++) {
-                        if (lastJenis == "") {
-                            lastJenis = result.data[i].jenis;
-                            if (result.data[i].rekomendasiHubla > 0) {
-                                totalPersentaseHubla += result.data[i].persentaseHubla;
-                                countRekomendasiHubla += 1;
-                            }
+    "initComplete": countTotalPercentageLLPTrx
+    //"initComplete": function (settings, json) {
+    //    console.log('on init complete!');
+    //    var lastJenis = "";
+    //    var totalPersentaseHubla = 0;
+    //    var totalPersentaseOSCP = 0;
+    //    var countRekomendasiHubla = 0;
+    //    var countRekomendasiOSCP = 0;
+    //    //count total persentase hubla
+    //    $.ajax({
+    //        url: base_api + 'Home/GetAllLLPTrx?port=' + port + "&year=" + selectedYear,
+    //        method: "GET",
+    //        success: function (result) {
+    //            if (result.data !== null && result.data !== undefined) {
+    //                for (var i = 0; i < result.data.length; i++) {
+    //                    if (lastJenis == "") {
+    //                        lastJenis = result.data[i].jenis;
+    //                        if (result.data[i].rekomendasiHubla > 0) {
+    //                            totalPersentaseHubla += result.data[i].persentaseHubla;
+    //                            countRekomendasiHubla += 1;
+    //                        }
 
-                            if (result.data[i].rekomendasiOSCP > 0) {
-                                totalPersentaseOSCP += result.data[i].persentaseOSCP;
-                                countRekomendasiOSCP += 1;
-                            }
+    //                        if (result.data[i].rekomendasiOSCP > 0) {
+    //                            totalPersentaseOSCP += result.data[i].persentaseOSCP;
+    //                            countRekomendasiOSCP += 1;
+    //                        }
                             
-                        } else if (lastJenis != result.data[i].jenis) {
-                            lastJenis = result.data[i].jenis;
-                            if (result.data[i].rekomendasiHubla > 0) {
-                                totalPersentaseHubla += result.data[i].persentaseHubla;
-                                countRekomendasiHubla += 1;
-                            }
+    //                    } else if (lastJenis != result.data[i].jenis) {
+    //                        lastJenis = result.data[i].jenis;
+    //                        if (result.data[i].rekomendasiHubla > 0) {
+    //                            totalPersentaseHubla += result.data[i].persentaseHubla;
+    //                            countRekomendasiHubla += 1;
+    //                        }
 
-                            if (result.data[i].rekomendasiOSCP > 0) {
-                                totalPersentaseOSCP += result.data[i].persentaseOSCP;
-                                countRekomendasiOSCP += 1;
-                            }
-                        }
-                    }
-                }
-            }, complete: function () {
-                var resultPersentaseHubla = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
-                if (Number.isNaN(resultPersentaseHubla)) {
-                    resultPersentaseHubla = 0;
-                }
+    //                        if (result.data[i].rekomendasiOSCP > 0) {
+    //                            totalPersentaseOSCP += result.data[i].persentaseOSCP;
+    //                            countRekomendasiOSCP += 1;
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }, complete: function () {
+    //            var resultPersentaseHubla = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
+    //            if (Number.isNaN(resultPersentaseHubla)) {
+    //                resultPersentaseHubla = 0;
+    //            }
 
-                var resultPersentaseOSCP = totalPersentaseOSCP / (countRekomendasiOSCP * 100) * 100;
-                if (Number.isNaN(resultPersentaseOSCP)) {
-                    resultPersentaseOSCP = 0;
-                }
+    //            var resultPersentaseOSCP = totalPersentaseOSCP / (countRekomendasiOSCP * 100) * 100;
+    //            if (Number.isNaN(resultPersentaseOSCP)) {
+    //                resultPersentaseOSCP = 0;
+    //            }
 
-                $("#totalPersentaseHubla").text(resultPersentaseHubla.toFixed(2) + "%");
-                $("#totalPersentaseOSCP").text(resultPersentaseOSCP.toFixed(2) + "%");
-            }
-        })
-    }
+    //            $("#totalPersentaseHubla").text(resultPersentaseHubla.toFixed(2) + "%");
+    //            $("#totalPersentaseOSCP").text(resultPersentaseOSCP.toFixed(2) + "%");
+    //        }
+    //    })
+    //}
 });
 
 

@@ -1,4 +1,41 @@
-﻿var table_personil_trx = $('#table_personil_trx').DataTable({
+﻿function countPercentagePersonilTrx() {
+    var countRekomendasiHublaPersonil = 0;
+    var totalPersentasePersonil = 0;
+    var lastPersonil = "";
+    $.ajax({
+        url: base_api + 'Home/GetAllPersonilTrx?port=' + port + "&year=" + selectedYear,
+        method: "GET",
+        success: function (result) {
+            if (result.data.length > 0) {
+                for (var i = 0; i < result.data.length; i++) {
+                    if (lastPersonil == "") {
+                        lastPersonil = result.data[i].personil;
+                        if (result.data[i].rekomendasiHubla > 0) {
+                            countRekomendasiHublaPersonil += 1;
+                            totalPersentasePersonil += result.data[i].persentasePersonil;
+                        }
+                    } else if (lastPersonil != result.data[i].personil) {
+                        lastPersonil = result.data[i].personil;
+                        if (result.data[i].rekomendasiHubla > 0) {
+                            countRekomendasiHublaPersonil += 1;
+                            totalPersentasePersonil += result.data[i].persentasePersonil;
+                        }
+                    }
+
+                }
+            }
+        }, complete: function () {
+            var resultPersentaseHublaPersonil = totalPersentasePersonil / (countRekomendasiHublaPersonil * 100) * 100;
+            if (Number.isNaN(resultPersentaseHublaPersonil)) {
+                resultPersentaseHublaPersonil = 0;
+            }
+
+            $("#totalPersentaseHublaPersonil").text(resultPersentaseHublaPersonil.toFixed(2) + "%");
+        }
+    });
+}
+
+var table_personil_trx = $('#table_personil_trx').DataTable({
     dom: 'Bfrtip',
     buttons: [
         {
@@ -146,42 +183,7 @@
     "order": [[1, 'asc']],
     rowCallback: function (row, data, iDisplayIndex) {
     },
-    "initComplete": function (settings, json) {
-        var countRekomendasiHublaPersonil = 0;
-        var totalPersentasePersonil = 0;
-        var lastPersonil = "";
-        $.ajax({
-            url: base_api + 'Home/GetAllPersonilTrx?port=' + port + "&year=" + selectedYear,
-            method: "GET",
-            success: function (result) {
-                if (result.data.length > 0) {
-                    for (var i = 0; i < result.data.length; i++) {
-                        if (lastPersonil == "") {
-                            lastPersonil = result.data[i].personil;
-                            if (result.data[i].rekomendasiHubla > 0) {
-                                countRekomendasiHublaPersonil += 1;
-                                totalPersentasePersonil += result.data[i].persentasePersonil;
-                            }
-                        } else if (lastPersonil != result.data[i].personil) {
-                            lastPersonil = result.data[i].personil;
-                            if (result.data[i].rekomendasiHubla > 0) {
-                                countRekomendasiHublaPersonil += 1;
-                                totalPersentasePersonil += result.data[i].persentasePersonil;
-                            }
-                        }
-                        
-                    }
-                }
-            }, complete: function() {
-                var resultPersentaseHublaPersonil = totalPersentasePersonil / (countRekomendasiHublaPersonil * 100) * 100;
-                if (Number.isNaN(resultPersentaseHublaPersonil)) {
-                    resultPersentaseHublaPersonil = 0;
-                }
-
-                $("#totalPersentaseHublaPersonil").text(resultPersentaseHublaPersonil.toFixed(2) + "%");
-            }
-        });
-    }
+    "initComplete": countPercentagePersonilTrx
 });
 
 //table_personil_trx.on('order.table_personil_trx search.table_personil_trx', function () {

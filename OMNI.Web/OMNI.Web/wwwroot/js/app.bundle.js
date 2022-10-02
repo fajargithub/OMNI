@@ -619,9 +619,16 @@ var initApp = (function (app) {
                             }).then(() => {
                                 $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
                                 if (init.returnUrl == null) {
-                                    location.reload();
+                                    //location.reload();
                                     $(init.modalId).modal('hide');
-                                    $(init.tableId).DataTable().ajax.reload(null, false);
+                                    /*$(init.tableId).DataTable().ajax.reload(countTotalPercentageLLPTrx, false);*/
+                                    $(init.tableId).DataTable().ajax.reload(function () {
+                                        console.log('on reload datatable!');
+                                        countTotalPercentageLLPTrx();
+                                        countPercentagePersonilTrx();
+                                        countPercentageLatihanTrx();
+
+                                    });
                                 } else {
                                     window.location.replace(init.returnUrl);
                                 }

@@ -111,9 +111,13 @@ namespace OMNI.Web.Services.Trx
                 data.Add(new StringContent(m.Year.ToString()), "Year");
                 data.Add(new StringContent(m.Jenis.ToString()), "Jenis");
                 data.Add(new StringContent(m.Kondisi.ToString()), "Kondisi");
-                data.Add(new StringContent(m.Brand.ToString()), "Brand");
-                data.Add(new StringContent(m.SerialNumber.ToString()), "SerialNumber");
-                data.Add(new StringContent(m.Remark.ToString()), "Remark");
+                data.Add(new StringContent(m.Brand), "Brand");
+                data.Add(new StringContent(m.SerialNumber), "SerialNumber");
+                if (string.IsNullOrEmpty(m.Remark))
+                {
+                    m.Remark = "";
+                }
+                data.Add(new StringContent(m.Remark), "Remark");
                 data.Add(new StringContent(m.QRCode.ToString()), "QRCode");
                 data.Add(new StringContent(m.QRCodeText.ToString()), "QRCodeText");
                 data.Add(new StringContent(m.DetailExisting.ToString()), "DetailExisting");

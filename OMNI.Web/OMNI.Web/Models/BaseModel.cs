@@ -18,7 +18,7 @@ namespace OMNI.Web.Models
         public string FilePath { get; set; }
         public string Length { get; set; }
         public string Flag { get; set; }
-        public string Remark { get; set; }
+        public string Remark { get; set; } = "";
         public string FileType { get; set; }
         public string ContentType { get; set; }
         public string TrxId { get; set; }

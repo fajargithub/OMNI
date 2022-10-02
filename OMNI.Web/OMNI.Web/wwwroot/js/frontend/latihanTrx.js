@@ -1,4 +1,44 @@
-﻿$('#table_latihan_trx').DataTable().destroy();
+﻿function countPercentageLatihanTrx() {
+    console.log('on count percentage latihan trx!');
+    var countRekomendasiHubla = 0;
+    var totalPersentaseHubla = 0;
+    var lastLatihan = "";
+    $.ajax({
+        url: base_api + 'Home/GetAllLatihanTrx?port=' + port + "&year=" + selectedYear,
+        method: "GET",
+        success: function (result) {
+            if (result.data.length > 0) {
+                for (var i = 0; i < result.data.length; i++) {
+                    if (lastLatihan == "") {
+                        lastLatihan = result.data[i].latihan;
+                        if (result.data[i].rekomendasiHubla > 0) {
+                            countRekomendasiHubla += 1;
+                            totalPersentaseHubla += result.data[i].persentaseLatihan;
+                        }
+                    } else if (lastLatihan != result.data[i].latihan) {
+                        lastLatihan = result.data[i].latihan;
+                        if (result.data[i].rekomendasiHubla > 0) {
+                            countRekomendasiHubla += 1;
+                            totalPersentaseHubla += result.data[i].persentaseLatihan;
+                        }
+                    }
+
+                }
+            }
+        }, complete: function () {
+            console.log(countRekomendasiHubla);
+            console.log(totalPersentaseHubla);
+            var resultPersentaseHublalatihan = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
+            if (Number.isNaN(resultPersentaseHublalatihan)) {
+                resultPersentaseHublalatihan = 0;
+            }
+
+            $("#totalPersentaseHublaLatihan").text(resultPersentaseHublalatihan.toFixed(2) + "%");
+        }
+    });
+}
+
+$('#table_latihan_trx').DataTable().destroy();
 
 /* COLUMN FILTER  */
 var table_latihan_trx = $('#table_latihan_trx').DataTable({
@@ -143,44 +183,7 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
     "order": [[1, 'asc']],
     rowCallback: function (row, data, iDisplayIndex) {
     },
-    "initComplete": function (settings, json) {
-        var countRekomendasiHubla = 0;
-        var totalPersentaseHubla = 0;
-        var lastLatihan = "";
-        $.ajax({
-            url: base_api + 'Home/GetAllLatihanTrx?port=' + port + "&year=" + selectedYear,
-            method: "GET",
-            success: function (result) {
-                if (result.data.length > 0) {
-                    for (var i = 0; i < result.data.length; i++) {
-                        if (lastLatihan == "") {
-                            lastLatihan = result.data[i].latihan;
-                            if (result.data[i].rekomendasiHubla > 0) {
-                                countRekomendasiHubla += 1;
-                                totalPersentaseHubla += result.data[i].persentaseLatihan;
-                            }
-                        } else if (lastLatihan != result.data[i].latihan) {
-                            lastLatihan = result.data[i].latihan;
-                            if (result.data[i].rekomendasiHubla > 0) {
-                                countRekomendasiHubla += 1;
-                                totalPersentaseHubla += result.data[i].persentaseLatihan;
-                            }
-                        }
-
-                    }
-                }
-            }, complete: function () {
-                console.log(countRekomendasiHubla);
-                console.log(totalPersentaseHubla);
-                var resultPersentaseHublalatihan = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
-                if (Number.isNaN(resultPersentaseHublalatihan)) {
-                    resultPersentaseHublalatihan = 0;
-                }
-
-                $("#totalPersentaseHublaLatihan").text(resultPersentaseHublalatihan.toFixed(2) + "%");
-            }
-        });
-    }
+    "initComplete": countPercentageLatihanTrx
 });
 
 function deleteLatihanTrx(id) {
@@ -194,7 +197,9 @@ function deleteLatihanTrx(id) {
         if (result.value) {
             $.post(base_api + 'Home/DeleteLatihanTrx?id=' + id, function (result) {
                 Swal.fire('Deleted!', '', 'success');
-                $("#table_latihan_trx").DataTable().ajax.reload(null, false);
+                $("#table_latihan_trx").DataTable().ajax.reload(function () {
+                    countPercentageLatihanTrx();
+                });
             });
         } else if (result.isDenied) {
 
