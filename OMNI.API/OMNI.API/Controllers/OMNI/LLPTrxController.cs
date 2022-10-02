@@ -40,6 +40,31 @@ namespace OMNI.API.Controllers.OMNI
             public string KesesuaianPM58 { get; set; }
         }
 
+        [HttpGet("GetLastNoAsset")]
+        public async Task<IActionResult> GetLastNoAsset(string inventoryNumber, int primaryId, CancellationToken cancellationToken)
+        {
+            int newNumber = 1;
+            List<int> listNumber = new List<int>();
+            List<string> result = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText.Contains(inventoryNumber)).Select(b => b.QRCodeText).ToListAsync(cancellationToken);
+
+            if(result.Count() > 0)
+            {
+                for(int i=0; i < result.Count(); i++)
+                {
+                    var arrTemp = result[i].Split("-");
+                    listNumber.Add(int.Parse(arrTemp[3]));
+                }
+
+                if(listNumber.Count() > 0)
+                {
+                    int maxNumber = listNumber.Max();
+                    newNumber = maxNumber + newNumber;
+                }
+            }
+
+            return Ok(newNumber);
+        }
+
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
