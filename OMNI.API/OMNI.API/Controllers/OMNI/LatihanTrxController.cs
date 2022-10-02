@@ -151,7 +151,11 @@ namespace OMNI.API.Controllers.OMNI
 
                                 if(result[i].RekomendasiHubla > 0)
                                 {
-                                    result[i].PersentaseLatihan = find.TotalCount / result[i].RekomendasiHubla * 100;
+                                    result[i].PersentaseLatihan = Math.Round(find.TotalCount / result[i].RekomendasiHubla * 100, 2);
+                                    if(result[i].PersentaseLatihan > 100)
+                                    {
+                                        result[i].PersentaseLatihan = 100;
+                                    }
                                 }
                                 
 
