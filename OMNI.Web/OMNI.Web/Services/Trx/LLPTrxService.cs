@@ -98,6 +98,18 @@ namespace OMNI.Web.Services.Trx
             throw new Exception();
         }
 
+        public async Task<string> GetLastNoAsset(AssetDataModel param)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/LLPTrx/GetLastNoAsset?inventoryNumber={param.InventoryNumber}&primaryId={param.PrimaryId}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<string>();
+
+            throw new Exception();
+        }
+
         public async Task<BaseJson<LLPTrxModel>> AddEdit(LLPTrxModel m)
         {
             HttpClient c = _httpClient.CreateClient("OMNI");

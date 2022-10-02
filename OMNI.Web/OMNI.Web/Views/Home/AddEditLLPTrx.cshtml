@@ -103,7 +103,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="form-label" for="">Upload Gambar</label>
-                    <input type="file" name="Files" class="form-control" asp-for="Files" multiple accept="image/jpeg,image/png,application/pdf" required />
+                    <input type="file" name="Files" id="files" class="form-control" asp-for="Files" multiple accept="image/jpeg,image/png,application/pdf"/>
                 </div>
             </div>
         </div><br />
@@ -141,7 +141,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="form-label" for="">No Aset</label>
-                    <input type="text" value="" id="noAset" class="form-control">
+                    <input type="text" value="" id="noAset" class="form-control" readonly>
                     <input type="hidden" id="qrcode-value" asp-for="QRCode" required />
                     <input type="hidden" id="qrcode-text" asp-for="QRCodeText" required />
                 </div>
@@ -168,16 +168,121 @@
         var region = "@ViewBag.Region";
         var qrCodeYear = "@ViewBag.QRCodeYear";
         var noAsset = "@ViewBag.noAsset";
+        var primaryId = parseInt("@ViewBag.Id");
 
         if (qrCodeYear !== null && qrCodeYear !== undefined && qrCodeYear !== "") {
+            console.log(qrCodeYear);
             $("#year").val(qrCodeYear).change();
+        } else {
+            $("#year").val(yearNow).change();
+        }
+
+        if (primaryId > 0) {
+            $("#files").prop('required', false);
+        } else {
+            $("#files").prop('required', true);
         }
 
         $("#noAset").val(noAsset);
 
         var selectedJenisId = parseInt("@ViewBag.JenisId");
         var selectedPeralatanOSR = $("#peralatanOSR").val();
+
         var inventoryNumber = "";
+        var kodeInventory = "";
+        var region = $("#region").val();
+
+        function getLastNoAsset() {
+            $("#submit").hide();
+            kodeInventory = $("#kodeInventory").val();
+            inventoryNumber = kodeInventory + "-" + $("#year").val() + "-" + region;
+
+            $.ajax({
+                url: base_api + "Home/GetLastNoAsset",
+                data: { inventoryNumber: inventoryNumber, primaryId: primaryId },
+                method: "POST",
+                success: function (result) {
+                    $("#noAset").val(result.noAsset);
+                }, complete: function () {
+                    if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
+                        inventoryNumber = kodeInventory + "-" + $("#year").val() + "-" + region + "-" + $("#noAset").val();
+                        $.ajax({
+                            url: generateQRCode(),
+                            complete: function () {
+                                $("#qrcode-text").val(inventoryNumber);
+
+                                var canvas = document.querySelector('canvas');
+                                var pngUrl = canvas.toDataURL();
+
+                                $("#qrcode-value").val(pngUrl);
+
+                                $("#submit").show();
+                            }
+                        });
+                    } else {
+                        $("#submit").hide();
+                        inventoryNumber = "";
+                    }
+                }
+            });
+        }
+
+        function validateNoAsset() {
+            if (primaryId < 1) {
+                getLastNoAsset();
+            } else {
+                console.log('on check no asset!');
+                var newPeralatanOSRId = $("#peralatanOSR").val();
+                var newJenisId = $("#jenis").val();
+
+                if (selectedPeralatanOSR == newPeralatanOSRId && selectedJenisId == newJenisId && qrCodeYear == $("#year").val()) {
+                    if (primaryId > 0) {
+                        $("#noAset").val(noAsset);
+                    }
+
+                    console.log('generate qr code!');
+                    if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
+                        kodeInventory = $("#kodeInventory").val();
+                        inventoryNumber = kodeInventory + "-" + $("#year").val() + "-" + region + "-" + $("#noAset").val();
+                        console.log(inventoryNumber);
+                        $.ajax({
+                            url: generateQRCode(),
+                            complete: function () {
+                                console.log(inventoryNumber);
+                                $("#qrcode-text").val(inventoryNumber);
+
+                                var canvas = document.querySelector('canvas');
+                                var pngUrl = canvas.toDataURL();
+
+                                $("#qrcode-value").val(pngUrl);
+
+                                $("#submit").show();
+                            }
+                        });
+                    } else {
+                        $("#submit").hide();
+                        inventoryNumber = "";
+                    }
+                } else {
+                    getLastNoAsset();
+                }
+            }
+        }
+
+        $("#jenis").on('change', function () {
+            console.log('on jenis change!');
+            $("#submit").hide();
+            var id = this.value;
+            $.ajax({
+                url: base_api + "SpesifikasiJenis/GetById?id=" + id,
+                method: "GET",
+                success: function (result) {
+                    $("#kodeInventory").val(result.kodeInventory);
+                    validateNoAsset();
+                }, complete: function () {
+                }
+            })
+        });
 
         function generateQRCode() {
             $('#qrcode').empty();
@@ -205,62 +310,36 @@
         }
 
         $("#year").on("change", function () {
-            $("#submit").hide();
-            var kodeInventory = $("#kodeInventory").val();
-            var year = this.value;
-            var region = $("#region").val();
-
-            if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
-                inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + $("#noAset").val();
-
-                $.ajax({
-                    url: generateQRCode(),
-                    complete: function () {
-                        $("#qrcode-text").val(inventoryNumber);
-
-                        var canvas = document.querySelector('canvas');
-                        var pngUrl = canvas.toDataURL();
-
-                        $("#qrcode-value").val(pngUrl);
-
-                        $("#submit").show();
-                    }
-                });
-            } else {
-                $("#submit").hide();
-                inventoryNumber = "";
-            }
+            validateNoAsset();
         });
 
-        $("#noAset").on('change', function () {
-            $("#submit").hide();
-            var kodeInventory = $("#kodeInventory").val();
-            var year = $("#year").val();
-            var region = $("#region").val();
+        //$("#noAset").on('change', function () {
+        //    $("#submit").hide();
+        //    var kodeInventory = $("#kodeInventory").val();
+        //    var year = $("#year").val();
+        //    var region = $("#region").val();
 
-            if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
-                inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + $("#noAset").val();
+        //    if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
+        //        inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + $("#noAset").val();
 
-                $.ajax({
-                    url: generateQRCode(),
-                    complete: function () {
-                        $("#qrcode-text").val(inventoryNumber);
+        //        $.ajax({
+        //            url: generateQRCode(),
+        //            complete: function () {
+        //                $("#qrcode-text").val(inventoryNumber);
 
-                        var canvas = document.querySelector('canvas');
-                        var pngUrl = canvas.toDataURL();
+        //                var canvas = document.querySelector('canvas');
+        //                var pngUrl = canvas.toDataURL();
 
-                        $("#qrcode-value").val(pngUrl);
+        //                $("#qrcode-value").val(pngUrl);
 
-                        $("#submit").show();
-                    }
-                });
-            } else {
-                $("#submit").hide();
-                inventoryNumber = "";
-            }
-        });
-
-        $("#year").val(yearNow).change();
+        //                $("#submit").show();
+        //            }
+        //        });
+        //    } else {
+        //        $("#submit").hide();
+        //        inventoryNumber = "";
+        //    }
+        //});
 
         if (selectedPeralatanOSR > 0) {
             $.ajax({
@@ -300,20 +379,6 @@
                     }
                 }, complete: function () {
                     $("#jenis").val(selectedJenisId).change();
-                }
-            })
-        });
-
-        $("#jenis").on('change', function () {
-            var id = this.value;
-
-            $.ajax({
-                url: base_api + "SpesifikasiJenis/GetById?id=" + id,
-                method: "GET",
-                success: function (result) {
-                    $("#kodeInventory").val(result.kodeInventory);
-                }, complete: function () {
-
                 }
             })
         });

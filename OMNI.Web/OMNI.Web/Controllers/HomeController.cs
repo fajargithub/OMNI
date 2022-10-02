@@ -180,6 +180,17 @@ namespace OMNI.Web.Controllers
             });
         }
 
+        [HttpPost]
+        public async Task<JsonResult> GetLastNoAsset(AssetDataModel data)
+        {
+            string NoAsset = await _llpTrxService.GetLastNoAsset(data);
+
+            return Json(new
+            {
+                NoAsset
+            });
+        }
+
         [HttpGet]
         public async Task<JsonResult> GetLLPTrxById(int id)
         {
@@ -198,10 +209,13 @@ namespace OMNI.Web.Controllers
             ViewBag.PeralatanOSRList = peralatanOSRList;
             ViewBag.KondisiList = await _kondisiService.GetAll();
             ViewBag.JenisId = 0;
+            ViewBag.PeralatanOSRId = 0;
             ViewBag.YearList = GetYearList(2010, 2030);
             ViewBag.YearNow = DateTime.Now.Year;
             ViewBag.Year = "";
             ViewBag.NoAsset = "";
+            ViewBag.SelectedYear = "";
+            ViewBag.Id = id;
 
             var region = await _portService.GetPortRegion(port);
             ViewBag.Region = region;
@@ -214,7 +228,7 @@ namespace OMNI.Web.Controllers
             {
                 model = await _llpTrxService.GetById(id);
                 ViewBag.JenisId = model.Jenis;
-
+                ViewBag.PeralatanOSRId = model.PeralatanOSR;
                 if (!string.IsNullOrEmpty(model.QRCodeText))
                 {
                     var arr = model.QRCodeText.Split("-");

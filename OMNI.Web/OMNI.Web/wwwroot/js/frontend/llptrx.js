@@ -81,8 +81,8 @@ var dt = $('#table_llp_trx').DataTable({
     "scrollCollapse": true,
     "paging": false,
     "fixedColumns": {
-        leftColumns: 7,
-        rightColumns: 1
+        leftColumns: 7
+       // rightColumns: 1
     },
     "ajax": {
         "url": base_api + 'Home/GetAllLLPTrx?port=' + port +"&year=" + selectedYear,
@@ -142,7 +142,7 @@ var dt = $('#table_llp_trx').DataTable({
             "render": function (row, data, iDisplayIndex) {
                 var result = "";
                 if (iDisplayIndex.peralatanOSR != "Total Persentase") {
-                    result = "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LLP' style='color:blue;' title='Gambar'><b><i>File Gambar</i></b></a>"
+                    result = "<a data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LLP' style='color:blue;' title='Gambar'><b><i>File Gambar</i></b></a>"
                 }
                 return result;
             }
@@ -296,7 +296,7 @@ var dt = $('#table_llp_trx').DataTable({
                 result = "";
 
                 if (iDisplayIndex.peralatanOSR != "Total Persentase") {
-                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
+                    result += "<a data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
                         " <a href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
                 }
 
@@ -353,62 +353,6 @@ var dt = $('#table_llp_trx').DataTable({
     rowCallback: function (row, data, iDisplayIndex) {
     },
     "initComplete": countTotalPercentageLLPTrx
-    //"initComplete": function (settings, json) {
-    //    console.log('on init complete!');
-    //    var lastJenis = "";
-    //    var totalPersentaseHubla = 0;
-    //    var totalPersentaseOSCP = 0;
-    //    var countRekomendasiHubla = 0;
-    //    var countRekomendasiOSCP = 0;
-    //    //count total persentase hubla
-    //    $.ajax({
-    //        url: base_api + 'Home/GetAllLLPTrx?port=' + port + "&year=" + selectedYear,
-    //        method: "GET",
-    //        success: function (result) {
-    //            if (result.data !== null && result.data !== undefined) {
-    //                for (var i = 0; i < result.data.length; i++) {
-    //                    if (lastJenis == "") {
-    //                        lastJenis = result.data[i].jenis;
-    //                        if (result.data[i].rekomendasiHubla > 0) {
-    //                            totalPersentaseHubla += result.data[i].persentaseHubla;
-    //                            countRekomendasiHubla += 1;
-    //                        }
-
-    //                        if (result.data[i].rekomendasiOSCP > 0) {
-    //                            totalPersentaseOSCP += result.data[i].persentaseOSCP;
-    //                            countRekomendasiOSCP += 1;
-    //                        }
-                            
-    //                    } else if (lastJenis != result.data[i].jenis) {
-    //                        lastJenis = result.data[i].jenis;
-    //                        if (result.data[i].rekomendasiHubla > 0) {
-    //                            totalPersentaseHubla += result.data[i].persentaseHubla;
-    //                            countRekomendasiHubla += 1;
-    //                        }
-
-    //                        if (result.data[i].rekomendasiOSCP > 0) {
-    //                            totalPersentaseOSCP += result.data[i].persentaseOSCP;
-    //                            countRekomendasiOSCP += 1;
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }, complete: function () {
-    //            var resultPersentaseHubla = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
-    //            if (Number.isNaN(resultPersentaseHubla)) {
-    //                resultPersentaseHubla = 0;
-    //            }
-
-    //            var resultPersentaseOSCP = totalPersentaseOSCP / (countRekomendasiOSCP * 100) * 100;
-    //            if (Number.isNaN(resultPersentaseOSCP)) {
-    //                resultPersentaseOSCP = 0;
-    //            }
-
-    //            $("#totalPersentaseHubla").text(resultPersentaseHubla.toFixed(2) + "%");
-    //            $("#totalPersentaseOSCP").text(resultPersentaseOSCP.toFixed(2) + "%");
-    //        }
-    //    })
-    //}
 });
 
 
@@ -456,6 +400,7 @@ function deleteLLPTrx(id) {
             $.post(base_api + 'Home/DeleteLLPTrx?id=' + id, function (result) {
                 Swal.fire('Deleted!', '', 'success');
                 $("#table_llp_trx").DataTable().ajax.reload(null, false);
+                countTotalPercentageLLPTrx();
             });
         } else if (result.isDenied) {
 

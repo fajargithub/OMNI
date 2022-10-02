@@ -86,7 +86,7 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
             "targets": -1,
             "data": null,
             "render": function (row, data, iDisplayIndex) {
-                return "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LATIHAN' style='color:blue;' title='Gambar'><b><i>File Dokumen</i></b></a>";
+                return "<a data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LATIHAN' style='color:blue;' title='Gambar'><b><i>File Dokumen</i></b></a>";
             }
         },
         {
@@ -142,7 +142,7 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
                 var result = "";
 
                 if (iDisplayIndex.latihan != "Total Persentase") {
-                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year="+ selectedYear +"' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
+                    result += "<a data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year="+ selectedYear +"' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
                         " <a href='javascript:void(0)' onclick='deleteLatihanTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
                 }
                 return result;
