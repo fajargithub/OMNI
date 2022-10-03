@@ -386,6 +386,7 @@ namespace OMNI.API.Controllers.OMNI
                         temp.Brand = list[i].Brand;
                         temp.SerialNumber = list[i].SerialNumber;
                         temp.Remark = list[i].Remark;
+                        temp.Status = list[i].Status;
                         temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
                         temp.CreatedBy = list[i].CreatedBy;
                         result.Add(temp);
@@ -520,6 +521,7 @@ namespace OMNI.API.Controllers.OMNI
                 result.Port = data.Port;
                 result.QRCode = data.QRCode;
                 result.QRCodeText = data.QRCodeText;
+                result.Status = data.Status;
                 result.DetailExisting = data.DetailExisting;
                 result.Kondisi = data.Kondisi;
                 result.TotalExistingJenis = data.TotalExistingJenis;
@@ -589,6 +591,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.PersentaseOSCP = model.PersentaseOSCP;
                     data.Year = model.Year;
                     data.Brand = model.Brand;
+                    data.Status = model.Status;
                     data.SerialNumber = model.SerialNumber;
                     data.Remark = model.Remark;
                     data.UpdatedAt = DateTime.Now;
@@ -641,6 +644,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.PersentaseOSCP = model.PersentaseOSCP;
                     data.Year = model.Year;
                     data.Brand = model.Brand;
+                    data.Status = model.Status;
                     data.SerialNumber = model.SerialNumber;
                     data.Remark = model.Remark;
                     data.CreatedAt = DateTime.Now;

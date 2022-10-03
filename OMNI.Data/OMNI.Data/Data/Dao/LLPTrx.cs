@@ -27,6 +27,7 @@ namespace OMNI.Data.Data.Dao
         public string Brand { get; set; }
         public string SerialNumber { get; set; }
         public string Remark { get; set; }
+        public string Status { get; set; }
         public int Year { get; set; }
     }
 }
