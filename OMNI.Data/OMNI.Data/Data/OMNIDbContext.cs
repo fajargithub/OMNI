@@ -35,6 +35,7 @@ namespace OMNI.Data.Data
         public DbSet<HistoryPersonilTrx> HistoryPersonilTrx { get; set; }
         public DbSet<RekomendasiPersonil> RekomendasiPersonil { get; set; }
         public DbSet<FileUpload> FileUpload { get; set; }
+        public DbSet<Lampiran> Lampiran { get; set; }
         public DbSet<OMNIActivityLog> OMNIActivityLog { get; set; }
     }
 }

@@ -515,7 +515,9 @@ namespace OMNI.API.Controllers.OMNI
             {
                 result.Id = data.Id;
                 result.PeralatanOSR = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Id.ToString() : "-";
+                result.PeralatanOSRName = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Name : "-";
                 result.Jenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Id.ToString() : "-";
+                result.JenisName = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Name : "-";
                 result.SatuanJenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Satuan : "-";
                 result.KodeInventory = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.KodeInventory : "-";
                 result.Port = data.Port;

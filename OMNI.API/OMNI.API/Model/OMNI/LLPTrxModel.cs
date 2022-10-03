@@ -12,7 +12,9 @@ namespace OMNI.API.Model.OMNI
         public int PeralatanOSRId { get; set; }
         public int SpesifikasiJenisId { get; set; }
         public string PeralatanOSR { get; set; }
+        public string PeralatanOSRName { get; set; }
         public string Jenis { get; set; }
+        public string JenisName { get; set; }
         public string SatuanJenis { get; set; }
         public string Port { get; set; }
         public string KodeInventory { get; set; }
