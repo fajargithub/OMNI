@@ -30,6 +30,7 @@ namespace OMNI.Data.Data
         public DbSet<RekomendasiLatihan> RekomendasiLatihan { get; set; }
         public DbSet<RekomendasiType> RekomendasiType { get; set; }
         public DbSet<Personil> Personil { get; set; }
+        public DbSet<Status> Status { get; set; }
         public DbSet<PersonilTrx> PersonilTrx { get; set; }
         public DbSet<HistoryPersonilTrx> HistoryPersonilTrx { get; set; }
         public DbSet<RekomendasiPersonil> RekomendasiPersonil { get; set; }
