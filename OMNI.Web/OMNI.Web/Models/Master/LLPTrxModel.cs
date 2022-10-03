@@ -10,10 +10,13 @@ namespace OMNI.Web.Models.Master
     public class LLPTrxModel : BaseModel
     {
         public string PeralatanOSR { get; set; }
+        public string PeralatanOSRName { get; set; }
         public string Jenis { get; set; }
+        public string JenisName { get; set; }
         public string KodeInventory { get; set; }
         public string SatuanJenis { get; set; }
         public string Port { get; set; }
+        public string Status { get; set; } = "STAND BY";
         public string Region { get; set; }
         public string QRCode { get; set; }
         public string QRCodeText { get; set; }

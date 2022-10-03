@@ -120,6 +120,7 @@ namespace OMNI.Web.Services.Trx
 
                 data.Add(new StringContent(m.Id.ToString()), "Id");
                 data.Add(new StringContent(m.Port.ToString()), "Port");
+                data.Add(new StringContent(m.Status.ToString()), "Status");
                 data.Add(new StringContent(m.Year.ToString()), "Year");
                 data.Add(new StringContent(m.Jenis.ToString()), "Jenis");
                 data.Add(new StringContent(m.Kondisi.ToString()), "Kondisi");

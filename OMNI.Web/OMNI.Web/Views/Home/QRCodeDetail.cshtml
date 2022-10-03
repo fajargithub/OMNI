@@ -1,0 +1,81 @@
+﻿@model OMNI.Web.Models.Master.LLPTrxModel
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/datatable/datatable.css" rel="stylesheet" />
+    <link href="~/css/datatable/datatable-sc.css" rel="stylesheet" />
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12" style="text-align: center;">
+                <br />
+                <img src="@ViewBag.Data.QRCode" alt="QR Code" />
+            </div>
+            <div class="col-md-12">
+                <br />
+                <table class="table table-bordered table-stripped table-hover">
+                    <tbody>
+                        <tr>
+                            <th scope="col">Nama Peralatan OSR</th>
+                            <td>:</td>
+                            <td>@ViewBag.Data.PeralatanOSRName</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Nama Spesifikasi / Jenis</th>
+                            <td>:</td>
+                            <td>@ViewBag.Data.JenisName</td>
+                        </tr>
+                        <tr>
+                            <th>Detail Eksisting Lokasi</th>
+                            <td>:</td>
+                            <td>@ViewBag.Data.DetailExisting</td>
+                        </tr>
+                        <tr>
+                            <th>Kondisi</th>
+                            <td>:</td>
+                            <td>
+                                @if (ViewBag.Data.Kondisi == "Baik")
+                                {
+                                    <b style="color:green;">Baik</b>
+                                }
+                                else if (ViewBag.Data.Kondisi == "Sedang")
+                                {
+                                    <b style="color:orange;">Sedang</b>
+                                }
+                                else if(ViewBag.Data.Kondisi == "Buruk")
+                                {
+                                    <b style="color:red;">Buruk</b>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Lokasi</th>
+                            <td>:</td>
+                            <td>@ViewBag.Data.Port</td>
+                        </tr>
+                        <tr>
+                            <th>Nomor Asset</th>
+                            <td>:</td>
+                            <td>@ViewBag.Data.QRCodeText</td>
+                        </tr>
+                        <tr>
+                            <th>Brand</th>
+                            <td>:</td>
+                            <td>@ViewBag.Data.Brand</td>
+                        </tr>
+                        <tr>
+                            <th>Serial Number</th>
+                            <td>:</td>
+                            <td>@ViewBag.Data.SerialNumber</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+   
+
+
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/datatable/datatable.js"></script>

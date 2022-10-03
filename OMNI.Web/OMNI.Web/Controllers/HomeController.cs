@@ -31,6 +31,8 @@ namespace OMNI.Web.Controllers
         private static readonly string INDEX_FILE = "~/Views/Home/IndexFile.cshtml";
         private static readonly string ADD_EDIT_FILE = "~/Views/Home/AddEditFile.cshtml";
 
+        private static readonly string QR_CODE_DETAIL = "~/Views/Home/QRCodeDetail.cshtml";
+
         protected ILLPTrx _llpTrxService;
         protected IPersonilTrx _personilTrxService;
         protected IPersonil _personilService;
@@ -114,6 +116,15 @@ namespace OMNI.Web.Controllers
             var contentType = await _llpTrxService.GetContentType(id);
 
             return File(r, @"" + contentType);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> QrCodeDetail(int id)
+        {
+            LLPTrxModel data = await _llpTrxService.GetById(id);
+            ViewBag.Data = data;
+            return PartialView(QR_CODE_DETAIL);
         }
 
         [HttpGet]

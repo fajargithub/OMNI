@@ -23,6 +23,8 @@ namespace OMNI.Web.Data
         public DbSet<LatihanTrx> LatihanTrx { get; set; }
         public DbSet<Personil> Personil { get; set; }
         public DbSet<PersonilTrx> PersonilTrx { get; set; }
+        public DbSet<Status> Status { get; set; }
+        public DbSet<Lampiran> Lampiran { get; set; }
         public DbSet<LLPTrx> LLPTrx { get; set; }
     }
 }
