@@ -8,7 +8,8 @@ namespace OMNI.Web.Data.Dao
 {
     public class Lampiran : BaseDao
     {
-        public virtual LLPTrx LLPTrx { get; set; }
+        public string Name { get; set; }
+        public string Port { get; set; }
         public string LampiranType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

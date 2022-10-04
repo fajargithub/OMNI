@@ -6,11 +6,11 @@
         <div class="row">
             <div class="col-xl-12">
                 <div id="panel-1" class="panel">
-                    <div class="panel-hdr">
+                    @*<div class="panel-hdr">
                         <div class="panel-toolbar">
                             <a asp-action="AddEditFile" asp-route-trxId="@ViewBag.TrxId" asp-route-flag="@ViewBag.Flag" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit-file"><i class="fal fa-plus"></i>  Add</a>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="panel-container show">
                         <div class="panel-content">
                             <table id="table_files" class="table table-borderless table-hover table-striped w-100">
@@ -18,7 +18,7 @@
                                     <tr class="fw-500 text-uppercase">
                                         <th style="width:5%;">No</th>
                                         <th style="width:50%;">File Name</th>
-                                        <th style="width:20px;">Uploaded At</th>
+                                        <th>Date</th>
                                         <th class="text-center" style="width:10px;">Action</th>
                                     </tr>
                                 </thead>

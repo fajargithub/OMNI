@@ -1,0 +1,96 @@
+﻿@model OMNI.Web.Models.Master.LampiranModel
+
+<style>
+    #upload-label {
+        color: darkred;
+        font-size: 12px;
+    }
+</style>
+<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Lampiran " + ViewBag.Title })
+
+    <div class="modal-body">
+        @Html.HiddenFor(b => b.Id)
+
+         <div class="row">
+             <div class="col-md-12">
+                 <div class="form-group">
+                     <label class="form-label" for="">Perihal Surat</label>
+                     <input class="form-control" asp-for="Name" required>
+                     <input type="hidden" asp-for="LampiranType" required>
+                     <input type="hidden" asp-for="Port" required>
+                 </div>
+             </div>
+         </div> <br />
+
+         <div class="row">
+             <div class="col-md-12">
+                 <div class="form-group">
+                     <label class="form-label" for="">Tanggal Keluar Surat</label>
+                     <input type="text" id="startDate" asp-for="StartDate" name="StartDate" class="form-control datepicker" style="width: 100% !important;" required>
+                 </div>
+             </div>
+         </div> <br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="form-label" for="">Upload File <i id="upload-label">(*jpeg, *png, *pdf)</i></label>
+                    <input type="file" name="Files" id="files" class="form-control" asp-for="Files" multiple accept="image/jpeg,image/png,application/pdf" />
+                </div>
+            </div>
+        </div><br />
+
+        <div class="form-group">
+            <label class="form-label" for="">Remark</label>
+            <textarea class="form-control" asp-for="Remark"></textarea>
+        </div>
+    </div>
+
+    @await Html.PartialAsync("_ModalFooter")
+</form>
+
+<script type="text/javascript">
+
+    var id = parseInt("@ViewBag.Id");
+
+    if (id > 0) {
+        $("#files").prop('required', false);
+    } else {
+        $("#files").prop('required', true);
+    }
+
+    $("#startDate").keydown(function (e) {
+        e.preventDefault();
+    });
+
+    $(".datepicker").datepicker({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-10:+10"
+    });
+
+    $(document).on('submit', '#form-akun', function () {
+        var form = $('#form-akun');
+        var validation = Array.prototype.filter.call(form, function (form) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            else {
+                event.preventDefault();
+                var param = new FormParam(
+                    form,
+                    "Apakah Anda yakin ingin menyimpan akun ini?",
+                    '@Url.Action("AddEdit")',
+                    null,
+                    '#modal-add-edit',
+                    '#table_surat_penilaian'
+                );
+                initApp.formSubmit(param);
+            }
+            form.classList.add('was-validated');
+        });
+    });
+</script>

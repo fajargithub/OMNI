@@ -10,9 +10,9 @@ namespace OMNI.Web.Services.Trx.Interface
 {
     public interface ILampiran
     {
-        public Task<List<Lampiran>> GetAll();
-        public Task<Lampiran> GetById(int id);
+        public Task<List<LampiranModel>> GetAllByPort(string port);
+        public Task<LampiranModel> GetById(int id);
         public Task<BaseJson<LampiranModel>> AddEdit(LampiranModel model);
-        public Task<Lampiran> Delete(int id);
+        public Task<string> Delete(int id);
     }
 }

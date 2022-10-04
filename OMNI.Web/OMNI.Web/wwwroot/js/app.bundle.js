@@ -624,10 +624,12 @@ var initApp = (function (app) {
                                     /*$(init.tableId).DataTable().ajax.reload(countTotalPercentageLLPTrx, false);*/
                                     $(init.tableId).DataTable().ajax.reload(function () {
                                         console.log('on reload datatable!');
-                                        countTotalPercentageLLPTrx();
-                                        countPercentagePersonilTrx();
-                                        countPercentageLatihanTrx();
-
+                                        if (init.tableId == "#table_llp_trx" || init.tableId == "#table_personil_trx" || init.tableId == "#table_latihan_trx") {
+                                            console.log('on count total percentage app bundle!');
+                                            countTotalPercentageLLPTrx();
+                                            countPercentagePersonilTrx();
+                                            countPercentageLatihanTrx();
+                                        }
                                     });
                                 } else {
                                     window.location.replace(init.returnUrl);
