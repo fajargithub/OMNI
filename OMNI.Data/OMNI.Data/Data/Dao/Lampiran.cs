@@ -9,10 +9,10 @@ namespace OMNI.Migrations.Data.Dao
 {
     public class Lampiran : BaseDao
     {
-        public virtual LLPTrx LLPTrx { get; set; }
+        public string Port { get; set; }
         public string LampiranType { get; set; } //PENILAIAN, PENGESAHAN, VERIFIKASI1, VERIFIKASI2
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string Remark { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using OMNI.Migrations.Data.Dao;
 using OMNI.Utilities.Base;
 using OMNI.Utilities.Constants;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,10 +27,25 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         // GET: api/<ValuesController>
-        [HttpGet("GetByTrxId")]
-        public async Task<IActionResult> GetByTrxId(int id, string lampiranType, CancellationToken cancellationToken)
+        [HttpGet("GetAllSuratPenilaian")]
+        public async Task<IActionResult> GetAllSuratPenilaian(string port, CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.Lampiran.Where(b => b.IsDeleted == GeneralConstants.NO && b.LLPTrx.Id == id && b.LampiranType == lampiranType).Include(b => b.LLPTrx).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+            List<LampiranModel> result = new List<LampiranModel>();
+            var list = await _dbOMNI.Lampiran.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.LampiranType == "SURAT PENILAIAN").OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+            if(list.Count() > 0)
+            {
+                for(int i=0; i < list.Count(); i++)
+                {
+                    LampiranModel temp = new LampiranModel();
+                    temp.FileName = "FileName.pdf";
+                    temp.StartDate = list[i].StartDate.HasValue ? list[i].StartDate.Value.ToString("dd MMM yyyy") : "-";
+                    temp.EndDate = list[i].EndDate.HasValue ? list[i].EndDate.Value.ToString("dd MMM yyyy") : "-";
+                    temp.CreateDate = list[i].CreatedAt != null ? list[i].CreatedAt.ToString("dd MMM yyyy") : "-";
+                    temp.CreatedBy = list[i].CreatedBy;
+                    temp.Remark = list[i].Remark;
+                    result.Add(temp);
+                }
+            }
             return Ok(result);
         }
 

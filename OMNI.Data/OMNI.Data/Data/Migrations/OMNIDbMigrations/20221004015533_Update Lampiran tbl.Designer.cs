@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OMNI.Data.Data;
 
-namespace OMNI.Data.Data.Migrations.OMNIDbMigrations
+namespace OMNI.Migrations.Data.Migrations.OMNIDbMigrations
 {
     [DbContext(typeof(OMNIDbContext))]
-    partial class OMNIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221004015533_Update Lampiran tbl")]
+    partial class UpdateLampirantbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1040,7 +1042,7 @@ namespace OMNI.Data.Data.Migrations.OMNIDbMigrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime?>("EndDate")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("IsActive")
@@ -1060,7 +1062,7 @@ namespace OMNI.Data.Data.Migrations.OMNIDbMigrations
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("StartDate")
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("UpdatedAt")
