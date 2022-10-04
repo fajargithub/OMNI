@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Minio;
 using OMNI.API.Model.OMNI;
 using OMNI.Data.Data;
 using OMNI.Data.Data.Dao;
@@ -17,27 +18,27 @@ namespace OMNI.API.Controllers.OMNI
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class LampiranController : ControllerBase
+    public class LampiranController : BaseController
     {
-        private readonly OMNIDbContext _dbOMNI;
-
-        public LampiranController(OMNIDbContext dbOMNI)
+        public LampiranController(OMNIDbContext dbOMNI, MinioClient mc) : base(dbOMNI, mc)
         {
             _dbOMNI = dbOMNI;
+            _mc = mc;
         }
 
         // GET: api/<ValuesController>
-        [HttpGet("GetAllSuratPenilaian")]
-        public async Task<IActionResult> GetAllSuratPenilaian(string port, CancellationToken cancellationToken)
+        [HttpGet("GetAllByPort")]
+        public async Task<IActionResult> GetAllByPort(string port, CancellationToken cancellationToken)
         {
             List<LampiranModel> result = new List<LampiranModel>();
-            var list = await _dbOMNI.Lampiran.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.LampiranType == "SURAT PENILAIAN").OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+            var list = await _dbOMNI.Lampiran.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
             if(list.Count() > 0)
             {
                 for(int i=0; i < list.Count(); i++)
                 {
                     LampiranModel temp = new LampiranModel();
-                    temp.FileName = "FileName.pdf";
+                    temp.Id = list[i].Id;
+                    temp.Name = list[i].Name;
                     temp.StartDate = list[i].StartDate.HasValue ? list[i].StartDate.Value.ToString("dd MMM yyyy") : "-";
                     temp.EndDate = list[i].EndDate.HasValue ? list[i].EndDate.Value.ToString("dd MMM yyyy") : "-";
                     temp.CreateDate = list[i].CreatedAt != null ? list[i].CreatedAt.ToString("dd MMM yyyy") : "-";
@@ -46,6 +47,7 @@ namespace OMNI.API.Controllers.OMNI
                     result.Add(temp);
                 }
             }
+
             return Ok(result);
         }
 
@@ -53,12 +55,23 @@ namespace OMNI.API.Controllers.OMNI
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
         {
-            var result = await _dbOMNI.Lampiran.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).FirstOrDefaultAsync(cancellationToken);
+            LampiranModel result = new LampiranModel();
+            var temp = await _dbOMNI.Lampiran.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).FirstOrDefaultAsync(cancellationToken);
+            if(temp != null)
+            {
+                result.Id = temp.Id;
+                result.Name = temp.Name;
+                result.LampiranType = temp.LampiranType;
+                result.Port = temp.Port;
+                result.StartDate = temp.StartDate.HasValue ? temp.StartDate.Value.ToString("MM/dd/yyyy") : "";
+                result.EndDate = temp.EndDate.HasValue ? temp.EndDate.Value.ToString("MM/dd/yyyy") : "";
+                result.Remark = temp.Remark;
+            }
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEdit(LampiranModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddEdit([FromForm] LampiranModel model, CancellationToken cancellationToken)
         {
             DateTime nullDate = new DateTime();
             Lampiran data = new Lampiran();
@@ -66,8 +79,10 @@ namespace OMNI.API.Controllers.OMNI
             {
                 data = await _dbOMNI.Lampiran.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
                 data.LampiranType = model.LampiranType;
-                data.StartDate = !string.IsNullOrEmpty(model.StartDate) ? DateTime.ParseExact("dd/MM/yyyy", model.StartDate, null) : nullDate;
-                data.EndDate = !string.IsNullOrEmpty(model.StartDate) ? DateTime.ParseExact("dd/MM/yyyy", model.StartDate, null) : nullDate;
+                data.Name = model.Name;
+                data.Port = model.Port;
+                data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
+                data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
                 data.Remark = model.Remark;
                 data.UpdatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
@@ -76,14 +91,35 @@ namespace OMNI.API.Controllers.OMNI
             }
             else
             {
-                data.LampiranType = model.LampiranType;
-                data.StartDate = !string.IsNullOrEmpty(model.StartDate) ? DateTime.ParseExact("dd/MM/yyyy", model.StartDate, null) : nullDate;
-                data.EndDate = !string.IsNullOrEmpty(model.StartDate) ? DateTime.ParseExact("dd/MM/yyyy", model.StartDate, null) : nullDate;
-                data.Remark = model.Remark;
-                data.CreatedAt = DateTime.Now;
-                data.UpdatedBy = "admin";
-                await _dbOMNI.Lampiran.AddAsync(data, cancellationToken);
-                await _dbOMNI.SaveChangesAsync(cancellationToken);
+                try
+                {
+                    data.LampiranType = model.LampiranType;
+                    data.Name = model.Name;
+                    data.Port = model.Port;
+                    data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
+                    data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
+                    data.Remark = model.Remark;
+                    data.CreatedAt = DateTime.Now;
+                    data.CreatedBy = "admin";
+                    data.UpdatedBy = "admin";
+                    await _dbOMNI.Lampiran.AddAsync(data, cancellationToken);
+                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
+
+            if (model.Files != null)
+            {
+                if (model.Files.Count() > 0)
+                {
+                    for (int i = 0; i < model.Files.Count(); i++)
+                    {
+                        await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OSMOSYS_PENILAIAN, isUpdate: model.Files != null, remark: null);
+                    }
+
+                }
             }
 
             return Ok(new ReturnJson { Payload = data });

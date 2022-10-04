@@ -9,6 +9,7 @@ namespace OMNI.Migrations.Data.Dao
 {
     public class Lampiran : BaseDao
     {
+        public string Name { get; set; }
         public string Port { get; set; }
         public string LampiranType { get; set; } //PENILAIAN, PENGESAHAN, VERIFIKASI1, VERIFIKASI2
         public DateTime? StartDate { get; set; }

@@ -23,6 +23,12 @@ namespace OMNI.Utilities.Constants
         public static readonly string UW_ATTACHMENT_FILE = nameof(UW_ATTACHMENT_FILE);
         public static readonly string ANSWER_IMAGE = nameof(ANSWER_IMAGE);
 
+        //LAMPIRAN
+        public static readonly string OSMOSYS_PENILAIAN = nameof(OSMOSYS_PENILAIAN);
+        public static readonly string OSMOSYS_PENGESAHAN = nameof(OSMOSYS_PENGESAHAN);
+        public static readonly string OSMOSYS_VERIFIKASI1 = nameof(OSMOSYS_VERIFIKASI1);
+        public static readonly string OSMOSYS_VERIFIKASI2 = nameof(OSMOSYS_VERIFIKASI2);
+
         public static readonly string IMG_PLACEHOLDER = "wwwroot/img/place_holder.png";
 
         public const string CREATE = nameof(CREATE);
