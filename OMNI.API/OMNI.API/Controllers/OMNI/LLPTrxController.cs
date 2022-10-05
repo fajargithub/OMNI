@@ -543,6 +543,17 @@ namespace OMNI.API.Controllers.OMNI
             return Ok(result);
         }
 
+        [HttpPost("UpdateQRCode")]
+        public async Task<IActionResult> UpdateQRCode(QRCodeModel model, CancellationToken cancellationToken)
+        {
+            LLPTrx data = await _dbOMNI.LLPTrx.Where(b => b.Id == model.PrimaryId).FirstOrDefaultAsync(cancellationToken);
+            data.QRCode = model.QRCode;
+            _dbOMNI.LLPTrx.Update(data);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+            return Ok(new ReturnJson { Payload = data });
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddEdit([FromForm] LLPTrxModel model, CancellationToken cancellationToken)
         {
@@ -578,7 +589,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
 
                     data.Port = model.Port;
-                    data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
+                    //data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
                     data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
                     data.DetailExisting = model.DetailExisting;
                     data.Kondisi = model.Kondisi;
@@ -613,7 +624,7 @@ namespace OMNI.API.Controllers.OMNI
                         }
                     }
 
-                    return Ok(new ReturnJson { });
+                    return Ok(new ReturnJson { Id = data.Id });
                 } else
                 {
                     return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "No Asset already exist" });
@@ -631,7 +642,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
 
                     data.Port = model.Port;
-                    data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
+                   // data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
                     data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
                     data.DetailExisting = model.DetailExisting;
                     data.Kondisi = model.Kondisi;
@@ -666,7 +677,7 @@ namespace OMNI.API.Controllers.OMNI
                         }
                     }
 
-                    return Ok(new ReturnJson { });
+                    return Ok(new ReturnJson { Id = data.Id });
                 }
             }
 

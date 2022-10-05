@@ -26,8 +26,7 @@ namespace OMNI.Utilities.Constants
         //LAMPIRAN
         public static readonly string OSMOSYS_PENILAIAN = nameof(OSMOSYS_PENILAIAN);
         public static readonly string OSMOSYS_PENGESAHAN = nameof(OSMOSYS_PENGESAHAN);
-        public static readonly string OSMOSYS_VERIFIKASI1 = nameof(OSMOSYS_VERIFIKASI1);
-        public static readonly string OSMOSYS_VERIFIKASI2 = nameof(OSMOSYS_VERIFIKASI2);
+        public static readonly string OSMOSYS_VERIFIKASI = nameof(OSMOSYS_VERIFIKASI);
 
         public static readonly string IMG_PLACEHOLDER = "wwwroot/img/place_holder.png";
 

@@ -39,6 +39,8 @@ namespace OMNI.API.Controllers.OMNI
                     LampiranModel temp = new LampiranModel();
                     temp.Id = list[i].Id;
                     temp.Name = list[i].Name;
+                    temp.LampiranType = list[i].LampiranType;
+                    temp.Port = list[i].Port;
                     temp.StartDate = list[i].StartDate.HasValue ? list[i].StartDate.Value.ToString("dd MMM yyyy") : "-";
                     temp.EndDate = list[i].EndDate.HasValue ? list[i].EndDate.Value.ToString("dd MMM yyyy") : "-";
                     temp.CreateDate = list[i].CreatedAt != null ? list[i].CreatedAt.ToString("dd MMM yyyy") : "-";
@@ -110,13 +112,26 @@ namespace OMNI.API.Controllers.OMNI
                 }
             }
 
+            string fileFlag = "";
+
+            if(data.LampiranType == "PENILAIAN")
+            {
+                fileFlag = GeneralConstants.OSMOSYS_PENILAIAN;
+            } else if(data.LampiranType == "PENGESAHAN")
+            {
+                fileFlag = GeneralConstants.OSMOSYS_PENGESAHAN;
+            } else if(data.LampiranType == "VERIFIKASI1" || data.LampiranType == "VERIFIKASI2")
+            {
+                fileFlag = GeneralConstants.OSMOSYS_VERIFIKASI;
+            } 
+
             if (model.Files != null)
             {
                 if (model.Files.Count() > 0)
                 {
                     for (int i = 0; i < model.Files.Count(); i++)
                     {
-                        await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: GeneralConstants.OSMOSYS_PENILAIAN, isUpdate: model.Files != null, remark: null);
+                        await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: fileFlag, isUpdate: model.Files != null, remark: null);
                     }
 
                 }

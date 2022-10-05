@@ -7,6 +7,7 @@ namespace OMNI.Utilities.Base
 {
     public class ReturnJson
     {
+        public int Id { get; set; }
         public int Code { get; set; } = (int)HttpStatusCode.OK;
         public bool IsSuccess { get; set; } = true;
 
