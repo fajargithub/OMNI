@@ -110,6 +110,27 @@ namespace OMNI.Web.Services.Trx
             throw new Exception();
         }
 
+        public async Task<BaseJson<QRCodeDataModel>> UpdateQRCode(QRCodeDataModel m)
+        {
+            HttpClient c = _httpClient.CreateClient("OMNI");
+
+            try
+            {
+                var r = await c.PostAsJsonAsync("/api/LLPTrx/UpdateQRCode", m);
+
+                if (r.IsSuccessStatusCode)
+                {
+                    return await r.Content.ReadAsAsync<BaseJson<QRCodeDataModel>>();
+                }
+
+                throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<BaseJson<LLPTrxModel>> AddEdit(LLPTrxModel m)
         {
             HttpClient c = _httpClient.CreateClient("OMNI");
@@ -131,7 +152,7 @@ namespace OMNI.Web.Services.Trx
                     m.Remark = "";
                 }
                 data.Add(new StringContent(m.Remark), "Remark");
-                data.Add(new StringContent(m.QRCode.ToString()), "QRCode");
+                //data.Add(new StringContent(m.QRCode.ToString()), "QRCode");
                 data.Add(new StringContent(m.QRCodeText.ToString()), "QRCodeText");
                 data.Add(new StringContent(m.DetailExisting.ToString()), "DetailExisting");
 

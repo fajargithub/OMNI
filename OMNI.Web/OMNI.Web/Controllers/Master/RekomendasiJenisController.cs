@@ -7,6 +7,7 @@ using OMNI.Web.Models;
 using OMNI.Web.Models.Master;
 using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
+using OMNI.Web.Services.Trx.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +24,15 @@ namespace OMNI.Web.Controllers.Master
 
         protected ISpesifikasiJenis _spesifikasiJenisService;
         protected IRekomendasiJenis _rekomendasiJenisService;
-        public RekomendasiJenisController(IRekomendasiType rekomendasiTypeService, IRekomendasiJenis rekomendasiJenisService, ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        protected ILampiran _lampiranService;
+        public RekomendasiJenisController(ILampiran lampiranService, IRekomendasiType rekomendasiTypeService, IRekomendasiJenis rekomendasiJenisService, ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _rekomendasiTypeService = rekomendasiTypeService;
             _rekomendasiJenisService = rekomendasiJenisService;
             _peralatanOSRService = peralatanOSRService;
             _spesifikasiJenisService = spesifikasiJenisService;
             _portService = portService;
+            _lampiranService = lampiranService;
         }
 
         public async Task<JsonResult> GetAll(string port, string typeId, int year)
@@ -60,6 +63,9 @@ namespace OMNI.Web.Controllers.Master
             if (year > 0)
             {
                 ViewBag.ThisYear = year;
+            } else
+            {
+                year = thisYear;
             }
 
             if (!string.IsNullOrEmpty(port))
@@ -68,7 +74,9 @@ namespace OMNI.Web.Controllers.Master
             }
             else
             {
-                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+                ViewBag.SelectedPort = findPort;
+                port = findPort.Name;
             }
 
             List<RekomendasiType> rekomendasiTypeList = await _rekomendasiTypeService.GetAll();
@@ -81,6 +89,25 @@ namespace OMNI.Web.Controllers.Master
             else
             {
                 ViewBag.SelectedRekomendasiType = rekomendasiTypeList.OrderBy(b => b.Id).FirstOrDefault();
+            }
+
+            ViewBag.StatusSurat = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
+
+            //FIND LAMPIRAN
+            List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(port);
+            if (lampiranList.Count() > 0)
+            {
+                List<LampiranModel> findLampiranType = new List<LampiranModel>();
+                //FIND PENILAIAN
+                findLampiranType = lampiranList.FindAll(b => b.LampiranType == "PENILAIAN").ToList();
+                if (findLampiranType.Count() < 1)
+                {
+                    ViewBag.StatusSurat = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
+                }
+                else
+                {
+                    ViewBag.StatusSurat = "";
+                }
             }
 
             return View(INDEX);

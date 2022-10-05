@@ -20,6 +20,7 @@ namespace OMNI.Web.Services.Trx.Interface
         public Task<List<LLPTrxModel>> GetAllLLPTrx(string port, int year);
         public Task<LLPTrxModel> GetById(int id);
         public Task<BaseJson<LLPTrxModel>> AddEdit(LLPTrxModel model);
+        public Task<BaseJson<QRCodeDataModel>> UpdateQRCode(QRCodeDataModel model);
         public Task<LLPTrx> Delete(int id);
         public Task<BaseJson<FilesModel>> AddEditFiles(FilesModel model);
         public Task<string> GetLastNoAsset(AssetDataModel data);

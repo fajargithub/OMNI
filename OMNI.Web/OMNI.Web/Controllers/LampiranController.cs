@@ -37,10 +37,6 @@ namespace OMNI.Web.Controllers
             ViewBag.YearList = GetYearList(2010, 2030);
 
             ViewBag.ThisYear = thisYear;
-            //if (year > 0)
-            //{
-            //    ViewBag.ThisYear = year;
-            //}
 
             List<Port> portList = await GetAllPort();
             ViewBag.PortList = portList;
@@ -71,6 +67,22 @@ namespace OMNI.Web.Controllers
         public async Task<IActionResult> AddEdit(int id, string port, string lampiranType)
         {
             ViewBag.Id = id;
+            ViewBag.LampiranType = lampiranType;
+            ViewBag.Title = "";
+
+            if(lampiranType == "PENILAIAN")
+            {
+                ViewBag.Title = "Surat Penilaian";
+            } else if(lampiranType == "PENGESAHAN")
+            {
+                ViewBag.Title = "Surat Pengesahan";
+            } else if(lampiranType == "VERIFIKASI1")
+            {
+                ViewBag.Title = "Verifikasi Surat Pengesahan 2,5 Tahun Pertama";
+            } else if(lampiranType == "VERIFIKASI2")
+            {
+                ViewBag.Title = "Verifikasi Surat Pengesahan 2,5 Tahun Kedua";
+            }
 
             var region = await _portService.GetPortRegion(port);
             ViewBag.Region = region;
@@ -103,6 +115,41 @@ namespace OMNI.Web.Controllers
         {
             List<LampiranModel> data = await _lampiranService.GetAllByPort(port);
 
+            if(data.Count() > 0)
+            {
+                data = data.FindAll(b => b.LampiranType == "PENILAIAN").ToList();
+            }
+            return Json(new
+            {
+                data
+            });
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAllVerifikasiSurat(string port)
+        {
+            List<LampiranModel> data = await _lampiranService.GetAllByPort(port);
+
+            if (data.Count() > 0)
+            {
+                data = data.FindAll(b => b.LampiranType.Contains("VERIFIKASI")).ToList();
+            }
+            return Json(new
+            {
+                data
+            });
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAllSuratPengesahan(string port)
+        {
+            List<LampiranModel> data = new List<LampiranModel>();
+            List<LampiranModel> list = await _lampiranService.GetAllByPort(port);
+
+            if (list.Count() > 0)
+            {
+                data = list.FindAll(b => b.LampiranType == "PENGESAHAN").ToList();
+            }
             return Json(new
             {
                 data

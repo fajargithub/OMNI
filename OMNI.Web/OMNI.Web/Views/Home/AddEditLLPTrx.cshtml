@@ -212,19 +212,22 @@
                 }, complete: function () {
                     if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
                         inventoryNumber = kodeInventory + "-" + $("#year").val() + "-" + region + "-" + $("#noAset").val();
-                        $.ajax({
-                            url: generateQRCode(),
-                            complete: function () {
-                                $("#qrcode-text").val(inventoryNumber);
+                        $("#qrcode-text").val(inventoryNumber);
+                        //$.ajax({
+                        //    url: generateQRCode(),
+                        //    complete: function () {
+                        //        $("#qrcode-text").val(inventoryNumber);
 
-                                var canvas = document.querySelector('canvas');
-                                var pngUrl = canvas.toDataURL();
+                        //        var canvas = document.querySelector('canvas');
+                        //        var pngUrl = canvas.toDataURL();
 
-                                $("#qrcode-value").val(pngUrl);
+                        //        $("#qrcode-value").val(pngUrl);
 
-                                $("#submit").show();
-                            }
-                        });
+                        //        $("#submit").show();
+                        //    }
+                        //});
+
+                        $("#submit").show();
                     } else {
                         $("#submit").hide();
                         inventoryNumber = "";
@@ -251,20 +254,23 @@
                         kodeInventory = $("#kodeInventory").val();
                         inventoryNumber = kodeInventory + "-" + $("#year").val() + "-" + region + "-" + $("#noAset").val();
                         console.log(inventoryNumber);
-                        $.ajax({
-                            url: generateQRCode(),
-                            complete: function () {
-                                console.log(inventoryNumber);
-                                $("#qrcode-text").val(inventoryNumber);
+                        $("#qrcode-text").val(inventoryNumber);
 
-                                var canvas = document.querySelector('canvas');
-                                var pngUrl = canvas.toDataURL();
+                        //$.ajax({
+                        //    url: generateQRCode(),
+                        //    complete: function () {
+                        //        console.log(inventoryNumber);
+                        //        $("#qrcode-text").val(inventoryNumber);
 
-                                $("#qrcode-value").val(pngUrl);
+                        //        var canvas = document.querySelector('canvas');
+                        //        var pngUrl = canvas.toDataURL();
 
-                                $("#submit").show();
-                            }
-                        });
+                        //        $("#qrcode-value").val(pngUrl);
+
+                        //        $("#submit").show();
+                        //    }
+                        //});
+                        $("#submit").show();
                     } else {
                         $("#submit").hide();
                         inventoryNumber = "";
@@ -291,61 +297,33 @@
         });
 
         function generateQRCode() {
-            $('#qrcode').empty();
+            //$('#qrcode').empty();
 
-            const qrCode = new QRCodeStyling({
-                width: 300,
-                height: 300,
-                type: "canvas",
-                data: inventoryNumber,
-                image: "/img/pertamina.png",
-                dotsOptions: {
-                    color: "#4267b2",
-                    type: "rounded"
-                },
-                backgroundOptions: {
-                    color: "#e9ebee",
-                },
-                imageOptions: {
-                    crossOrigin: "anonymous",
-                    margin: 5,
-                }
-            });
+            //const qrCode = new QRCodeStyling({
+            //    width: 300,
+            //    height: 300,
+            //    type: "canvas",
+            //    data: inventoryNumber,
+            //    image: "/img/pertamina.png",
+            //    dotsOptions: {
+            //        color: "#4267b2",
+            //        type: "rounded"
+            //    },
+            //    backgroundOptions: {
+            //        color: "#e9ebee",
+            //    },
+            //    imageOptions: {
+            //        crossOrigin: "anonymous",
+            //        margin: 5,
+            //    }
+            //});
 
-            qrCode.append(document.getElementById("qrcode"));
+            //qrCode.append(document.getElementById("qrcode"));
         }
 
         $("#year").on("change", function () {
             validateNoAsset();
         });
-
-        //$("#noAset").on('change', function () {
-        //    $("#submit").hide();
-        //    var kodeInventory = $("#kodeInventory").val();
-        //    var year = $("#year").val();
-        //    var region = $("#region").val();
-
-        //    if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
-        //        inventoryNumber = kodeInventory + "-" + year + "-" + region + "-" + $("#noAset").val();
-
-        //        $.ajax({
-        //            url: generateQRCode(),
-        //            complete: function () {
-        //                $("#qrcode-text").val(inventoryNumber);
-
-        //                var canvas = document.querySelector('canvas');
-        //                var pngUrl = canvas.toDataURL();
-
-        //                $("#qrcode-value").val(pngUrl);
-
-        //                $("#submit").show();
-        //            }
-        //        });
-        //    } else {
-        //        $("#submit").hide();
-        //        inventoryNumber = "";
-        //    }
-        //});
 
         if (selectedPeralatanOSR > 0) {
             $.ajax({
@@ -404,7 +382,7 @@
             var canvas = document.querySelector('canvas');
             var pngUrl = canvas.toDataURL();
 
-            $("#qrcode-value").val(pngUrl);
+            //$("#qrcode-value").val(pngUrl);
 
         });
 
@@ -429,7 +407,7 @@
                     '#modal-add-edit',
                     '#table_llp_trx'
                 );
-                initApp.formSubmit(param);
+                initApp.formSubmit2(param);
             }
             form.classList.add('was-validated');
         });

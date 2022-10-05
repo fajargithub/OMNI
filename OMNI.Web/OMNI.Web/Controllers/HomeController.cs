@@ -40,7 +40,8 @@ namespace OMNI.Web.Controllers
         protected ISpesifikasiJenis _spesifikasiJenisService;
         protected ILatihan _latihanService;
         protected ILatihanTrx _latihanTrxService;
-        public HomeController(ILogger<HomeController> logger,ILatihan latihanService, ILatihanTrx latihanTrxService, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        protected ILampiran _lampiranService;
+        public HomeController(ILogger<HomeController> logger,ILampiran lampiranService, ILatihan latihanService, ILatihanTrx latihanTrxService, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _logger = logger;
             _llpTrxService = llpTrxService;
@@ -51,19 +52,23 @@ namespace OMNI.Web.Controllers
             _personilService = personilService;
             _latihanService = latihanService;
             _latihanTrxService = latihanTrxService;
+            _lampiranService = lampiranService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(string port, int year)
         {
             var thisYear = DateTime.Now.Year;
-
             ViewBag.YearList = GetYearList(2010, 2030);
-
             ViewBag.ThisYear = thisYear;
-            if(year > 0)
+            ViewBag.StatusSurat = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
+
+            if (year > 0)
             {
                 ViewBag.ThisYear = year;
+            } else
+            {
+                year = thisYear;
             }
 
             List<Port> portList = await GetAllPort();
@@ -75,8 +80,55 @@ namespace OMNI.Web.Controllers
             }
             else
             {
-                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+                ViewBag.SelectedPort = findPort;
+                port = findPort.Name;
             }
+
+            List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(port);
+            if(lampiranList.Count() > 0)
+            {
+                List<LampiranModel> findLampiranType = new List<LampiranModel>();
+
+                //FIND VERIFIKASI Ke 2
+                findLampiranType = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").ToList();
+                if(findLampiranType.Count() > 0)
+                {
+                    ViewBag.StatusSurat = "Verifikasi Surat Pengesahan Pemenuhan (2,5 tahun kedua) sudah terupload";
+                }
+                else
+                {
+                    //FIND VERIFIKASI Ke 1
+                    findLampiranType = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").ToList();
+                    if (findLampiranType.Count() > 0)
+                    {
+                        ViewBag.StatusSurat = "* Verifikasi Surat Pengesahan Pemenuhan (2,5 tahun pertama) sudah terupload, Mohon upload Surat Pengesahan Pemenuhan - verifikasi (2, 5 tahun kedua)";
+                    }
+                    else
+                    {
+                        //FIND PENGESAHAN
+                        findLampiranType = lampiranList.FindAll(b => b.LampiranType == "PENGESAHAN").ToList();
+                        if (findLampiranType.Count() > 0)
+                        {
+                            ViewBag.StatusSurat = "* Surat Pengesahan sudah terupload, Mohon upload Surat Pengesahan Pemenuhan - verifikasi (2, 5 tahun pertama)";
+                        }
+                        else
+                        {
+                            //FIND PENILAIAN
+                            findLampiranType = lampiranList.FindAll(b => b.LampiranType == "PENILAIAN").ToList();
+                            if (findLampiranType.Count() > 0)
+                            {
+                                ViewBag.StatusSurat = "* Surat Penilaian sudah terupload, Mohon upload Surat Pengesahan Pemenuhan";
+                            }
+                            else
+                            {
+                                ViewBag.StatusSurat = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
+                            }
+                        }
+
+                    }
+                }
+            } 
 
             return View();
         }
@@ -255,14 +307,25 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEditLLPTrx(LLPTrxModel model)
+        public async Task<IActionResult> UpdateQRCode(QRCodeDataModel data)
         {
-            var r = await _llpTrxService.AddEdit(model);
+            var r = await _llpTrxService.UpdateQRCode(data);
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {
                 return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
             }
             return Ok(new JsonResponse());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddEditLLPTrx(LLPTrxModel model)
+        {
+            var r = await _llpTrxService.AddEdit(model);
+            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
+            {
+                return Ok(new JsonResponse { Id = r.Id, Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            }
+            return Ok(new JsonResponse { Id = r.Id, Status = GeneralConstants.SUCCESS, ErrorMsg = r.ErrorMsg });
         }
 
         [HttpPost]

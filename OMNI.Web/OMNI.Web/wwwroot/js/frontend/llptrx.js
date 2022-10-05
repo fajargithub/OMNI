@@ -367,18 +367,18 @@ $("#table_llp_trx thead th input[type=text]").on('keyup change',
     });
 
 function qrcodeClick(id) {
-    window.open(base_api + "Home/QrCodeDetail?id=" + id);
-    //$.ajax({
-    //    url: base_api + "Home/GetLLPTrxById?id=" + id,
-    //    method: 'GET',
-    //    success: function (result) {
-    //        Swal.fire({
-    //            imageUrl: result.data.qrCode,
-    //            imageAlt: 'QR Code',
-    //            html: '<a href="javascript:void(0)" class="openimage" data-base64="' + result.data.qrCode + '">' + result.data.qrCodeText + '</a> '
-    //        })
-    //    }
-    //});
+    //window.open(base_api + "Home/QrCodeDetail?id=" + id);
+    $.ajax({
+        url: base_api + "Home/GetLLPTrxById?id=" + id,
+        method: 'GET',
+        success: function (result) {
+            Swal.fire({
+                imageUrl: result.data.qrCode,
+                imageAlt: 'QR Code',
+                html: 'No Asset: <a href="javascript:void(0)" class="openimage" data-base64="' + result.data.qrCode + '">' + result.data.qrCodeText + '</a> '
+            })
+        }
+    });
 }
 
 $(document).on('click', '.openimage', function () {

@@ -80,11 +80,14 @@
         </div>
     </div>
     <div class="col-xl-12">
+        <i style="color:red;">@ViewBag.StatusSurat</i>
+    </div>
+    <div class="col-xl-12">
         <br />
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    LLP
+                    Lindungan Lingkungan Perairan
                 </h2>
                 <div class="panel-toolbar">
                     <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>

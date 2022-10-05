@@ -35,10 +35,6 @@
             columnDefs: [
                 { "orderable": false, "targets": 5 }
             ],
-            //dom:
-            //    "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
-            //    "<'row'<'col-sm-12'tr>>" +
-            //    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             buttons: [
                 {
                     text: '<i class="fal fa-filter"></i> Filter',
@@ -49,11 +45,9 @@
                 },
             ],
             processing: true,
-            //serverSide: true,
             "ajax": {
                 "url": base_api + 'Lampiran/GetAllSuratPenilaian?port=' + port,
                 "type": 'GET'
-                //"data": { searchData: result }
             },
             "columns": [
                 { "data": null },
@@ -70,8 +64,6 @@
                             "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OSMOSYS_PENILAIAN' style='color:blue;' title='Files'><b><i class='fa fa-archive'></i></b></a> " +
                             "<a data-toggle='modal' data-target='#modal-add-edit' href='/Lampiran/AddEdit?id=" + iDisplayIndex.id + "&port="+ port +"&lampiranType=PENILAIAN' title='Edit'><b style='color:orange;'><i class='fa fa-pencil'></i></b></a>" +
                         " <a href='javascript:void(0)' onclick='deleteSuratPenilaian(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete'><b style='color:red;'><i class='fa fa-trash'></i></b></a>";
-                        //return "<a data-toggle='modal' data-target='#modal-add-edit' href='/Jenis/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
-                        //    " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
                     }
                 }
             ],

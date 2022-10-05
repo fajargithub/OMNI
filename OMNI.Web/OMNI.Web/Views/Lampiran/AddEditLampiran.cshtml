@@ -7,7 +7,7 @@
     }
 </style>
 <form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit Lampiran " + ViewBag.Title })
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add/Edit " + ViewBag.Title })
 
     <div class="modal-body">
         @Html.HiddenFor(b => b.Id)
@@ -53,6 +53,16 @@
 <script type="text/javascript">
 
     var id = parseInt("@ViewBag.Id");
+    var lampiranType = "@ViewBag.LampiranType";
+    var tableId = "";
+
+    if (lampiranType == "PENILAIAN") {
+        tableId = "#table_surat_penilaian";
+    } else if (lampiranType == "PENGESAHAN") {
+        tableId = "#table_surat_pengesahan";
+    } else if (lampiranType == 'VERIFIKASI1' || lampiranType == "VERIFIKASI2") {
+        tableId = "#table_verifikasi_surat";
+    }
 
     if (id > 0) {
         $("#files").prop('required', false);
@@ -86,7 +96,7 @@
                     '@Url.Action("AddEdit")',
                     null,
                     '#modal-add-edit',
-                    '#table_surat_penilaian'
+                    tableId
                 );
                 initApp.formSubmit(param);
             }

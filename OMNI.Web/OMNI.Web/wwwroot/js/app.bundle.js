@@ -2,6 +2,32 @@
 // HEADSUP!
 // Please be sure to re-run gulp again if you do not see the config changes
 //--------------------------------------------------------------------------
+function generateQRCode2(qrcode_url) {
+    console.log('on generate QR Code 2');
+    $('#qrcode').empty();
+
+    const qrCode = new QRCodeStyling({
+        width: 300,
+        height: 300,
+        type: "canvas",
+        data: qrcode_url,
+        image: "/img/pertamina.png",
+        dotsOptions: {
+            color: "#4267b2",
+            type: "rounded"
+        },
+        backgroundOptions: {
+            color: "#e9ebee",
+        },
+        imageOptions: {
+            crossOrigin: "anonymous",
+            margin: 5,
+        }
+    });
+
+    qrCode.append(document.getElementById("qrcode"));
+}
+
 var myapp_config = {
 	/*
 	APP VERSION
@@ -550,24 +576,140 @@ var initApp = (function (app) {
         });
     };
 
+    app.formSubmit2 = function (param) {
+        let init = new FormParam(param.form, param.questionText, param.submitUrl, param.returnUrl, param.modalId, param.tableId);
+        var formData = new FormData($(init.form)[0]);
+        var formId = init.form.getAttribute('id');
+
+        $(`#${formId} button[type=submit]`).html(`<i class="fal fa-spin fa-spinner-third" aria-hidden="true"></i> Loading`).attr("disabled", true);
+        //e.preventDefault();
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: init.questionText,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes!'
+        }).then((result) => {
+            if (result.value) {
+                let tempDropZone = $(`#${formId} div.dropzone`);
+                if (tempDropZone.length > 0) {
+                    $.each(tempDropZone, function (index, val) {
+                        let myDropzone = Dropzone.forElement(val);
+                        $.each(myDropzone.getAcceptedFiles(), function (index, val) {
+                            formData.append(myDropzone.element.dataset.name, val);
+                        });
+                    });
+                }
+
+                Swal.fire({
+                    title: '<i class="fa fa-cog fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only"> Submiting</span>',
+                    text: 'Saving, please wait',
+                    allowOutsideClick: false,
+                    showConfirmButton: false
+                });
+
+                $.ajax({
+                    url: init.submitUrl,
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (response) {
+
+                        $(init.tableId).DataTable().ajax.reload(function () {
+                            console.log('on reload datatable!');
+                            if (init.tableId == "#table_llp_trx" || init.tableId == "#table_personil_trx" || init.tableId == "#table_latihan_trx") {
+                                console.log('on count total percentage app bundle!');
+                                countTotalPercentageLLPTrx();
+                                countPercentagePersonilTrx();
+                                countPercentageLatihanTrx();
+
+                                var id = response.id;
+                                var qrcode_url = base_api + "Home/QrCodeDetail?id=" + id;
+
+                                $.ajax({
+                                    url: generateQRCode2(qrcode_url),
+                                    method: "GET",
+                                    complete: function () {
+                                        var canvas = document.querySelector('canvas');
+                                        var pngUrl = canvas.toDataURL();
+
+                                        var qrcodeVal = {
+                                            primaryId: id,
+                                            qrCode: pngUrl
+                                        }
+
+                                        $.ajax({
+                                            url: base_api + "Home/UpdateQRCode",
+                                            method: "POST",
+                                            data: { data: qrcodeVal },
+                                            success: function (result) {
+                                                if (response.status == "SUCCESS") {
+                                                    Swal.fire({
+                                                        title: 'Submitted!',
+                                                        text: 'Your data has been submited.',
+                                                        type: 'success',
+                                                        timer: 2000,
+                                                        timerProgressBar: true
+                                                    }).then(() => {
+                                                        $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
+                                                        if (init.returnUrl == null) {
+                                                            $(init.modalId).modal('hide');
+                                                            $(init.tableId).DataTable().ajax.reload(function () {
+                                                                console.log('on reload datatable!');
+                                                                countTotalPercentageLLPTrx();
+                                                                countPercentagePersonilTrx();
+                                                                countPercentageLatihanTrx();
+                                                            });
+                                                        } else {
+                                                            window.location.replace(init.returnUrl);
+                                                        }
+                                                    });
+                                                } else {
+                                                    var msgError = response.errorMsg == null ? 'Failed submited Data.' : response.errorMsg;
+                                                    Swal.fire(
+                                                        'Failed!',
+                                                        msgError,
+                                                        'error'
+                                                    );
+                                                    $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
+                                                }
+                                            }, complete: function () {
+
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        });
+
+                        
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Oops...',
+                            'Something went wrong!',
+                            'error'
+                        );
+                        $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
+                    },
+                    complete: function () {
+                        setTimeout(function () {
+                            Swal.close();
+                        }, 5000);
+                    }
+                });
+            } else {
+                $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
+            }
+        });
+    };
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Dimas Ver
     app.formSubmit = function (param) {
-    //HOW TO USE:
-    //var param = new FormParam(
-    //    "#addEditLocation",                                   * your form id*
-    //    {                                                     * your not null field
-    //                Name:
-    //        {
-    //            required: true
-    //        }
-    //    },
-    //        "Are you sure want to add/edit this Location?",   * validation message
-    //        '/Vetting/AddEditLocation',                       * Submit Url
-    //        null,                                             * Return Url [Optional]
-    //        "#modal-action",                                  * Modal Id [Optional]
-    //        "#locationTable"                                  * Table Id [Optional]
-    //    );
         let init = new FormParam(param.form, param.questionText, param.submitUrl, param.returnUrl, param.modalId, param.tableId);
         var formData = new FormData($(init.form)[0]);
         var formId = init.form.getAttribute('id');
@@ -624,12 +766,12 @@ var initApp = (function (app) {
                                     /*$(init.tableId).DataTable().ajax.reload(countTotalPercentageLLPTrx, false);*/
                                     $(init.tableId).DataTable().ajax.reload(function () {
                                         console.log('on reload datatable!');
-                                        if (init.tableId == "#table_llp_trx" || init.tableId == "#table_personil_trx" || init.tableId == "#table_latihan_trx") {
-                                            console.log('on count total percentage app bundle!');
-                                            countTotalPercentageLLPTrx();
-                                            countPercentagePersonilTrx();
-                                            countPercentageLatihanTrx();
-                                        }
+                                        //if (init.tableId == "#table_llp_trx" || init.tableId == "#table_personil_trx" || init.tableId == "#table_latihan_trx") {
+                                        //    console.log('on count total percentage app bundle!');
+                                        //    countTotalPercentageLLPTrx();
+                                        //    countPercentagePersonilTrx();
+                                        //    countPercentageLatihanTrx();
+                                        //}
                                     });
                                 } else {
                                     window.location.replace(init.returnUrl);
