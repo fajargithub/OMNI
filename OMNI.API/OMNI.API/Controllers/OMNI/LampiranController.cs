@@ -99,7 +99,24 @@ namespace OMNI.API.Controllers.OMNI
                     data.Name = model.Name;
                     data.Port = model.Port;
                     data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
-                    data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
+
+                    if (data.LampiranType == "PENGESAHAN")
+                    {
+                        data.EndDate = DateTime.Now.AddDays(910);
+                    }
+                    else if (data.LampiranType == "VERIFIKASI1")
+                    {
+                        var findPengesahan = await _dbOMNI.Lampiran.Where(b => b.LampiranType == "PENGESAHAN").OrderByDescending(b => b.Id).FirstOrDefaultAsync(cancellationToken);
+                        if(findPengesahan != null)
+                        {
+                            data.EndDate = findPengesahan.EndDate.Value.AddDays(910);
+                        }
+                    }
+                    else
+                    {
+                        data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
+                    }
+
                     data.Remark = model.Remark;
                     data.CreatedAt = DateTime.Now;
                     data.CreatedBy = "admin";
