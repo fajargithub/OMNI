@@ -58,10 +58,11 @@ namespace OMNI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string port, int year)
         {
-            var thisYear = DateTime.Now.Year;
+            var dateNow = DateTime.Now;
+            var thisYear = dateNow.Year;
             ViewBag.YearList = GetYearList(2010, 2030);
             ViewBag.ThisYear = thisYear;
-            ViewBag.StatusSurat = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
+            ViewBag.Info = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
 
             if (year > 0)
             {
@@ -85,50 +86,37 @@ namespace OMNI.Web.Controllers
                 port = findPort.Name;
             }
 
+            ViewBag.EnablePengesahan = false;
+            ViewBag.EnableVerifikasi1 = false;
+            ViewBag.EnableVerifikasi2 = false;
+
             List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(port);
-            if(lampiranList.Count() > 0)
+            if (lampiranList.Count() > 0)
             {
-                List<LampiranModel> findLampiranType = new List<LampiranModel>();
+                var findPenilaian = lampiranList.FindAll(b => b.LampiranType == "PENILAIAN").OrderByDescending(b => b.Id).FirstOrDefault();
+                if (findPenilaian != null)
+                {
+                    ViewBag.EnablePengesahan = true;
+                    ViewBag.Info = "* Mohon upload Surat Pengesahan";
+                    var findPengesahan = lampiranList.FindAll(b => b.LampiranType == "PENGESAHAN").OrderByDescending(b => b.Id).FirstOrDefault();
+                    if (findPengesahan != null)
+                    {
+                        ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun pertama) per tanggal " + findPengesahan.EndDate;
 
-                //FIND VERIFIKASI Ke 2
-                findLampiranType = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").ToList();
-                if(findLampiranType.Count() > 0)
-                {
-                    ViewBag.StatusSurat = "Verifikasi Surat Pengesahan Pemenuhan (2,5 tahun kedua) sudah terupload";
-                }
-                else
-                {
-                    //FIND VERIFIKASI Ke 1
-                    findLampiranType = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").ToList();
-                    if (findLampiranType.Count() > 0)
-                    {
-                        ViewBag.StatusSurat = "* Verifikasi Surat Pengesahan Pemenuhan (2,5 tahun pertama) sudah terupload, Mohon upload Surat Pengesahan Pemenuhan - verifikasi (2, 5 tahun kedua)";
-                    }
-                    else
-                    {
-                        //FIND PENGESAHAN
-                        findLampiranType = lampiranList.FindAll(b => b.LampiranType == "PENGESAHAN").ToList();
-                        if (findLampiranType.Count() > 0)
+                        var findVerifikasi1 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").OrderByDescending(b => b.Id).FirstOrDefault();
+                        if (findVerifikasi1 != null)
                         {
-                            ViewBag.StatusSurat = "* Surat Pengesahan sudah terupload, Mohon upload Surat Pengesahan Pemenuhan - verifikasi (2, 5 tahun pertama)";
-                        }
-                        else
-                        {
-                            //FIND PENILAIAN
-                            findLampiranType = lampiranList.FindAll(b => b.LampiranType == "PENILAIAN").ToList();
-                            if (findLampiranType.Count() > 0)
+                            ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
+
+                            var findVerifikasi2 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").OrderByDescending(b => b.Id).FirstOrDefault();
+                            if (findVerifikasi2 != null)
                             {
-                                ViewBag.StatusSurat = "* Surat Penilaian sudah terupload, Mohon upload Surat Pengesahan Pemenuhan";
-                            }
-                            else
-                            {
-                                ViewBag.StatusSurat = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
+                                ViewBag.Info = "";
                             }
                         }
-
                     }
                 }
-            } 
+            }
 
             return View();
         }

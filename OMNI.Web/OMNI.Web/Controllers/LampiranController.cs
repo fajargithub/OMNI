@@ -32,7 +32,10 @@ namespace OMNI.Web.Controllers
 
         public async Task<IActionResult> Index(string port)
         {
-            var thisYear = DateTime.Now.Year;
+            var dateNow = DateTime.Now;
+            var thisYear = dateNow.Year;
+
+            ViewBag.Info = "* Silahkan upload Surat Penilaian";
 
             ViewBag.YearList = GetYearList(2010, 2030);
 
@@ -47,7 +50,73 @@ namespace OMNI.Web.Controllers
             }
             else
             {
-                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+                ViewBag.SelectedPort = findPort;
+                port = findPort.Name;
+            }
+
+            ViewBag.EnablePengesahan = false;
+            ViewBag.EnableVerifikasi1 = false;
+            ViewBag.EnableVerifikasi2 = false;
+
+            List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(port);
+            if(lampiranList.Count() > 0)
+            {
+                var findPenilaian = lampiranList.FindAll(b => b.LampiranType == "PENILAIAN").OrderByDescending(b => b.Id).FirstOrDefault();
+                if(findPenilaian != null)
+                {
+                    ViewBag.EnablePengesahan = true;
+                    ViewBag.Info = "* Mohon upload Surat Pengesahan";
+                    var findPengesahan = lampiranList.FindAll(b => b.LampiranType == "PENGESAHAN").OrderByDescending(b => b.Id).FirstOrDefault();
+                    if(findPengesahan != null)
+                    {
+                        var endDatePengesahan = DateTime.ParseExact(findPengesahan.EndDate, "dd MMM yyyy", null);
+                        if(dateNow >= endDatePengesahan)
+                        {
+                            ViewBag.EnableVerifikasi1 = true;
+                        } 
+                        else
+                        {
+                            ViewBag.EnableVerifikasi1 = false;
+                        }
+
+                        ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun pertama) per tanggal " + findPengesahan.EndDate;
+
+                        var findVerifikasi1 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").OrderByDescending(b => b.Id).FirstOrDefault();
+                        if(findVerifikasi1 != null)
+                        {
+                            var endDateVerifikasi1 = DateTime.ParseExact(findVerifikasi1.EndDate, "dd MMM yyyy", null);
+                            if (dateNow >= endDateVerifikasi1)
+                            {
+                                ViewBag.EnableVerifikasi2 = true;
+                            }
+                            else
+                            {
+                                ViewBag.EnableVerifikasi2 = false;
+                            }
+
+                            ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
+
+                            var findVerifikasi2 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").OrderByDescending(b => b.Id).FirstOrDefault();
+                            if(findVerifikasi2 != null)
+                            {
+                                ViewBag.Info = "";
+                            }
+                        } else
+                        {
+                            ViewBag.EnableVerifikasi2 = false;
+                        }
+                    } else
+                    {
+                        ViewBag.EnableVerifikasi1 = false;
+                        ViewBag.EnableVerifikasi2 = false;
+                    }
+                } else
+                {
+                    ViewBag.EnablePengesahan = false;
+                    ViewBag.EnableVerifikasi1 = false;
+                    ViewBag.EnableVerifikasi2 = false;
+                }
             }
 
             return View(INDEX_LAMPIRAN);
