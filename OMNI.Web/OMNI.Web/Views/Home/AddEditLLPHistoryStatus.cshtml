@@ -1,0 +1,121 @@
+﻿@model OMNI.Web.Models.Master.LLPHistoryStatusModel
+
+<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Form Add LLP Rental / Maintenance" })
+
+    <div class="modal-body">
+        @Html.HiddenFor(b => b.Id)
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Peralatan OSR</label>
+                    <input class="form-control" id="peralatanOSR" name="PeralatanOSR" asp-for="PeralatanOSR" disabled />
+                    <input type="hidden" name="LLPTrx" asp-for="LLPTrx" />
+                    <input type="hidden" name="PortFrom" asp-for="PortFrom" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Select Spesifikasi / Jenis</label>
+                    <input class="form-control" id="jenis" name="Jenis" asp-for="Jenis" disabled />
+                </div>
+            </div>
+        </div><br />
+
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="">Select Status</label>
+                          <select name="Status" asp-for="Status" id="status" class="select4-input">
+                              <option value="STAND BY">STAND BY</option>
+                              <option value="RENTAL">RENTAL</option>
+                              <option value="MAINTENANCE">MAINTENANCE</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="">Port To</label>
+                          <select name="Port" asp-for="PortTo" id="port1" class="select4-input"
+                                  asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
+                          </select>
+                      </div>
+                  </div>
+              </div><br />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Tanggal In</label>
+                    <input type="text" id="startDate" asp-for="StartDate" name="StartDate" class="form-control datepicker" style="width: 100% !important;" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="form-label" for="">Tanggal Out</label>
+                    <input type="text" id="endDate" asp-for="EndDate" name="EndDate" class="form-control datepicker" style="width: 100% !important;" required>
+                </div>
+            </div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="form-label" for="">Remark</label>
+                    <textarea class="form-control" asp-for="Remark"></textarea>
+                </div>
+            </div>
+        </div><br />
+    </div>
+
+    @await Html.PartialAsync("_ModalFooter")
+</form>
+<script src="~/js/qr-code-styling.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.select4-input').select2({
+            dropdownParent: $('#modal-add-edit')
+        });
+
+        $("#startDate").keydown(function (e) {
+            e.preventDefault();
+        });
+
+        $("#endDate").keydown(function (e) {
+            e.preventDefault();
+        });
+
+        $(".datepicker").datepicker({
+            dateFormat: 'dd/mm/yy',
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-10:+10"
+        });
+        
+        $(document).on('submit', '#form-akun', function () {
+        var form = $('#form-akun');
+        var validation = Array.prototype.filter.call(form, function (form) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            else {
+                event.preventDefault();
+                var param = new FormParam(
+                    form,
+                    "Apakah Anda yakin ingin menyimpan akun ini?",
+                    '@Url.Action("AddEditLLPHistoryStatus")',
+                    null,
+                    '#modal-add-edit',
+                    '#table_llp_trx'
+                );
+                initApp.formSubmit(param);
+            }
+            form.classList.add('was-validated');
+        });
+    });
+    });
+
+</script>

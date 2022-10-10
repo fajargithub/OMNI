@@ -33,6 +33,8 @@ namespace OMNI.Web.Controllers
 
         private static readonly string QR_CODE_DETAIL = "~/Views/Home/QRCodeDetail.cshtml";
 
+        private static readonly string ADD_EDIT_LLP_HISTORY_STATUS = "~/Views/Home/AddEditLLPHistoryStatus.cshtml";
+
         protected ILLPTrx _llpTrxService;
         protected IPersonilTrx _personilTrxService;
         protected IPersonil _personilService;
@@ -454,6 +456,37 @@ namespace OMNI.Web.Controllers
         public async Task<IActionResult> DeleteLatihanTrx(int id)
         {
             var r = await _latihanTrxService.Delete(id);
+
+            return Ok(new JsonResponse());
+        }
+        #endregion
+
+        #region
+        [HttpGet]
+        public async Task<IActionResult> AddEditLLPHistoryStatus(int llpTrxId, string port)
+        {
+            List<Port> portList = await GetAllPort();
+            ViewBag.PortList = portList;
+
+            LLPHistoryStatusModel model = new LLPHistoryStatusModel();
+            LLPTrxModel llpTrx = await _llpTrxService.GetById(llpTrxId);
+            model.LLPTrx = llpTrx.Id.ToString();
+            model.PortFrom = llpTrx.Port;
+            model.PeralatanOSR = llpTrx.PeralatanOSRName;
+            model.Jenis = llpTrx.JenisName;
+
+            return PartialView(ADD_EDIT_LLP_HISTORY_STATUS, model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddEditLLPHistoryStatus(LLPHistoryStatusModel model)
+        {
+            var r = await _llpTrxService.AddEditLLPHistoryStatus(model);
+
+            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
+            {
+                return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            }
 
             return Ok(new JsonResponse());
         }

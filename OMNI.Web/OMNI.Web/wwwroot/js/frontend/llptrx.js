@@ -296,9 +296,21 @@ var dt = $('#table_llp_trx').DataTable({
                 result = "";
 
                 if (iDisplayIndex.peralatanOSR != "Total Persentase") {
-                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
-                        " <a href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                    result += "<div class='btn-group' role='group'>" +
+                        "<button id='btnGroupVerticalDrop1' type='button' class='btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Action</button>" +
+                        "<div class='dropdown-menu' aria-labelledby='btnGroupVerticalDrop1'>" +
+                        "<a class='dropdown-item' href='javascript:void(0)' onclick='llpTrxRemark(" + iDisplayIndex.id + ")' title='Remark'><b style='color:cornflowerblue;'><i class='fa fa-info-circle'></i> Remark</b></a>" +
+                        "<a class='dropdown-item' data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPHistoryStatus?llpTrxId=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "' title='Rental / Maintenance'><b style='color:teal;'><i class='fa fa-exchange'></i> Rental/Maintenance</b></a>" +
+                        "<a class='dropdown-item' data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' title='Edit'><b style='color:darkorange;'><i class='fa fa-pencil'></i> Edit</b></a>" +
+                        "<a class='dropdown-item btn-delete' href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' title='Delete'><b style='color:red;'><i class='fa fa-trash'></i> Delete</b></a>" +
+                        "</div>" +
+                        "</div>";
                 }
+
+                //if (iDisplayIndex.peralatanOSR != "Total Persentase") {
+                //    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
+                //        " <a href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                //}
 
                 return result;
             }
@@ -378,6 +390,16 @@ function qrcodeClick(id) {
                 html: 'No Asset: <a href="javascript:void(0)" class="openimage" data-base64="' + result.data.qrCode + '">' + result.data.qrCodeText + '</a> '
             })
         }
+    });
+}
+
+function llpTrxRemark(id) {
+    $.get(base_api + 'Home/GetLLPTrxById?id=' + id, function (result) {
+        Swal.fire(
+            'Remark',
+            result.data.remark,
+            'info'
+        )
     });
 }
 

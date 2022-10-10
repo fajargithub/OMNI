@@ -24,6 +24,7 @@ namespace OMNI.Web.Services.Trx.Interface
         public Task<LLPTrx> Delete(int id);
         public Task<BaseJson<FilesModel>> AddEditFiles(FilesModel model);
         public Task<string> GetLastNoAsset(AssetDataModel data);
+        public Task<BaseJson<LLPHistoryStatusModel>> AddEditLLPHistoryStatus(LLPHistoryStatusModel model);
 
     }
 }

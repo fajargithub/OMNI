@@ -248,5 +248,26 @@ namespace OMNI.Web.Services.Trx
                 throw ex;
             }
         }
+
+        public async Task<BaseJson<LLPHistoryStatusModel>> AddEditLLPHistoryStatus(LLPHistoryStatusModel m)
+        {
+            HttpClient c = _httpClient.CreateClient("OMNI");
+
+            try
+            {
+                var r = await c.PostAsJsonAsync("/api/LLPTrx/AddEditLLPHistoryStatus", m);
+
+                if (r.IsSuccessStatusCode)
+                {
+                    return await r.Content.ReadAsAsync<BaseJson<LLPHistoryStatusModel>>();
+                }
+
+                throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
