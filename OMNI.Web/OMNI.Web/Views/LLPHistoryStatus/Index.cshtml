@@ -1,8 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Home";
     ViewData["PageName"] = "home";
-    ViewData["Heading"] = "<i class='subheader-icon fal fa-book'></i>  Data Lokasi Balikpapan";
-    ViewData["PageDescription"] = "Halaman pengelolaan data LLP, Latihan dan Personil Oil Spill Response";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-history'></i>  History LLP";
+    ViewData["PageDescription"] = "Halaman Status History LLP";
 }
 
 @model OMNI.Web.Models.HomeModel
@@ -63,7 +63,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label class="form-label" for="">Select Lokasi</label>
+                    <label class="form-label" for="">Select Lokasi From</label>
                     <select asp-for="Port" id="port" class="select2-input-index"
                             asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
                     </select>
@@ -102,8 +102,10 @@
                                 <th style="width:70px;">Jenis</th>
                                 <th style="width:70px;">Satuan</th>
                                 <th style="width:70px;">Detail Existing di Lokasi</th>
-                                <th style="width:70px;">No Asset</th>
+                                <th style="width:70px;">No Inventory</th>
                                 <th style="width:70px;">Status</th>
+                                <th style="width:70px;">Lokasi From</th>
+                                <th style="width:70px;">Lokasi To</th>
                                 <th style="width:70px;">Tanggal In</th>
                                 <th style="width:70px;">Tanggal Out</th>
                                 <th style="width:10px;">Action</th>

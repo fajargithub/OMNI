@@ -105,14 +105,20 @@
             </div>
         </div><br />
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="form-label" for="">Upload Gambar <i id="upload-label">(*jpeg, *png, *pdf)</i></label>
-                    <input type="file" name="Files" id="files" class="form-control" asp-for="Files" multiple accept="image/jpeg,image/png,application/pdf"/>
-                </div>
-            </div>
-        </div><br />
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="">Upload Gambar <i id="upload-label">(*jpeg, *png, *pdf)</i></label>
+                          <input type="file" name="Files" id="files" class="form-control" asp-for="Files" multiple accept="image/jpeg,image/png,application/pdf" />
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <label class="form-label" for="">No Asset</label>
+                          <input class="form-control" name="NoAsset" asp-for="NoAsset" />
+                      </div>
+                  </div>
+              </div><br />
 
         <div class="row">
             <div class="col-md-12">
@@ -146,7 +152,7 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="form-label" for="">No Aset</label>
+                    <label class="form-label" for="">No Inventory</label>
                     <input type="text" value="" id="noAset" class="form-control" readonly>
                     <input type="hidden" id="qrcode-value" asp-for="QRCode" required />
                     <input type="hidden" id="qrcode-text" asp-for="QRCodeText" required />

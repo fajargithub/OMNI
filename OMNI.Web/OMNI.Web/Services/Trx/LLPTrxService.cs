@@ -155,8 +155,13 @@ namespace OMNI.Web.Services.Trx
                 //data.Add(new StringContent(m.QRCode.ToString()), "QRCode");
                 data.Add(new StringContent(m.QRCodeText.ToString()), "QRCodeText");
                 data.Add(new StringContent(m.DetailExisting.ToString()), "DetailExisting");
+                if (string.IsNullOrEmpty(m.NoAsset))
+                {
+                    m.NoAsset = "";
+                }
+                data.Add(new StringContent(m.NoAsset), "NoAsset");
 
-                if(m.Files != null)
+                if (m.Files != null)
                 {
                     if (m.Files.Count() > 0)
                     {

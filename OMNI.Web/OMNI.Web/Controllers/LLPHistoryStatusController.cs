@@ -83,5 +83,15 @@ namespace OMNI.Web.Controllers
                 data
             });
         }
+
+        public async Task<JsonResult> GetById(int id)
+        {
+            var data = await _llpHistoryStatusService.GetById(id);
+
+            return Json(new
+            {
+                data
+            });
+        }
     }
 }

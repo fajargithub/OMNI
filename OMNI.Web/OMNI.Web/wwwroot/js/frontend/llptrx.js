@@ -71,7 +71,7 @@ var dt = $('#table_llp_trx').DataTable({
             className: 'btn btn-sm btn-outline-primary',
             title: 'Data LLP ' + formattedToday,
             exportOptions: {
-                columns: [1, 2, 3, 4, 6, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+                columns: [1, 2, 3, 4, 6, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
             }
         }
     ],
@@ -81,7 +81,7 @@ var dt = $('#table_llp_trx').DataTable({
     "scrollCollapse": true,
     "paging": false,
     "fixedColumns": {
-        leftColumns: 7
+        leftColumns: 9
        // rightColumns: 1
     },
     "ajax": {
@@ -279,6 +279,30 @@ var dt = $('#table_llp_trx').DataTable({
             data: 'serialNumber'
         },
         {
+            name: 'noAsset',
+            title: 'No Asset',
+            data: 'noAsset'
+        },
+        {
+            name: 'status',
+            title: 'Status',
+            target: -1,
+            data: 'status',
+            render: function (row, data, iDisplayIndex) {
+                var result = "";
+
+                if (iDisplayIndex.status == "STAND BY") {
+                    result = "<b style='color:darkgrey;'>STAND BY</b>";
+                } else if (iDisplayIndex.status == "RENTAL") {
+                    result = "<b style='color:darkorange;'>RENTAL</b>";
+                } else if (iDisplayIndex.status == "MAINTENANCE") {
+                    result = "<b style='color:darkred;'>MAINTENANCE</b>";
+                }
+
+                return result;
+            }
+        },
+        {
             name: 'createdBy',
             title: 'Created By',
             data: 'createdBy'
@@ -343,6 +367,7 @@ var dt = $('#table_llp_trx').DataTable({
             this.api().cell($('td:eq(14)', row)).data('');
             this.api().cell($('td:eq(15)', row)).data('');
             this.api().cell($('td:eq(16)', row)).data('');
+            this.api().cell($('td:eq(17)', row)).data('');
         }
     },
     rowsGroup: [

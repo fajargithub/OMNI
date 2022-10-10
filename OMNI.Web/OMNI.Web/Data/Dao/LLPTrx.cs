@@ -24,5 +24,6 @@ namespace OMNI.Web.Data.Dao
         public string KesesuaianOSCP { get; set; }
         public decimal PersentaseOSCP { get; set; }
         public decimal PersentaseHubla { get; set; }
+        public string NoAsset { get; set; }
     }
 }

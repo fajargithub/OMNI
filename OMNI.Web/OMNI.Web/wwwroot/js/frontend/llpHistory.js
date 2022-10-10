@@ -21,7 +21,7 @@ var table_history_llp_status = $('#table_history_llp_status').DataTable({
             className: 'btn btn-sm btn-outline-primary',
             title: 'Data LLP History Status ' + formattedToday,
             exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
             }
         }
     ],
@@ -52,14 +52,16 @@ var table_history_llp_status = $('#table_history_llp_status').DataTable({
                 if (iDisplayIndex.status == "STAND BY") {
                     result = "<b style='color:darkgrey;'>STAND BY</b>";
                 } else if (iDisplayIndex.status == "RENTAL") {
-                    result = "<b style='color:darkyellow;'>RENTAL</b>";
+                    result = "<b style='color:darkorange;'>RENTAL</b>";
                 } else if (iDisplayIndex.status == "MAINTENANCE") {
-                    result = "<b style='color:darkorange;'>MAINTENANCE</b>";
+                    result = "<b style='color:darkred;'>MAINTENANCE</b>";
                 }
 
                 return result;
             }
         },
+        { "data": "portFrom" },
+        { "data": "portTo" },
         { "data": "startDate" },
         { "data": "endDate" },
         {
@@ -69,12 +71,11 @@ var table_history_llp_status = $('#table_history_llp_status').DataTable({
                 var result = "";
 
                 if (iDisplayIndex.latihan != "Total Persentase") {
-                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
-                        " <a href='javascript:void(0)' onclick='deleteLatihanTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                    result += "<a class='dropdown-item' href='javascript:void(0)' onclick='llpHistoryRemark(" + iDisplayIndex.id + ")' title='Remark'><b style='color:cornflowerblue;'><i class='fa fa-info-circle'></i> Remark</b></a>";
                 }
                 return result;
             }
-        },
+        }
     ],
     createdRow: function (row, data, dataIndex) {
         
@@ -84,4 +85,14 @@ var table_history_llp_status = $('#table_history_llp_status').DataTable({
     },
     "initComplete": function (row, data, iDisplayIndex) { }
 });
+
+function llpHistoryRemark(id) {
+    $.get(base_api + 'LLPHistoryStatus/GetById?id=' + id, function (result) {
+        Swal.fire(
+            'Remark',
+            result.data.remark,
+            'info'
+        )
+    });
+}
 

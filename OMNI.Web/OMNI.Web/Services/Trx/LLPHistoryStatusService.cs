@@ -16,6 +16,18 @@ namespace OMNI.Web.Services.Trx
         {
             _httpClient = httpClient;
         }
+
+        public async Task<LLPHistoryStatusModel> GetById(int id)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/LLPHistoryStatus/{id}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<LLPHistoryStatusModel>();
+
+            throw new Exception();
+        }
         public async Task<List<LLPHistoryStatusModel>> GetAll(string port, int year)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
