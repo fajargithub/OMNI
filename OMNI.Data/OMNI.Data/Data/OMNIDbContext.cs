@@ -36,6 +36,7 @@ namespace OMNI.Data.Data
         public DbSet<RekomendasiPersonil> RekomendasiPersonil { get; set; }
         public DbSet<FileUpload> FileUpload { get; set; }
         public DbSet<Lampiran> Lampiran { get; set; }
+        public DbSet<LLPHistoryStatus> LLPHistoryStatus { get; set; }
         public DbSet<OMNIActivityLog> OMNIActivityLog { get; set; }
     }
 }
