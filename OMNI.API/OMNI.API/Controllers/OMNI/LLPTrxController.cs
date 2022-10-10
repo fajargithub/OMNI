@@ -717,5 +717,36 @@ namespace OMNI.API.Controllers.OMNI
 
             return Ok(new ReturnJson { });
         }
+
+        [HttpPost("AddEditLLPHistoryStatus")]
+        public async Task<IActionResult> AddEditLLPHistoryStatus(LLPHistoryStatusModel model, CancellationToken cancellationToken)
+        {
+            LLPHistoryStatus data = new LLPHistoryStatus();
+
+            LLPTrx llpTrx = await _dbOMNI.LLPTrx.Where(b => b.Id == int.Parse(model.LLPTrx)).FirstOrDefaultAsync(cancellationToken);
+            data.LLPTrx = llpTrx;
+            data.PortFrom = model.PortFrom;
+            data.PortTo = model.PortTo;
+            data.Status = model.Status;
+            data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
+            data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
+            data.Remark = model.Remark;
+            data.CreatedAt = DateTime.Now;
+            data.CreatedBy = "admin";
+            _dbOMNI.LLPHistoryStatus.Add(data);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+            if (data.Id > 0)
+            {
+                llpTrx.Port = model.PortTo;
+                llpTrx.Status = model.Status;
+                llpTrx.UpdatedAt = DateTime.Now;
+                llpTrx.UpdatedBy = "admin";
+                _dbOMNI.LLPTrx.Update(llpTrx);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
+
+            return Ok(new ReturnJson { });
+        }
     }
 }

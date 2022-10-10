@@ -10,7 +10,8 @@ namespace OMNI.Migrations.Data.Dao
     public class LLPHistoryStatus : BaseDao
     {
         public virtual LLPTrx LLPTrx { get; set; }
-        public string Port { get; set; }
+        public string PortFrom { get; set; }
+        public string PortTo { get; set; }
         public string Status { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
