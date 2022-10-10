@@ -386,6 +386,7 @@ namespace OMNI.API.Controllers.OMNI
                         temp.Brand = list[i].Brand;
                         temp.SerialNumber = list[i].SerialNumber;
                         temp.Remark = list[i].Remark;
+                        temp.NoAsset = list[i].NoAsset;
                         temp.Status = list[i].Status;
                         temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
                         temp.CreatedBy = list[i].CreatedBy;
@@ -531,6 +532,7 @@ namespace OMNI.API.Controllers.OMNI
                 result.TotalKebutuhanHubla = data.TotalKebutuhanHubla;
                 result.SelisihHubla = data.SelisihHubla;
                 result.Brand = data.Brand;
+                result.NoAsset = data.NoAsset;
                 result.SerialNumber = data.SerialNumber;
                 result.Remark = data.Remark;
                 //result.KesesuaianPM58 = data.KesesuaianPM58;
@@ -605,6 +607,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.Year = model.Year;
                     data.Brand = model.Brand;
                     data.Status = model.Status;
+                    data.NoAsset = model.NoAsset;
                     data.SerialNumber = model.SerialNumber;
                     data.Remark = model.Remark;
                     data.UpdatedAt = DateTime.Now;
@@ -657,6 +660,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.PersentaseOSCP = model.PersentaseOSCP;
                     data.Year = model.Year;
                     data.Brand = model.Brand;
+                    data.NoAsset = model.NoAsset;
                     data.Status = model.Status;
                     data.SerialNumber = model.SerialNumber;
                     data.Remark = model.Remark;

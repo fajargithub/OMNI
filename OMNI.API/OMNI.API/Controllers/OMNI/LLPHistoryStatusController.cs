@@ -38,6 +38,19 @@ namespace OMNI.API.Controllers.OMNI
             public decimal TotalCount { get; set; }
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
+        {
+            LLPHistoryStatusModel result = new LLPHistoryStatusModel();
+            var temp = await _dbOMNI.LLPHistoryStatus.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).FirstOrDefaultAsync(cancellationToken);
+            if (temp != null)
+            {
+                result.Id = temp.Id;
+                result.Remark = temp.Remark;
+            }
+            return Ok(result);
+        }
+
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
@@ -46,7 +59,7 @@ namespace OMNI.API.Controllers.OMNI
            
             try
             {
-                var list = await _dbOMNI.LLPHistoryStatus.Where(b => b.IsDeleted == GeneralConstants.NO && b.LLPTrx.Port == port && b.LLPTrx.Year == year)
+                var list = await _dbOMNI.LLPHistoryStatus.Where(b => b.IsDeleted == GeneralConstants.NO && b.LLPTrx.IsDeleted == GeneralConstants.NO && b.PortFrom == port && b.LLPTrx.Year == year)
                 .Include(b => b.LLPTrx).Include(b => b.LLPTrx.SpesifikasiJenis).Include(b => b.LLPTrx.SpesifikasiJenis.PeralatanOSR)
                 .Include(b => b.LLPTrx.SpesifikasiJenis.Jenis)
                 .OrderByDescending(b => b.Id).ToListAsync(cancellationToken);
@@ -62,6 +75,7 @@ namespace OMNI.API.Controllers.OMNI
                         temp.DetailExisting = list[i].LLPTrx.DetailExisting.ToString();
                         temp.Satuan = list[i].LLPTrx.SpesifikasiJenis.Jenis.Satuan;
                         temp.NoAsset = list[i].LLPTrx.QRCodeText;
+                        temp.Status = list[i].Status;
                         temp.PortFrom = list[i].PortFrom;
                         temp.PortTo = list[i].PortTo;
                         temp.StartDate = list[i].StartDate.HasValue ? list[i].StartDate.Value.ToString("dd MMM yyyy") : "-";

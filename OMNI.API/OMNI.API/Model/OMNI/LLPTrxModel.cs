@@ -38,6 +38,7 @@ namespace OMNI.API.Model.OMNI
         public int Year { get; set; }
         public string Brand { get; set; }
         public string SerialNumber { get; set; }
+        public string NoAsset { get; set; }
         public string Status { get; set; }
 
         [JsonIgnore]

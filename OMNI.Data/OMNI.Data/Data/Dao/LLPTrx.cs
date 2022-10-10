@@ -28,6 +28,7 @@ namespace OMNI.Data.Data.Dao
         public string SerialNumber { get; set; }
         public string Remark { get; set; }
         public string Status { get; set; }
+        public string NoAsset { get; set; }
         public int Year { get; set; }
     }
 }
