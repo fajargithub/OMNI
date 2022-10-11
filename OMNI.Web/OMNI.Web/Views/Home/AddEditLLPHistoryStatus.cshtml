@@ -44,17 +44,17 @@
                   </div>
               </div><br />
 
-        <div class="row">
+        <div class="row" id="date">
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="form-label" for="">Tanggal In</label>
-                    <input type="text" id="startDate" asp-for="StartDate" name="StartDate" class="form-control datepicker" style="width: 100% !important;" required>
+                    <input type="text" id="startDate" asp-for="StartDate" name="StartDate" class="form-control datepicker" style="width: 100% !important;">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="form-label" for="">Tanggal Out</label>
-                    <input type="text" id="endDate" asp-for="EndDate" name="EndDate" class="form-control datepicker" style="width: 100% !important;" required>
+                    <input type="text" id="endDate" asp-for="EndDate" name="EndDate" class="form-control datepicker" style="width: 100% !important;">
                 </div>
             </div>
         </div><br />
@@ -85,6 +85,34 @@
 
         $("#endDate").keydown(function (e) {
             e.preventDefault();
+        });
+
+        var status = $("#status").val();
+        if (status == "STAND BY") {
+            $("#startDate").attr("required", false);
+            $("#endDate").attr("required", false);
+
+            $("#date").hide();
+        } else {
+            $("#date").show();
+
+            $("#startDate").attr("required", true);
+            $("#endDate").attr("required", true);
+        }
+
+        $("#status").on('change', function () {
+            console.log(this.value);
+            if (this.value == "STAND BY") {
+                $("#startDate").attr("required", false);
+                $("#endDate").attr("required", false);
+
+                $("#date").hide();
+            } else {
+                $("#date").show();
+
+                $("#startDate").attr("required", true);
+                $("#endDate").attr("required", true);
+            }
         });
 
         $(".datepicker").datepicker({
