@@ -80,6 +80,7 @@ namespace OMNI.Web.Extensions
             services.AddScoped<SpesifikasiJenisService>();
             services.AddScoped<LampiranService>();
             services.AddScoped<LLPHistoryStatusService>();
+            services.AddScoped<LoginService>();
 
         }
 
@@ -108,6 +109,7 @@ namespace OMNI.Web.Extensions
             services.AddScoped<IPersonil, PersonilService>();
             services.AddScoped<ILampiran, LampiranService>();
             services.AddScoped<ILLPHistoryStatus, LLPHistoryStatusService>();
+            services.AddScoped<ILogin, LoginService>();
         }
 
         public static void ConfigureSession(this IServiceCollection services)

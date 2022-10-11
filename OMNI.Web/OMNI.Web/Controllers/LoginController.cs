@@ -25,14 +25,30 @@ namespace OMNI.Web.Controllers
         private readonly ILogger<LoginController> _logger;
         private static readonly string LOGIN_URL = "~/Views/Authentication/Login.cshtml";
 
-        public LoginController(ILogger<LoginController> logger, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        protected ILogin _loginService;
+
+        public LoginController(ILogger<LoginController> logger, ILogin loginService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
+            _loginService = loginService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(LOGIN_URL);
+            return PartialView(LOGIN_URL);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(LoginModel model)
+        {
+            var r = await _loginService.SignIn(model);
+
+            if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
+            {
+                return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            }
+
+            return Ok(new JsonResponse());
         }
     }
 }

@@ -1,4 +1,31 @@
-﻿<style>
+﻿@model OMNI.Web.Models.Master.LoginModel
+
+<meta charset="utf-8">
+<title>Login OSMOSYS</title>
+<meta name="description" content="@ViewBag.Title">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="msapplication-tap-highlight" content="no">
+
+@*<link rel="stylesheet" media="screen, print" href="~/css/vendors.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/app.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/themes/cust-theme-5.css">*@
+
+<link rel="stylesheet" media="screen, print" href="~/css/vendors.bundle.css">
+<link rel="stylesheet" media="screen, print" href="~/css/app.bundle.css">
+<link rel="stylesheet" media="screen, print" href="~/css/skin/skin-master.css">
+
+<link rel="stylesheet" media="screen, print" href="~/css/site.css">
+
+<link rel="stylesheet" media="screen, print" href="~/css/sweetalert2/sweetalert2.css">
+<link rel="stylesheet" media="screen, print" href="~/css/select2/select2.bundle.css">
+<link rel="stylesheet" media="screen, print" href="~/lib/toastr/toastr.min.css">
+<link rel="stylesheet" media="screen, print" href="~/css/datagrid/datatables/datatables.bundle.css">
+<link href="~/css/datepicker/datepicker.css" rel="stylesheet" />
+<partial name="_Favicon" />
+
+<style>
     .form-signin {
         width: 100%;
         max-width: 330px;
@@ -7,46 +34,61 @@
     }
 </style>
 
-<form class="form-signin" asp-Controller="Home" asp-action="Index">
-    <img class="mb-5" src="~/img/logo-simontana.png" alt="" width="100" height="100">
-
-    @*<h1 class="mb-3 font-weight-normal">Sign In</h1>*@
-
-    @*<label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">*@
-
+<form class="form-signin" id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    <img class="mb-5" src="~/img/logo-2.png" style=" width: 285px;" />
     <div class="form-group">
         <div class="input-group flex-nowrap">
             <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-user fs-xl"></i></span>
             </div>
-            <input id="addon-wrapping-left" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping-left">
+            <input id="addon-wrapping-left" type="text" class="form-control" placeholder="Username" aria-label="Username" asp-for="Username" name="Username" aria-describedby="addon-wrapping-left" required>
         </div>
     </div>
-
-    @*<label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">*@
 
     <div class="form-group mb-3">
         <div class="input-group flex-nowrap">
             <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-key fs-xl"></i></span>
             </div>
-            <input id="addon-wrapping-left" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="addon-wrapping-left">
+            <input id="addon-wrapping-left" type="password" class="form-control" placeholder="Password" aria-label="Password" asp-for="Password" name="Password" aria-describedby="addon-wrapping-left" required>
         </div>
     </div>
 
-    @*<div class="checkbox my-3">
-        <label>
-            <input type="checkbox" value="remember-me"> Remember me
-        </label>
-    </div>*@
-
-    <div class="custom-control custom-checkbox mb-4">
-        <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-        <label class="custom-control-label" for="defaultUnchecked">Remember me</label>
-    </div>
-
     <button class="btn btn-primary btn-block" type="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-muted">© 2022</p>
+    <p class="mt-5 mb-3 text-muted" style="text-align:center;">Pertamina Trans Kontinental © 2022</p>
 </form>
+
+<script src="~/js/vendors.bundle.js"></script>
+<script src="~/js/app.bundle.js"></script>
+<script src="~/js/structure.js"></script>
+<script src="~/js/jquery-3.5.1.js"></script>
+<script src="~/js/sweetalert2/sweetalert2.bundle.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(document).on('submit', '#form-akun', function () {
+        var form = $('#form-akun');
+        var validation = Array.prototype.filter.call(form, function (form) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            else {
+                event.preventDefault();
+                var param = new FormParam(
+                    form,
+                    "Apakah Anda yakin ingin menyimpan akun ini?",
+                    '@Url.Action("SignIn")',
+                    null,
+                    '#modal-add-edit',
+                    '#table1'
+                );
+                initApp.formSubmitLogin(param);
+            }
+            form.classList.add('was-validated');
+        });
+    });
+    });
+
+</script>

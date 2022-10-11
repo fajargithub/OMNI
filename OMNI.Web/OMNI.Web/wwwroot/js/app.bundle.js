@@ -803,6 +803,72 @@ var initApp = (function (app) {
             }
         });
     };
+
+    app.formSubmitLogin = function (param) {
+        let init = new FormParam(param.form, param.questionText, param.submitUrl, param.returnUrl, param.modalId, param.tableId);
+        var formData = new FormData($(init.form)[0]);
+        var formId = init.form.getAttribute('id');
+
+        $(`#${formId} button[type=submit]`).html(`<i class="fal fa-spin fa-spinner-third" aria-hidden="true"></i> Loading`).attr("disabled", true);
+        //e.preventDefault();
+
+        let tempDropZone = $(`#${formId} div.dropzone`);
+        if (tempDropZone.length > 0) {
+            $.each(tempDropZone, function (index, val) {
+                let myDropzone = Dropzone.forElement(val);
+                $.each(myDropzone.getAcceptedFiles(), function (index, val) {
+                    formData.append(myDropzone.element.dataset.name, val);
+                });
+            });
+        }
+
+        $.ajax({
+            url: init.submitUrl,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (response) {
+                if (response.status == "SUCCESS") {
+                    Swal.fire({
+                        title: 'Submitted!',
+                        text: 'Your data has been submited.',
+                        type: 'success',
+                        timer: 2000,
+                        timerProgressBar: true
+                    }).then(() => {
+                        $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
+                        if (init.returnUrl == null) {
+                            
+                        } else {
+                            window.location.replace(init.returnUrl);
+                        }
+                    });
+                } else {
+                    var msgError = response.errorMsg == null ? 'Failed submited Data.' : response.errorMsg;
+                    Swal.fire(
+                        'Failed!',
+                        msgError,
+                        'error'
+                    );
+                    $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
+                }
+            },
+            error: function () {
+                Swal.fire(
+                    'Oops...',
+                    'Something went wrong!',
+                    'error'
+                );
+                $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
+            },
+            complete: function () {
+                setTimeout(function () {
+                    Swal.close();
+                }, 5000);
+            }
+        });
+    };
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Dimas Ver
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Gatra Ver
