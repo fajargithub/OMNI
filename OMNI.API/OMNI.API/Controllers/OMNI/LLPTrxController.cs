@@ -732,8 +732,17 @@ namespace OMNI.API.Controllers.OMNI
             data.PortFrom = model.PortFrom;
             data.PortTo = model.PortTo;
             data.Status = model.Status;
-            data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
-            data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
+
+            if(data.Status == "STAND BY")
+            {
+                data.StartDate = DateTime.Now;
+                data.EndDate = (DateTime?)null;
+            } else
+            {
+                data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
+                data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
+            }
+            
             data.Remark = model.Remark;
             data.CreatedAt = DateTime.Now;
             data.CreatedBy = "admin";

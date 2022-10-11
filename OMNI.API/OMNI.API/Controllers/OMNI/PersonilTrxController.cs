@@ -52,6 +52,7 @@ namespace OMNI.API.Controllers.OMNI
             var list = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year)
                 .Include(b => b.Personil)
                 .OrderBy(b => b.Personil.Id).ToListAsync(cancellationToken);
+
             if (list.Count() > 0)
             {
                 for (int i = 0; i < list.Count(); i++)
@@ -143,26 +144,31 @@ namespace OMNI.API.Controllers.OMNI
 
                 if (countTotalDetailExisting.Count() > 0)
                 {
-                    for (int i = 0; i < result.Count(); i++)
+                    for (int j = 0; j < result.Count(); j++)
                     {
-                        var find = countTotalDetailExisting.Find(b => b.TrxId == result[i].PersonilId);
+                        var index = j;
+                        var find = countTotalDetailExisting.Find(b => b.TrxId == result[j].PersonilId);
                         if (find != null)
                         {
-                            result[i].TotalDetailExisting = find.TotalCount;
-                            result[i].SelisihHubla = find.TotalCount - result[i].RekomendasiHubla;
-                            result[i].PersentasePersonil = Math.Round(find.TotalCount / result[i].RekomendasiHubla * 100, 2);
+                            result[j].TotalDetailExisting = find.TotalCount;
+                            result[j].SelisihHubla = find.TotalCount - result[j].RekomendasiHubla;
 
-                            if(result[i].PersentasePersonil > 100)
+                            if(result[j].RekomendasiHubla > 0)
                             {
-                                result[i].PersentasePersonil = 100;
+                                result[j].PersentasePersonil = Math.Round(find.TotalCount / result[j].RekomendasiHubla * 100, 2);
+                            }
+                            
+                            if(result[j].PersentasePersonil > 100)
+                            {
+                                result[j].PersentasePersonil = 100;
                             }
 
-                            if(result[i].SelisihHubla >= 0)
+                            if(result[j].SelisihHubla >= 0)
                             {
-                                result[i].KesesuaianPM58 = "TERPENUHI";
+                                result[j].KesesuaianPM58 = "TERPENUHI";
                             } else
                             {
-                                result[i].KesesuaianPM58 = "KURANG";
+                                result[j].KesesuaianPM58 = "KURANG";
                             }
                         }
                     }
