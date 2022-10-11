@@ -12,6 +12,9 @@ namespace OMNI.Utilities.Constants
 {
     public static class GeneralConstants
     {
+        public static string DevConnectionMode = nameof(DevConnectionMode);
+        public static string ProdConnectionMode = nameof(ProdConnectionMode);
+
         public static readonly string REPORT = nameof(REPORT);
         public static readonly string REPORT_EXCEL = nameof(REPORT_EXCEL);
         public static readonly string ACTIVITY = nameof(ACTIVITY);
@@ -47,6 +50,8 @@ namespace OMNI.Utilities.Constants
         public static bool IsProduction { get; set; } = false;
         public static string NO = "N";
         public static string YES = "Y";
+
+        public const string FILLED = nameof(FILLED);
 
         public const string ErrorMessageFieldLength = "Field Length too Long";
 

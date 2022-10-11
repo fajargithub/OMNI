@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OMNI.API.Extensions;
+using OMNI.API.Services.LDAP;
+using OMNI.Data.Data;
+using OMNI.Migrations.Data.Dao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +33,11 @@ namespace OMNI.API
             services.ConfigureDatabaseConnection(Configuration);
             services.ConfigureMinio(Configuration);
             services.AddControllers();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders()
+            .AddSignInManager<CustomSignInService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

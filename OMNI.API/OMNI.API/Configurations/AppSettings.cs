@@ -9,6 +9,8 @@ namespace OMNI.API.Configurations
 {
     public class AppSettings : BaseAppSettings
     {
+        public IDictionary<string, string> Default { get; set; }
         public IDictionary<string, string> Secret { get; set; }
+        public IDictionary<string, string> LDAPAuth { get; set; }
     }
 }

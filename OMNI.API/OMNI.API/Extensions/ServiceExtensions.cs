@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio.AspNetCore;
 using OMNI.API.Configurations;
+using OMNI.API.Services.LDAP;
+using OMNI.API.Services.LDAP.Interfaces;
 using OMNI.Data.Data;
 using OMNI.Utilities.Constants;
 using OMNI.Utilities.Enums;
@@ -21,8 +23,8 @@ namespace OMNI.API.Extensions
             GeneralConstants.IsProduction = appSettings.IsProduction;
             var connection = appSettings.IsProduction ? appSettings.ConnectionStrings["ProdConnectionMode"] : appSettings.ConnectionStrings["DevConnectionMode"];
 
-            //services.AddDbContext<ApplicationDbContext>(options
-            //    => options.UseSqlServer(connection + appSettings.DataBase[DatabaseEnums.ApplicationDb.ToString()]));
+            services.AddDbContext<ApplicationDbContext>(options
+                => options.UseSqlServer(connection + appSettings.DataBase[DatabaseEnums.AppUserDb.ToString()]));
 
             services.AddDbContext<OMNIDbContext>(options
                 => options.UseSqlServer(connection + appSettings.DataBase[DatabaseEnums.OMNIDb.ToString()]));
@@ -31,7 +33,17 @@ namespace OMNI.API.Extensions
                 => options.UseSqlServer(connection + appSettings.DataBase[DatabaseEnums.CorePTKDb.ToString()]));
         }
 
-        public static void ConfigureMinio(this IServiceCollection services, IConfiguration configuration)
+        //public static void ConfigureDataLayer(this IServiceCollection services)
+        //{
+        //    services.AddScoped<CustomSignInService>();
+        //}
+
+        //public static void ConfigureDomainLayer(this IServiceCollection services)
+        //{
+        //    services.AddScoped<ICustomSignInService, CustomSignInService>();
+        //}
+
+            public static void ConfigureMinio(this IServiceCollection services, IConfiguration configuration)
         {
             var appSettings = configuration.Get<AppSettings>();
             string a = configuration.GetSection("MinioService").GetSection("AccessKey").Value;
