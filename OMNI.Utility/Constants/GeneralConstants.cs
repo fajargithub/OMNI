@@ -12,6 +12,16 @@ namespace OMNI.Utilities.Constants
 {
     public static class GeneralConstants
     {
+        public static string ConvertToUserName(string email)
+        {
+            return email.Substring(0, email.IndexOf('@'));
+        }
+        public static bool CheckIsPtkDomain(string email)
+        {
+            return "ptk-shipping.com" == email.Substring(email.IndexOf('@') + 1, (email.Length - email.IndexOf('@') - 1));
+
+        }
+
         public static string DevConnectionMode = nameof(DevConnectionMode);
         public static string ProdConnectionMode = nameof(ProdConnectionMode);
 

@@ -37,12 +37,12 @@ namespace OMNI.API.Controllers.OMNI
             _signInManager = signInManager;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get(CancellationToken cancellationToken)
-        {
-            var result = await _dbCorePTK.Employees.Where(b => b.IsDeleted == GeneralConstants.NO).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
-            return Ok(result);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> Get(CancellationToken cancellationToken)
+        //{
+        //    var result = await _dbCorePTK.Employees.Where(b => b.IsDeleted == GeneralConstants.NO).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
+        //    return Ok(result);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> SignIn(LoginModel model, CancellationToken cancellationToken)
@@ -65,6 +65,7 @@ namespace OMNI.API.Controllers.OMNI
 
             if (result.Succeeded)
             {
+
                 Employee employee = await _dbCorePTK.Employees
                     .Where(b => b.IsDeleted == GeneralConstants.NO)
                     .Include(b => b.EmployeePosition.EmployeePositionAbbrv)
@@ -81,10 +82,19 @@ namespace OMNI.API.Controllers.OMNI
                     b.IsDeleted == GeneralConstants.NO
                     );
 
-                return Ok(new ReturnJson());
-            }
+                var user = new ApplicationUser
+                {
+                    UserName = GeneralConstants.CheckIsPtkDomain(model.Username) ? GeneralConstants.ConvertToUserName(model.Username) : model.Username,
+                    Email = model.Username
+                };
 
-            return Ok(new ReturnJson());
+                var userRoles = await _userManager.GetUserNameAsync(user);
+
+                return Ok(new ReturnJson());
+            } else
+            {
+                return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "Invalid Username / Password"});
+            }
         }
     }
 }
