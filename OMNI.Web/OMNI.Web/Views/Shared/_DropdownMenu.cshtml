@@ -35,17 +35,18 @@
         }
 
         $("#logout2").click(function () {
-            $.ajax({
-                url: funcLogout(),
-                type: "GET",
-                success: function (res) {
-                    console.log(res);
-                }, error: function () {
+            window.location.replace("/Login/Logout");
+            //$.ajax({
+            //    url: funcLogout(),
+            //    type: "GET",
+            //    success: function (res) {
+            //        console.log(res);
+            //    }, error: function () {
 
-                }, complete: function () {
+            //    }, complete: function () {
 
-                }
-            })
+            //    }
+            //})
         });
     });
 </script>

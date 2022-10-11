@@ -46,9 +46,16 @@ namespace OMNI.Web.Controllers
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {
                 return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
+            } else
+            {
+                return Ok(new JsonResponse());
             }
+        }
 
-            return Ok(new JsonResponse());
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            return PartialView(LOGIN_URL);
         }
     }
 }

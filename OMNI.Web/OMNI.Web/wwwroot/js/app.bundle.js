@@ -829,21 +829,9 @@ var initApp = (function (app) {
             contentType: false,
             data: formData,
             success: function (response) {
+                console.log(response);
                 if (response.status == "SUCCESS") {
-                    Swal.fire({
-                        title: 'Submitted!',
-                        text: 'Your data has been submited.',
-                        type: 'success',
-                        timer: 2000,
-                        timerProgressBar: true
-                    }).then(() => {
-                        $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
-                        if (init.returnUrl == null) {
-                            
-                        } else {
-                            window.location.replace(init.returnUrl);
-                        }
-                    });
+                    window.location.replace(init.returnUrl);
                 } else {
                     var msgError = response.errorMsg == null ? 'Failed submited Data.' : response.errorMsg;
                     Swal.fire(

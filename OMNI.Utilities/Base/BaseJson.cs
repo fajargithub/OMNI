@@ -12,6 +12,10 @@ namespace OMNI.Utilities.Base
         public bool IsSuccess { get; set; } = true;
         public string ErrorMsg { get; set; }
         public T Payload { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Position { get; set; }
+        public List<string> Roles { get; set; }
     }
 
     public class BaseDatatable<T>
