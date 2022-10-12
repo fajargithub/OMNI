@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers
 {
     [AllowAnonymous]
-    [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI)]
+    [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI)]
     public class MainPageController : OMNIBaseController
     {
         private static readonly string MAIN_PAGE_URL = "~/Views/MainPage.cshtml";

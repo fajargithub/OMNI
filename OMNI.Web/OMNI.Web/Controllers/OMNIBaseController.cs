@@ -37,23 +37,38 @@ namespace OMNI.Web.Controllers
             public static string Username { get; set; }
             public static string Email { get; set; }
             public static List<string> RoleList;
-            public static string ParamRole { get; set; }
+            public static string[] ParamRole { get; set; }
         }
 
-        public static bool CheckUserRole(string param)
+        public static bool CheckUserRole()
         {
             bool result = false;
             var roleList = UserData.RoleList;
             if(roleList != null)
             {
-                roleList = roleList.FindAll(b => b.Contains(param));
-                if (roleList.Count() > 0)
+                if(UserData.ParamRole.Count() > 0)
                 {
-                    result = true;
+                    for(int i=0; i < UserData.ParamRole.Count(); i++)
+                    {
+                        if (!result)
+                        {
+                            var findRole = roleList.FindAll(b => b.Contains(UserData.ParamRole[i]));
+                            if (findRole.Count() > 0)
+                            {
+                                result = true;
+                            }
+                        }
+                    }
                 }
             }
 
             return result;
+        }
+
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            base.OnActionExecuted(context);
+            ViewBag.UserEmail = UserData.Email;
         }
 
         public class CheckRole : ActionFilterAttribute
@@ -63,11 +78,15 @@ namespace OMNI.Web.Controllers
 
             public CheckRole(string values)
             {
-                UserData.ParamRole = values;
+                var arrRoles = values.Split(",");
+                UserData.ParamRole = arrRoles;
             }
+
             public override void OnActionExecuting(ActionExecutingContext context)
             {
-                isInRole = CheckUserRole(UserData.ParamRole);
+                base.OnActionExecuting(context);
+
+                isInRole = CheckUserRole();
 
                 if (!isInRole)
                 {
@@ -75,6 +94,8 @@ namespace OMNI.Web.Controllers
                     UserData.Email = null;
                     UserData.RoleList = null;
                     context.Result = new RedirectToActionResult("Index", "Login", null);
+                } else
+                {
                 }
             }
 

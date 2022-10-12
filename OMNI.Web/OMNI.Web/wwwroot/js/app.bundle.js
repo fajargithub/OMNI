@@ -3,7 +3,6 @@
 // Please be sure to re-run gulp again if you do not see the config changes
 //--------------------------------------------------------------------------
 
-console.log('call app.bundle !');
 function generateQRCode2(qrcode_url) {
     console.log('on generate QR Code 2');
     $('#qrcode').empty();

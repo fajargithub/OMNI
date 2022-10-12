@@ -24,6 +24,7 @@ namespace OMNI.Web.Controllers
     {
         //private readonly ILogger<LoginController> _logger;
         private static readonly string LOGIN_URL = "~/Views/Authentication/Login.cshtml";
+        private static readonly string LOGOUT_URL = "~/Views/Authentication/Logout.cshtml";
         private static readonly string NO_ACCESS_URL = "~/Views/Authentication/NoAccess.cshtml";
 
         protected ILogin _loginService;
@@ -38,6 +39,23 @@ namespace OMNI.Web.Controllers
         {
             return PartialView(LOGIN_URL);
         }
+
+        //[HttpGet]
+        //public async Task<JsonResult> CheckSession()
+        //{
+        //    bool result = false;
+
+        //    var checkSession = UserData.Username;
+        //    if (!string.IsNullOrEmpty(checkSession))
+        //    {
+        //        result = true;
+        //    }
+
+        //    return Json(new
+        //    {
+        //        success = result
+        //    });
+        //}
 
         [HttpGet]
         public IActionResult NoAccess()
@@ -69,8 +87,10 @@ namespace OMNI.Web.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
+            UserData.Username = null;
+            UserData.Email = null;
             UserData.RoleList = null;
-            return PartialView(LOGIN_URL);
+            return PartialView(LOGOUT_URL);
         }
     }
 }

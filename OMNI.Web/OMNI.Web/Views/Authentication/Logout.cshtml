@@ -1,0 +1,70 @@
+﻿@model OMNI.Web.Models.Master.LoginModel
+
+<meta charset="utf-8">
+<title>Login OSMOSYS</title>
+<meta name="description" content="@ViewBag.Title">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="msapplication-tap-highlight" content="no">
+
+@*<link rel="stylesheet" media="screen, print" href="~/css/vendors.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/app.bundle.css">
+    <link rel="stylesheet" media="screen, print" href="~/css/themes/cust-theme-5.css">*@
+
+<link rel="stylesheet" media="screen, print" href="~/css/vendors.bundle.css">
+<link rel="stylesheet" media="screen, print" href="~/css/app.bundle.css">
+<link rel="stylesheet" media="screen, print" href="~/css/skin/skin-master.css">
+
+<link rel="stylesheet" media="screen, print" href="~/css/site.css">
+
+<link rel="stylesheet" media="screen, print" href="~/css/sweetalert2/sweetalert2.css">
+<link rel="stylesheet" media="screen, print" href="~/css/select2/select2.bundle.css">
+<link rel="stylesheet" media="screen, print" href="~/lib/toastr/toastr.min.css">
+<link rel="stylesheet" media="screen, print" href="~/css/datagrid/datatables/datatables.bundle.css">
+<link href="~/css/datepicker/datepicker.css" rel="stylesheet" />
+<partial name="_Favicon" />
+
+<style>
+    .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: auto;
+    }
+
+    h2 {
+        text-align: center;
+        font-weight: bold;
+        color: grey;
+    }
+
+    h5 {
+        text-align: center;
+        font-weight: bold;
+        color: darkgrey;
+    }
+</style>
+
+<form class="form-signin needs-validation" id="form-akun" method="post" enctype="multipart/form-data" novalidate>
+    <img class="mb-5" src="~/img/logo-2.png" style=" width: 285px;" />
+    <h2>You are Logging Out</h2>
+    <h5>Click this <a  asp-controller="Login" asp-action="Index">link</a> to Sign In</h5>
+    <p class="mt-5 mb-3 text-muted" style="text-align:center;">Pertamina Trans Kontinental © 2022</p>
+</form>
+
+<script src="~/js/vendors.bundle.js"></script>
+<script src="~/js/loginFunction.js"></script>
+<script src="~/js/structure.js"></script>
+<script src="~/js/jquery-3.5.1.js"></script>
+<script src="~/js/sweetalert2/sweetalert2.bundle.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        setTimeout(function () {
+            window.location.replace("/Login/Index");
+        }, 3000);
+    });
+
+</script>

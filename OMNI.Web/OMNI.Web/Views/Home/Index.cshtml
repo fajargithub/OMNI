@@ -99,7 +99,7 @@
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Lindungan Lingkungan Perairan
+                    Lindungan Lingkungan Perairan @ViewBag.UserEmail
                 </h2>
                 <div class="panel-toolbar">
                     <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
@@ -256,6 +256,15 @@
     <script src="~/js/datatable/datatable.js"></script>
 
     <script>
+        //jQuery(document).ready(function ($) {
+
+        //    if (window.history && window.history.pushState) {
+
+        //        alert('trigger!');
+
+        //    }
+        //});
+
         var port = "@ViewBag.SelectedPort.Name";
         var selectedYear = parseInt("@ViewBag.ThisYear");
 
