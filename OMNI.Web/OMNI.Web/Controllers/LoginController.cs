@@ -22,8 +22,9 @@ namespace OMNI.Web.Controllers
     [AllowAnonymous]
     public class LoginController : OMNIBaseController
     {
-        private readonly ILogger<LoginController> _logger;
+        //private readonly ILogger<LoginController> _logger;
         private static readonly string LOGIN_URL = "~/Views/Authentication/Login.cshtml";
+        private static readonly string NO_ACCESS_URL = "~/Views/Authentication/NoAccess.cshtml";
 
         protected ILogin _loginService;
 
@@ -38,6 +39,12 @@ namespace OMNI.Web.Controllers
             return PartialView(LOGIN_URL);
         }
 
+        [HttpGet]
+        public IActionResult NoAccess()
+        {
+            return PartialView(NO_ACCESS_URL);
+        }
+
         [HttpPost]
         public async Task<IActionResult> SignIn(LoginModel model)
         {
@@ -46,8 +53,15 @@ namespace OMNI.Web.Controllers
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {
                 return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
-            } else
+            }
+            else
             {
+                UserData.RoleList = r.Roles;
+                UserData.Username = r.Username;
+                UserData.Email = r.Email;
+
+                //return Redirect("/MainPage/Index");
+                //return Ok(new JsonResponse { Status = GeneralConstants.SUCCESS, Username = r.Username, Email = r.Email, Roles = r.Roles });
                 return Ok(new JsonResponse());
             }
         }
@@ -55,6 +69,7 @@ namespace OMNI.Web.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
+            UserData.RoleList = null;
             return PartialView(LOGIN_URL);
         }
     }

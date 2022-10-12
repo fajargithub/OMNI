@@ -1,6 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Routing;
+using OMNI.Utilities.Constants;
+using OMNI.Web.Services.CorePTK.Interface;
+using OMNI.Web.Services.Master.Interface;
+using OMNI.Web.Services.Trx.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +14,19 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Controllers
 {
-    [Authorize(Policy = "osmosys.user.read")]
-    public class MainPageController : Controller
+    [AllowAnonymous]
+    [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI)]
+    public class MainPageController : OMNIBaseController
     {
         private static readonly string MAIN_PAGE_URL = "~/Views/MainPage.cshtml";
+
+        public MainPageController(IRekomendasiType rekomendasiTypeService, ILogin loginService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        {
+        }
+
         public async Task<IActionResult> Index()
         {
-            var userData = User.Claims.ToList();
-            ViewBag.Claims = userData;
-            string token = await HttpContext.GetTokenAsync("access_token");
-            string email = User.Claims.FirstOrDefault(c => c.Type.Equals(Models.Oid.Email)).Value;
+            ViewBag.Username = UserData.Username;
             return View(MAIN_PAGE_URL);
         }
 
@@ -28,7 +37,7 @@ namespace OMNI.Web.Controllers
                 Response.Cookies.Delete(cookie);
             await HttpContext.SignOutAsync();
            SignOut("Cookies", "oidc");
-            return RedirectToAction("Index", "MainPage");
+            return RedirectToAction("Logout", "Login");
         }
     }
 }

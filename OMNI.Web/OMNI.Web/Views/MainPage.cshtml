@@ -1,10 +1,11 @@
 ﻿<div class="row">
     <div class="col-md-12">
-        <h3>Welcome to OSMOSYS, @ViewBag.Claims[7].Value</h3>
+        <h3>Welcome to OSMOSYS, <b id="username">@ViewBag.Username</b></h3>
+
     </div>
-    <div class="col-md-12">
+    @*<div class="col-md-12">
         <a class="btn btn-primary btn-sm shadow-0 waves-effect waves-themed" id="logout">LOGOUT</a>
-    </div>
+    </div>*@
     <div class="col-md-12" style="text-align:center;">
         <img src="~/img/logo-2.png" style="width:400px;"/>
     </div>
@@ -13,6 +14,9 @@
 <script src="~/js/front/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+
+        //var username = sessionStorage.getItem("username");
+        //$("#username").text(username);
 
         function funcLogout() {
             window.onbeforeunload = function () { return "Your work will be lost."; };

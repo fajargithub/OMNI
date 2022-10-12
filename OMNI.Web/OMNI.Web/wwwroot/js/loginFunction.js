@@ -1,145 +1,118 @@
-//--------------------------------------------------------------------------
+﻿//--------------------------------------------------------------------------
 // HEADSUP!
 // Please be sure to re-run gulp again if you do not see the config changes
-//--------------------------------------------------------------------------
+//-----------------------------
 
-console.log('call app.bundle !');
-function generateQRCode2(qrcode_url) {
-    console.log('on generate QR Code 2');
-    $('#qrcode').empty();
-
-    const qrCode = new QRCodeStyling({
-        width: 300,
-        height: 300,
-        type: "canvas",
-        data: qrcode_url,
-        image: "/img/pertamina.png",
-        dotsOptions: {
-            color: "#4267b2",
-            type: "rounded"
-        },
-        backgroundOptions: {
-            color: "#e9ebee",
-        },
-        imageOptions: {
-            crossOrigin: "anonymous",
-            margin: 5,
-        }
-    });
-
-    qrCode.append(document.getElementById("qrcode"));
-}
-
-function checkSession() {
-    console.log('on check session');
+function checkSessionOnLoginPage(){
     var username = sessionStorage.getItem("username");
-    if (!username) {
-        window.location.replace("/Login/Logout");
+    console.log(username);
+    if (username) {
+        window.location.replace("/MainPage/Index");
     }
 }
 
-//checkSession();
+//checkSessionOnLoginPage();
 
 var myapp_config = {
-	/*
-	APP VERSION
-	*/
+    /*
+    APP VERSION
+    */
     VERSION: '4.0.2',
-	/*
-	SAVE INSTANCE REFERENCE
-	Save a reference to the global object (window in the browser)
-	*/
+    /*
+    SAVE INSTANCE REFERENCE
+    Save a reference to the global object (window in the browser)
+    */
     root_: $('body'), // used for core app reference
     root_logo: $('.page-sidebar > .page-logo'), // used for core app reference
-	/*
-	DELAY VAR FOR FIRING REPEATED EVENTS (eg., scroll & resize events)
-	Lowering the variable makes faster response time but taxing on the CPU
-	Reference: http://benalman.com/code/projects/jquery-throttle-debounce/examples/throttle/
-	*/
+    /*
+    DELAY VAR FOR FIRING REPEATED EVENTS (eg., scroll & resize events)
+    Lowering the variable makes faster response time but taxing on the CPU
+    Reference: http://benalman.com/code/projects/jquery-throttle-debounce/examples/throttle/
+    */
     throttleDelay: 450, // for window.scrolling & window.resizing
     filterDelay: 150,   // for keyup.functions
-	/*
-	DETECT MOBILE DEVICES
-	Description: Detects mobile device - if any of the listed device is
-	detected a class is inserted to $.root_ and the variable thisDevice
-	is decleard. (so far this is covering most hand held devices)
-	*/
+    /*
+    DETECT MOBILE DEVICES
+    Description: Detects mobile device - if any of the listed device is
+    detected a class is inserted to $.root_ and the variable thisDevice
+    is decleard. (so far this is covering most hand held devices)
+    */
     thisDevice: null, // desktop or mobile
     isMobile: (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase())), //popular device types available on the market
     mobileMenuTrigger: null, // used by pagescrolling and appHeight script, do not change!
     mobileResolutionTrigger: 992, //the resolution when the mobile activation fires
-	/*
-	DETECT IF WEBKIT
-	Description: this variable is used to fire the custom scroll plugin.
-	If it is a non-webkit it will fire the plugin.
-	*/
+    /*
+    DETECT IF WEBKIT
+    Description: this variable is used to fire the custom scroll plugin.
+    If it is a non-webkit it will fire the plugin.
+    */
     isWebkit: ((!!window.chrome && !!window.chrome.webstore) === true || Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 === true),
-	/*
-	DETECT CHROME
-	Description: this variable is used to fire the custom CSS hacks
-	*/
+    /*
+    DETECT CHROME
+    Description: this variable is used to fire the custom CSS hacks
+    */
     isChrome: (/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())),
-	/*
-	DETECT IE (it only detects the newer versions of IE)
-	Description: this variable is used to fire the custom CSS hacks
-	*/
+    /*
+    DETECT IE (it only detects the newer versions of IE)
+    Description: this variable is used to fire the custom CSS hacks
+    */
     isIE: ((window.navigator.userAgent.indexOf('Trident/')) > 0 === true),
-	/*
-	DEBUGGING MODE
-	debugState = true; will spit all debuging message inside browser console.
-	*/
+    /*
+    DEBUGGING MODE
+    debugState = true; will spit all debuging message inside browser console.
+    */
     debugState: true, // outputs debug information on browser console
-	/*
-	Turn on ripple effect for buttons and touch events
-	Dependency:
-	*/
+    /*
+    Turn on ripple effect for buttons and touch events
+    Dependency:
+    */
     rippleEffect: true, // material design effect that appears on all buttons
-	/*
-	Primary theme anchor point ID
-	This anchor is created dynamically and CSS is loaded as an override theme
-	*/
+    /*
+    Primary theme anchor point ID
+    This anchor is created dynamically and CSS is loaded as an override theme
+    */
     mythemeAnchor: '#mytheme',
-	/*
-	Primary menu anchor point #js-primary-nav
-	This is the root anchor point where the menu script will begin its build
-	*/
+    /*
+    Primary menu anchor point #js-primary-nav
+    This is the root anchor point where the menu script will begin its build
+    */
     navAnchor: $('#js-primary-nav'), //changing this may implicate slimscroll plugin target
     navHooks: $('.js-nav-menu'), //changing this may implicate CSS targets
     navAccordion: true, //nav item when one is expanded the other closes
     navInitalized: 'js-nav-built', //nav finished class
     navFilterInput: $('#nav_filter_input'), //changing this may implicate CSS targets
     navHorizontalWrapperId: 'js-nav-menu-wrapper',
-	/*
-	The rate at which the menu expands revealing child elements on click
-	Lower rate reels faster expansion of nav childs
-	*/
+    /*
+    The rate at which the menu expands revealing child elements on click
+    Lower rate reels faster expansion of nav childs
+    */
     navSpeed: 500, //ms
-	/*
-	Color profile reference hook (needed for getting CSS value for theme colors in charts and various graphs)
-	*/
+    /*
+    Color profile reference hook (needed for getting CSS value for theme colors in charts and various graphs)
+    */
     mythemeColorProfileID: $('#js-color-profile'),
-	/*
-	Nav close and open signs
-	This uses the fontawesome css class
-	*/
+    /*
+    Nav close and open signs
+    This uses the fontawesome css class
+    */
     navClosedSign: 'fal fa-angle-down',
     navOpenedSign: 'fal fa-angle-up',
-	/*
-	App date ID
-	found inside the breadcrumb unit, displays current date to the app on pageload
-	*/
+    /*
+    App date ID
+    found inside the breadcrumb unit, displays current date to the app on pageload
+    */
     appDateHook: $('.js-get-date'),
-	/*
-	* SaveSettings to localStorage
-	* DOC: to store settings to a DB instead of LocalStorage see below:
-	*    initApp.pushSettings("className1 className2") //sets value
-	*    var DB_string = initApp.getSettings(); //returns setting string
-	*/
+    /*
+    * SaveSettings to localStorage
+    * DOC: to store settings to a DB instead of LocalStorage see below:
+    *    initApp.pushSettings("className1 className2") //sets value
+    *    var DB_string = initApp.getSettings(); //returns setting string
+    */
     storeLocally: true,
-	/*
-	* Used with initApp.loadScripts
-	* DOC: Please leave it blank
-	*/
+    /*
+    * Used with initApp.loadScripts
+    * DOC: Please leave it blank
+    */
     jsArray: []
 };
 
@@ -154,23 +127,23 @@ var myapp_config = {
 
 
 (function ($) {
-	/**
-	 * Menu Plugin
-	 **/
+    /**
+     * Menu Plugin
+     **/
     $.fn.extend({
-		/**
-		 * pass the options variable to the function
-		 *
-		 *   $(id).navigation({
-		 *       accordion: true,
-		 *       animate: 'easeOutExpo',
-		 *       speed: 200,
-		 *       closedSign: '[+]',
-		 *       openedSign: '[-]',
-		 *       initClass: 'js-nav-built'
-		 *   });
-		 *
-		 **/
+        /**
+         * pass the options variable to the function
+         *
+         *   $(id).navigation({
+         *       accordion: true,
+         *       animate: 'easeOutExpo',
+         *       speed: 200,
+         *       closedSign: '[+]',
+         *       openedSign: '[-]',
+         *       initClass: 'js-nav-built'
+         *   });
+         *
+         **/
 
         navigation: function (options) {
             var defaults = {
@@ -182,14 +155,14 @@ var myapp_config = {
                 initClass: 'js-nav-built'
             },
 
-	            /**
-	             * extend our default options with those provided.
-	             **/
+                /**
+                 * extend our default options with those provided.
+                 **/
                 opts = $.extend(defaults, options),
 
-	            /**
-	             * assign current element to variable, in this case is UL element
-	             **/
+                /**
+                 * assign current element to variable, in this case is UL element
+                 **/
                 self = $(this);
 
             if (!self.hasClass(opts.initClass)) {
@@ -306,9 +279,9 @@ var myapp_config = {
             }
         },
 
-	    /**
-	     * DOC: $(id).destroy();
-	     **/
+        /**
+         * DOC: $(id).destroy();
+         **/
         navigationDestroy: function () {
             self = $(this);
 
@@ -588,302 +561,82 @@ var initApp = (function (app) {
         });
     };
 
-    app.formSubmit2 = function (param) {
-        let init = new FormParam(param.form, param.questionText, param.submitUrl, param.returnUrl, param.modalId, param.tableId);
-        var formData = new FormData($(init.form)[0]);
-        var formId = init.form.getAttribute('id');
-
-        $(`#${formId} button[type=submit]`).html(`<i class="fal fa-spin fa-spinner-third" aria-hidden="true"></i> Loading`).attr("disabled", true);
-        //e.preventDefault();
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: init.questionText,
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!'
-        }).then((result) => {
-            if (result.value) {
-                let tempDropZone = $(`#${formId} div.dropzone`);
-                if (tempDropZone.length > 0) {
-                    $.each(tempDropZone, function (index, val) {
-                        let myDropzone = Dropzone.forElement(val);
-                        $.each(myDropzone.getAcceptedFiles(), function (index, val) {
-                            formData.append(myDropzone.element.dataset.name, val);
-                        });
-                    });
-                }
-
-                Swal.fire({
-                    title: '<i class="fa fa-cog fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only"> Submiting</span>',
-                    text: 'Saving, please wait',
-                    allowOutsideClick: false,
-                    showConfirmButton: false
-                });
-
-                $.ajax({
-                    url: init.submitUrl,
-                    type: 'POST',
-                    processData: false,
-                    contentType: false,
-                    data: formData,
-                    success: function (response) {
-
-                        $(init.tableId).DataTable().ajax.reload(function () {
-                            console.log('on reload datatable!');
-                            if (init.tableId == "#table_llp_trx" || init.tableId == "#table_personil_trx" || init.tableId == "#table_latihan_trx") {
-                                console.log('on count total percentage app bundle!');
-                                countTotalPercentageLLPTrx();
-                                countPercentagePersonilTrx();
-                                countPercentageLatihanTrx();
-
-                                var id = response.id;
-                                var qrcode_url = base_api + "Home/QrCodeDetail?id=" + id;
-
-                                $.ajax({
-                                    url: generateQRCode2(qrcode_url),
-                                    method: "GET",
-                                    complete: function () {
-                                        var canvas = document.querySelector('canvas');
-                                        var pngUrl = canvas.toDataURL();
-
-                                        var qrcodeVal = {
-                                            primaryId: id,
-                                            qrCode: pngUrl
-                                        }
-
-                                        $.ajax({
-                                            url: base_api + "Home/UpdateQRCode",
-                                            method: "POST",
-                                            data: { data: qrcodeVal },
-                                            success: function (result) {
-                                                if (response.status == "SUCCESS") {
-                                                    Swal.fire({
-                                                        title: 'Submitted!',
-                                                        text: 'Your data has been submited.',
-                                                        type: 'success',
-                                                        timer: 2000,
-                                                        timerProgressBar: true
-                                                    }).then(() => {
-                                                        $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
-                                                        if (init.returnUrl == null) {
-                                                            $(init.modalId).modal('hide');
-                                                            $(init.tableId).DataTable().ajax.reload(function () {
-                                                                console.log('on reload datatable!');
-                                                                countTotalPercentageLLPTrx();
-                                                                countPercentagePersonilTrx();
-                                                                countPercentageLatihanTrx();
-                                                            });
-                                                        } else {
-                                                            window.location.replace(init.returnUrl);
-                                                        }
-                                                    });
-                                                } else {
-                                                    var msgError = response.errorMsg == null ? 'Failed submited Data.' : response.errorMsg;
-                                                    Swal.fire(
-                                                        'Failed!',
-                                                        msgError,
-                                                        'error'
-                                                    );
-                                                    $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
-                                                }
-                                            }, complete: function () {
-
-                                            }
-                                        })
-                                    }
-                                })
-                            }
-                        });
-
-                        
-                    },
-                    error: function () {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        );
-                        $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
-                    },
-                    complete: function () {
-                        setTimeout(function () {
-                            Swal.close();
-                        }, 5000);
-                    }
-                });
-            } else {
-                $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
-            }
-        });
-    };
-
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Dimas Ver
-    app.formSubmit = function (param) {
-        let init = new FormParam(param.form, param.questionText, param.submitUrl, param.returnUrl, param.modalId, param.tableId);
-        var formData = new FormData($(init.form)[0]);
-        var formId = init.form.getAttribute('id');
-
-        $(`#${formId} button[type=submit]`).html(`<i class="fal fa-spin fa-spinner-third" aria-hidden="true"></i> Loading`).attr("disabled", true);
-        //e.preventDefault();
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: init.questionText,
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!'
-        }).then((result) => {
-            if (result.value) {
-                let tempDropZone = $(`#${formId} div.dropzone`);
-                if (tempDropZone.length > 0) {
-                    $.each(tempDropZone, function (index, val) {
-                        let myDropzone = Dropzone.forElement(val);
-                        $.each(myDropzone.getAcceptedFiles(), function (index, val) {
-                            formData.append(myDropzone.element.dataset.name, val);
-                        });
-                    });
-                }
-
-                Swal.fire({
-                    title: '<i class="fa fa-cog fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only"> Submiting</span>',
-                    text: 'Saving, please wait',
-                    allowOutsideClick: false,
-                    showConfirmButton: false
-                });
-
-                $.ajax({
-                    url: init.submitUrl,
-                    type: 'POST',
-                    processData: false,
-                    contentType: false,
-                    data: formData,
-                    success: function (response) {
-                        if (response.status == "SUCCESS") {
-                            Swal.fire({
-                                title: 'Submitted!',
-                                text: 'Your data has been submited.',
-                                type: 'success',
-                                timer: 2000,
-                                timerProgressBar: true
-                            }).then(() => {
-                                $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
-                                if (init.returnUrl == null) {
-                                    //location.reload();
-                                    $(init.modalId).modal('hide');
-                                    /*$(init.tableId).DataTable().ajax.reload(countTotalPercentageLLPTrx, false);*/
-                                    $(init.tableId).DataTable().ajax.reload(function () {
-                                        console.log('on reload datatable!');
-                                        if (init.tableId == "#table_surat_penilaian" || init.tableId == "#table_surat_pengesahan" || init.tableId == "#table_verifikasi_surat") {
-                                            location.reload();
-                                        }
-                                    });
-                                } else {
-                                    window.location.replace(init.returnUrl);
-                                }
-                            });
-                        } else {
-                            var msgError = response.errorMsg == null ? 'Failed submited Data.' : response.errorMsg;
-                            Swal.fire(
-                                'Failed!',
-                                msgError,
-                                'error'
-                            );
-                            $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
-                        }
-                    },
-                    error: function () {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        );
-                        $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
-                    },
-                    complete: function () {
-                        setTimeout(function () {
-                            Swal.close();
-                        }, 5000);
-                    }
-                });
-            } else {
-                $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
-            }
-        });
-    };
-
     function setSession(param) {
-        console.log('on set session');
-        sessionStorage.setItem("username", param.username);
-        sessionStorage.setItem("email", param.email);
+        //console.log('on set session');
+        //sessionStorage.setItem("username", param.username);
+        //sessionStorage.setItem("email", param.email);
     }
 
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Dimas Ver
+    app.formSubmitLogin = function (param) {
+        let init = new FormParam(param.form, param.questionText, param.submitUrl, param.returnUrl, param.modalId, param.tableId);
+        var formData = new FormData($(init.form)[0]);
+        var formId = init.form.getAttribute('id');
 
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Gatra Ver
-    app.submitForm = function (formdata, controller, method, urlReturnController, urlReturnMethod) {
-        var res = null;
-        //var data = {};
-        //$(formdata).each(function (index, obj) {
-        //    data[obj.name] = obj.value;
-        //});
-        var data = {};
+        $(`#${formId} button[type=submit]`).html(`<i class="fal fa-spin fa-spinner-third" aria-hidden="true"></i> Loading`).attr("disabled", true);
+        //e.preventDefault();
 
-        $(formdata).each(function (index, obj) {
-            if (data.hasOwnProperty(obj.name)) {
-                if (Array.isArray(data[obj.name])) {
-                    data[obj.name].push(obj.value);
-                } else {
-                    data[obj.name] = [data[obj.name], obj.value];
-                }
-            } else {
-                data[obj.name] = obj.value;
-            }
-        });
+        let tempDropZone = $(`#${formId} div.dropzone`);
+        if (tempDropZone.length > 0) {
+            $.each(tempDropZone, function (index, val) {
+                let myDropzone = Dropzone.forElement(val);
+                $.each(myDropzone.getAcceptedFiles(), function (index, val) {
+                    formData.append(myDropzone.element.dataset.name, val);
+                });
+            });
+        }
 
         $.ajax({
-            async: false,
-            type: "POST",
-            data: { data: data },
-            url: base_url + controller + "/" + method,
-            cache: false,
-            success: function (result) {
-                res = result;
-                if (result.status == "SUCCESS") {
-                    if (urlReturnController != null && urlReturnMethod != null) {
-                        window.open(base_url + urlReturnController + "/" + urlReturnMethod, "_self");
-                    }
+            url: init.submitUrl,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (response) {
+                if (response.status == "SUCCESS") {
+                    $.ajax({
+                        url: setSession(response),
+                        method: "GET",
+                        success: function () {
+                            window.location.replace(init.returnUrl);
+                        }
+                    })
                 } else {
+                    var msgError = response.errorMsg == null ? 'Failed submited Data.' : response.errorMsg;
                     Swal.fire(
-                        {
-                            type: "error",
-                            title: "Oops...",
-                            text: "Something went wrong!"
-                        });
+                        'Failed!',
+                        msgError,
+                        'error'
+                    );
+                    $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
                 }
             },
             error: function () {
+                Swal.fire(
+                    'Oops...',
+                    'Something went wrong!',
+                    'error'
+                );
+                $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
+            },
+            complete: function () {
+                setTimeout(function () {
+                    Swal.close();
+                }, 5000);
             }
         });
-        return res;
     };
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Gatra Ver
 
-    
-	/**
-	 * List filter
-	 * DOC: searches list items, it could be UL or DIV elements
-	 * usage: initApp.listFilter($('.list'), $('#intput-id'));
-	 *        inside the .list you will need to insert 'data-filter-tags' inside <a>
-	 * @param  list
-	 * @param  input
-	 * @param  anchor
-	 * @return
-	 */
+
+    /**
+     * List filter
+     * DOC: searches list items, it could be UL or DIV elements
+     * usage: initApp.listFilter($('.list'), $('#intput-id'));
+     *        inside the .list you will need to insert 'data-filter-tags' inside <a>
+     * @param  list
+     * @param  input
+     * @param  anchor
+     * @return
+     */
     app.listFilter = function (list, input, anchor) {
         /* add class to filter hide/show */
         if (anchor) {
@@ -899,8 +652,8 @@ var initApp = (function (app) {
 
             /* when user types more than 1 letter start search filter */
             if (filter.length > 1) {
-				/* this finds all data-filter-tags in a list that contain the input val,
-				   hiding the ones not containing the input while showing the ones that do */
+                /* this finds all data-filter-tags in a list that contain the input val,
+                   hiding the ones not containing the input while showing the ones that do */
 
                 /* (1) hide all that does not match */
                 $(list).find($("[data-filter-tags]:not([data-filter-tags*='" + filter + "'])"))
@@ -931,19 +684,19 @@ var initApp = (function (app) {
             /* fire the above change event after every letter is typed with a delay of 250ms */
             $(this).change();
 
-			/*if(e.keyCode == 13) {
-				console.log( $(list).find(".filter-show:not(.filter-hide) > a") );
-			}*/
+            /*if(e.keyCode == 13) {
+                console.log( $(list).find(".filter-show:not(.filter-hide) > a") );
+            }*/
         }));
     };
 
-	/**
-	 * Load scripts using lazyload method
-	 * usage: initApp.loadScript("js/my_lovely_script.js", myFunction);
-	 * @param  {[type]}   scriptName
-	 * @param  {Function} callback
-	 * @return {[type]}
-	 */
+    /**
+     * Load scripts using lazyload method
+     * usage: initApp.loadScript("js/my_lovely_script.js", myFunction);
+     * @param  {[type]}   scriptName
+     * @param  {Function} callback
+     * @return {[type]}
+     */
     app.loadScript = function (scriptName, callback) {
         if (!myapp_config.jsArray[scriptName]) {
             var promise = jQuery.Deferred();
@@ -954,8 +707,8 @@ var initApp = (function (app) {
             script.type = 'text/javascript';
             script.src = scriptName;
 
-			/* then bind the event to the callback function
-			   there are several events for cross browser compatibility */
+            /* then bind the event to the callback function
+               there are several events for cross browser compatibility */
             script.onload = function () {
                 promise.resolve();
             };
@@ -975,10 +728,10 @@ var initApp = (function (app) {
         });
     };
 
-	/**
-	 * Javascript Animation for save settings
-	 * @return
-	 **/
+    /**
+     * Javascript Animation for save settings
+     * @return
+     **/
     app.saveSettings = function () {
         /* if saveSettings function exists */
         if (typeof saveSettings !== 'undefined' && $.isFunction(saveSettings) && myapp_config.storeLocally) {
@@ -995,11 +748,11 @@ var initApp = (function (app) {
         }
     };
 
-	/**
-	 * Reset settings
-	 * DOC: removes all classes from root_ then saves
-	 * @return {[type]}
-	 **/
+    /**
+     * Reset settings
+     * DOC: removes all classes from root_ then saves
+     * @return {[type]}
+     **/
     app.resetSettings = function () {
         /* remove all setting classes nav|header|mod|display */
         myapp_config.root_.removeClass(function (index, className) {
@@ -1019,11 +772,11 @@ var initApp = (function (app) {
             console.log("App reset successful");
     };
 
-	/**
-	 * Factory Reset
-	 * DOC: Resets all of localstorage
-	 * @return {[type]}
-	 **/
+    /**
+     * Factory Reset
+     * DOC: Resets all of localstorage
+     * @return {[type]}
+     **/
     app.factoryReset = function () {
         //backdrop sound
         initApp.playSound('media/sound', 'messagebox');
@@ -1071,12 +824,12 @@ var initApp = (function (app) {
             console.log("App reset successful");
     };
 
-	/**
-	 * Access Indicator
-	 * DOC: spinning icon that appears whenever you
-	 * access localstorage or change settings
-	 * @return {[type]}
-	 **/
+    /**
+     * Access Indicator
+     * DOC: spinning icon that appears whenever you
+     * access localstorage or change settings
+     * @return {[type]}
+     **/
     app.accessIndicator = function () {
         myapp_config.root_.addClass('saving').delay(600).queue(function () {
             $(this).removeClass('saving').dequeue();
@@ -1084,15 +837,15 @@ var initApp = (function (app) {
         });
     };
 
-	/*
-	 * usage: initApp.pushSettings("className1 className2")
-	 * save settings to localstorage: initApp.pushSettings("className1 className2", true)
-	 * DOC: pushSettings will also auto save to localStorage if "storeLocally == true"
-	 * we will use this "pushSettings" when loading settings from a database
-	 * @param  {[type]} DB_string
-	 * @param  {[type]} saveToLocal
-	 * @return {[type]}
-	 */
+    /*
+     * usage: initApp.pushSettings("className1 className2")
+     * save settings to localstorage: initApp.pushSettings("className1 className2", true)
+     * DOC: pushSettings will also auto save to localStorage if "storeLocally == true"
+     * we will use this "pushSettings" when loading settings from a database
+     * @param  {[type]} DB_string
+     * @param  {[type]} saveToLocal
+     * @return {[type]}
+     */
     app.pushSettings = function (DB_string, saveToLocal) {
         /* clear localstorage variable 'themeSettings' */
         if (saveToLocal != false)
@@ -1112,23 +865,23 @@ var initApp = (function (app) {
         return DB_string;
     };
 
-	/*
-	 * usage: var DB_string = initApp.getSettings();
-	 * we will use this "getSettings" when storing settings to a database
-	 * @return {[type]}
-	 */
+    /*
+     * usage: var DB_string = initApp.getSettings();
+     * we will use this "getSettings" when storing settings to a database
+     * @return {[type]}
+     */
     app.getSettings = function () {
         return myapp_config.root_.attr('class').split(/[^\w-]+/).filter(function (item) {
             return /^(nav|header|mod|display)-/i.test(item);
         }).join(' ');
     };
 
-	/*
-	 * Play Sounds
-	 * usage: initApp.playSound(path, sound);
-	 * @param  {[string]} path
-	 * @param  {[string]} sound
-	 */
+    /*
+     * Play Sounds
+     * usage: initApp.playSound(path, sound);
+     * @param  {[string]} path
+     * @param  {[string]} sound
+     */
     app.playSound = function (path, sound) {
         var audioElement = document.createElement('audio');
         if (navigator.userAgent.match('Firefox/'))
@@ -1145,30 +898,30 @@ var initApp = (function (app) {
         audioElement.play();
     }
 
-	/*
-	 * Checks and sets active settings selections
-	 * DOC: ?
-	 */
-	/*app.indicateSelections = function () {
-		var classNames = initApp.getSettings()
-			.split(' ')
-			.map(function(c) {
-				return '[data-class="' +  c + '"].js-indicateSelections';
-			})
-			.join(',');
+    /*
+     * Checks and sets active settings selections
+     * DOC: ?
+     */
+    /*app.indicateSelections = function () {
+        var classNames = initApp.getSettings()
+            .split(' ')
+            .map(function(c) {
+                return '[data-class="' +  c + '"].js-indicateSelections';
+            })
+            .join(',');
 
-		$('[data-class].active.js-indicateSelections').removeClass('active');
-		$(classNames).addClass('active');
+        $('[data-class].active.js-indicateSelections').removeClass('active');
+        $(classNames).addClass('active');
 
-		if (myapp_config.debugState)
-			console.log(classNames);
-	}*/
+        if (myapp_config.debugState)
+            console.log(classNames);
+    }*/
 
-	/**
-	 * detect browser type
-	 * DOC: detect if browser supports webkit CSS
-	 * @return {[type]}
-	 **/
+    /**
+     * detect browser type
+     * DOC: detect if browser supports webkit CSS
+     * @return {[type]}
+     **/
     app.detectBrowserType = function () {
         /* safari, chrome or IE detect */
         if (myapp_config.isChrome) {
@@ -1183,10 +936,10 @@ var initApp = (function (app) {
         }
     };
 
-	/**
-	 * Add device type
-	 * DOC: Detect if mobile or desktop
-	 **/
+    /**
+     * Add device type
+     * DOC: Detect if mobile or desktop
+     **/
     app.addDeviceType = function () {
         if (!myapp_config.isMobile) {
             /* desktop */
@@ -1201,12 +954,12 @@ var initApp = (function (app) {
         return myapp_config.thisDevice;
     };
 
-	/**
-	 * Fix logo position on .header-function-fixed & .nav-function-hidden
-	 * DOC: Counters browser bug for fixed position and overflow:hidden for the logo (firefox/IE/Safari)
-	 *      Will not fire for webkit devices or Chrome as its not needed
-	 * @return {[type]}
-	 **/
+    /**
+     * Fix logo position on .header-function-fixed & .nav-function-hidden
+     * DOC: Counters browser bug for fixed position and overflow:hidden for the logo (firefox/IE/Safari)
+     *      Will not fire for webkit devices or Chrome as its not needed
+     * @return {[type]}
+     **/
     app.windowScrollEvents = function () {
         if (myapp_config.root_.is('.nav-function-hidden.header-function-fixed:not(.nav-function-top)') && myapp_config.thisDevice === 'desktop') {
             myapp_config.root_logo.css({
@@ -1217,18 +970,18 @@ var initApp = (function (app) {
         }
     };
 
-	/**
-	 * checkNavigationOrientation by checking layout conditions
-	 * DOC: sometimes settings can trigger certain plugins; so we check this condition and activate accordingly
-	 * E.g: the fixed navigation activates custom scroll plugin for the navigation, but this only happens when
-	 *		it detects desktop browser and destroys the plugin when navigation is on top or if its not fixed.
-	 * @return {[type]}
-	 **/
+    /**
+     * checkNavigationOrientation by checking layout conditions
+     * DOC: sometimes settings can trigger certain plugins; so we check this condition and activate accordingly
+     * E.g: the fixed navigation activates custom scroll plugin for the navigation, but this only happens when
+     *		it detects desktop browser and destroys the plugin when navigation is on top or if its not fixed.
+     * @return {[type]}
+     **/
     app.checkNavigationOrientation = function () {
-		/**
-		 * DOC: add the plugin with the following rules: fixed navigation is selected, top navigation is not active, minify nav is not active,
-		 * and the device is desktop. We do not need to activate the plugin when loading from a mobile phone as it is not needed for touch screens.
-		 **/
+        /**
+         * DOC: add the plugin with the following rules: fixed navigation is selected, top navigation is not active, minify nav is not active,
+         * and the device is desktop. We do not need to activate the plugin when loading from a mobile phone as it is not needed for touch screens.
+         **/
         switch (true) {
             case (myapp_config.root_.hasClass('nav-function-fixed') && !myapp_config.root_.is('.nav-function-top, .nav-function-minify, .mod-main-boxed') && myapp_config.thisDevice === 'desktop'):
 
@@ -1318,17 +1071,17 @@ var initApp = (function (app) {
         }
     };
 
-	/**
-	 * Activate Nav
-	 * DOC: activation should not take place if top navigation is on
-	 * @param  {[type]} id
-	 * @return {[type]}
-	 **/
+    /**
+     * Activate Nav
+     * DOC: activation should not take place if top navigation is on
+     * @param  {[type]} id
+     * @return {[type]}
+     **/
     app.buildNavigation = function (id) {
-		/**
-		 * build nav
-		 * app.navigation.js
-		 **/
+        /**
+         * build nav
+         * app.navigation.js
+         **/
         if ($.fn.navigation) {
             $(id).navigation({
                 accordion: myapp_config.navAccordion,
@@ -1345,16 +1098,16 @@ var initApp = (function (app) {
         }
     };
 
-	/**
-	 * Destroy Nav
-	 * @param  {[type]} id
-	 * @return {[type]}
-	 **/
+    /**
+     * Destroy Nav
+     * @param  {[type]} id
+     * @return {[type]}
+     **/
     app.destroyNavigation = function (id) {
-		/**
-		 * destroy nav
-		 * app.navigation.js
-		 **/
+        /**
+         * destroy nav
+         * app.navigation.js
+         **/
         if ($.fn.navigation) {
             $(id).navigationDestroy();
 
@@ -1365,42 +1118,42 @@ var initApp = (function (app) {
         }
     };
 
-	/**
-	 * App Forms
-	 * DOC: detects if input is selected or blured
-	 * @param  {[type]} parentClass
-	 * @param  {[type]} focusClass
-	 * @param  {[type]} disabledClass
-	 * @return {[type]}
-	 **/
+    /**
+     * App Forms
+     * DOC: detects if input is selected or blured
+     * @param  {[type]} parentClass
+     * @param  {[type]} focusClass
+     * @param  {[type]} disabledClass
+     * @return {[type]}
+     **/
     app.appForms = function (parentClass, focusClass, disabledClass) {
         /* go through each .form-control */
-		/*$('.form-control').each(function () {
-			checkLength(this);
-		});*/
+        /*$('.form-control').each(function () {
+            checkLength(this);
+        });*/
 
         /* if input has 'some value' add class .has-length to .form-group */
-		/*function checkLength(e) {
-			if (e.value.length > 0 ) {
-				$(e).parents(parentClass).addClass(focusClass);
-				if($(e).is('[readonly]') || $(e).is('[disabled]')) {
-					$(e).parents(parentClass).addClass(disabledClass);
-				}
-			} else {
-				$(e).parents(parentClass).removeClass(focusClass);
-				if($(e).is('[readonly]') || $(e).is('[disabled]')) {
-					$(e).parents(parentClass).removeClass(disabledClass);
-				}
-			}
-		}*/
+        /*function checkLength(e) {
+            if (e.value.length > 0 ) {
+                $(e).parents(parentClass).addClass(focusClass);
+                if($(e).is('[readonly]') || $(e).is('[disabled]')) {
+                    $(e).parents(parentClass).addClass(disabledClass);
+                }
+            } else {
+                $(e).parents(parentClass).removeClass(focusClass);
+                if($(e).is('[readonly]') || $(e).is('[disabled]')) {
+                    $(e).parents(parentClass).removeClass(disabledClass);
+                }
+            }
+        }*/
 
         function setClass(e, parentClass, focusClass) {
             $(e).parents(parentClass).addClass(focusClass);
         }
 
         function deleteClass(e, parentClass, focusClass) {
-			/*if(e.value.length) {
-			} else {*/
+            /*if(e.value.length) {
+            } else {*/
             $(e).parents(parentClass).removeClass(focusClass);
             /*}*/
         }
@@ -1416,11 +1169,11 @@ var initApp = (function (app) {
         });
     };
 
-	/**
-	 * Mobile Check Activate
-	 * DOC: check on window resize if screen width is less than [value]
-	 * @return {int}
-	 */
+    /**
+     * Mobile Check Activate
+     * DOC: check on window resize if screen width is less than [value]
+     * @return {int}
+     */
     app.mobileCheckActivation = function () {
         if (window.innerWidth < myapp_config.mobileResolutionTrigger) {
             myapp_config.root_.addClass('mobile-view-activated');
@@ -1509,13 +1262,13 @@ var initApp = (function (app) {
         });
     };
 
-	/**
-	 *  Toggle visibility
-	 * 	DOC: show and hide content with a button action
-	 *  Usage: onclick="initApp.toggleVisibility('foo');"
-	 *  @param  {[type]} id
-	 *  @return {[type]}
-	 **/
+    /**
+     *  Toggle visibility
+     * 	DOC: show and hide content with a button action
+     *  Usage: onclick="initApp.toggleVisibility('foo');"
+     *  @param  {[type]} id
+     *  @return {[type]}
+     **/
     app.toggleVisibility = function (id) {
         var e = document.getElementById(id);
         if (e.style.display == 'block')
@@ -1524,11 +1277,11 @@ var initApp = (function (app) {
             e.style.display = 'block';
     };
 
-	/**
-	 * Miscelaneous DOM ready functions
-	 * DOC: start jQuery(document).ready calls
-	 * @return {[type]}
-	 **/
+    /**
+     * Miscelaneous DOM ready functions
+     * DOC: start jQuery(document).ready calls
+     * @return {[type]}
+     **/
     app.domReadyMisc = function () {
         /* Add file name path to input files */
         $('.custom-file input').change(function (e) {
@@ -1572,24 +1325,24 @@ var initApp = (function (app) {
             $('[href="' + lastTab + '"]').tab('show');
         }
 
-		/**
-		 * all options:
-		 * --------------
-			width: '300px',
-			height: '500px',
-			size: '10px',
-			position: 'left',
-			color: '#ffcc00',
-			alwaysVisible: true,
-			distance: '20px',
-			start: $('#child_image_element'),
-			railVisible: true,
-			railColor: '#222',
-			railOpacity: 0.3,
-			wheelStep: 10,
-			allowPageScroll: false,
-			disableFadeOut: false
-		 **/
+        /**
+         * all options:
+         * --------------
+            width: '300px',
+            height: '500px',
+            size: '10px',
+            position: 'left',
+            color: '#ffcc00',
+            alwaysVisible: true,
+            distance: '20px',
+            start: $('#child_image_element'),
+            railVisible: true,
+            railColor: '#222',
+            railOpacity: 0.3,
+            wheelStep: 10,
+            allowPageScroll: false,
+            disableFadeOut: false
+         **/
         if (typeof $.fn.slimScroll !== 'undefined' && myapp_config.thisDevice === 'desktop') {
             $('.custom-scroll:not(.disable-slimscroll) >:first-child').slimscroll({
                 height: $(this).data('scrollHeight') || '100%',
@@ -1611,10 +1364,10 @@ var initApp = (function (app) {
             myapp_config.root_.addClass("no-slimscroll");
         }
 
-		/**
-		 * Activate listFilters
-		 * usage: <input id="inputID" data-listfilter="listFilter" />
-		 **/
+        /**
+         * Activate listFilters
+         * usage: <input id="inputID" data-listfilter="listFilter" />
+         **/
         if (typeof initApp.listFilter !== 'undefined' && $.isFunction(initApp.listFilter) && $('[data-listfilter]').length) {
             var inputID = $('[data-listfilter]').attr('id'),
                 listFilter = $('[data-listfilter]').attr("data-listfilter");
@@ -1623,18 +1376,18 @@ var initApp = (function (app) {
             initApp.listFilter(listFilter, '#' + inputID);
         }
 
-		/**
-		 * Start bootstrap tooltips
-		 **/
+        /**
+         * Start bootstrap tooltips
+         **/
         if (typeof ($.fn.tooltip) !== 'undefined' && $('[data-toggle="tooltip"]').length) {
             $('[data-toggle="tooltip"]').tooltip(); /*{html: true}*/
         } else {
             console.log("OOPS! bs.tooltip is not loaded");
         }
 
-		/**
-		 * Start bootstrap popovers
-		 **/
+        /**
+         * Start bootstrap popovers
+         **/
         if (typeof ($.fn.popover) !== 'undefined' && $('[data-toggle="popover"]').length) {
             /* BS4 sanatize */
             var myDefaultWhiteList = $.fn.tooltip.Constructor.Default.whiteList
@@ -1648,27 +1401,27 @@ var initApp = (function (app) {
 			console.log("this")
 		}*/
 
-		/*
-		 * Disable popper.js's forced hardware accelaration styles
-		 */
+        /*
+         * Disable popper.js's forced hardware accelaration styles
+         */
         if (typeof ($.fn.dropdown) !== 'undefined') {
             Popper.Defaults.modifiers.computeStyle.gpuAcceleration = false;
         } else {
             console.log("OOPS! bs.popover is not loaded");
         }
 
-		/**
-		 * Dropdowns will not close on click
-		 * doc: close dropdowns on click outside hit area
-		 **/
+        /**
+         * Dropdowns will not close on click
+         * doc: close dropdowns on click outside hit area
+         **/
         $(document).on('click', '.dropdown-menu', function (e) {
             e.stopPropagation();
         });
 
-		/**
-		 * Waves effect (plugin has issues with IE9)
-		 * DOC: http://fian.my.id/Waves/#start
-		 **/
+        /**
+         * Waves effect (plugin has issues with IE9)
+         * DOC: http://fian.my.id/Waves/#start
+         **/
         if (window.Waves && myapp_config.rippleEffect) {
             Waves.attach('.nav-menu:not(.js-waves-off) a, .btn:not(.js-waves-off):not(.btn-switch), .js-waves-on', ['waves-themed']);
             Waves.init();
@@ -1680,19 +1433,19 @@ var initApp = (function (app) {
                 console.log("%c✘ Waves plugin inactive! ", "color: #fd3995");
         }
 
-		/**
-		 * Action buttons
-		 **/
+        /**
+         * Action buttons
+         **/
         myapp_config.root_
             .on('click touchend', '[data-action]', function (e) {
                 var actiontype = $(this).data('action');
 
                 switch (true) {
-					/**
-					 * toggle trigger
-					 * Usage 1 (body): <a href="#" data-action="toggle" data-class="add-this-class-to-body">...</a>
-					 * Usage 2 (target): <a href="#" data-action="toggle" data-class="add-this-class-to-target" data-target="target">...</a>
-					 **/
+                    /**
+                     * toggle trigger
+                     * Usage 1 (body): <a href="#" data-action="toggle" data-class="add-this-class-to-body">...</a>
+                     * Usage 2 (target): <a href="#" data-action="toggle" data-class="add-this-class-to-target" data-target="target">...</a>
+                     **/
                     case (actiontype === 'toggle'):
 
                         var target = $(this).attr('data-target') || myapp_config.root_,
@@ -1714,9 +1467,9 @@ var initApp = (function (app) {
                             $(this).toggleClass('active');
                         }
 
-						/* focus input if available
-						   FAQ: We had to put a delay timer to slow it down for chrome
-						*/
+                        /* focus input if available
+                           FAQ: We had to put a delay timer to slow it down for chrome
+                        */
                         if (inputFocus != undefined) {
                             setTimeout(function () { $('#' + inputFocus).focus(); }, 200);
                         }
@@ -1730,10 +1483,10 @@ var initApp = (function (app) {
 
                         break;
 
-					/**
-					 * toggle swap trigger
-					 * Usage (target): <a href="#" data-action="toggle-swap" data-class=".add-this-class-to-target .another-class" data-target="#id">...</a>
-					 **/
+                    /**
+                     * toggle swap trigger
+                     * Usage (target): <a href="#" data-action="toggle-swap" data-class=".add-this-class-to-target .another-class" data-target="#id">...</a>
+                     **/
                     case (actiontype === 'toggle-swap'):
 
                         var target = $(this).attr('data-target'),
@@ -1744,9 +1497,9 @@ var initApp = (function (app) {
 
                         break;
 
-					/**
-					 * panel 'collapse' trigger
-					 **/
+                    /**
+                     * panel 'collapse' trigger
+                     **/
                     case (actiontype === 'panel-collapse'):
 
                         var selectedPanel = $(this).closest('.panel');
@@ -1769,9 +1522,9 @@ var initApp = (function (app) {
 
                         break;
 
-					/**
-					 * panel 'fullscreen' trigger
-					 **/
+                    /**
+                     * panel 'fullscreen' trigger
+                     **/
                     case (actiontype === 'panel-fullscreen'):
 
                         var selectedPanel = $(this).closest('.panel');
@@ -1787,9 +1540,9 @@ var initApp = (function (app) {
 
                         break;
 
-					/**
-					 * panel 'close' trigger
-					 **/
+                    /**
+                     * panel 'close' trigger
+                     **/
                     case (actiontype === 'panel-close'):
 
                         var selectedPanel = $(this).closest('.panel');
@@ -1838,11 +1591,11 @@ var initApp = (function (app) {
 
                         break;
 
-					/**
-					 * update header css, 'theme-update' trigger
-					 * eg:  data-action = "theme-update"
-					 *      data-theme = "css/cust-theme-1.css"
-					 **/
+                    /**
+                     * update header css, 'theme-update' trigger
+                     * eg:  data-action = "theme-update"
+                     *      data-theme = "css/cust-theme-1.css"
+                     **/
                     case (actiontype === 'theme-update'):
 
                         if ($(myapp_config.mythemeAnchor).length) {
@@ -1858,38 +1611,38 @@ var initApp = (function (app) {
 
                         break;
 
-					/**
-					 * theme 'app-reset' trigger
-					 **/
+                    /**
+                     * theme 'app-reset' trigger
+                     **/
                     case (actiontype === 'app-reset'):
 
                         initApp.resetSettings();
 
                         break;
 
-					/**
-					 * theme 'factory-reset' trigger
-					 **/
+                    /**
+                     * theme 'factory-reset' trigger
+                     **/
                     case (actiontype === 'factory-reset'):
 
                         initApp.factoryReset();
 
                         break;
 
-					/**
-					 * app print
-					 * starts print priview for browser
-					 **/
+                    /**
+                     * app print
+                     * starts print priview for browser
+                     **/
                     case (actiontype === 'app-print'):
 
                         window.print();
 
                         break;
 
-					/**
-					 * ondemand
-					 * load onDemand scripts
-					 **/
+                    /**
+                     * ondemand
+                     * load onDemand scripts
+                     **/
                     case (actiontype === 'app-loadscript'):
 
                         var loadurl = $(this).attr('data-loadurl'),
@@ -1899,10 +1652,10 @@ var initApp = (function (app) {
 
                         break;
 
-					/**
-					 * app language selection
-					 * lazyloads i18n plugin and activates selected language
-					 **/
+                    /**
+                     * app language selection
+                     * lazyloads i18n plugin and activates selected language
+                     **/
                     case (actiontype === 'lang'):
 
                         var applang = $(this).attr('data-lang').toString();
@@ -1933,13 +1686,13 @@ var initApp = (function (app) {
 
                         break;
 
-					/**
-					 * app 'fullscreen' trigger
-					 **/
+                    /**
+                     * app 'fullscreen' trigger
+                     **/
                     case (actiontype === 'app-fullscreen'):
 
-						/* NOTE: this may not work for all browsers if the browser security does not permit it
-						   IE issues: http://stackoverflow.com/questions/33732805/fullscreen-not-working-in-ie */
+                        /* NOTE: this may not work for all browsers if the browser security does not permit it
+                           IE issues: http://stackoverflow.com/questions/33732805/fullscreen-not-working-in-ie */
 
                         if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
                             if (document.documentElement.requestFullscreen) {
@@ -1975,10 +1728,10 @@ var initApp = (function (app) {
 
                         break;
 
-					/**
-					 * app 'playsound' trigger
-					 * usage: data-action="playsound" data-soundpath="media/sound/" data-soundfile="filename" (no file extensions)
-					 **/
+                    /**
+                     * app 'playsound' trigger
+                     * usage: data-action="playsound" data-soundpath="media/sound/" data-soundfile="filename" (no file extensions)
+                     **/
                     case (actiontype === 'playsound'):
 
                         var path = $(this).attr('data-soundpath') || "media/sound/",
@@ -2000,10 +1753,10 @@ var initApp = (function (app) {
                 e.preventDefault();
             });
 
-		/**
-		 * Windows mobile 8 fix ~
-		 * DOC: bootstrap related
-		 **/
+        /**
+         * Windows mobile 8 fix ~
+         * DOC: bootstrap related
+         **/
         if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
             var msViewportStyle = document.createElement('style');
             msViewportStyle.appendChild(
@@ -2014,10 +1767,10 @@ var initApp = (function (app) {
             document.head.appendChild(msViewportStyle)
         };
 
-		/**
-		 * Display APP version
-		 * DOC: only show this if debug state tree
-		 **/
+        /**
+         * Display APP version
+         * DOC: only show this if debug state tree
+         **/
         if (myapp_config.debugState)
             console.log("%c✔ Finished app.init() v" + myapp_config.VERSION + '\n' + "---------------------------", "color: #148f32");
     };
@@ -2025,601 +1778,3 @@ var initApp = (function (app) {
     return app;
 })({});
 
-var buttonApps = (function (buttonApp) {
-    buttonApp.isActiveSwal = function (data, tableName, controller, method, urlReturnController, urlReturnMethod) {
-        var tb = "";
-        if (tableName != null) {
-            tb += tableName;
-        } else {
-            tb += "mytable";
-        }
-        var isActive = data.isActive == "Y" ? "Inactive this" : "Activation";
-        Swal.fire(
-            {
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes," + isActive + " !"
-            }).then(function (isConfirm) {
-                if (isConfirm.value == true) {
-                    $.ajax({
-                        type: "POST",
-                        data: { data: data },
-                        url: base_url + controller + "/" + method,
-                        cache: false,
-                        success: function (result) {
-                            if (result.status == "SUCCESS") {
-                                if (urlReturnController != null && urlReturnMethod != null) {
-                                    window.open(base_url + urlReturnController + "/" + urlReturnMethod, "_self");
-                                } else {
-                                    $('#' + tb).DataTable().ajax.reload(null, false);
-                                }
-                            } else {
-                                Swal.fire(
-                                    {
-                                        type: "error",
-                                        title: "Oops...",
-                                        text: "Something went wrong!"
-                                    });
-                            }
-                        },
-                        error: function () {
-                        }
-                    });
-                }
-            });
-    };
-
-    buttonApp.isDeleteSwal = function (data, tableName, controller, method, urlReturnController, urlReturnMethod) {
-        var tb = "";
-        if (tableName != null) {
-            tb += tableName;
-        } else {
-            tb += "mytable";
-        }
-        Swal.fire(
-            {
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, delete this !"
-            }).then(function (isConfirm) {
-                if (isConfirm.value == true) {
-                    $.ajax({
-                        type: "POST",
-                        url: base_url + controller + "/" + method,
-                        data: { id : data},
-                        cache: false,
-                        success: function (result) {
-                            if (result.status == "SUCCESS") {
-                                if (urlReturnController != null && urlReturnMethod != null) {
-                                    window.open(base_url + urlReturnController + "/" + urlReturnMethod, "_self");
-                                } else {
-                                    $('#'+tb).DataTable().ajax.reload(null, false);
-                                }
-                            } else {
-                                Swal.fire(
-                                    {
-                                        type: "error",
-                                        title: "Oops...",
-                                        text: "Something went wrong!"
-                                    });
-                            }
-                        },
-                        error: function () {
-                        }
-                    });
-                }
-            });
-    };
-
-    buttonApp.confirmationSwal = function (paramconfirmationSwal) {
-        let param = new ParamconfirmationSwal(
-            new SwalParam(
-                paramconfirmationSwal.swalParam.title,
-                paramconfirmationSwal.swalParam.text,
-                paramconfirmationSwal.swalParam.type,
-                paramconfirmationSwal.swalParam.confirmTextBtn),
-            paramconfirmationSwal.yesFunc,
-            paramconfirmationSwal.noFunc,
-            new ParamAjax(
-                paramconfirmationSwal.paramAjax.isAjax,
-                paramconfirmationSwal.paramAjax.url,
-                paramconfirmationSwal.paramAjax.method,
-                paramconfirmationSwal.paramAjax.data
-            )
-        );
-        swal.fire({
-            title: param.swalParam.title,
-            text: param.swalParam.text,
-            type: param.swalParam.type,
-            showCancelButton: true,
-            confirmButtonText: param.swalParam.confirmTextBtn
-        }).then((res) => {
-            if (param.paramAjax.isAjax) {
-                if (res.value) {
-                    $.ajax({
-                        type: param.paramAjax.method,
-                        async: false,
-                        url: param.paramAjax.url,
-                        data: param.paramAjax.data,
-                        success: function (result) {
-                            swal.fire({
-                                type: 'success',
-                                title: 'Successfully!',
-                                text: '',
-                                timer: 1500,
-                                showCloseButton: true
-                            });
-                        },
-                        error: function () {
-                            swal.fire({
-                                type: 'error',
-                                title: 'Oops...',
-                                text: 'Something went wrong!',
-                                timer: 1500,
-                                showCloseButton: true
-                            });
-                        }
-                    })
-                } else {
-                    param.paramAjax.noFunc
-                }
-            } else {
-                if (res.value) {
-                    param.paramAjax.yesFunc
-                } else {
-                    param.paramAjax.noFunc
-                }
-            }
-        });
-    }
-
-    return buttonApp;
-})({});
-
-var dataTableApps = (function (dbSetup) {
-    dbSetup.buildTableServerSide = function (a) {
-       
-        let currentData = new DataTableAjax( a.tableName, a.columnList, a.filtration,a.controller, a.clsDataTableEndPoint, a.method, a.setting,a.orderBy);
-        console.log(currentData.columnList);
-
-        console.log("------");
-        console.log(currentData.filtration);
-        console.log("------");
-
-        //for (var col = 0; col < currentData.columnList.length; col++) {
-
-        //}
-
-
-        let contentDb = [
-            { "data": "createdDt" }
-        ];
-        let columnDefs = [
-            {
-                "targets": [0],
-                "visible": false,
-                "searchable": false
-            }
-        ];
-
-        $("#" + currentData.tableName).append("<thead></thead>");
-
-        $("#" + currentData.tableName).find('thead')
-            .append($("<tr id='trId'></tr>")
-                .append(
-                    function () {
-                        var text = "<th>Time Create</th>";
-                        if (currentData.setting.numberColumn == true) {
-                            //console.log("test");
-                            text += "<th>#</th>";
-                            columnDefs.push(
-                                {
-                                    "searchable": false,
-                                    "orderable": false,
-                                    "targets": 1
-                                }
-                            );
-                            contentDb.push({
-                                //"class": "details-control",
-                                "orderable": false,
-                                "data": null,
-                                "defaultContent": ""
-                            });
-                        }
-
-                        if (currentData.setting.actionColumn == true) {
-                            text += "<th>Action</th>";
-                            contentDb.push({
-                                //"targets": "id",
-                                "data": "id",
-                                "render": function (row, data, iDisplayIndex,meta) {
-                                    result = "";
-                                    if (currentData.clsDataTableEndPoint.endPointEdit != null) {
-                                        //if (true) {
-                                            result += "<a href='" + base_url + currentData.controller + "/" + currentData.clsDataTableEndPoint.endPointEdit + "?id=" + iDisplayIndex.id + "' class='btn btn-warning btn-xs small-font  waves-effect waves-themed' ><i class='fal fa-pencil'></i> Edit</a> ";
-                                        //} else {
-                                            //result += "<a href='" + base_url + currentData.controller + "/" + currentData.clsDataTableEndPoint.endPointEdit + "/" + iDisplayIndex.id + "' data-dismiss='modal'  data-toggle='modal' data-target='#modal-edit-right-lg'  class='btn btn-warning btn-xs small-font  waves-effect waves-themed' ><i class='fal fa-pencil'></i> Edit</a> ";
-                                        //}
-
-                                    }
-                                    if (currentData.clsDataTableEndPoint.endPointIsDelete != null) {
-                                      
-                                        result += "<a asp-route-id='" + iDisplayIndex.id + "'  class='btn btn-danger btn-xs small-font waves-effect waves-themed decisionMakingIsDelete"+meta.row+" ' title = 'Delete' > <i class='fal fa-trash'></i>Delete </a> ";
-                                    }
-
-                                    if (currentData.clsDataTableEndPoint.endPointIsActive != null) {
-                                        if (iDisplayIndex.isActive == "@GeneralConstant.YES") {
-                                            result += "<a asp-route-id='" + iDisplayIndex.id + "' asp-route-isActive='" + iDisplayIndex.isActive + "' class='btn btn-success btn-xs small-font  waves-effect waves-themed decisionMakingIsActive"+meta.row+" ' title='Delete'> <i class='fal fa-trash'></i>Inactive </a> ";
-                                        } else {
-                                            result += "<a asp-route-id='" + iDisplayIndex.id + "' asp-route-isActive='" + iDisplayIndex.isActive + "'  class='btn btn-danger btn-xs small-font waves-effect waves-themed decisionMakingIsActive" + meta.row+" ' title='Delete'> <i class='fal fa-trash'></i>Activation </a> ";
-                                        }
-                                    }
-
-                                    if (currentData.clsDataTableEndPoint.endPointAdditional != null) {
-
-                                        result += currentData.clsDataTableEndPoint.endPointAdditional;
-
-
-                                    }
-
-                                    return result;
-                                }
-                            });
-                        }
-
-                        return $(text);
-                    }
-                )
-        );
-
-        for (var i = 0; i < a.columnList.length; i++) {
-            $("#" + currentData.tableName + ">thead>tr").append("<th>" + currentData.columnList[i].name + "</th>");
-            contentDb.push({ "data": currentData.columnList[i].data, "render": currentData.columnList[i].renderFormat == undefined ? null : currentData.columnList[i].renderFormat });
-        }
-
-        $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) {
-            return {
-                "iStart": oSettings._iDisplayStart,
-                "iEnd": oSettings.fnDisplayEnd(),
-                "iLength": oSettings._iDisplayLength,
-                "iTotal": oSettings.fnRecordsTotal(),
-                "iFilteredTotal": oSettings.fnRecordsDisplay(),
-                "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
-                "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
-            };
-        };
-        var dt = $('#' + currentData.tableName).dataTable({
-
-            //"async": false,
-            "bInfo": true,
-            "responsive": true,
-            "bAutoWidth": true,
-            "bFilter": false,
-            "bDestroy": false,
-            "serverSide": true,
-            "bPaginate": true,
-            "paging": true,
-            "cache" : false,
-            "iDisplayLength": 10,
-            "processing": true,
-            "bStateSave": false, // saves sort state using localStorage
-            "order": currentData.orderBy ??  [[0, 'desc']],
-            "rowCallback": function (row, data, iDisplayIndex) {
-                var info = this.fnPagingInfo();
-                var page = info.iPage;
-                var length = info.iLength;
-                var index = page * length + (iDisplayIndex + 1);
-
-                if (currentData.clsDataTableEndPoint.endPointIsActive != null) {
-                    var elementRowIsActive = $(row).find('.decisionMakingIsActive' + iDisplayIndex);
-                    elementRowIsActive.on('click', function () {
-                        var d = { id: data.id, isActive: data.isActive };
-                        buttonApps.isActiveSwal(d, currentData.tableName, currentData.controller, currentData.clsDataTableEndPoint.endPointIsActive, null, null);
-                    });
-                }
-                if (currentData.clsDataTableEndPoint.endPointIsDelete != null) {
-                    var elementRowIsDelete = $(row).find('.decisionMakingIsDelete' + iDisplayIndex);
-                    elementRowIsDelete.on('click', function () {
-                        //var d = { id: data.id, isActive: data.isActive };
-                        buttonApps.isDeleteSwal(data.id, currentData.tableName, currentData.controller, currentData.clsDataTableEndPoint.endPointIsDelete, null, null);
-
-                    });
-                }
-
-                if (currentData.setting.numberColumn == true) {
-                    $('td:eq(0)', row).html(index);
-                } else {
-                    //$('td:eq(1)', row).html(index);
-                }
-            },
-            "fnDrawCallback": function (oSettings) {
-                //$("#datatable_status").select2();
-                //$(".dataTables_length select").select2();
-                //$(".dataTables_paginate select").select2();
-                //$(' select[name="mytable_length"]').hide();
-
-
-               
-
-            },
-            "columnDefs": columnDefs,
-            "ajax": {
-                "url": currentData.clsDataTableEndPoint.endPointData,
-                "method": currentData.method,
-                "data": function (d) {
-                    $.extend(d,
-                        currentData.filtration
-                    );
-                    d.supersearch = $('.my-filter').val();
-                    // Add dynamic parameters to the data object sent to the server
-                    
-                    //if (dt_params) {
-                    //    $.extend(d, dt_params);
-                    //}
-
-                },
-                //"dataSrc": function (json) {
-                //    console.log(json);
-                //}
-            },
-            "columns": contentDb
-        });
-
-
-        console.log(contentDb);
-        var detailRows = [];
-
-        $("#" + currentData.tableName + " tbody").on('click', 'tr td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = dt.row(tr);
-            var idx = $.inArray(tr.attr('id'), detailRows);
-
-            if (row.child.isShown()) {
-                tr.removeClass('details');
-                row.child.hide();
-
-                // Remove from the 'open' array
-                detailRows.splice(idx, 1);
-            }
-            else {
-                tr.addClass('details');
-                row.child(format(row.data())).show();
-
-                // Add to the 'open' array
-                if (idx === -1) {
-                    detailRows.push(tr.attr('id'));
-                }
-            }
-        });
-
-        // On each draw, loop over the `detailRows` array and show any child rows
-        dt.on('draw', function () {
-            $.each(detailRows, function (i, id) {
-                $('#' + id + ' td.details-control').trigger('click');
-            });
-        });
-
-
-    };
-
-    return dbSetup;
-})({});
-
-/*
-	"Night is a bag that bursts with the golden dust of dawn..."
-
-	Oh wow, you actually opened this file and read it all the way though! Congrats!
-	Please do drop me a line at @myplaneticket :)
-
-*/
-/**
- * Bind the throttled handler to the resize event.
- * NOTE: Please do not change the order displayed (e.g. 1a, 1b, 2a, 2b...etc)
- **/
-$(window).resize(
-
-    $.throttle(myapp_config.throttleDelay, function (e) {
-        /**
-         * (1a) ADD CLASS WHEN BELOW CERTAIN WIDTH (MOBILE MENU)
-         * Description: tracks the page min-width of #CONTENT and NAV when navigation is resized.
-         * This is to counter bugs for minimum page width on many desktop and mobile devices.
-         **/
-        initApp.mobileCheckActivation();
-
-        /**
-         * (1b) CHECK NAVIGATION STATUS (IF HORIZONTAL OR VERTICAL)
-         * Description: fires an event to check for navigation orientation.
-         * Based on the condition, it will initliaze or destroy the slimscroll, or horizontal nav plugins
-         **/
-        initApp.checkNavigationOrientation();
-
-        /** -- insert your resize codes below this line -- **/
-    })
-);
-
-/**
- * Bind the throttled handler to the scroll event
- **/
-$(window).scroll(
-
-    $.throttle(myapp_config.throttleDelay, function (e) {
-        /**
-         * FIX APP HEIGHT
-         * Compare the height of nav and content;
-         * If one is longer/shorter than the other, measure them to be equal.
-         * This event is only fired on desktop.
-         **/
-
-        /** -- insert your other scroll codes below this line -- **/
-    })
-
-);
-
-/**
- * Initiate scroll events
- **/
-$(window).on('scroll', initApp.windowScrollEvents);
-
-/**
- * DOCUMENT LOADED EVENT
- * DOC: Fire when DOM is ready
- * Do not change order a, b, c, d...
- **/
-
-document.addEventListener('DOMContentLoaded', function () {
-	/**
-	 * detect desktop or mobile
-	 **/
-    initApp.addDeviceType();
-
-	/**
-	 * detect Webkit Browser
-	 **/
-    initApp.detectBrowserType();
-
-	/**
-	 * a. check for mobile view width and add class .mobile-view-activated
-	 **/
-    initApp.mobileCheckActivation();
-
-    /**
-   * b. build navigation
-   **/
-    initApp.buildNavigation(myapp_config.navHooks);
-
-    /**
-   * c. initialize nav filter
-   **/
-    initApp.listFilter(myapp_config.navHooks, myapp_config.navFilterInput, myapp_config.navAnchor);
-
-    /**
-   * d. run DOM misc functions
-   **/
-    initApp.domReadyMisc();
-
-    /**
-   * e. run app forms class detectors [parentClass,focusClass,disabledClass]
-   **/
-    initApp.appForms('.input-group', 'has-length', 'has-disabled');
-});
-
-/**
- * Mobile orientation change events
- * DOC: recalculates app height
- **/
-$(window).on("orientationchange", function (event) {
-    /* reset any .CSS heights and force appHeight function to recalculate */
-
-    if (myapp_config.debugState)
-        console.log("orientationchange event");
-});
-
-/**
- * Window load function
- * DOC: window focus blur detection
- **/
-$(window).on("blur focus", function (e) {
-    var prevType = $(this).data("prevType");
-    /**
-     * reduce double fire issues
-     **/
-    if (prevType != e.type) {
-        switch (e.type) {
-            case "blur":
-                myapp_config.root_.toggleClass("blur")
-
-                if (myapp_config.debugState)
-                    console.log("blur");
-
-                break;
-            case "focus":
-                myapp_config.root_.toggleClass("blur")
-                if (myapp_config.debugState)
-
-                    console.log("focused");
-
-                break;
-        }
-    }
-
-    $(this).data("prevType", e.type);
-})
-
-var color = {
-    primary: {
-        _50: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-50').css('color')) || '#ccbfdf',
-        _100: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-100').css('color')) || '#beaed7',
-        _200: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-200').css('color')) || '#b19dce',
-        _300: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-300').css('color')) || '#a38cc6',
-        _400: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-400').css('color')) || '#967bbd',
-        _500: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-500').css('color')) || '#886ab5',
-        _600: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-600').css('color')) || '#7a59ad',
-        _700: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-700').css('color')) || '#6e4e9e',
-        _800: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-800').css('color')) || '#62468d',
-        _900: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-primary-900').css('color')) || '#563d7c'
-    },
-    success: {
-        _50: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-50').css('color')) || '#7aece0',
-        _100: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-100').css('color')) || '#63e9db',
-        _200: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-200').css('color')) || '#4de5d5',
-        _300: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-300').css('color')) || '#37e2d0',
-        _400: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-400').css('color')) || '#21dfcb',
-        _500: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-500').css('color')) || '#1dc9b7',
-        _600: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-600').css('color')) || '#1ab3a3',
-        _700: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-700').css('color')) || '#179c8e',
-        _800: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-800').css('color')) || '#13867a',
-        _900: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-success-900').css('color')) || '#107066'
-    },
-    info: {
-        _50: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-50').css('color')) || '#9acffa',
-        _100: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-100').css('color')) || '#82c4f8',
-        _200: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-200').css('color')) || '#6ab8f7',
-        _300: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-300').css('color')) || '#51adf6',
-        _400: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-400').css('color')) || '#39a1f4',
-        _500: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-500').css('color')) || '#2196F3',
-        _600: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-600').css('color')) || '#0d8aee',
-        _700: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-700').css('color')) || '#0c7cd5',
-        _800: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-800').css('color')) || '#0a6ebd',
-        _900: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-info-900').css('color')) || '#0960a5'
-    },
-    warning: {
-        _50: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-50').css('color')) || '#ffebc1',
-        _100: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-100').css('color')) || '#ffe3a7',
-        _200: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-200').css('color')) || '#ffdb8e',
-        _300: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-300').css('color')) || '#ffd274',
-        _400: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-400').css('color')) || '#ffca5b',
-        _500: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-500').css('color')) || '#ffc241',
-        _600: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-600').css('color')) || '#ffba28',
-        _700: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-700').css('color')) || '#ffb20e',
-        _800: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-800').css('color')) || '#f4a500',
-        _900: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-warning-900').css('color')) || '#da9400'
-    },
-    danger: {
-        _50: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-50').css('color')) || '#feb7d9',
-        _100: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-100').css('color')) || '#fe9ecb',
-        _200: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-200').css('color')) || '#fe85be',
-        _300: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-300').css('color')) || '#fe6bb0',
-        _400: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-400').css('color')) || '#fd52a3',
-        _500: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-500').css('color')) || '#fd3995',
-        _600: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-600').css('color')) || '#fd2087',
-        _700: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-700').css('color')) || '#fc077a',
-        _800: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-800').css('color')) || '#e7026e',
-        _900: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-danger-900').css('color')) || '#ce0262'
-    },
-    fusion: {
-        _50: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-50').css('color')) || '#909090',
-        _100: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-100').css('color')) || '#838383',
-        _200: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-200').css('color')) || '#767676',
-        _300: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-300').css('color')) || '#696969',
-        _400: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-400').css('color')) || '#5d5d5d',
-        _500: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-500').css('color')) || '#505050',
-        _600: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-600').css('color')) || '#434343',
-        _700: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-700').css('color')) || '#363636',
-        _800: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-800').css('color')) || '#2a2a2a',
-        _900: rgb2hex(myapp_config.mythemeColorProfileID.find('.color-fusion-900').css('color')) || '#1d1d1d'
-    }
-}

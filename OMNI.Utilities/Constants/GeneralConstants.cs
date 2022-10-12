@@ -15,6 +15,15 @@ namespace OMNI.Utilities.Constants
 {
     public static class GeneralConstants
     {
+
+        //Role Names
+        public const string OSMOSYS_SUPER_ADMIN = nameof(OSMOSYS_SUPER_ADMIN);
+        public const string OSMOSYS_MANAGEMENT = nameof(OSMOSYS_MANAGEMENT);
+        public const string OSMOSYS_GUEST_LOKASI = nameof(OSMOSYS_GUEST_LOKASI);
+        public const string OSMOSYS_GUEST_NON_LOKASI = nameof(OSMOSYS_GUEST_NON_LOKASI);
+        public const string OSMOSYS_ADMIN_REGION = nameof(OSMOSYS_ADMIN_REGION);
+        public const string OSMOSYS_ADMIN_LOKASI = nameof(OSMOSYS_ADMIN_LOKASI);
+
         public static string SITConnectionMode = nameof(SITConnectionMode);
         public static string DevConnectionMode = nameof(DevConnectionMode);
         public static string ProdConnectionMode = nameof(ProdConnectionMode);

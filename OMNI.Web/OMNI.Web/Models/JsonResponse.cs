@@ -12,5 +12,9 @@ namespace OMNI.Web.Models
         public string Status { get; set; } = GeneralConstants.SUCCESS;
         public string ErrorMsg { get; set; }
         public object Data { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Position { get; set; }
+        public List<string> Roles { get; set; }
     }
 }

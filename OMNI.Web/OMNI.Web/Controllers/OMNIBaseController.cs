@@ -1,12 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using OMNI.Web.Data.Dao;
 using OMNI.Web.Data.Dao.CorePTK;
 using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
-using System;
+using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OMNI.Web.Models.Master;
+using OMNI.Web.Services.Trx.Interface;
+using System.Net;
+using OMNI.Web.Models;
+using OMNI.Utilities.Constants;
+using Microsoft.AspNetCore.Routing;
+using System;
 
 namespace OMNI.Web.Controllers
 {
@@ -22,6 +30,54 @@ namespace OMNI.Web.Controllers
             _portService = portService;
             _peralatanOSRService = peralatanOSRService;
             _jenisService = jenisService;
+        }
+
+        public static class UserData
+        {
+            public static string Username { get; set; }
+            public static string Email { get; set; }
+            public static List<string> RoleList;
+            public static string ParamRole { get; set; }
+        }
+
+        public static bool CheckUserRole(string param)
+        {
+            bool result = false;
+            var roleList = UserData.RoleList;
+            if(roleList != null)
+            {
+                roleList = roleList.FindAll(b => b.Contains(param));
+                if (roleList.Count() > 0)
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+        public class CheckRole : ActionFilterAttribute
+        {
+            bool isInRole = false;
+            
+
+            public CheckRole(string values)
+            {
+                UserData.ParamRole = values;
+            }
+            public override void OnActionExecuting(ActionExecutingContext context)
+            {
+                isInRole = CheckUserRole(UserData.ParamRole);
+
+                if (!isInRole)
+                {
+                    UserData.Username = null;
+                    UserData.Email = null;
+                    UserData.RoleList = null;
+                    context.Result = new RedirectToActionResult("Index", "Login", null);
+                }
+            }
+
         }
 
         public class yearData

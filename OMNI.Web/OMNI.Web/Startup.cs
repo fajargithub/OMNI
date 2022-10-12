@@ -2,21 +2,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OMNI.Web.Extensions;
-using OMNI.Web.Services.CorePTK;
-using OMNI.Web.Services.CorePTK.Interface;
-using OMNI.Web.Services.Master;
-using OMNI.Web.Services.Master.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace OMNI.Web
 {
@@ -122,7 +113,7 @@ namespace OMNI.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Login}/{action=Index}/{id?}");
+                    pattern: "{controller=MainPage}/{action=Index}/{id?}");
             });
         }
     }

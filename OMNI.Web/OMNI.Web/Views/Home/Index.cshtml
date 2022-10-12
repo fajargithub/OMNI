@@ -88,9 +88,12 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-12">
-        <i style="color:red;">@ViewBag.Info</i>
-    </div>
+    @if (!string.IsNullOrEmpty(ViewBag.Info)) { 
+        <div class="col-xl-12">
+            <i style="color:red;">@ViewBag.Info, klik <b style="color:dodgerblue;"><a href="/Lampiran">link</a></b> berikut</i>
+        </div>
+    }
+ 
     <div class="col-xl-12">
         <br />
         <div id="panel-1" class="panel">
