@@ -10,6 +10,7 @@ using OMNI.Migrations.Data.Dao.CorePTK;
 using OMNI.Utilities.Base;
 using OMNI.Utilities.Constants;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,15 +24,17 @@ namespace OMNI.API.Controllers.OMNI
     {
         private readonly OMNIDbContext _dbOMNI;
         private readonly CorePTKContext _dbCorePTK;
+        private readonly ApplicationDbContext _appDbContext;
 
         protected UserManager<ApplicationUser> _userManager;
         private readonly CustomSignInService _customSignInService;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public LoginController(OMNIDbContext dbOMNI, CorePTKContext dbCorePTK, UserManager<ApplicationUser> userManager, CustomSignInService customSignInService, SignInManager<ApplicationUser> signInManager = null)
+        public LoginController(ApplicationDbContext appDbContext, OMNIDbContext dbOMNI, CorePTKContext dbCorePTK, UserManager<ApplicationUser> userManager, CustomSignInService customSignInService, SignInManager<ApplicationUser> signInManager = null)
         {
             _dbOMNI = dbOMNI;
             _dbCorePTK = dbCorePTK;
+            _appDbContext = appDbContext;
             _userManager = userManager;
             _customSignInService = customSignInService;
             _signInManager = signInManager;
@@ -82,15 +85,25 @@ namespace OMNI.API.Controllers.OMNI
                     b.IsDeleted == GeneralConstants.NO
                     );
 
-                var user = new ApplicationUser
+                List<string> roleList = new List<string>();
+                List<UserRoleModel> findRoles = (from userRole in _appDbContext.UserRoles
+                                             join role in _appDbContext.Roles on userRole.RoleId equals role.Id
+                                             join user in _appDbContext.Users on userRole.UserId equals user.Id
+                                             where (user.Email == employee.Email)
+                                             select new UserRoleModel
+                                             {
+                                                 RoleName = role.Name,
+                                             }).ToList();
+
+                if(findRoles.Count() > 0)
                 {
-                    UserName = GeneralConstants.CheckIsPtkDomain(model.Username) ? GeneralConstants.ConvertToUserName(model.Username) : model.Username,
-                    Email = model.Username
-                };
+                    for(int i=0; i < findRoles.Count(); i++)
+                    {
+                        roleList.Add(findRoles[i].RoleName);
+                    }
+                }
 
-                var userRoles = await _userManager.GetUserNameAsync(user);
-
-                return Ok(new ReturnJson());
+                return Ok(new ReturnJson { IsSuccess = true, Username = employee.Name, Email = employee.Email, Roles = roleList } );
             } else
             {
                 return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "Invalid Username / Password"});
