@@ -13,6 +13,9 @@
 <script type="text/javascript">
     var base_api = "@Context.Request.Scheme://@Context.Request.Host/";
 
+    var isManagement = "@ViewBag.Roles.Contains("OSMOSYS_MANAGEMENT")";
+    console.log("status: " + isManagement);
+
     $(document).on('click', `a[data-toggle="modal"]`, function () {
         let elA = $(this);
         if (elA.attr("href") !== "#") {

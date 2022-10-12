@@ -35,10 +35,13 @@
                 <h2>
                     Rekomendasi Latihan List
                 </h2>
-                <div class="panel-toolbar">
-                    <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                @if (!ViewBag.Roles.Contains("OSMOSYS_MANAGEMENT"))
+                {
+                    <div class="panel-toolbar">
+                        <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    </div>
+                }
                 </div>
-            </div>
             <div class="panel-container show">
                 <div class="panel-content">
                     <table id="table1" class="table table-borderless table-hover table-striped w-100">
@@ -146,8 +149,12 @@
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
-                                return "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiLatihan/AddEdit?id=" + iDisplayIndex.id + "&port=" + port + "&year=" + selectedYear + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
-                                    " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
+                                var result = "";
+                                if (isManagement !== "True") {
+                                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiLatihan/AddEdit?id=" + iDisplayIndex.id + "&port=" + port + "&year=" + selectedYear + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                        " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
+                                }
+                                return result;
                             }
                         }
                     ],

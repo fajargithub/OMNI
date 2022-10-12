@@ -11,17 +11,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using static OMNI.Web.Controllers.OMNIBaseController;
 
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
-    public class KondisiController : BaseController
+    [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI)]
+    public class KondisiController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/Master/Kondisi/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/Kondisi/AddEdit.cshtml";
 
         protected IKondisi _kondisiService;
-        public KondisiController(IKondisi KondisiService) : base()
+        public KondisiController(IKondisi KondisiService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _kondisiService = KondisiService;
         }

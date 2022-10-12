@@ -15,13 +15,14 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
-    public class JenisController : BaseController
+    [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI)]
+    public class JenisController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/Master/Jenis/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/Jenis/AddEdit.cshtml";
 
         protected IJenis _jenisService;
-        public JenisController(IJenis jenisService) : base()
+        public JenisController(IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _jenisService = jenisService;
         }

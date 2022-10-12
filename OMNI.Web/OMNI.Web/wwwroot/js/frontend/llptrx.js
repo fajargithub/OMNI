@@ -81,7 +81,7 @@ var dt = $('#table_llp_trx').DataTable({
     "scrollCollapse": true,
     "paging": false,
     "fixedColumns": {
-        leftColumns: 9
+        leftColumns: 7
        // rightColumns: 1
     },
     "ajax": {
@@ -320,21 +320,21 @@ var dt = $('#table_llp_trx').DataTable({
                 result = "";
 
                 if (iDisplayIndex.peralatanOSR != "Total Persentase") {
+
                     result += "<div class='btn-group' role='group'>" +
                         "<button id='btnGroupVerticalDrop1' type='button' class='btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Action</button>" +
                         "<div class='dropdown-menu' aria-labelledby='btnGroupVerticalDrop1'>" +
-                        "<a class='dropdown-item' href='javascript:void(0)' onclick='llpTrxRemark(" + iDisplayIndex.id + ")' title='Remark'><b style='color:cornflowerblue;'><i class='fa fa-info-circle'></i> Remark</b></a>" +
-                        "<a class='dropdown-item' data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPHistoryStatus?llpTrxId=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "' title='Rental / Maintenance'><b style='color:teal;'><i class='fa fa-exchange'></i> Rental/Maintenance</b></a>" +
-                        "<a class='dropdown-item' data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' title='Edit'><b style='color:darkorange;'><i class='fa fa-pencil'></i> Edit</b></a>" +
-                        "<a class='dropdown-item btn-delete' href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' title='Delete'><b style='color:red;'><i class='fa fa-trash'></i> Delete</b></a>" +
-                        "</div>" +
+                        "<a class='dropdown-item' href='javascript:void(0)' onclick='llpTrxRemark(" + iDisplayIndex.id + ")' title='Remark'><b style='color:cornflowerblue;'><i class='fa fa-info-circle'></i> Remark</b></a>";
+
+                    if (isManagement !== "True") {
+                        result += "<a class='dropdown-item' data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPHistoryStatus?llpTrxId=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "' title='Rental / Maintenance'><b style='color:teal;'><i class='fa fa-exchange'></i> Rental/Maintenance</b></a>" +
+                            "<a class='dropdown-item' data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' title='Edit'><b style='color:darkorange;'><i class='fa fa-pencil'></i> Edit</b></a>" +
+                            "<a class='dropdown-item btn-delete' href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' title='Delete'><b style='color:red;'><i class='fa fa-trash'></i> Delete</b></a>";
+                    }
+                    
+                    result += "</div>" +
                         "</div>";
                 }
-
-                //if (iDisplayIndex.peralatanOSR != "Total Persentase") {
-                //    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
-                //        " <a href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
-                //}
 
                 return result;
             }

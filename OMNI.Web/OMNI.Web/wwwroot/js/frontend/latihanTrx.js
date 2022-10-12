@@ -141,10 +141,13 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
             "render": function (row, data, iDisplayIndex) {
                 var result = "";
 
-                if (iDisplayIndex.latihan != "Total Persentase") {
-                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year="+ selectedYear +"' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
-                        " <a href='javascript:void(0)' onclick='deleteLatihanTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                if (isManagement !== "True") {
+                    if (iDisplayIndex.latihan != "Total Persentase") {
+                        result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
+                            " <a href='javascript:void(0)' onclick='deleteLatihanTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                    }
                 }
+                
                 return result;
             }
         },

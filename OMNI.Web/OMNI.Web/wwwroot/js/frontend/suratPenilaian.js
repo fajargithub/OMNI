@@ -59,11 +59,17 @@
                     "targets": -1,
                     "data": null,
                     "render": function (row, data, iDisplayIndex) {
+                        var result = "";
+
+                        if (isManagement !== "True") {
+                            result += " <a href='javascript:void(0)' onclick='showRemark(" + iDisplayIndex.id + ")' class='btn-delete' title='Remark'><b style='color:lightblue;'><i class='fa fa-info-circle'></i></b></a> " +
+                                "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OSMOSYS_PENILAIAN' style='color:blue;' title='Files'><b><i class='fa fa-archive'></i></b></a> " +
+                                "<a data-toggle='modal' data-target='#modal-add-edit' href='/Lampiran/AddEdit?id=" + iDisplayIndex.id + "&port=" + port + "&lampiranType=PENILAIAN' title='Edit'><b style='color:orange;'><i class='fa fa-pencil'></i></b></a>" +
+                                " <a href='javascript:void(0)' onclick='deleteSuratPenilaian(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete'><b style='color:red;'><i class='fa fa-trash'></i></b></a>";
+                        }
+
+                        return result;
                         
-                        return " <a href='javascript:void(0)' onclick='showRemark(" + iDisplayIndex.id + ")' class='btn-delete' title='Remark'><b style='color:lightblue;'><i class='fa fa-info-circle'></i></b></a> " +
-                            "<a data-toggle='modal' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OSMOSYS_PENILAIAN' style='color:blue;' title='Files'><b><i class='fa fa-archive'></i></b></a> " +
-                            "<a data-toggle='modal' data-target='#modal-add-edit' href='/Lampiran/AddEdit?id=" + iDisplayIndex.id + "&port="+ port +"&lampiranType=PENILAIAN' title='Edit'><b style='color:orange;'><i class='fa fa-pencil'></i></b></a>" +
-                        " <a href='javascript:void(0)' onclick='deleteSuratPenilaian(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete'><b style='color:red;'><i class='fa fa-trash'></i></b></a>";
                     }
                 }
             ],

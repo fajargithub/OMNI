@@ -4,6 +4,7 @@ using OMNI.Utilities.Constants;
 using OMNI.Web.Data.Dao;
 using OMNI.Web.Models;
 using OMNI.Web.Models.Master;
+using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,13 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
-    public class PeralatanOSRController : BaseController
+    public class PeralatanOSRController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/Master/PeralatanOSR/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/PeralatanOSR/AddEdit.cshtml";
 
         protected IPeralatanOSR _peralatanOSRService;
-        public PeralatanOSRController(IPeralatanOSR peralatanOSRService) : base()
+        public PeralatanOSRController(IPeralatanOSR peralatanOSRService, IRekomendasiType rekomendasiTypeService, IPort portService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _peralatanOSRService = peralatanOSRService;
         }

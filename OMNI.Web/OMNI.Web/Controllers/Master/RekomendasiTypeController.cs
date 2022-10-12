@@ -15,13 +15,13 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
-    public class RekomendasiTypeController : BaseController
+    public class RekomendasiTypeController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/Master/RekomendasiType/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/RekomendasiType/AddEdit.cshtml";
 
         protected IRekomendasiType _rekomendasiTypeService;
-        public RekomendasiTypeController(IRekomendasiType rekomendasiTypeService) : base()
+        public RekomendasiTypeController(IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _rekomendasiTypeService = rekomendasiTypeService;
         }

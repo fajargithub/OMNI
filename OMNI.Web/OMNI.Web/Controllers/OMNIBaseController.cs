@@ -40,6 +40,14 @@ namespace OMNI.Web.Controllers
             public static string[] ParamRole { get; set; }
         }
 
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            base.OnActionExecuted(context);
+            ViewBag.Username = UserData.Username;
+            ViewBag.Email = UserData.Email;
+            ViewBag.Roles = UserData.RoleList; 
+        }
+
         public static bool CheckUserRole()
         {
             bool result = false;
@@ -63,12 +71,6 @@ namespace OMNI.Web.Controllers
             }
 
             return result;
-        }
-
-        public override void OnActionExecuted(ActionExecutedContext context)
-        {
-            base.OnActionExecuted(context);
-            ViewBag.UserEmail = UserData.Email;
         }
 
         public class CheckRole : ActionFilterAttribute
