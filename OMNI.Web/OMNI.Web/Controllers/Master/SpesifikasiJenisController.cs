@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
+    [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION1 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION2 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION3 + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI)]
     public class SpesifikasiJenisController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/Master/SpesifikasiJenis/Index.cshtml";
@@ -47,19 +48,6 @@ namespace OMNI.Web.Controllers.Master
         {
             List<SpesifikasiJenisModel> data = await _spesifikasiJenisService.GetAll();
 
-            //if (list.Count() > 0)
-            //{
-            //    for (int i = 0; i < list.Count(); i++)
-            //    {
-            //        SpesifikasiJenisModel temp = new SpesifikasiJenisModel();
-            //        temp.Id = list[i].Id;
-            //        temp.PeralatanOSR = list[i].PeralatanOSR;
-            //        temp.PeralatanOSR = list[i].Jenis;
-            //        temp.CreateDate = list[i].CreateDate;
-            //        data.Add(temp);
-            //    }
-            //}
-
             int count = data.Count();
 
             return Json(new
@@ -71,19 +59,8 @@ namespace OMNI.Web.Controllers.Master
             });
         }
 
-        public async Task<IActionResult> Index(int? portId)
-        {
-            //List<Port> portList = await GetAllPort();
-            //ViewBag.PortList = portList;
-
-            //if (portId.HasValue)
-            //{
-            //    ViewBag.SelectedPort = portList.Where(b => b.Id == portId).FirstOrDefault();
-            //} else
-            //{
-            //    ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-            //}
-            
+        public IActionResult Index(int? portId)
+        {   
             return View(INDEX);
         }
 
@@ -97,14 +74,6 @@ namespace OMNI.Web.Controllers.Master
             if (id > 0)
             {
                 model = await _spesifikasiJenisService.GetById(id);
-                //if (data != null)
-                //{
-                //    model.Id = data.Id;
-                //    model.PeralatanOSR = data.PeralatanOSR;
-                //    model.RekomendasiHubla = data.RekomendasiHubla;
-                //    model.Name = data.Name;
-                //    model.Desc = data.Desc;
-                //}
             }
 
             return PartialView(ADD_EDIT, model);

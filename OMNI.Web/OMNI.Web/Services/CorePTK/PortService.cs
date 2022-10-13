@@ -30,6 +30,18 @@ namespace OMNI.Web.Services.CorePTK
             throw new Exception();
         }
 
+        public async Task<List<Port>> GetPortByRegion(int regionId)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/Api/Port/GetPortByRegion?regionId={regionId}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<List<Port>>();
+
+            throw new Exception();
+        }
+
         public async Task<Port> GetById(int id)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");

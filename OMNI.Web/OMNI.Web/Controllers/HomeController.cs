@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers
 {
     [AllowAnonymous]
-    [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI)]
+    [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION1 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION2 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION3)]
     public class HomeController : OMNIBaseController
     {
         private readonly ILogger<HomeController> _logger;
@@ -74,16 +74,17 @@ namespace OMNI.Web.Controllers
                 year = thisYear;
             }
 
-            List<Port> portList = await GetAllPort();
-            ViewBag.PortList = portList;
+            await GetPorts();
+            ViewBag.PortList = PortData.PortList;
+            ViewBag.RegionTxt = PortData.RegionTxt;
 
             if (!string.IsNullOrEmpty(port))
             {
-                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedPort = PortData.PortList.Where(b => b.Name == port).FirstOrDefault();
             }
             else
             {
-                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+                var findPort = PortData.PortList.OrderBy(b => b.Id).FirstOrDefault();
                 ViewBag.SelectedPort = findPort;
                 port = findPort.Name;
             }

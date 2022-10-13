@@ -32,6 +32,38 @@ namespace OMNI.Web.Controllers
             _jenisService = jenisService;
         }
 
+        public static class PortData
+        {
+            public static List<Port> PortList { get; set; }
+            public static string RegionTxt { get; set; }
+        }
+
+        public async Task<string> GetPorts()
+        {
+            if (UserData.RoleList.Contains("OSMOSYS_ADMIN_REGION1"))
+            {
+                PortData.RegionTxt = "Region 1";
+                PortData.PortList = await GetPortByRegion(2);
+            }
+            else if (UserData.RoleList.Contains("OSMOSYS_ADMIN_REGION2"))
+            {
+                PortData.RegionTxt = "Region 2";
+                PortData.PortList = await GetPortByRegion(3);
+            }
+            else if (UserData.RoleList.Contains("OSMOSYS_ADMIN_REGION3"))
+            {
+                PortData.RegionTxt = "Region 3";
+                PortData.PortList = await GetPortByRegion(4);
+            }
+            else
+            {
+                PortData.RegionTxt = "Region 1, 2 & 3";
+                PortData.PortList = await GetAllPort();
+            }
+
+            return "OK";
+        }
+
         public static class UserData
         {
             public static string Username { get; set; }
@@ -158,6 +190,13 @@ namespace OMNI.Web.Controllers
         public async Task<List<Port>> GetAllPort()
         {
             List<Port> data = await _portService.GetAll();
+
+            return data;
+        }
+
+        public async Task<List<Port>> GetPortByRegion(int regionId)
+        {
+            List<Port> data = await _portService.GetPortByRegion(regionId);
 
             return data;
         }

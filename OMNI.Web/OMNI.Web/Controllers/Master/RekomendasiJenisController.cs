@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers.Master
 {
     [AllowAnonymous]
+    [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION1 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION2 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION3 + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI)]
     public class RekomendasiJenisController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/Master/RekomendasiJenis/Index.cshtml";
@@ -52,8 +53,9 @@ namespace OMNI.Web.Controllers.Master
 
         public async Task<IActionResult> Index(string port, int typeId, int year)
         {
-            List<Port> portList = await GetAllPort();
-            ViewBag.PortList = portList;
+            await GetPorts();
+            ViewBag.PortList = PortData.PortList;
+            ViewBag.RegionTxt = PortData.RegionTxt;
 
             var thisYear = DateTime.Now.Year;
 
@@ -70,11 +72,11 @@ namespace OMNI.Web.Controllers.Master
 
             if (!string.IsNullOrEmpty(port))
             {
-                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedPort = PortData.PortList.Where(b => b.Name == port).FirstOrDefault();
             }
             else
             {
-                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+                var findPort = PortData.PortList.OrderBy(b => b.Id).FirstOrDefault();
                 ViewBag.SelectedPort = findPort;
                 port = findPort.Name;
             }

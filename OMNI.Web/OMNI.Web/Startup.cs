@@ -41,11 +41,11 @@ namespace OMNI.Web
 
             services.AddResponseCaching();
 
-            //ConnectionConfiguration.GetService(
-            //    services: services,
-            //    configuration: Configuration,
-            //    IsProduction: Configuration.GetValue<bool>("IsProduction")
-            //    );
+            ConnectionConfiguration.GetService(
+                services: services,
+                configuration: Configuration,
+                IsProduction: Configuration.GetValue<bool>("IsProduction")
+                );
 
             services.AddControllersWithViews(opt =>
             {

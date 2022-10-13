@@ -10,6 +10,7 @@ namespace OMNI.Web.Services.CorePTK.Interface
     public interface IPort
     {
         public Task<List<Port>> GetAll();
+        public Task<List<Port>> GetPortByRegion(int start);
         public Task<Port> GetById(int id);
 
         public Task<string> GetPortRegion(string port);

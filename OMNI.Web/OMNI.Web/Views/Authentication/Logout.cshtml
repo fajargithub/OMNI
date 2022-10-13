@@ -39,17 +39,27 @@
         color: grey;
     }
 
+    h3 {
+        text-align: center;
+    }
+
     h5 {
         text-align: center;
         font-weight: bold;
         color: darkgrey;
     }
+    .mb-5, .my-5 {
+        margin-bottom:0px !important;
+    }
 </style>
 
 <form class="form-signin needs-validation" id="form-akun" method="post" enctype="multipart/form-data" novalidate>
     <img class="mb-5" src="~/img/logo-2.png" style=" width: 285px;" />
-    <h2>You are Logging Out</h2>
-    <h5>Click this <a  asp-controller="Login" asp-action="Index">link</a> to Sign In</h5>
+    <h2>
+        <i class="fa fa-cog fa-spin fa-3x fa-fw" style="font-size:35px;margin-bottom:10px;"></i> <br />
+        You are Logging Out
+    </h2>
+    @*<h5>Click this <a  asp-controller="Login" asp-action="Index">link</a> to Sign In</h5>*@
     <p class="mt-5 mb-3 text-muted" style="text-align:center;">Pertamina Trans Kontinental © 2022</p>
 </form>
 
@@ -64,7 +74,7 @@
 
         setTimeout(function () {
             window.location.replace("/Login/Index");
-        }, 3000);
+        }, 2000);
     });
 
 </script>
