@@ -535,7 +535,6 @@ namespace OMNI.API.Controllers.OMNI
                 result.NoAsset = data.NoAsset;
                 result.SerialNumber = data.SerialNumber;
                 result.Remark = data.Remark;
-                //result.KesesuaianPM58 = data.KesesuaianPM58;
                 result.PersentaseHubla = data.PersentaseHubla;
                 result.TotalKebutuhanOSCP = data.TotalKebutuhanOSCP;
                 result.SelisihOSCP = data.SelisihOSCP;

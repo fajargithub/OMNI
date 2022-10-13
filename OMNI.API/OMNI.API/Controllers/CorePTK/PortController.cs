@@ -41,6 +41,21 @@ namespace OMNI.API.Controllers.CorePTK
             }
         }
 
+        [HttpGet("GetPortByRegion")]
+        public async Task<IActionResult> GetPortByRegion(int regionId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var result = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.PAreaSub.Id > 0 && b.PAreaSub.PArea.Region.Id == regionId).Include(b => b.PAreaSub).Include(b =>b.PAreaSub.PArea).Include(b => b.PAreaSub.PArea.Region).OrderBy(b => b.Id).ToListAsync(cancellationToken);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return Ok(null);
+            }
+        }
+
         // GET api/<ValuesController>/5
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
