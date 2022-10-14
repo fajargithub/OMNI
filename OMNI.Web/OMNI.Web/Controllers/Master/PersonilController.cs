@@ -7,6 +7,7 @@ using OMNI.Web.Models;
 using OMNI.Web.Models.Master;
 using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
+using OMNI.Web.Services.Trx.Interface;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -22,7 +23,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/Personil/AddEdit.cshtml";
 
         protected IPersonil _PersonilService;
-        public PersonilController(IRekomendasiType rekomendasiTypeService, IPersonil PersonilService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public PersonilController(IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPersonil PersonilService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _PersonilService = PersonilService;
         }

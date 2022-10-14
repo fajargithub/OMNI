@@ -7,6 +7,7 @@ using OMNI.Web.Models;
 using OMNI.Web.Models.Master;
 using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
+using OMNI.Web.Services.Trx.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/SpesifikasiJenis/AddEdit.cshtml";
 
         protected ISpesifikasiJenis _spesifikasiJenisService;
-        public SpesifikasiJenisController(IRekomendasiType rekomendasiTypeService, ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public SpesifikasiJenisController(IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _spesifikasiJenisService = spesifikasiJenisService;
         }

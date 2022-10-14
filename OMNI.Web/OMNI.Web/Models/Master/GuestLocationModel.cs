@@ -9,6 +9,8 @@ namespace OMNI.Web.Models.Master
     {
         public int UserId { get; set; }
         public string GuestCategory { get; set; }
-        public string Port { get; set; }
+        public string StrPortList { get; set; }
+        public List<string> PortList { get; set; }
+        public string Email { get; set; }
     }
 }

@@ -9,7 +9,6 @@ namespace OMNI.Web.Data.Dao
     public class GuestLocation : BaseDao
     {
         public int UserId { get; set; }
-        public string GuestCategory { get; set; }
         public string Port { get; set; }
     }
 }

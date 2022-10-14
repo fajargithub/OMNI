@@ -7,6 +7,7 @@ using OMNI.Web.Models;
 using OMNI.Web.Models.Master;
 using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
+using OMNI.Web.Services.Trx.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace OMNI.Web.Controllers.Master
 
         protected IRekomendasiPersonil _rekomendasiPersonilService;
         protected IPersonil _personilService;
-        public RekomendasiPersonilController(IPersonil personilService, IRekomendasiType rekomendasiTypeService, IRekomendasiPersonil RekomendasiPersonilService, ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public RekomendasiPersonilController(IGuestLocation guestLocationService, IPersonil personilService, IRekomendasiType rekomendasiTypeService, IRekomendasiPersonil RekomendasiPersonilService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _personilService = personilService;
             _rekomendasiTypeService = rekomendasiTypeService;

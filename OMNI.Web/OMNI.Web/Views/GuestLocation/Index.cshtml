@@ -1,38 +1,43 @@
 ﻿@{
-    ViewData["Title"] = "Master Data Rekomendasi Type";
-    ViewData["PageName"] = "jenis";
-    ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i>  Rekomendasi Type";
-    ViewData["PageDescription"] = "Halaman pengelolaan data master Rekomendasi Type Oil Spill Response";
+    ViewData["Title"] = "Guest Location";
+    ViewData["PageName"] = "guest_location";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-users'></i>  Guest Location";
+    ViewData["PageDescription"] = "";
 }
 
+@model OMNI.Web.Models.Master.GuestLocationModel
+
+<style>
+    #table_guest_location {
+        font-size: 11px;
+    }
+</style>
 <div class="row">
     <div class="col-xl-12">
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Rekomendasi Type List
+                    Guest Location List
                 </h2>
-                @if (ViewBag.Editable)
-                {
-                    <div class="panel-toolbar">
-                        <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                    </div>
-                }
-                </div>
+            </div>
             <div class="panel-container show">
                 <div class="panel-content">
-                    <table id="table1" class="table table-borderless table-hover table-striped w-100">
+                    <table id="table_guest_location" class="table table-borderless table-hover table-striped w-100">
                         <thead>
                             <tr class="fw-500 text-uppercase">
                                 <th style="width:7%;">No</th>
-                                <th>Nama</th>
-                                <th>Description</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Guest Category</th>
+                                <th>Location</th>
                                 <th class="text-center" style="width:10%;">Action</th>
                             </tr>
-                            <tr id="table1-filter" style="display:none;">
+                            <tr id="table_guest_location-filter" style="display:none;">
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Name" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Desc" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Email" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Category" /></th>
+                                <th><input type="text" class="form-control" placeholder="Filter Location" /></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -48,13 +53,16 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         $(document).ready(function () {
+
+            $('.select2-input').select2();
+
             $(".select2-placeholder").select2(
                 {
                     placeholder: $(this).data("placeholder"),
                     allowClear: true
                 });
 
-            $('#table1 thead tr:eq(1) th').each(function (i) {
+            $('#table_guest_location thead tr:eq(1) th').each(function (i) {
                 $('select', this).on('change', function () {
                     if (table.column(i).search() !== this.value) {
                         table
@@ -74,7 +82,7 @@
                 });
             });
 
-            var table = $('#table1').DataTable(
+            var table = $('#table_guest_location').DataTable(
                 {
                     orderCellsTop: true,
                     fixedHeader: true,
@@ -82,7 +90,7 @@
                     ordering: false,
                     order: [],
                     columnDefs: [
-                        { "orderable": false, "targets": 3 }
+                        { "orderable": false, "targets": 5 }
                     ],
                     dom:
                         "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
@@ -93,29 +101,42 @@
                             text: '<i class="fal fa-filter"></i> Filter',
                             className: 'btn btn-sm btn-outline-primary',
                             action: function (e, dt, node, config) {
-                                $('#table1-filter').toggle();
+                                $('#table_guest_location-filter').toggle();
                             }
                         },
                     ],
                     processing: true,
                     //serverSide: true,
                     "ajax": {
-                        "url": base_api + 'RekomendasiType/GetAll',
+                        "url": base_api + 'GuestLocation/GetAll',
                         "type": 'GET'
                         //"data": { searchData: result }
                     },
                     "columns": [
                         { "data": null },
-                        { "data": "name" },
-                        { "data": "desc" },
+                        { "data": "userName" },
+                        { "data": "email" },
+                        {
+                            "targets": -1,
+                            "data": null,
+                            "render": function (row, data, iDisplayIndex) {
+                                var result = "";
+                                if (iDisplayIndex.guestCategory == "Pertamina") {
+                                    result += "<b style='color:blue;'>Pertamina</b>";
+                                } else {
+                                    result += "<b style='color:darkorange;'>Non Pertamina</b>";
+                                }
+                                return result;
+                            }
+                        },
+                        { "data": "strPortList" },
                         {
                             "targets": -1,
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
                                 var result = "";
                                 if (editable == "True") {
-                                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiType/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
-                                        " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
+                                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/GuestLocation/AddEdit?id=" + iDisplayIndex.userId + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>";
                                 }
                                 return result;
                             }
@@ -125,8 +146,9 @@
                     rowCallback: function (row, data, iDisplayIndex) {
                     },
                     "initComplete": function (settings, json) {
-                    }
-                });
+                    },
+                    "destroy": true
+                }).ajax.reload();
 
             table.on('order.dt search.dt', function () {
                 table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
@@ -144,9 +166,9 @@
                 denyButtonText: `Cancel`,
             }).then((result) => {
                 if (result.value) {
-                    $.post(base_api + 'RekomendasiType/DeleteRekomendasiType?id=' + id, function (result) {
+                    $.post(base_api + 'Personil/DeletePersonil?id=' + id, function (result) {
                         Swal.fire('Deleted!', '', 'success');
-                        $("#table1").DataTable().ajax.reload(null, false);
+                        $("#table_guest_location").DataTable().ajax.reload(null, false);
                     });
                 } else if (result.isDenied) {
 

@@ -29,7 +29,7 @@ namespace OMNI.Web.Controllers
 
         protected ILogin _loginService;
 
-        public LoginController(ILogger<LoginController> logger, ILogin loginService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public LoginController(ILogger<LoginController> logger, ILogin loginService, IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _loginService = loginService;
         }
@@ -39,23 +39,6 @@ namespace OMNI.Web.Controllers
         {
             return PartialView(LOGIN_URL);
         }
-
-        //[HttpGet]
-        //public async Task<JsonResult> CheckSession()
-        //{
-        //    bool result = false;
-
-        //    var checkSession = UserData.Username;
-        //    if (!string.IsNullOrEmpty(checkSession))
-        //    {
-        //        result = true;
-        //    }
-
-        //    return Json(new
-        //    {
-        //        success = result
-        //    });
-        //}
 
         [HttpGet]
         public IActionResult NoAccess()
@@ -74,12 +57,10 @@ namespace OMNI.Web.Controllers
             }
             else
             {
+                UserData.UserId = r.UserId;
                 UserData.RoleList = r.Roles;
                 UserData.Username = r.Username;
                 UserData.Email = r.Email;
-
-                //return Redirect("/MainPage/Index");
-                //return Ok(new JsonResponse { Status = GeneralConstants.SUCCESS, Username = r.Username, Email = r.Email, Roles = r.Roles });
                 return Ok(new JsonResponse());
             }
         }
@@ -87,6 +68,7 @@ namespace OMNI.Web.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
+            UserData.UserId = 0;
             UserData.Username = null;
             UserData.Email = null;
             UserData.RoleList = null;

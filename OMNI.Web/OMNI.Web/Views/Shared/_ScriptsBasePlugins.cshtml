@@ -13,7 +13,8 @@
 <script type="text/javascript">
     var base_api = "@Context.Request.Scheme://@Context.Request.Host/";
 
-    var isManagement = "@ViewBag.Roles.Contains("OSMOSYS_MANAGEMENT")";
+    //var isManagement = "@ViewBag.Roles.Contains("OSMOSYS_MANAGEMENT")";
+    var editable = "@ViewBag.Editable";
     console.log("status: " + isManagement);
 
     $(document).on('click', `a[data-toggle="modal"]`, function () {

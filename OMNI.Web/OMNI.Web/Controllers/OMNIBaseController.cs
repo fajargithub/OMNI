@@ -24,12 +24,14 @@ namespace OMNI.Web.Controllers
         protected IPeralatanOSR _peralatanOSRService;
         protected IJenis _jenisService;
         protected IRekomendasiType _rekomendasiTypeService;
-        public OMNIBaseController(IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base()
+        protected IGuestLocation _guestLocationService;
+        public OMNIBaseController(IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base()
         {
             _rekomendasiTypeService = rekomendasiTypeService;
             _portService = portService;
             _peralatanOSRService = peralatanOSRService;
             _jenisService = jenisService;
+            _guestLocationService = guestLocationService;
         }
 
         public static class PortData
@@ -55,7 +57,33 @@ namespace OMNI.Web.Controllers
                 PortData.RegionTxt = "Region 3";
                 PortData.PortList = await GetPortByRegion(4);
             }
-            else
+            else if (UserData.RoleList.Contains("OSMOSYS_GUEST_LOKASI") || UserData.RoleList.Contains("OSMOSYS_GUEST_NON_LOKASI"))
+            {
+                List<Port> userPorts = new List<Port>();
+                GuestLocationModel guestUser = await _guestLocationService.GetByUserId(UserData.UserId);
+                if(guestUser != null)
+                {
+                    if (guestUser.PortList.Count() > 0)
+                    {
+                        var portList = await GetAllPort();
+                        if (portList.Count() > 0)
+                        {
+                            for (int i = 0; i < guestUser.PortList.Count(); i++)
+                            {
+                                Port temp = new Port();
+                                var findPort = portList.FindAll(b => b.Name.Contains(guestUser.PortList[i])).FirstOrDefault();
+                                if (findPort != null)
+                                {
+                                    userPorts.Add(findPort);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                PortData.RegionTxt = "Region (Selected)";
+                PortData.PortList = userPorts;
+            } else
             {
                 PortData.RegionTxt = "Region 1, 2 & 3";
                 PortData.PortList = await GetAllPort();
@@ -66,6 +94,7 @@ namespace OMNI.Web.Controllers
 
         public static class UserData
         {
+            public static int UserId { get; set; }
             public static string Username { get; set; }
             public static string Email { get; set; }
             public static List<string> RoleList;
@@ -78,6 +107,21 @@ namespace OMNI.Web.Controllers
             ViewBag.Username = UserData.Username;
             ViewBag.Email = UserData.Email;
             ViewBag.Roles = UserData.RoleList; 
+            
+            if(UserData.RoleList != null)
+            {
+                if (UserData.RoleList.Contains(GeneralConstants.OSMOSYS_MANAGEMENT) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_LOKASI) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_NON_LOKASI))
+                {
+                    ViewBag.Editable = false;
+                }
+                else
+                {
+                    ViewBag.Editable = true;
+                }
+            } else
+            {
+                ViewBag.Editable = false;
+            }
         }
 
         public static bool CheckUserRole()

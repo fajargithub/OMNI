@@ -20,7 +20,7 @@ namespace OMNI.Web.Controllers
     {
         private static readonly string MAIN_PAGE_URL = "~/Views/MainPage.cshtml";
 
-        public MainPageController(IRekomendasiType rekomendasiTypeService, ILogin loginService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public MainPageController(IRekomendasiType rekomendasiTypeService, IGuestLocation guestLocationService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
         }
 

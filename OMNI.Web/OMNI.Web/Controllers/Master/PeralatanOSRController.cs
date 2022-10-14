@@ -6,6 +6,7 @@ using OMNI.Web.Models;
 using OMNI.Web.Models.Master;
 using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
+using OMNI.Web.Services.Trx.Interface;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -21,7 +22,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/PeralatanOSR/AddEdit.cshtml";
 
         protected IPeralatanOSR _peralatanOSRService;
-        public PeralatanOSRController(IPeralatanOSR peralatanOSRService, IRekomendasiType rekomendasiTypeService, IPort portService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public PeralatanOSRController(IGuestLocation guestLocationService, IPeralatanOSR peralatanOSRService, IRekomendasiType rekomendasiTypeService, IPort portService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _peralatanOSRService = peralatanOSRService;
         }

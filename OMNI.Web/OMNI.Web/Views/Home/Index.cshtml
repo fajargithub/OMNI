@@ -101,7 +101,7 @@
                 <h2>
                     Lindungan Lingkungan Perairan
                 </h2>
-                @if (!ViewBag.Roles.Contains("OSMOSYS_MANAGEMENT"))
+                @if (ViewBag.Editable)
                 {
                     <div class="panel-toolbar">
                         <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>

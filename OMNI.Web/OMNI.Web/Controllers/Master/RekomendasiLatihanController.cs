@@ -7,6 +7,7 @@ using OMNI.Web.Models;
 using OMNI.Web.Models.Master;
 using OMNI.Web.Services.CorePTK.Interface;
 using OMNI.Web.Services.Master.Interface;
+using OMNI.Web.Services.Trx.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace OMNI.Web.Controllers.Master
 
         protected IRekomendasiLatihan _rekomendasiLatihanModel;
         protected ILatihan _latihanService;
-        public RekomendasiLatihanController(ILatihan latihanService, IRekomendasiType rekomendasiTypeService, IRekomendasiLatihan RekomendasiLatihanModel, ISpesifikasiJenis spesifikasiJenisService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public RekomendasiLatihanController(IGuestLocation guestLocationService, ILatihan latihanService, IRekomendasiType rekomendasiTypeService, IRekomendasiLatihan RekomendasiLatihanModel, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _latihanService = latihanService;
             _rekomendasiTypeService = rekomendasiTypeService;

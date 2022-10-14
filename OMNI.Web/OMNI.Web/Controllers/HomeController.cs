@@ -43,7 +43,7 @@ namespace OMNI.Web.Controllers
         protected ILatihan _latihanService;
         protected ILatihanTrx _latihanTrxService;
         protected ILampiran _lampiranService;
-        public HomeController(ILogger<HomeController> logger,ILampiran lampiranService, ILatihan latihanService, ILatihanTrx latihanTrxService, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public HomeController(ILogger<HomeController> logger, IGuestLocation guestLocationService, ILampiran lampiranService, ILatihan latihanService, ILatihanTrx latihanTrxService, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _logger = logger;
             _llpTrxService = llpTrxService;
@@ -85,8 +85,11 @@ namespace OMNI.Web.Controllers
             else
             {
                 var findPort = PortData.PortList.OrderBy(b => b.Id).FirstOrDefault();
-                ViewBag.SelectedPort = findPort;
-                port = findPort.Name;
+                if(findPort != null)
+                {
+                    ViewBag.SelectedPort = findPort;
+                    port = findPort.Name;
+                }
             }
 
             ViewBag.EnablePengesahan = false;

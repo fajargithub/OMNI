@@ -81,6 +81,7 @@ namespace OMNI.Web.Extensions
             services.AddScoped<LampiranService>();
             services.AddScoped<LLPHistoryStatusService>();
             services.AddScoped<LoginService>();
+            services.AddScoped<GuestLocationService>();
 
         }
 
@@ -108,6 +109,7 @@ namespace OMNI.Web.Extensions
             services.AddScoped<ILatihan, LatihanService>();
             services.AddScoped<IPersonil, PersonilService>();
             services.AddScoped<ILampiran, LampiranService>();
+            services.AddScoped<IGuestLocation, GuestLocationService>();
             services.AddScoped<ILLPHistoryStatus, LLPHistoryStatusService>();
             services.AddScoped<ILogin, LoginService>();
         }

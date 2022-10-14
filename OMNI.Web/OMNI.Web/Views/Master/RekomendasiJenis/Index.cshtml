@@ -169,7 +169,7 @@
                                 var result = "";
 
                                 if (statusSurat == "") {
-                                    if (isManagement !== "True") {
+                                    if (editable == "True") {
                                         result += "<input class='input-value' type='number' onchange='inputValue(" + iDisplayIndex.id + ")' id='value-" + iDisplayIndex.id + "' data-port='" + port + "' data-typeId='" + typeId + "' data-year='" + selectedYear + "' value='" + iDisplayIndex.value + "' style='width:50px;'>";
                                     } else {
                                         result += "<input class='input-value' type='number' value='" + iDisplayIndex.value + "' style='width:50px;' disabled>";

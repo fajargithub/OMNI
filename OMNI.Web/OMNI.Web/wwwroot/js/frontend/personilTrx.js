@@ -141,7 +141,7 @@ var table_personil_trx = $('#table_personil_trx').DataTable({
             "render": function (row, data, iDisplayIndex) {
                 var result = "";
 
-                if (isManagement !== "True") {
+                if (editable == "True") {
                     if (iDisplayIndex.personil != "Total Persentase") {
                         result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditPersonilTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
                             " <a href='javascript:void(0)' onclick='deletePersonilTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";

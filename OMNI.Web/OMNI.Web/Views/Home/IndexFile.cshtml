@@ -104,7 +104,12 @@
                         "targets": -1,
                         "data": null,
                         "render": function (row, data, iDisplayIndex) {
-                            return " <a href='javascript:void(0)' onclick='deleteDoc(" + iDisplayIndex.id + ")' class='delete-file' data-id='" + iDisplayIndex.id + "' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                            var result = "";
+                            if (editable == "True") {
+                                result += " <a href='javascript:void(0)' onclick='deleteDoc(" + iDisplayIndex.id + ")' class='delete-file' data-id='" + iDisplayIndex.id + "' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
+                            }
+                            
+                            return result;
                         }
                     }
                 ],
