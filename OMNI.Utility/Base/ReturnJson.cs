@@ -12,6 +12,7 @@ namespace OMNI.Utilities.Base
         public bool IsSuccess { get; set; } = true;
         public string ErrorMsg { get; set; }
         public dynamic Payload { get; set; }
+        public int UserId { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string Position { get; set; }

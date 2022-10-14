@@ -22,7 +22,6 @@ namespace OMNI.API.Controllers.OMNI
     [Produces("application/json")]
     public class LoginController : ControllerBase
     {
-        private readonly OMNIDbContext _dbOMNI;
         private readonly CorePTKContext _dbCorePTK;
         private readonly ApplicationDbContext _appDbContext;
 
@@ -30,9 +29,8 @@ namespace OMNI.API.Controllers.OMNI
         private readonly CustomSignInService _customSignInService;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public LoginController(ApplicationDbContext appDbContext, OMNIDbContext dbOMNI, CorePTKContext dbCorePTK, UserManager<ApplicationUser> userManager, CustomSignInService customSignInService, SignInManager<ApplicationUser> signInManager = null)
+        public LoginController(ApplicationDbContext appDbContext, CorePTKContext dbCorePTK, UserManager<ApplicationUser> userManager, CustomSignInService customSignInService, SignInManager<ApplicationUser> signInManager = null)
         {
-            _dbOMNI = dbOMNI;
             _dbCorePTK = dbCorePTK;
             _appDbContext = appDbContext;
             _userManager = userManager;
@@ -103,7 +101,7 @@ namespace OMNI.API.Controllers.OMNI
                     }
                 }
 
-                return Ok(new ReturnJson { IsSuccess = true, Username = employee.Name, Email = employee.Email, Roles = roleList } );
+                return Ok(new ReturnJson { IsSuccess = true, UserId = employee.Id, Username = employee.Name, Email = employee.Email, Roles = roleList } );
             } else
             {
                 return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "Invalid Username / Password"});
