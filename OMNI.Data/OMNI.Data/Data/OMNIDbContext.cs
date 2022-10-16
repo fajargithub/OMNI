@@ -37,6 +37,7 @@ namespace OMNI.Data.Data
         public DbSet<FileUpload> FileUpload { get; set; }
         public DbSet<Lampiran> Lampiran { get; set; }
         public DbSet<GuestLocation> GuestLocation { get; set; }
+        public DbSet<AdminLocation> AdminLocation { get; set; }
         public DbSet<LLPHistoryStatus> LLPHistoryStatus { get; set; }
         public DbSet<OMNIActivityLog> OMNIActivityLog { get; set; }
     }
