@@ -23,7 +23,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/RekomendasiType/AddEdit.cshtml";
 
         protected IRekomendasiType _rekomendasiTypeService;
-        public RekomendasiTypeController(IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public RekomendasiTypeController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _rekomendasiTypeService = rekomendasiTypeService;
         }

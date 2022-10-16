@@ -29,7 +29,7 @@ namespace OMNI.Web.Controllers
 
         protected ILogin _loginService;
 
-        public LoginController(ILogger<LoginController> logger, ILogin loginService, IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public LoginController(ILogger<LoginController> logger, IAdminLocation adminLocationService, ILogin loginService, IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _loginService = loginService;
         }

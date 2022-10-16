@@ -24,7 +24,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/Kondisi/AddEdit.cshtml";
 
         protected IKondisi _kondisiService;
-        public KondisiController(IGuestLocation guestLocationService, IKondisi KondisiService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public KondisiController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IKondisi KondisiService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _kondisiService = KondisiService;
         }

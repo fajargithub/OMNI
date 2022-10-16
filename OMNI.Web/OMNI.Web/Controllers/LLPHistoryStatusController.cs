@@ -29,7 +29,7 @@ namespace OMNI.Web.Controllers
 
         protected ILLPTrx _llpTrxService;
         protected ILLPHistoryStatus _llpHistoryStatusService;
-        public LLPHistoryStatusController(ILogger<LLPHistoryStatusController> logger, ILLPHistoryStatus llpHistoryStatusService, ILLPTrx llpTrxService, IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public LLPHistoryStatusController(ILogger<LLPHistoryStatusController> logger, IAdminLocation adminLocationService, ILLPHistoryStatus llpHistoryStatusService, ILLPTrx llpTrxService, IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _logger = logger;
             _llpTrxService = llpTrxService;

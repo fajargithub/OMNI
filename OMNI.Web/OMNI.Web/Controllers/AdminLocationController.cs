@@ -17,19 +17,19 @@ namespace OMNI.Web.Controllers
 {
     [AllowAnonymous]
     [CheckRole(GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION1 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION2 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION3 + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI)]
-    public class GuestLocationController : OMNIBaseController
+    public class AdminLocationController : OMNIBaseController
     {
-        private static readonly string INDEX = "~/Views/GuestLocation/Index.cshtml";
-        private static readonly string ADD_EDIT = "~/Views/GuestLocation/AddEdit.cshtml";
+        private static readonly string INDEX = "~/Views/AdminLocation/Index.cshtml";
+        private static readonly string ADD_EDIT = "~/Views/AdminLocation/AddEdit.cshtml";
 
-        public GuestLocationController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public AdminLocationController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _jenisService = jenisService;
         }
 
         public async Task<JsonResult> GetAll()
         {
-            List<GuestLocationModel> data = await _guestLocationService.GetAll();
+            List<AdminLocationModel> data = await _adminLocationService.GetAll();
 
             int count = data.Count();
 
@@ -50,12 +50,12 @@ namespace OMNI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> AddEdit(int id)
         {
-            GuestLocationModel model = new GuestLocationModel();
+            AdminLocationModel model = new AdminLocationModel();
             ViewBag.PortList = await GetAllPort();
             ViewBag.PrimaryKey = 0;
             if (id > 0)
             {
-                GuestLocationModel data = await _guestLocationService.GetByUserId(id);
+                AdminLocationModel data = await _adminLocationService.GetByUserId(id);
                 if (data != null)
                 {
                     ViewBag.PrimaryKey = data.Id;
@@ -69,22 +69,14 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEdit(GuestLocationModel model)
+        public async Task<IActionResult> AddEdit(AdminLocationModel model)
         {
-            var r = await _guestLocationService.AddEdit(model);
+            var r = await _adminLocationService.AddEdit(model);
 
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {
                 return Ok(new JsonResponse { Status = GeneralConstants.FAILED, ErrorMsg = r.ErrorMsg });
             }
-
-            return Ok(new JsonResponse());
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> DeleteJenis(int id)
-        {
-            var r = await _guestLocationService.Delete(id);
 
             return Ok(new JsonResponse());
         }

@@ -1,0 +1,47 @@
+﻿@model OMNI.Web.Models.Master.AdminLocationModel
+
+<form id="form-akun" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    @await Html.PartialAsync("_ModalHeader", new ModalHeader { Heading = "Update Admin Location" })
+
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="form-label" for="">Select Lokasi @ViewBag.Primarykey</label>
+            <select name="PortList" asp-for="PortList" id="port" class="select2-input"
+                    asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
+            </select>
+            <input type="hidden" name="Id" asp-for="Id" value="@ViewBag.PrimaryKey" />
+            <input type="hidden" name="UserId" asp-for="UserId" />
+        </div>
+    </div>
+    @await Html.PartialAsync("_ModalFooter")
+</form>
+
+<script type="text/javascript">
+
+        $('.select2-input').select2({
+            dropdownParent: $('#modal-add-edit')
+        });
+
+    $(document).on('submit', '#form-akun', function () {
+        var form = $('#form-akun');
+        var validation = Array.prototype.filter.call(form, function (form) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            else {
+                event.preventDefault();
+                var param = new FormParam(
+                    form,
+                    "Apakah Anda yakin ingin menyimpan akun ini?",
+                    '@Url.Action("AddEdit")',
+                    null,
+                    '#modal-add-edit',
+                    '#table_guest_location'
+                );
+                initApp.formSubmit(param);
+            }
+            form.classList.add('was-validated');
+        });
+    });
+</script>

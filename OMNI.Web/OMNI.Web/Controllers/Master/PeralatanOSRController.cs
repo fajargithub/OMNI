@@ -22,7 +22,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/PeralatanOSR/AddEdit.cshtml";
 
         protected IPeralatanOSR _peralatanOSRService;
-        public PeralatanOSRController(IGuestLocation guestLocationService, IPeralatanOSR peralatanOSRService, IRekomendasiType rekomendasiTypeService, IPort portService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public PeralatanOSRController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IPeralatanOSR peralatanOSRService, IRekomendasiType rekomendasiTypeService, IPort portService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _peralatanOSRService = peralatanOSRService;
         }

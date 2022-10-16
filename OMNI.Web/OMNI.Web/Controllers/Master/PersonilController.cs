@@ -23,7 +23,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string ADD_EDIT = "~/Views/Master/Personil/AddEdit.cshtml";
 
         protected IPersonil _PersonilService;
-        public PersonilController(IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPersonil PersonilService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public PersonilController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPersonil PersonilService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _PersonilService = PersonilService;
         }

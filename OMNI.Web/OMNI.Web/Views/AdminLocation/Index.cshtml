@@ -1,14 +1,14 @@
 ﻿@{
-    ViewData["Title"] = "Guest Location";
-    ViewData["PageName"] = "guest_location";
-    ViewData["Heading"] = "<i class='subheader-icon fal fa-users'></i>  Guest Location";
+    ViewData["Title"] = "Admin Location";
+    ViewData["PageName"] = "admin_location";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-users'></i>  Admin Location";
     ViewData["PageDescription"] = "";
 }
 
-@model OMNI.Web.Models.Master.GuestLocationModel
+@model OMNI.Web.Models.Master.AdminLocationModel
 
 <style>
-    #table_guest_location {
+    #table_admin_location {
         font-size: 11px;
     }
 </style>
@@ -17,26 +17,24 @@
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Guest Location List
+                    Admin Location List
                 </h2>
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
-                    <table id="table_guest_location" class="table table-borderless table-hover table-striped w-100">
+                    <table id="table_admin_location" class="table table-borderless table-hover table-striped w-100">
                         <thead>
                             <tr class="fw-500 text-uppercase">
                                 <th style="width:7%;">No</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Guest Category</th>
                                 <th>Location</th>
                                 <th class="text-center" style="width:10%;">Action</th>
                             </tr>
-                            <tr id="table_guest_location-filter" style="display:none;">
+                            <tr id="table_admin_location-filter" style="display:none;">
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Name" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Email" /></th>
-                                <th><input type="text" class="form-control" placeholder="Filter Category" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Location" /></th>
                                 <th></th>
                             </tr>
@@ -62,7 +60,7 @@
                     allowClear: true
                 });
 
-            $('#table_guest_location thead tr:eq(1) th').each(function (i) {
+            $('#table_admin_location thead tr:eq(1) th').each(function (i) {
                 $('select', this).on('change', function () {
                     if (table.column(i).search() !== this.value) {
                         table
@@ -82,7 +80,7 @@
                 });
             });
 
-            var table = $('#table_guest_location').DataTable(
+            var table = $('#table_admin_location').DataTable(
                 {
                     orderCellsTop: true,
                     fixedHeader: true,
@@ -101,34 +99,19 @@
                             text: '<i class="fal fa-filter"></i> Filter',
                             className: 'btn btn-sm btn-outline-primary',
                             action: function (e, dt, node, config) {
-                                $('#table_guest_location-filter').toggle();
+                                $('#table_admin_location-filter').toggle();
                             }
                         },
                     ],
                     processing: true,
-                    //serverSide: true,
                     "ajax": {
-                        "url": base_api + 'GuestLocation/GetAll',
+                        "url": base_api + 'AdminLocation/GetAll',
                         "type": 'GET'
-                        //"data": { searchData: result }
                     },
                     "columns": [
                         { "data": null },
                         { "data": "userName" },
                         { "data": "email" },
-                        {
-                            "targets": -1,
-                            "data": null,
-                            "render": function (row, data, iDisplayIndex) {
-                                var result = "";
-                                if (iDisplayIndex.guestCategory == "Pertamina") {
-                                    result += "<b style='color:blue;'>Pertamina</b>";
-                                } else {
-                                    result += "<b style='color:darkorange;'>Non Pertamina</b>";
-                                }
-                                return result;
-                            }
-                        },
                         { "data": "strPortList" },
                         {
                             "targets": -1,
@@ -136,7 +119,7 @@
                             "render": function (row, data, iDisplayIndex) {
                                 var result = "";
                                 if (editable == "True") {
-                                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/GuestLocation/AddEdit?id=" + iDisplayIndex.userId + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>";
+                                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/AdminLocation/AddEdit?id=" + iDisplayIndex.userId + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>";
                                 }
                                 return result;
                             }

@@ -43,7 +43,7 @@ namespace OMNI.Web.Controllers
         protected ILatihan _latihanService;
         protected ILatihanTrx _latihanTrxService;
         protected ILampiran _lampiranService;
-        public HomeController(ILogger<HomeController> logger, IGuestLocation guestLocationService, ILampiran lampiranService, ILatihan latihanService, ILatihanTrx latihanTrxService, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public HomeController(ILogger<HomeController> logger, IAdminLocation adminLocationService, IGuestLocation guestLocationService, ILampiran lampiranService, ILatihan latihanService, ILatihanTrx latihanTrxService, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _logger = logger;
             _llpTrxService = llpTrxService;

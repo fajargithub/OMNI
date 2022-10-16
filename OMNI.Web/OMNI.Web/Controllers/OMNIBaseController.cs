@@ -25,13 +25,15 @@ namespace OMNI.Web.Controllers
         protected IJenis _jenisService;
         protected IRekomendasiType _rekomendasiTypeService;
         protected IGuestLocation _guestLocationService;
-        public OMNIBaseController(IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base()
+        protected IAdminLocation _adminLocationService;
+        public OMNIBaseController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base()
         {
             _rekomendasiTypeService = rekomendasiTypeService;
             _portService = portService;
             _peralatanOSRService = peralatanOSRService;
             _jenisService = jenisService;
             _guestLocationService = guestLocationService;
+            _adminLocationService = adminLocationService;
         }
 
         public static class PortData
@@ -61,7 +63,7 @@ namespace OMNI.Web.Controllers
             {
                 List<Port> userPorts = new List<Port>();
                 GuestLocationModel guestUser = await _guestLocationService.GetByUserId(UserData.UserId);
-                if(guestUser != null)
+                if (guestUser != null)
                 {
                     if (guestUser.PortList.Count() > 0)
                     {
@@ -72,6 +74,31 @@ namespace OMNI.Web.Controllers
                             {
                                 Port temp = new Port();
                                 var findPort = portList.FindAll(b => b.Name.Contains(guestUser.PortList[i])).FirstOrDefault();
+                                if (findPort != null)
+                                {
+                                    userPorts.Add(findPort);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                PortData.RegionTxt = "Region (Selected)";
+                PortData.PortList = userPorts;
+            } else if (UserData.RoleList.Contains("OSMOSYS_ADMIN_LOKASI")) {
+                List<Port> userPorts = new List<Port>();
+                AdminLocationModel adminUser = await _adminLocationService.GetByUserId(UserData.UserId);
+                if (adminUser != null)
+                {
+                    if (adminUser.PortList.Count() > 0)
+                    {
+                        var portList = await GetAllPort();
+                        if (portList.Count() > 0)
+                        {
+                            for (int i = 0; i < adminUser.PortList.Count(); i++)
+                            {
+                                Port temp = new Port();
+                                var findPort = portList.FindAll(b => b.Name.Contains(adminUser.PortList[i])).FirstOrDefault();
                                 if (findPort != null)
                                 {
                                     userPorts.Add(findPort);

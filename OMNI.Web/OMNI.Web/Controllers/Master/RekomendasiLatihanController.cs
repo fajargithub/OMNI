@@ -25,7 +25,7 @@ namespace OMNI.Web.Controllers.Master
 
         protected IRekomendasiLatihan _rekomendasiLatihanModel;
         protected ILatihan _latihanService;
-        public RekomendasiLatihanController(IGuestLocation guestLocationService, ILatihan latihanService, IRekomendasiType rekomendasiTypeService, IRekomendasiLatihan RekomendasiLatihanModel, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public RekomendasiLatihanController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, ILatihan latihanService, IRekomendasiType rekomendasiTypeService, IRekomendasiLatihan RekomendasiLatihanModel, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _latihanService = latihanService;
             _rekomendasiTypeService = rekomendasiTypeService;

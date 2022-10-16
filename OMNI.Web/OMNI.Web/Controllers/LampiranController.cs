@@ -24,7 +24,7 @@ namespace OMNI.Web.Controllers
 
         protected ILampiran _lampiranService;
         protected ILLPTrx _llpTrxService;
-        public LampiranController(ILampiran lampiranService, ILLPTrx llptrxService, IPort portService, IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public LampiranController(IAdminLocation adminLocationService, ILampiran lampiranService, ILLPTrx llptrxService, IPort portService, IGuestLocation guestLocationService, IRekomendasiType rekomendasiTypeService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _lampiranService = lampiranService;
             _llpTrxService = llptrxService;

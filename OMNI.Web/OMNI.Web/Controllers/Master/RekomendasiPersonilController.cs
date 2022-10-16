@@ -25,7 +25,7 @@ namespace OMNI.Web.Controllers.Master
 
         protected IRekomendasiPersonil _rekomendasiPersonilService;
         protected IPersonil _personilService;
-        public RekomendasiPersonilController(IGuestLocation guestLocationService, IPersonil personilService, IRekomendasiType rekomendasiTypeService, IRekomendasiPersonil RekomendasiPersonilService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public RekomendasiPersonilController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IPersonil personilService, IRekomendasiType rekomendasiTypeService, IRekomendasiPersonil RekomendasiPersonilService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _personilService = personilService;
             _rekomendasiTypeService = rekomendasiTypeService;

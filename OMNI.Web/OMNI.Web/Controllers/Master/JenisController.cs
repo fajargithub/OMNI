@@ -22,7 +22,7 @@ namespace OMNI.Web.Controllers.Master
         private static readonly string INDEX = "~/Views/Master/Jenis/Index.cshtml";
         private static readonly string ADD_EDIT = "~/Views/Master/Jenis/AddEdit.cshtml";
 
-        public JenisController(IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        public JenisController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _jenisService = jenisService;
         }
