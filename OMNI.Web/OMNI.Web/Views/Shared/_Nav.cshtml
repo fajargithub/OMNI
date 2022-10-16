@@ -133,24 +133,29 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="#" title="Dashboard" data-filter-tags="dashboard">
-                    <i class="fal fa-list"></i>
-                    <span class="nav-link-text" data-i18n="master.personil">User Access</span>
-                </a>
-                <ul>
-                    <li>
-                        <a href="@Url.Action("Index", "GuestLocation")" title="" data-filter-tags="guestlocation">
-                            <span class="nav-link-text" data-i18n="account.index">Guest Location</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("Index", "AdminLocation")" title="" data-filter-tags="adminlocation">
-                            <span class="nav-link-text" data-i18n="account.index">Admin Location</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+
+            @if (!ViewBag.Roles.Contains(GeneralConstants.OSMOSYS_ADMIN_LOKASI))
+            {
+                <li>
+                    <a href="#" title="Dashboard" data-filter-tags="dashboard">
+                        <i class="fal fa-users"></i>
+                        <span class="nav-link-text" data-i18n="master.personil">User Access</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("Index", "GuestLocation")" title="" data-filter-tags="guestlocation">
+                                <span class="nav-link-text" data-i18n="account.index">Guest Location</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "AdminLocation")" title="" data-filter-tags="adminlocation">
+                                <span class="nav-link-text" data-i18n="account.index">Admin Location</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            }
+
         </ul>
     </div>
 </div>

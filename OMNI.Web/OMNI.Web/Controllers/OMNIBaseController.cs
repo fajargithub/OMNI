@@ -179,26 +179,33 @@ namespace OMNI.Web.Controllers
         public class CheckRole : ActionFilterAttribute
         {
             bool isInRole = false;
-            
 
-            public CheckRole(string values)
-            {
-                var arrRoles = values.Split(",");
-                UserData.ParamRole = arrRoles;
-            }
+            public string Roles { get; set; }
 
             public override void OnActionExecuting(ActionExecutingContext context)
             {
-                base.OnActionExecuting(context);
+                //base.OnActionExecuting(context);
+                if (!string.IsNullOrEmpty(Roles))
+                {
+                    var arrRoles = Roles.Split(",");
+                    UserData.ParamRole = arrRoles;
+                }
 
                 isInRole = CheckUserRole();
 
                 if (!isInRole)
                 {
-                    UserData.Username = null;
-                    UserData.Email = null;
-                    UserData.RoleList = null;
-                    context.Result = new RedirectToActionResult("Index", "Login", null);
+                    if(UserData.ParamRole.Count() > 0 && !string.IsNullOrEmpty(UserData.Username))
+                    {
+                        context.Result = new RedirectToActionResult("NoAccess", "Login", null);
+                    } else
+                    {
+                        UserData.Username = null;
+                        UserData.Email = null;
+                        UserData.RoleList = null;
+
+                        context.Result = new RedirectToActionResult("Index", "Login", null);
+                    }  
                 } else
                 {
                 }

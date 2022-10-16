@@ -5,7 +5,7 @@
 
     <div class="modal-body">
         <div class="form-group">
-            <label class="form-label" for="">Select Lokasi @ViewBag.Primarykey</label>
+            <label class="form-label" for="">Select Lokasi</label>
             <select name="PortList" asp-for="PortList" id="port" class="select2-input"
                     asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
             </select>
@@ -37,7 +37,7 @@
                     '@Url.Action("AddEdit")',
                     null,
                     '#modal-add-edit',
-                    '#table_guest_location'
+                    '#table_admin_location'
                 );
                 initApp.formSubmit(param);
             }
