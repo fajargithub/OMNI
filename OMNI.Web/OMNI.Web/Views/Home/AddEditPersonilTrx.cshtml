@@ -88,6 +88,7 @@
         var year = parseInt("@ViewBag.Year");
 
         if (selectedPersonil > 0) {
+            
             $.ajax({
                 url: base_api + "Personil/GetById?id=" + selectedPersonil,
                 method: "GET",

@@ -133,9 +133,9 @@ namespace OMNI.Web.Controllers
             base.OnActionExecuted(context);
             ViewBag.Username = UserData.Username;
             ViewBag.Email = UserData.Email;
-            ViewBag.Roles = UserData.RoleList; 
-            
-            if(UserData.RoleList != null)
+            ViewBag.Roles = UserData.RoleList;
+
+            if (UserData.RoleList != null)
             {
                 if (UserData.RoleList.Contains(GeneralConstants.OSMOSYS_MANAGEMENT) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_LOKASI) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_NON_LOKASI))
                 {
@@ -144,6 +144,15 @@ namespace OMNI.Web.Controllers
                 else
                 {
                     ViewBag.Editable = true;
+                }
+
+                if (UserData.RoleList.Contains(GeneralConstants.OSMOSYS_SUPER_ADMIN) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_MANAGEMENT))
+                {
+                    ViewBag.EnableUserAccess = true;
+                }
+                else
+                {
+                    ViewBag.EnableUserAccess = false;
                 }
             } else
             {

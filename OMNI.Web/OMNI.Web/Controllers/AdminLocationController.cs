@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers
 {
     [AllowAnonymous]
-    [CheckRole(Roles = GeneralConstants.OSMOSYS_SUPER_ADMIN)]
+    [CheckRole(Roles = GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT)]
     public class AdminLocationController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/AdminLocation/Index.cshtml";

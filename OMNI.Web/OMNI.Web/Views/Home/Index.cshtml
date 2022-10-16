@@ -156,9 +156,12 @@
                 <h2>
                     PERSONIL
                 </h2>
-                <div class="panel-toolbar">
-                    <a asp-action="AddEditPersonilTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                </div>
+                @if (ViewBag.Editable)
+                { 
+                    <div class="panel-toolbar">
+                        <a asp-action="AddEditPersonilTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    </div>
+                }    
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -195,9 +198,13 @@
                 <h2>
                     LATIHAN
                 </h2>
-                <div class="panel-toolbar">
-                    <a asp-action="AddEditLatihanTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                </div>
+                @if (ViewBag.Editable)
+                { 
+                    <div class="panel-toolbar">
+                        <a asp-action="AddEditLatihanTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    </div>
+                }
+                
             </div>
             <div class="panel-container show">
                 <div class="panel-content">

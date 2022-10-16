@@ -28,6 +28,17 @@ namespace OMNI.Web.Controllers.Master
             _latihanService = LatihanService;
         }
 
+        [HttpGet]
+        public async Task<JsonResult> GetById(int id)
+        {
+            Latihan data = await _latihanService.GetById(id);
+
+            return Json(new
+            {
+                data
+            });
+        }
+
         public async Task<JsonResult> GetAll()
         {
             List<Latihan> data = await _latihanService.GetAll();
