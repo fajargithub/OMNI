@@ -38,13 +38,6 @@ namespace OMNI.API.Controllers.OMNI
             _signInManager = signInManager;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Get(CancellationToken cancellationToken)
-        //{
-        //    var result = await _dbCorePTK.Employees.Where(b => b.IsDeleted == GeneralConstants.NO).OrderByDescending(b => b.CreatedAt).OrderByDescending(b => b.UpdatedAt).ToListAsync(cancellationToken);
-        //    return Ok(result);
-        //}
-
         [HttpPost]
         public async Task<IActionResult> SignIn(LoginModel model, CancellationToken cancellationToken)
         {
