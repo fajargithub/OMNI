@@ -71,6 +71,20 @@
                 </table>
             </div>
         </div>
+        <div class="row">
+            @if(ViewBag.FileList.Count > 0)
+            {
+                for(int i=0; i < ViewBag.FileList.Count; i++)
+                {
+                    <div class="col-md-3">
+                        @if(ViewBag.FileList[i].FileType == "image/jpeg")
+                        {
+                            <img src="@ViewBag.FileList[i].FilePath" style="width:50px;"/>
+                        }
+                    </div>
+                }
+            }
+        </div>
     </div>
    
 
