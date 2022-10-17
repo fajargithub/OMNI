@@ -639,7 +639,8 @@ var initApp = (function (app) {
                                 countPercentageLatihanTrx();
 
                                 var id = response.id;
-                                var qrcode_url = base_api + "Home/QrCodeDetail?id=" + id;
+                                /*var qrcode_url = base_api + "Home/QrCodeDetail?id=" + id;*/
+                                var qrcode_url = base_api + "QRCodeDetail/Index?id=" + id;
 
                                 $.ajax({
                                     url: generateQRCode2(qrcode_url),

@@ -219,19 +219,6 @@
                     if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
                         inventoryNumber = kodeInventory + "-" + $("#year").val() + "-" + region + "-" + $("#noAset").val();
                         $("#qrcode-text").val(inventoryNumber);
-                        //$.ajax({
-                        //    url: generateQRCode(),
-                        //    complete: function () {
-                        //        $("#qrcode-text").val(inventoryNumber);
-
-                        //        var canvas = document.querySelector('canvas');
-                        //        var pngUrl = canvas.toDataURL();
-
-                        //        $("#qrcode-value").val(pngUrl);
-
-                        //        $("#submit").show();
-                        //    }
-                        //});
 
                         $("#submit").show();
                     } else {
@@ -259,23 +246,7 @@
                     if ($("#noAset").val() !== null && $("#noAset").val() !== "") {
                         kodeInventory = $("#kodeInventory").val();
                         inventoryNumber = kodeInventory + "-" + $("#year").val() + "-" + region + "-" + $("#noAset").val();
-                        console.log(inventoryNumber);
                         $("#qrcode-text").val(inventoryNumber);
-
-                        //$.ajax({
-                        //    url: generateQRCode(),
-                        //    complete: function () {
-                        //        console.log(inventoryNumber);
-                        //        $("#qrcode-text").val(inventoryNumber);
-
-                        //        var canvas = document.querySelector('canvas');
-                        //        var pngUrl = canvas.toDataURL();
-
-                        //        $("#qrcode-value").val(pngUrl);
-
-                        //        $("#submit").show();
-                        //    }
-                        //});
                         $("#submit").show();
                     } else {
                         $("#submit").hide();
@@ -303,28 +274,7 @@
         });
 
         function generateQRCode() {
-            //$('#qrcode').empty();
 
-            //const qrCode = new QRCodeStyling({
-            //    width: 300,
-            //    height: 300,
-            //    type: "canvas",
-            //    data: inventoryNumber,
-            //    image: "/img/pertamina.png",
-            //    dotsOptions: {
-            //        color: "#4267b2",
-            //        type: "rounded"
-            //    },
-            //    backgroundOptions: {
-            //        color: "#e9ebee",
-            //    },
-            //    imageOptions: {
-            //        crossOrigin: "anonymous",
-            //        margin: 5,
-            //    }
-            //});
-
-            //qrCode.append(document.getElementById("qrcode"));
         }
 
         $("#year").on("change", function () {

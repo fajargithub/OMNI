@@ -142,7 +142,7 @@ var dt = $('#table_llp_trx').DataTable({
             "render": function (row, data, iDisplayIndex) {
                 var result = "";
                 if (iDisplayIndex.peralatanOSR != "Total Persentase") {
-                    result = "<a data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LLP' style='color:blue;' title='Gambar'><b><i>File Gambar</i></b></a>"
+                    result = "<a data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#modal-file' href='/Home/IndexFile?trxId=" + iDisplayIndex.id + "&flag=OMNI_LLP' style='color:blue;' title='View Files'><b><i class='fa fa-archive' style='font-size:13px; color:teal;'></i></b></a>"
                 }
                 return result;
             }

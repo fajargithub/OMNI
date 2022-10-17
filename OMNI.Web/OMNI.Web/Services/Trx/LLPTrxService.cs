@@ -51,6 +51,17 @@ namespace OMNI.Web.Services.Trx
             catch (Exception e) { throw e; }
         }
 
+        public async Task<List<FilesModel>> GetQRCodeFiles(int trxId, string flag)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/LLPTrx/GetQRCodeFiles?trxId={trxId}&flag={flag}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<List<FilesModel>>();
+
+            throw new Exception();
+        }
         public async Task<List<FilesModel>> GetAllFiles(int trxId, string flag)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");

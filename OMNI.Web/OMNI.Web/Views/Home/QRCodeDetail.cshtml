@@ -1,95 +1,123 @@
 ﻿@model OMNI.Web.Models.Master.LLPTrxModel
 
-    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <link href="~/css/datatable/datatable.css" rel="stylesheet" />
-    <link href="~/css/datatable/datatable-sc.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+<link href="~/css/datatable/datatable.css" rel="stylesheet" />
+<link href="~/css/datatable/datatable-sc.css" rel="stylesheet" />
+<link href="~/css/sweetalert2/sweetalert2.css" rel="stylesheet" />
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12" style="text-align: center;">
-                <br />
-                <img src="@ViewBag.Data.QRCode" alt="QR Code" />
-            </div>
-            <div class="col-md-12">
-                <br />
-                <table class="table table-bordered table-stripped table-hover">
-                    <tbody>
-                        <tr>
-                            <th scope="col">Nama Peralatan OSR</th>
-                            <td>:</td>
-                            <td>@ViewBag.Data.PeralatanOSRName</td>
-                        </tr>
-                        <tr>
-                            <th scope="col">Nama Spesifikasi / Jenis</th>
-                            <td>:</td>
-                            <td>@ViewBag.Data.JenisName</td>
-                        </tr>
-                        <tr>
-                            <th>Detail Eksisting Lokasi</th>
-                            <td>:</td>
-                            <td>@ViewBag.Data.DetailExisting</td>
-                        </tr>
-                        <tr>
-                            <th>Kondisi</th>
-                            <td>:</td>
-                            <td>
-                                @if (ViewBag.Data.Kondisi == "Baik")
-                                {
-                                    <b style="color:green;">Baik</b>
-                                }
-                                else if (ViewBag.Data.Kondisi == "Sedang")
-                                {
-                                    <b style="color:orange;">Sedang</b>
-                                }
-                                else if(ViewBag.Data.Kondisi == "Buruk")
-                                {
-                                    <b style="color:red;">Buruk</b>
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Lokasi</th>
-                            <td>:</td>
-                            <td>@ViewBag.Data.Port</td>
-                        </tr>
-                        <tr>
-                            <th>Nomor Asset</th>
-                            <td>:</td>
-                            <td>@ViewBag.Data.QRCodeText</td>
-                        </tr>
-                        <tr>
-                            <th>Brand</th>
-                            <td>:</td>
-                            <td>@ViewBag.Data.Brand</td>
-                        </tr>
-                        <tr>
-                            <th>Serial Number</th>
-                            <td>:</td>
-                            <td>@ViewBag.Data.SerialNumber</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+<style>
+    .swal2-popup {
+        width: 80% !important;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="text-align: center;">
+            <br />
+            <img src="@ViewBag.Data.QRCode" alt="QR Code" />
         </div>
-        <div class="row">
-            @if(ViewBag.FileList.Count > 0)
+        <div class="col-md-12">
+            <br />
+            <table class="table table-bordered table-stripped table-hover">
+                <tbody>
+                    <tr>
+                        <th scope="col">Nama Peralatan OSR</th>
+                        <td>:</td>
+                        <td>@ViewBag.Data.PeralatanOSRName</td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Nama Spesifikasi / Jenis</th>
+                        <td>:</td>
+                        <td>@ViewBag.Data.JenisName</td>
+                    </tr>
+                    <tr>
+                        <th>Detail Eksisting Lokasi</th>
+                        <td>:</td>
+                        <td>@ViewBag.Data.DetailExisting</td>
+                    </tr>
+                    <tr>
+                        <th>Kondisi</th>
+                        <td>:</td>
+                        <td>
+                            @if (ViewBag.Data.Kondisi == "Baik")
+                            {
+                                <b style="color:green;">Baik</b>
+                            }
+                            else if (ViewBag.Data.Kondisi == "Sedang")
+                            {
+                                <b style="color:orange;">Sedang</b>
+                            }
+                            else if (ViewBag.Data.Kondisi == "Buruk")
+                            {
+                                <b style="color:red;">Buruk</b>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Lokasi</th>
+                        <td>:</td>
+                        <td>@ViewBag.Data.Port</td>
+                    </tr>
+                    <tr>
+                        <th>Nomor Asset</th>
+                        <td>:</td>
+                        <td>@ViewBag.Data.QRCodeText</td>
+                    </tr>
+                    <tr>
+                        <th>Brand</th>
+                        <td>:</td>
+                        <td>@ViewBag.Data.Brand</td>
+                    </tr>
+                    <tr>
+                        <th>Serial Number</th>
+                        <td>:</td>
+                        <td>@ViewBag.Data.SerialNumber</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div><br />
+    <h5>File Attachment:</h5><br />
+    <div class="row" style="text-align:center !important;">
+
+        @if (ViewBag.FileList.Count > 0)
+        {
+            for (int i = 0; i < ViewBag.FileList.Count; i++)
             {
-                for(int i=0; i < ViewBag.FileList.Count; i++)
-                {
-                    <div class="col-md-3">
-                        @if(ViewBag.FileList[i].FileType == "image/jpeg")
-                        {
-                            <img src="@ViewBag.FileList[i].FilePath" style="width:50px;"/>
-                        }
-                    </div>
-                }
+                <div class="col-4" style=" margin-bottom: 10px;">
+                    @if (ViewBag.FileList[i].FileType == "image/jpeg" || ViewBag.FileList[i].FileType == "image/png")
+                    {
+                        <img src="@ViewBag.FileList[i].Base64" data-base64="@ViewBag.FileList[i].Base64" data-filename="@ViewBag.FileList[i].FileName" class="openImage" style="max-width:150px;" />
+                    }
+                    else if (ViewBag.FileList[i].FileType == "application/pdf")
+                    {
+                        <a target='_blank' asp-controller="Home" asp-action="ViewFile" asp-route-id="@ViewBag.FileList[i].Id" asp-route-flag="OMNI_LLP" title='View File'>
+                            <img src="~/img/pdf-icon.png" style="width: 150px;" />
+                        </a>
+                    }
+                </div>
             }
-        </div>
+        }
     </div>
-   
+</div>
 
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/js/datatable/datatable.js"></script>
+<script src="~/js/sweetalert2/sweetalert2.bundle.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".openImage").click(function () {
 
+            var base64 = $(this).data('base64');
+            var filename = $(this).data('filename');
 
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/js/datatable/datatable.js"></script>
+            Swal.fire({
+                title: filename,
+                text: '',
+                imageUrl: base64,
+                imageAlt: 'Custom image',
+            });
+        })
+    });
+</script>
