@@ -8,5 +8,6 @@ namespace OMNI.API.Model.OMNI
     public class FilesModel : BaseModel
     {
         public string c { get; set; }
+        public string Base64 { get; set; }
     }
 }

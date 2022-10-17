@@ -12,8 +12,11 @@ using OMNI.Migrations.Data.Dao;
 using OMNI.Utilities.Constants;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Threading;
@@ -87,6 +90,98 @@ namespace OMNI.API.Controllers
             //}
         }
 
+        public string RemoveFileExtension(string param)
+        {
+            string fileName = param;
+            int fileExtPos = fileName.LastIndexOf(".");
+            if (fileExtPos >= 0)
+                fileName = fileName.Substring(0, fileExtPos);
+
+            return fileName;
+        }
+
+        [HttpGet("GetQRCodeFiles")]
+        public async Task<IActionResult> GetQRCodeFiles(string trxId, string flag, CancellationToken cancellationToken)
+        {
+            List<FileUpload> fileList = await _dbOMNI.FileUpload.Where(b => b.IsDeleted == GeneralConstants.NO && b.TrxId == int.Parse(trxId) && b.Flag == flag).ToListAsync(cancellationToken);
+            List<FilesModel> result = new List<FilesModel>();
+
+            try
+            {
+                if (fileList != null)
+                {
+                    for (int i = 0; i < fileList.Count(); i++)
+                    {
+                        FilesModel temp = new FilesModel();
+                        temp.Id = fileList[i].Id;
+                        temp.FileName = RemoveFileExtension(fileList[i].FileName);
+                        temp.FileType = fileList[i].ContentType;
+                        temp.FilePath = fileList[i] != null ? (Path.Combine(fileList[i].FilePath + fileList[i].FileName)) : GeneralConstants.IMG_PLACEHOLDER;
+
+                        //var request = WebRequest.Create("http://www.gravatar.com/avatar/6810d91caff032b202c50701dd3af745?d=identicon&r=PG");
+
+                        //using (var response = request.GetResponse())
+                        //using (var stream = response.GetResponseStream())
+                        //{
+                        //    var image = Bitmap.FromStream(stream);
+                        //    System.IO.MemoryStream ms = new MemoryStream();
+                        //    image.Save(ms, ImageFormat.Jpeg);
+                        //    byte[] byteImage = ms.ToArray();
+                        //    var SigBase64 = Convert.ToBase64String(byteImage);
+                        //}
+
+                        var base64Type = "";
+
+                        if (temp.FileType == "image/jpeg")
+                        {
+                            base64Type = "data:image/jpeg;base64,";
+                        }
+                        else if (temp.FileType == "image/png")
+                        {
+                            base64Type = "data:image/png;base64,";
+                        }
+
+
+                        MemoryStream stream = new MemoryStream();
+                        string filePath = fileList[i] != null ? (Path.Combine(fileList[i].FilePath + fileList[i].FileName)) : GeneralConstants.IMG_PLACEHOLDER;
+
+                        bool isFileExists = false;
+                        if (fileList[i] != null)
+                        {
+                            try
+                            {
+                                ObjectStat stat = await _mc.StatObjectAsync("uploaded", filePath);
+                                isFileExists = true;
+                            }
+                            catch (ObjectNotFoundException)
+                            {
+
+                            }
+                        }
+                        if (isFileExists && !temp.FileType.Contains("application/pdf"))
+                        {
+                            await _mc.GetObjectAsync("uploaded", filePath, b => b.CopyTo(stream));
+
+                            var image = Bitmap.FromStream(stream);
+                            System.IO.MemoryStream ms = new MemoryStream();
+                            image.Save(ms, ImageFormat.Jpeg);
+                            byte[] byteImage = ms.ToArray();
+                            temp.Base64 = base64Type + Convert.ToBase64String(byteImage);
+                        }
+
+                        temp.CreateDate = fileList[i].CreatedAt.ToString("dd/MM/yyyy");
+                        temp.CreatedBy = fileList[i].CreatedBy;
+                        result.Add(temp);
+                    }
+                }
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
+            return Ok(result);
+        }
+
         [HttpGet("GetAllFiles")]
         public async Task<IActionResult> GetAllFiles(string trxId, string flag, CancellationToken cancellationToken) {
             List<FileUpload> fileList = await _dbOMNI.FileUpload.Where(b => b.IsDeleted == GeneralConstants.NO && b.TrxId == int.Parse(trxId) && b.Flag == flag).ToListAsync(cancellationToken);
@@ -158,41 +253,6 @@ namespace OMNI.API.Controllers
             return result;
         }
 
-        //public async Task<string> GetFilePath(FileUpload file)
-        //{
-        //    string result = Path.Combine(file.FilePath + file.FileName);
-        //    try
-        //    {
-        //        ObjectStat stat = await _mc.StatObjectAsync("uploaded", result);
-        //    }
-        //    catch (ObjectNotFoundException)
-        //    {
-        //        throw new FileNotFoundException();
-        //    }
-        //    return result;
-        //}
-
-        //public IActionResult ViewFile(int id)
-        //{
-        //    UploadFile fileData = _uploadFileService.GetAllWithFilter(b => b.TrxId == Id && b.Flag == "ICONSV2").OrderByDescending(b => b.Id).FirstOrDefault();
-        //    MemoryStream pdfStream = new MemoryStream();
-        //    if (fileData == null) return NotFound();
-        //    string filePath = GeneralConstant.URL_DOWNLOAD_UPLOAD_NEW + fileData.FilePath + fileData.FileName;
-        //    byte[] pdfByteArray = System.IO.File.ReadAllBytes(filePath);
-
-        //    if (fileData.ContentType == "application/pdf")
-        //    {
-        //        pdfStream.Write(pdfByteArray, 0, pdfByteArray.Length);
-        //        pdfStream.Position = 0;
-
-        //        return new FileStreamResult(pdfStream, "application/pdf");
-        //    }
-        //    else
-        //    {
-        //        return File(pdfByteArray, fileData.ContentType, fileData.FileName);
-        //    }
-        //}
-
         [HttpGet("GetContentType")]
         public async Task<string> GetContentType(string id, CancellationToken cancellationToken)
         {
@@ -250,6 +310,7 @@ namespace OMNI.API.Controllers
                     byte[] byteArray = await System.IO.File.ReadAllBytesAsync(GeneralConstants.IMG_PLACEHOLDER);
                     stream.Write(byteArray, 0, byteArray.Length);
                 }
+
                 stream.Position = 0;
                 FileStreamResult result = new FileStreamResult(stream, isFileExists && file != null ? file.ContentType : @"image/png");
                 if (isFileNameFromDb)
@@ -267,48 +328,6 @@ namespace OMNI.API.Controllers
                 throw ex;
             }
         }
-
-        //public async Task<ReadFileModel> ReadFileByte(int id, string flag)
-        //{
-        //    FileUpload file = await _dbOMNI.Set<FileUpload>().SingleOrDefaultAsync(b => b.Id == id && b.IsDeleted == GeneralConstants.NO);
-        //    return await ReadFileByte(file);
-        //}
-
-        //public async Task<ReadFileModel> ReadFileByte(FileUpload file)
-        //{
-        //    string filePath = file != null ? (Path.Combine(file.FilePath + file.FileName)) : GeneralConstants.IMG_PLACEHOLDER;
-
-        //    bool isFileExists = false;
-        //    if (file != null)
-        //    {
-        //        try
-        //        {
-        //            ObjectStat stat = await _mc.StatObjectAsync("uploaded", filePath);
-        //            isFileExists = true;
-        //        }
-        //        catch (ObjectNotFoundException)
-        //        {
-
-        //        }
-        //    }
-
-        //    byte[] byteArray = null;
-        //    if (isFileExists)
-        //        using (MemoryStream ms = new MemoryStream())
-        //        {
-        //            await _mc.GetObjectAsync("uploaded", filePath, b => b.CopyTo(ms));
-        //            byteArray = ms.ToArray();
-        //        }
-        //    else
-        //        byteArray = await System.IO.File.ReadAllBytesAsync(GeneralConstants.IMG_PLACEHOLDER);
-
-        //    return new ReadFileModel
-        //    {
-        //        ContentType = isFileExists ? file.ContentType : @"image/png",
-        //        FileContents = byteArray,
-        //        FileName = isFileExists ? file.FileName : "404.jpg"
-        //    };
-        //}
 
         public async Task UploadFile(string path, string createBy, int trxId, IFormFile file, bool isUpdate = false, string Flag = null, string remark = null, bool autoRename = false, bool isCompress = false)
         {
