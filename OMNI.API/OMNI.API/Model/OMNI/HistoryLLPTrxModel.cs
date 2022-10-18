@@ -8,8 +8,16 @@ namespace OMNI.API.Model.OMNI
     public class HistoryLLPTrxModel : BaseModel
     {
         public int LLPTrxId { get; set; }
-        public string SpesifikasiJenis { get; set; }
+        public int PeralatanOSRId { get; set; }
+        public int SpesifikasiJenisId { get; set; }
+        public string PeralatanOSR { get; set; }
+        public string PeralatanOSRName { get; set; }
+        public string Jenis { get; set; }
+        public string JenisName { get; set; }
+        public string SatuanJenis { get; set; }
         public string Port { get; set; }
+        public string KodeInventory { get; set; }
+        public string Region { get; set; }
         public string QRCode { get; set; }
         public string QRCodeText { get; set; }
         public decimal DetailExisting { get; set; }
@@ -18,18 +26,18 @@ namespace OMNI.API.Model.OMNI
         public decimal TotalExistingKeseluruhan { get; set; }
         public decimal TotalKebutuhanHubla { get; set; }
         public decimal SelisihHubla { get; set; }
-        public string KesesuaianMP58 { get; set; }
+        public string KesesuaianPM58 { get; set; }
         public decimal TotalKebutuhanOSCP { get; set; }
         public decimal SelisihOSCP { get; set; }
         public string KesesuaianOSCP { get; set; }
         public decimal PersentaseOSCP { get; set; }
         public decimal PersentaseHubla { get; set; }
+        public decimal RekomendasiHubla { get; set; }
+        public decimal RekomendasiOSCP { get; set; }
+        public int Year { get; set; }
         public string Brand { get; set; }
         public string SerialNumber { get; set; }
-        public string Remark { get; set; }
-        public string Status { get; set; }
         public string NoAsset { get; set; }
-        public int Year { get; set; }
-        public string TrxStatus { get; set; }
+        public string Status { get; set; }
     }
 }
