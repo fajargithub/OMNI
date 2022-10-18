@@ -34,5 +34,6 @@ namespace OMNI.API.Model
         [JsonIgnore]
         public IFormFileCollection Files { get; set; }
         public string CreateDate { get; set; }
+        public string UpdateDate { get; set; }
     }
 }
