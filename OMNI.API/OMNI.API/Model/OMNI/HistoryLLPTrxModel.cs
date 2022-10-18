@@ -39,5 +39,6 @@ namespace OMNI.API.Model.OMNI
         public string SerialNumber { get; set; }
         public string NoAsset { get; set; }
         public string Status { get; set; }
+        public string TrxStatus { get; set; }
     }
 }

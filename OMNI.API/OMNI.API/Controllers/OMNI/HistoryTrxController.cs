@@ -34,8 +34,49 @@ namespace OMNI.API.Controllers.OMNI
             public string KesesuaianPM58 { get; set; }
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
+        {
+            HistoryLLPTrxModel result = new HistoryLLPTrxModel();
+            var data = await _dbOMNI.HistoryLLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id)
+                .Include(b => b.SpesifikasiJenis)
+                .Include(b => b.SpesifikasiJenis.PeralatanOSR)
+                .Include(b => b.SpesifikasiJenis.Jenis)
+                .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
+            if (data != null)
+            {
+                result.Id = data.Id;
+                result.PeralatanOSR = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Id.ToString() : "-";
+                result.PeralatanOSRName = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Name : "-";
+                result.Jenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Id.ToString() : "-";
+                result.JenisName = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Name : "-";
+                result.SatuanJenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Satuan : "-";
+                result.KodeInventory = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.KodeInventory : "-";
+                result.Port = data.Port;
+                result.QRCode = data.QRCode;
+                result.QRCodeText = data.QRCodeText;
+                result.Status = data.Status;
+                result.DetailExisting = data.DetailExisting;
+                result.Kondisi = data.Kondisi;
+                result.TotalExistingJenis = data.TotalExistingJenis;
+                result.TotalExistingKeseluruhan = data.TotalExistingKeseluruhan;
+                result.TotalKebutuhanHubla = data.TotalKebutuhanHubla;
+                result.SelisihHubla = data.SelisihHubla;
+                result.Brand = data.Brand;
+                result.NoAsset = data.NoAsset;
+                result.SerialNumber = data.SerialNumber;
+                result.Remark = data.Remark;
+                result.PersentaseHubla = data.PersentaseHubla;
+                result.TotalKebutuhanOSCP = data.TotalKebutuhanOSCP;
+                result.SelisihOSCP = data.SelisihOSCP;
+                result.KesesuaianOSCP = data.KesesuaianOSCP;
+                result.PersentaseOSCP = data.PersentaseOSCP;
+            }
+            return Ok(result);
+        }
+
         [HttpGet("GetAllHistoryHistoryLLPTrx")]
-        public async Task<IActionResult> GetAllHistoryHistoryLLPTrx(int trxId, string port, int year, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllHistoryLLPTrx(int trxId, string port, int year, CancellationToken cancellationToken)
         {
             int lastSpesifikasiJenisId = 0;
             int lastSpesifikasiJenisId_2 = 0;
@@ -356,6 +397,7 @@ namespace OMNI.API.Controllers.OMNI
                         temp.Status = list[i].Status;
                         temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
                         temp.CreatedBy = list[i].CreatedBy;
+                        temp.TrxStatus = list[i].TrxStatus;
                         result.Add(temp);
                     }
 
@@ -470,124 +512,46 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         // GET api/<ValuesController>/5
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancellationToken)
+        [HttpGet("GetAllHistoryLLPTrx")]
+        public async Task<IActionResult> GetAllHistoryLLPTrx([FromRoute] int id, CancellationToken cancellationToken)
         {
-            LampiranModel result = new LampiranModel();
-            var temp = await _dbOMNI.Lampiran.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id).FirstOrDefaultAsync(cancellationToken);
-            if (temp != null)
+            HistoryLLPTrxModel result = new HistoryLLPTrxModel();
+            var data = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id)
+                .Include(b => b.SpesifikasiJenis)
+                .Include(b => b.SpesifikasiJenis.PeralatanOSR)
+                .Include(b => b.SpesifikasiJenis.Jenis)
+                .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
+            if (data != null)
             {
-                result.Id = temp.Id;
-                result.Name = temp.Name;
-                result.LampiranType = temp.LampiranType;
-                result.Port = temp.Port;
-                result.StartDate = temp.StartDate.HasValue ? temp.StartDate.Value.ToString("MM/dd/yyyy") : "";
-                result.EndDate = temp.EndDate.HasValue ? temp.EndDate.Value.ToString("MM/dd/yyyy") : "";
-                result.Remark = temp.Remark;
+                result.Id = data.Id;
+                result.PeralatanOSR = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Id.ToString() : "-";
+                result.PeralatanOSRName = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.PeralatanOSR.Name : "-";
+                result.Jenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Id.ToString() : "-";
+                result.JenisName = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Name : "-";
+                result.SatuanJenis = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.Satuan : "-";
+                result.KodeInventory = data.SpesifikasiJenis != null ? data.SpesifikasiJenis.Jenis.KodeInventory : "-";
+                result.Port = data.Port;
+                result.QRCode = data.QRCode;
+                result.QRCodeText = data.QRCodeText;
+                result.Status = data.Status;
+                result.DetailExisting = data.DetailExisting;
+                result.Kondisi = data.Kondisi;
+                result.TotalExistingJenis = data.TotalExistingJenis;
+                result.TotalExistingKeseluruhan = data.TotalExistingKeseluruhan;
+                result.TotalKebutuhanHubla = data.TotalKebutuhanHubla;
+                result.SelisihHubla = data.SelisihHubla;
+                result.Brand = data.Brand;
+                result.NoAsset = data.NoAsset;
+                result.SerialNumber = data.SerialNumber;
+                result.Remark = data.Remark;
+                result.PersentaseHubla = data.PersentaseHubla;
+                result.TotalKebutuhanOSCP = data.TotalKebutuhanOSCP;
+                result.SelisihOSCP = data.SelisihOSCP;
+                result.KesesuaianOSCP = data.KesesuaianOSCP;
+                result.PersentaseOSCP = data.PersentaseOSCP;
             }
+
             return Ok(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddEdit([FromForm] LampiranModel model, CancellationToken cancellationToken)
-        {
-            DateTime nullDate = new DateTime();
-            Lampiran data = new Lampiran();
-            if (model.Id > 0)
-            {
-                data = await _dbOMNI.Lampiran.Where(b => b.Id == model.Id).FirstOrDefaultAsync(cancellationToken);
-                data.LampiranType = model.LampiranType;
-                data.Name = model.Name;
-                data.Port = model.Port;
-                data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
-                data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
-                data.Remark = model.Remark;
-                data.UpdatedAt = DateTime.Now;
-                data.UpdatedBy = "admin";
-                _dbOMNI.Lampiran.Update(data);
-                await _dbOMNI.SaveChangesAsync(cancellationToken);
-            }
-            else
-            {
-                try
-                {
-                    data.LampiranType = model.LampiranType;
-                    data.Name = model.Name;
-                    data.Port = model.Port;
-                    data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
-
-                    if (data.LampiranType == "PENGESAHAN")
-                    {
-                        data.EndDate = DateTime.Now.AddDays(910);
-                    }
-                    else if (data.LampiranType == "VERIFIKASI1")
-                    {
-                        var findPengesahan = await _dbOMNI.Lampiran.Where(b => b.LampiranType == "PENGESAHAN").OrderByDescending(b => b.Id).FirstOrDefaultAsync(cancellationToken);
-                        if (findPengesahan != null)
-                        {
-                            data.EndDate = findPengesahan.EndDate.Value.AddDays(910);
-                        }
-                    }
-                    else
-                    {
-                        data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
-                    }
-
-                    data.Remark = model.Remark;
-                    data.CreatedAt = DateTime.Now;
-                    data.CreatedBy = "admin";
-                    data.UpdatedBy = "admin";
-                    await _dbOMNI.Lampiran.AddAsync(data, cancellationToken);
-                    await _dbOMNI.SaveChangesAsync(cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-            }
-
-            string fileFlag = "";
-
-            if (data.LampiranType == "PENILAIAN")
-            {
-                fileFlag = GeneralConstants.OSMOSYS_PENILAIAN;
-            }
-            else if (data.LampiranType == "PENGESAHAN")
-            {
-                fileFlag = GeneralConstants.OSMOSYS_PENGESAHAN;
-            }
-            else if (data.LampiranType == "VERIFIKASI1" || data.LampiranType == "VERIFIKASI2")
-            {
-                fileFlag = GeneralConstants.OSMOSYS_VERIFIKASI;
-            }
-
-            if (model.Files != null)
-            {
-                if (model.Files.Count() > 0)
-                {
-                    for (int i = 0; i < model.Files.Count(); i++)
-                    {
-                        await UploadFileWithReturn(path: $"OMNI/{data.Id}/Files/", createBy: data.CreatedBy, trxId: data.Id, file: model.Files[i], Flag: fileFlag, isUpdate: model.Files != null, remark: null);
-                    }
-
-                }
-            }
-
-            return Ok(new ReturnJson { Payload = data });
-        }
-
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id:int}")]
-        public async Task<Lampiran> Delete([FromRoute] int id, CancellationToken cancellationToken)
-        {
-            Lampiran data = await _dbOMNI.Lampiran.Where(b => b.Id == id).FirstOrDefaultAsync(cancellationToken);
-            data.IsDeleted = GeneralConstants.YES;
-            data.UpdatedBy = "admin";
-            data.UpdatedAt = DateTime.Now;
-            _dbOMNI.Lampiran.Update(data);
-            await _dbOMNI.SaveChangesAsync(cancellationToken);
-
-            return data;
         }
     }
 }
