@@ -8,11 +8,13 @@ namespace OMNI.Web.Data.Dao
 {
     public class HistoryLatihanTrx : BaseDao
     {
+        public int LatihanTrxId { get; set; }
         public virtual Latihan Latihan { get; set; }
         public string Port { get; set; }
         public DateTime TanggalPelaksanaan { get; set; }
         public decimal SelisihHubla { get; set; }
         public string KesesuaianPM58 { get; set; }
         public decimal PersentaseLatihan { get; set; }
+        public int Year { get; set; }
     }
 }

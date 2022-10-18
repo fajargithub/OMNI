@@ -7,9 +7,11 @@ namespace OMNI.Web.Models.Master
 {
     public class HistoryLLPTrxModel : BaseModel
     {
+        public int LLPTrxId { get; set; }
         public string SpesifikasiJenis { get; set; }
         public string Port { get; set; }
         public string QRCode { get; set; }
+        public string QRCodeText { get; set; }
         public decimal DetailExisting { get; set; }
         public string Kondisi { get; set; }
         public decimal TotalExistingJenis { get; set; }
@@ -21,5 +23,12 @@ namespace OMNI.Web.Models.Master
         public decimal SelisihOSCP { get; set; }
         public string KesesuaianOSCP { get; set; }
         public decimal PersentaseOSCP { get; set; }
+        public decimal PersentaseHubla { get; set; }
+        public string Brand { get; set; }
+        public string SerialNumber { get; set; }
+        public string Remark { get; set; }
+        public string Status { get; set; }
+        public string NoAsset { get; set; }
+        public int Year { get; set; }
     }
 }
