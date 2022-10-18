@@ -143,6 +143,7 @@
     <script>
         var port = "@ViewBag.Port";
         var selectedYear = parseInt("@ViewBag.Year");
+        var trxId = parseInt("@ViewBag.TrxId");
 
             $(".hidden-tr").hide();
 
@@ -164,5 +165,326 @@
         if (mm < 10) mm = '0' + mm;
 
         const formattedToday = dd + '/' + mm + '/' + yyyy;
+    </script>
+    <script>
+        $('#table_history_llptrx').DataTable().destroy();
+
+        var totalPersentaseHubla = 0;
+        var totalPersentaseOSCP = 0;
+
+        /* COLUMN FILTER  */
+        var dt = $('#table_history_llptrx').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fal fa-download"></i> Export Excel',
+                    titleAttr: 'Generate Excel',
+                    className: 'btn btn-sm btn-outline-primary',
+                    title: 'Data LLP ' + formattedToday,
+                    exportOptions: {
+                        columns: [1, 2, 3, 4, 6, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+                    }
+                }
+            ],
+            "ordering": false,
+            "scrollX": true,
+            "scrollY": '400px',
+            "scrollCollapse": true,
+            "paging": false,
+            "fixedColumns": {
+                leftColumns: 7
+                // rightColumns: 1
+            },
+            "ajax": {
+                "url": base_api + 'HistoryTrx/GetAllHistoryLLPTrx?trxId=' + trxId + 'port=' + port + "&year=" + selectedYear,
+                "type": 'GET'
+            },
+            "columns": [
+                /*{ "data": null },*/
+                {
+                    name: 'peralatanOSR',
+                    title: 'Peralatan OSR',
+                    data: 'peralatanOSR',
+                    render: function (row, data, iDisplayIndex) {
+                        var result = iDisplayIndex.peralatanOSR;
+                        if (result == "Total Persentase") {
+                            result = "<b>Total Persentase</b>";
+                        }
+                        return result;
+                    }
+                },
+                { "data": "jenis" },
+                {
+                    name: 'satuanJenis',
+                    title: 'Satuan',
+                    data: 'satuanJenis'
+                },
+                { "data": "detailExisting" },
+                {
+                    "targets": -1,
+                    "data": null,
+                    "render": function (row, data, iDisplayIndex) {
+                        var image = "<a href='javascript:void(0)' onclick='qrcodeClick(" + iDisplayIndex.id + ")'><img src='" + iDisplayIndex.qrCode + "' alt='' width='35' id='qrcode-" + iDisplayIndex.id + "'></a>";
+                        return image;
+                    }
+                },
+                {
+                    name: 'kondisi',
+                    title: 'Kondisi',
+                    target: -1,
+                    data: 'kondisi',
+                    "render": function (row, data, iDisplayIndex) {
+                        var kondisi = "";
+
+                        if (iDisplayIndex.kondisi == "Baik") {
+                            kondisi = "<b style='color:green;'>Baik</b>";
+                        } else if (iDisplayIndex.kondisi == "Sedang") {
+                            kondisi = "<b style='color:darkorange;'>Sedang</b>";
+                        } else if (iDisplayIndex.kondisi == "Buruk") {
+                            kondisi = "<b style='color:red;'>Buruk</b>";
+                        }
+
+                        return kondisi;
+                    }
+                },
+                {
+                    name: 'totalExistingJenis',
+                    title: 'Total Existing di Lokasi (Jenis)',
+                    data: 'totalExistingJenis'
+                },
+                {
+                    name: 'totalExistingKeseluruhan',
+                    title: 'Total Existing di Lokasi (Keseluruhan)',
+                    data: 'totalExistingKeseluruhan'
+                },
+                {
+                    name: 'rekomendasiHubla',
+                    title: 'Rekomendasi Hubla',
+                    data: 'rekomendasiHubla'
+                },
+                {
+                    name: 'totalKebutuhanHubla',
+                    title: 'Total Kebutuhan sesuai Hubla',
+                    data: 'totalKebutuhanHubla'
+                },
+                {
+                    name: 'selisihHubla',
+                    title: 'Selisih Hubla',
+                    data: 'selisihHubla'
+                },
+                {
+                    name: 'kesesuaianPM58',
+                    title: 'Kesesuaian PM.58',
+                    target: -1,
+                    data: 'kesesuaianPM58',
+                    render: function (row, data, iDisplayIndex) {
+                        var result = "";
+
+                        if (iDisplayIndex.kesesuaianPM58 == "TERPENUHI") {
+                            result = "<b style='color:green;'>TERPENUHI</b>";
+                        } else if (iDisplayIndex.kesesuaianPM58 == "KURANG") {
+                            result = "<b style='color:red;'>KURANG</b>";
+                        }
+
+                        return result;
+                    }
+                },
+                {
+                    name: 'persentaseHubla',
+                    title: 'Persentase Hubla',
+                    data: 'persentaseHubla',
+                    render: function (row, data, iDisplayIndex) {
+                        result = "";
+                        if (iDisplayIndex.peralatanOSR == "Total Persentase") {
+                            result = "<b><i id='totalPersentaseHubla'></i></b>";
+                        } else {
+                            if (iDisplayIndex.persentaseHubla !== null) {
+                                if (iDisplayIndex.rekomendasiHubla > 0) {
+                                    result = iDisplayIndex.persentaseHubla + "%";
+                                    totalPersentaseHubla += parseFloat(iDisplayIndex.persentaseHubla);
+                                } else {
+                                    result = "-";
+                                }
+
+                            }
+                        }
+
+                        return result;
+                    }
+                },
+                {
+                    name: 'rekomendasiOSCP',
+                    title: 'Rekomendasi OSCP',
+                    data: 'rekomendasiOSCP'
+                },
+                {
+                    name: 'totalKebutuhanOSCP',
+                    title: 'Total Kebutuhan sesuai OSCP',
+                    data: 'totalKebutuhanOSCP'
+                },
+                {
+                    name: 'selisihOSCP',
+                    title: 'Selisih OSCP',
+                    data: 'selisihOSCP'
+                },
+                {
+                    name: 'kesesuaianOSCP',
+                    title: 'Kesesuaian OSCP',
+                    target: -1,
+                    data: 'kesesuaianOSCP',
+                    render: function (row, data, iDisplayIndex) {
+                        var result = "";
+
+                        if (iDisplayIndex.kesesuaianOSCP == "TERPENUHI") {
+                            result = "<b style='color:green;'>TERPENUHI</b>";
+                        } else if (iDisplayIndex.kesesuaianOSCP == "KURANG") {
+                            result = "<b style='color:red;'>KURANG</b>";
+                        }
+
+                        return result;
+                    }
+                },
+                {
+                    name: 'persentaseOSCP',
+                    title: 'Persentase OSCP',
+                    data: 'persentaseOSCP',
+                    render: function (row, data, iDisplayIndex) {
+                        result = "";
+                        if (iDisplayIndex.peralatanOSR == "Total Persentase") {
+                            result = "<b><i id='totalPersentaseOSCP'></i></b>";
+                        } else {
+                            if (iDisplayIndex.persentaseOSCP !== null) {
+                                if (iDisplayIndex.persentaseOSCP > 0) {
+                                    result = iDisplayIndex.persentaseOSCP + "%";
+                                    totalPersentaseOSCP += parseFloat(iDisplayIndex.persentaseOSCP);
+                                } else {
+                                    result = "-";
+                                }
+
+                            }
+                        }
+
+
+                        return result;
+                    }
+                },
+                {
+                    name: 'brand',
+                    title: 'Brand',
+                    data: 'brand'
+                },
+                {
+                    name: 'serialNumber',
+                    title: 'Serial Number',
+                    data: 'serialNumber'
+                },
+                {
+                    name: 'noAsset',
+                    title: 'No Asset',
+                    data: 'noAsset'
+                },
+                {
+                    name: 'status',
+                    title: 'Status',
+                    target: -1,
+                    data: 'status',
+                    render: function (row, data, iDisplayIndex) {
+                        var result = "";
+
+                        if (iDisplayIndex.status == "STAND BY") {
+                            result = "<b style='color:darkgrey;'>STAND BY</b>";
+                        } else if (iDisplayIndex.status == "RENTAL") {
+                            result = "<b style='color:darkorange;'>RENTAL</b>";
+                        } else if (iDisplayIndex.status == "MAINTENANCE") {
+                            result = "<b style='color:darkred;'>MAINTENANCE</b>";
+                        }
+
+                        return result;
+                    }
+                },
+                {
+                    name: 'createdBy',
+                    title: 'Created By',
+                    data: 'createdBy'
+                },
+                {
+                    name: 'createDate',
+                    title: 'Created At',
+                    data: 'createDate'
+                },
+                {
+                    name: 'trxStatus',
+                    title: 'Status Submit',
+                    data: 'trxStatus'
+                }
+            ],
+            createdRow: function (row, data, dataIndex) {
+            },
+            rowsGroup: [
+                'peralatanOSR:name',
+                'satuanJenis:name',
+                'totalExistingJenis:name',
+                'totalExistingKeseluruhan:name',
+                'rekomendasiHubla:name',
+                'totalKebutuhanHubla:name',
+                'selisihHubla:name',
+                'kesesuaianPM58:name',
+                'persentaseHubla:name',
+                'rekomendasiOSCP:name',
+                'totalKebutuhanOSCP:name',
+                'selisihOSCP:name',
+                'kesesuaianOSCP:name',
+                'persentaseOSCP:name',
+            ],
+            "order": [[1, 'asc']],
+            rowCallback: function (row, data, iDisplayIndex) {
+            },
+            "initComplete": countTotalPercentageLLPTrx
+        });
+
+
+        $("#table_history_llptrx thead th input[type=text]").on('keyup change',
+            function () {
+
+                dt
+                    .column($(this).parent().index() + ':visible')
+                    .search(this.value)
+                    .draw();
+
+            });
+
+        function qrcodeClick(id) {
+            $.ajax({
+                url: base_api + "HistoryTrx/GetHistorytLLPTrxById?id=" + id,
+                method: 'GET',
+                success: function (result) {
+                    Swal.fire({
+                        imageUrl: result.data.qrCode,
+                        imageAlt: 'QR Code',
+                        html: 'No Asset: <a href="javascript:void(0)" class="openimage" data-base64="' + result.data.qrCode + '">' + result.data.qrCodeText + '</a> '
+                    })
+                }
+            });
+        }
+
+        function llpTrxRemark(id) {
+            $.get(base_api + 'Home/GetLLPTrxById?id=' + id, function (result) {
+                Swal.fire(
+                    'Remark',
+                    result.data.remark,
+                    'info'
+                )
+            });
+        }
+
+        $(document).on('click', '.openimage', function () {
+            var base64 = $(this).attr("data-base64");
+            var image = new Image();
+            image.src = base64;
+            var w = window.open("");
+            w.document.write(image.outerHTML);
+        });
+
     </script>
 }
