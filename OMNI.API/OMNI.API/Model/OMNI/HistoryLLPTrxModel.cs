@@ -30,5 +30,6 @@ namespace OMNI.API.Model.OMNI
         public string Status { get; set; }
         public string NoAsset { get; set; }
         public int Year { get; set; }
+        public string TrxStatus { get; set; }
     }
 }

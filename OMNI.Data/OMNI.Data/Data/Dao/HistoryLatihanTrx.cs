@@ -16,5 +16,6 @@ namespace OMNI.Data.Data.Dao
         public string KesesuaianPM58 { get; set; }
         public decimal PersentaseLatihan { get; set; }
         public int Year { get; set; }
+        public string TrxStatus { get; set; }
     }
 }

@@ -71,8 +71,6 @@ namespace OMNI.API.Controllers.OMNI
         {
             int lastSpesifikasiJenisId = 0;
             int lastSpesifikasiJenisId_2 = 0;
-            //int lastSpesifikasiJenisId_3 = 0;
-            //int lastSpesifikasiJenisId_4 = 0;
             int lastPeralatanOSRId = 0;
             int lastPeralatanOSRId_2 = 0;
             decimal totalKesesuaianHubla = 0;
@@ -552,6 +550,12 @@ namespace OMNI.API.Controllers.OMNI
             _dbOMNI.LLPTrx.Update(data);
             await _dbOMNI.SaveChangesAsync(cancellationToken);
 
+            //Update History LLPTrx
+            HistoryLLPTrx history = await _dbOMNI.HistoryLLPTrx.Where(b => b.LLPTrxId == model.PrimaryId).OrderByDescending(b => b.Id).FirstOrDefaultAsync(cancellationToken);
+            history.QRCode = model.QRCode;
+            _dbOMNI.HistoryLLPTrx.Update(history);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
+
             return Ok(new ReturnJson { Payload = data });
         }
 
@@ -590,7 +594,6 @@ namespace OMNI.API.Controllers.OMNI
                     data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
 
                     data.Port = model.Port;
-                    //data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
                     data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
                     data.DetailExisting = model.DetailExisting;
                     data.Kondisi = model.Kondisi;
@@ -610,7 +613,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.SerialNumber = model.SerialNumber;
                     data.Remark = model.Remark;
                     data.UpdatedAt = DateTime.Now;
-                    data.UpdatedBy = "admin";
+                    data.UpdatedBy = model.UpdatedBy;
                     _dbOMNI.LLPTrx.Update(data);
                     await _dbOMNI.SaveChangesAsync(cancellationToken);
 
@@ -626,7 +629,7 @@ namespace OMNI.API.Controllers.OMNI
                         }
                     }
 
-                    return Ok(new ReturnJson { Id = data.Id });
+                    //return Ok(new ReturnJson { Id = data.Id });
                 } else
                 {
                     return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "No Asset already exist" });
@@ -644,7 +647,6 @@ namespace OMNI.API.Controllers.OMNI
                     data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
 
                     data.Port = model.Port;
-                   // data.QRCode = !string.IsNullOrWhiteSpace(model.QRCode) ? model.QRCode : "";
                     data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
                     data.DetailExisting = model.DetailExisting;
                     data.Kondisi = model.Kondisi;
@@ -664,7 +666,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.SerialNumber = model.SerialNumber;
                     data.Remark = model.Remark;
                     data.CreatedAt = DateTime.Now;
-                    data.CreatedBy = "admin";
+                    data.CreatedBy = model.CreatedBy;
                     await _dbOMNI.LLPTrx.AddAsync(data, cancellationToken);
                     await _dbOMNI.SaveChangesAsync(cancellationToken);
 
@@ -680,11 +682,15 @@ namespace OMNI.API.Controllers.OMNI
                         }
                     }
 
-                    return Ok(new ReturnJson { Id = data.Id });
+                    //return Ok(new ReturnJson { Id = data.Id });
                 }
             }
 
-            //return Ok(new ReturnJson { });
+            //Add LLPTrx History
+            await AddHistory(data, model, cancellationToken);
+
+            return Ok(new ReturnJson { Id = data.Id });
+
         }
 
         //// DELETE api/<ValuesController>/5
@@ -693,7 +699,6 @@ namespace OMNI.API.Controllers.OMNI
         {
             LLPTrx data = await _dbOMNI.LLPTrx.Where(b => b.Id == id).Include(b => b.SpesifikasiJenis).FirstOrDefaultAsync(cancellationToken);
             data.IsDeleted = GeneralConstants.YES;
-            data.UpdatedBy = "admin";
             data.UpdatedAt = DateTime.Now;
             _dbOMNI.LLPTrx.Update(data);
             await _dbOMNI.SaveChangesAsync(cancellationToken);
@@ -744,7 +749,7 @@ namespace OMNI.API.Controllers.OMNI
             
             data.Remark = model.Remark;
             data.CreatedAt = DateTime.Now;
-            data.CreatedBy = "admin";
+            data.CreatedBy = model.CreatedBy;
             _dbOMNI.LLPHistoryStatus.Add(data);
             await _dbOMNI.SaveChangesAsync(cancellationToken);
 
@@ -753,12 +758,46 @@ namespace OMNI.API.Controllers.OMNI
                 llpTrx.Port = model.PortTo;
                 llpTrx.Status = model.Status;
                 llpTrx.UpdatedAt = DateTime.Now;
-                llpTrx.UpdatedBy = "admin";
+                llpTrx.UpdatedBy = model.UpdatedBy;
                 _dbOMNI.LLPTrx.Update(llpTrx);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
             }
 
             return Ok(new ReturnJson { });
+        }
+
+        public async Task<string> AddHistory(LLPTrx data, LLPTrxModel model, CancellationToken cancellationToken)
+        {
+            HistoryLLPTrx history = new HistoryLLPTrx();
+            history.LLPTrxId = data.Id;
+            history.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
+            history.Port = model.Port;
+            history.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
+            history.DetailExisting = model.DetailExisting;
+            history.Kondisi = model.Kondisi;
+            history.TotalExistingJenis = model.TotalExistingJenis;
+            history.TotalExistingKeseluruhan = model.TotalExistingKeseluruhan;
+            history.TotalKebutuhanHubla = model.TotalKebutuhanHubla;
+            history.SelisihHubla = model.SelisihHubla;
+            history.PersentaseHubla = model.PersentaseHubla;
+            history.TotalKebutuhanOSCP = model.TotalKebutuhanOSCP;
+            history.SelisihOSCP = model.SelisihOSCP;
+            history.KesesuaianOSCP = model.KesesuaianOSCP;
+            history.PersentaseOSCP = model.PersentaseOSCP;
+            history.Year = model.Year;
+            history.Brand = model.Brand;
+            history.NoAsset = model.NoAsset;
+            history.Status = model.Status;
+            history.SerialNumber = model.SerialNumber;
+            history.Remark = model.Remark;
+            history.CreatedAt = DateTime.Now;
+            history.CreatedBy = model.CreatedBy;
+            history.UpdatedAt = DateTime.Now;
+            history.UpdatedBy = model.UpdatedBy;
+            await _dbOMNI.HistoryLLPTrx.AddAsync(history, cancellationToken);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+            return "OK";
         }
     }
 }

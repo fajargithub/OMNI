@@ -31,5 +31,6 @@ namespace OMNI.Data.Data.Dao
         public string Status { get; set; }
         public string NoAsset { get; set; }
         public int Year { get; set; }
+        public string TrxStatus { get; set; }
     }
 }
