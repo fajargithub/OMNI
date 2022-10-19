@@ -11,6 +11,7 @@ namespace OMNI.Web.Models.Master
         public string Personil { get; set; }
         public string Port { get; set; }
         public string Name { get; set; }
+        public string Satuan { get; set; }
         public decimal TotalDetailExisting { get; set; }
         public string TanggalPelatihan { get; set; }
         public string TanggalExpired { get; set; }
@@ -19,5 +20,6 @@ namespace OMNI.Web.Models.Master
         public string KesesuaianPM58 { get; set; }
         public decimal PersentasePersonil { get; set; }
         public int Year { get; set; }
+        public string TrxStatus { get; set; }
     }
 }

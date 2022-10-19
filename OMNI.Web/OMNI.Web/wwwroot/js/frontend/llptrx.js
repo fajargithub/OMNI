@@ -328,8 +328,8 @@ var dt = $('#table_llp_trx').DataTable({
 
                     if (editable == "True") {
                         result += "<a class='dropdown-item' data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPHistoryStatus?llpTrxId=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "' title='Rental / Maintenance'><b style='color:teal;'><i class='fa fa-exchange'></i> Rental/Maintenance</b></a>" +
-                            "<a class='dropdown-item' data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' title='Edit'><b style='color:darkorange;'><i class='fa fa-pencil'></i> Edit</b></a>" +
-                            "<a class='dropdown-item' data-toggle='modal' data-target='#modal-add-edit' href='/HistoryTrx/HistoryLLPTrx?trxId=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' title='Edit'><b style='color:teal;'><i class='fa fa-history'></i> History</b></a>" +
+                            "<a class='dropdown-item' data-toggle='modal' data-backdrop='static' data-keyboard='false' data-target='#modal-add-edit' href='/Home/AddEditLLPTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' title='Edit'><b style='color:darkorange;'><i class='fa fa-pencil'></i> Edit</b></a>" +
+                            "<a class='dropdown-item' data-toggle='modal' data-target='#modal-history' href='/HistoryTrx/HistoryLLPTrx?trxId=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' title='Edit'><b style='color:teal;'><i class='fa fa-history'></i> History</b></a>" +
                             "<a class='dropdown-item btn-delete' href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' title='Delete'><b style='color:red;'><i class='fa fa-trash'></i> Delete</b></a>";
                     }
                     
@@ -405,7 +405,6 @@ $("#table_llp_trx thead th input[type=text]").on('keyup change',
     });
 
 function qrcodeClick(id) {
-    //window.open(base_api + "Home/QrCodeDetail?id=" + id);
     $.ajax({
         url: base_api + "Home/GetLLPTrxById?id=" + id,
         method: 'GET',

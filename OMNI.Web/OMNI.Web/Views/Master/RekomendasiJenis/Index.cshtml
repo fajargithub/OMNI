@@ -80,7 +80,6 @@
 
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Medium })
 @section ScriptsBlock {
-    <script src="~/js/datatable/datatable.js"></script>
     <script>
         $(document).ready(function () {
             var statusSurat = "@ViewBag.StatusSurat";

@@ -158,6 +158,14 @@ namespace OMNI.Web.Services.Trx
                 data.Add(new StringContent(m.Kondisi.ToString()), "Kondisi");
                 data.Add(new StringContent(m.Brand), "Brand");
                 data.Add(new StringContent(m.SerialNumber), "SerialNumber");
+                if (m.Id > 0)
+                {
+                    data.Add(new StringContent(m.UpdatedBy), "UpdatedBy");
+                }
+                else
+                {
+                    data.Add(new StringContent(m.CreatedBy), "CreatedBy");
+                }
                 if (string.IsNullOrEmpty(m.Remark))
                 {
                     m.Remark = "";

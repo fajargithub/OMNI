@@ -1,0 +1,139 @@
+﻿@{
+    ViewData["Title"] = "History Personil";
+    ViewData["PageName"] = "history_personil";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-history'></i>  History Personil";
+    ViewData["PageDescription"] = "";
+}
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                    History List
+                </h2>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <table id="table_history_personil_trx" class="table table-borderless table-hover table-striped w-100">
+                        <thead>
+                            <tr class="fw-500 text-uppercase">
+                                <th style="width:7%;">No</th>
+                                <th>Personil</th>
+                                <th>Nama Personil</th>
+                                <th style="width:70px;">Satuan</th>
+                                <th style="width:70px;">Tanggal Pelatihan</th>
+                                <th style="width:70px;">Tanggal Expired</th>
+                                <th style="width:80px;">Created By</th>
+                                <th style="width:80px;">Created At</th>
+                                <th style="width:80px;">Updated By</th>
+                                <th style="width:80px;">Updated At</th>
+                                <th style="width:80px;">Status Submit</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+            $(document).ready(function () {
+
+                var port = "@ViewBag.Port";
+                var selectedYear = parseInt("@ViewBag.Year");
+                var trxId = parseInt("@ViewBag.TrxId");
+
+                $('#table_history_personil_trx thead tr:eq(1) th').each(function (i) {
+                    $('select', this).on('change', function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+
+                    $('input', this).on('keyup change', function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+                });
+
+                var table = $('#table_history_personil_trx').DataTable(
+                    {
+                        "ordering": false,
+                        "scrollX": true,
+                        "scrollY": '400px',
+                        "scrollCollapse": true,
+                        "paging": false,
+                        order: [],
+                        columnDefs: [
+                            { "orderable": false, "targets": 10 }
+                        ],
+                        dom:
+                            "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+                            "<'row'<'col-sm-12'tr>>" +
+                            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                        buttons: [
+                            {
+                                text: '<i class="fal fa-filter"></i> Filter',
+                                className: 'btn btn-sm btn-outline-primary',
+                                action: function (e, dt, node, config) {
+                                    $('#table_history_personil_trx-filter').toggle();
+                                }
+                            },
+                        ],
+                        processing: true,
+                        "ajax": {
+                            "url": base_api + 'HistoryTrx/GetAllHistoryPersonilTrx?trxId=' + trxId + '&port=' + port + '&year=' + selectedYear,
+                            "type": 'GET'
+                        },
+                        "columns": [
+                            { "data": null },
+                            { "data": "personil" },
+                            { "data": "name" },
+                            { "data": "satuan" },
+                            { "data": "tanggalPelatihan" },
+                            { "data": "tanggalExpired" },
+                            { "data": "createdBy" },
+                            { "data": "createDate" },
+                            { "data": "updatedBy" },
+                            { "data": "updateDate" },
+                            { "data": "trxStatus" }
+                        ],
+                        "order": [[1, 'asc']],
+                        rowCallback: function (row, data, iDisplayIndex) {
+                        },
+                        "initComplete": function (settings, json) {
+                        },
+                        "destroy": true
+                    }).ajax.reload();
+
+                table.on('order.dt search.dt', function () {
+                    table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            });
+
+        function historyQRCodeClick(id) {
+            console.log(id);
+            $.ajax({
+                url: base_api + "HistoryTrx/GetHistoryLLPTrxById?id=" + id,
+                method: 'GET',
+                success: function (result) {
+                    console.log(result);
+                    Swal.fire({
+                        imageUrl: result.data.qrCode,
+                        imageAlt: 'QR Code',
+                        html: 'No Asset: <a href="javascript:void(0)" class="openimage" data-base64="' + result.data.qrCode + '">' + result.data.qrCodeText + '</a> '
+                    })
+                }
+            });
+        }
+    </script>

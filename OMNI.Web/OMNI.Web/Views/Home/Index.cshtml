@@ -30,8 +30,8 @@
         text-align: center;
     }
 
-    .dataTables_filter{
-        margin-top:15px;
+    .dataTables_filter {
+        margin-top: 15px;
     }
 
     .buttons-excel {
@@ -47,9 +47,9 @@
         border: 0px solid #97a7c31c !important;
     }
 
-    .table-bordered th, .table-bordered td {
-        border: 0.5px solid #97a7c31c !important;
-    }
+        .table-bordered th, .table-bordered td {
+            border: 0.5px solid #97a7c31c !important;
+        }
 
     .dropdown-menu {
         left: -94px;
@@ -88,12 +88,13 @@
             </div>
         </div>
     </div>
-    @if (!string.IsNullOrEmpty(ViewBag.Info)) { 
+    @if (!string.IsNullOrEmpty(ViewBag.Info))
+    {
         <div class="col-xl-12">
             <i style="color:red;">@ViewBag.Info, klik <b style="color:dodgerblue;"><a href="/Lampiran">link</a></b> berikut</i>
         </div>
     }
- 
+
     <div class="col-xl-12">
         <br />
         <div id="panel-1" class="panel">
@@ -104,7 +105,7 @@
                 @if (ViewBag.Editable)
                 {
                     <div class="panel-toolbar">
-                        <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                        <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit" data-backdrop='static' data-keyboard='false'><i class="fal fa-plus"></i>  Add</a>
                     </div>
                 }
             </div>
@@ -157,11 +158,11 @@
                     PERSONIL
                 </h2>
                 @if (ViewBag.Editable)
-                { 
+                {
                     <div class="panel-toolbar">
                         <a asp-action="AddEditPersonilTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                     </div>
-                }    
+                }
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -199,12 +200,12 @@
                     LATIHAN
                 </h2>
                 @if (ViewBag.Editable)
-                { 
+                {
                     <div class="panel-toolbar">
                         <a asp-action="AddEditLatihanTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                     </div>
                 }
-                
+
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -254,6 +255,7 @@
     </div>
 </div>
 
+@await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-history", Type = ModalType.Right, Size = ModalSize.Large })
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Medium })
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-file", Type = ModalType.Right, Size = ModalSize.Medium })
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit-file", Type = ModalType.Right, Size = ModalSize.Medium })
@@ -263,7 +265,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/ashl1/datatables-rowsgroup@fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
-    <script src="~/js/datatable/datatable.js"></script>
+
 
     <script>
         @*var isManagement = "@ViewBag.Roles.Contains("OSMOSYS_ADMIN_REGION")";

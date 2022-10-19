@@ -113,8 +113,15 @@ namespace OMNI.Web.Services.Trx
                 data.Add(new StringContent(m.Port.ToString()), "Port");
                 data.Add(new StringContent(m.TanggalPelatihan.ToString()), "TanggalPelatihan");
                 data.Add(new StringContent(m.TanggalExpired.ToString()), "TanggalExpired");
-
-                if(m.Files != null)
+                if(m.Id > 0)
+                {
+                    data.Add(new StringContent(m.UpdatedBy), "UpdatedBy");
+                } else
+                {
+                    data.Add(new StringContent(m.CreatedBy), "CreatedBy");
+                }
+                
+                if (m.Files != null)
                 {
                     if (m.Files.Count() > 0)
                     {

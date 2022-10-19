@@ -9,7 +9,7 @@ namespace OMNI.Web.Models
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        public string CreatedBy { get; set; }
+        public string CreatedBy { get; set; } 
         public string UpdatedBy { get; set; }
         public string Activity { get; set; }
         public string StatusMessage { get; set; }
@@ -30,5 +30,6 @@ namespace OMNI.Web.Models
         [JsonIgnore]
         public IFormFileCollection Files { get; set; }
         public string CreateDate { get; set; }
+        public string UpdateDate { get; set; }
     }
 }

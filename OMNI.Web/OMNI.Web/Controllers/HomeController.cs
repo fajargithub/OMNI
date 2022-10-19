@@ -315,6 +315,14 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditLLPTrx(LLPTrxModel model)
         {
+            if(model.Id > 0)
+            {
+                model.UpdatedBy = UserData.Username;
+            } else
+            {
+                model.CreatedBy = UserData.Username;
+            }
+            
             var r = await _llpTrxService.AddEdit(model);
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {
@@ -382,6 +390,15 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditPersonilTrx(PersonilTrxModel model)
         {
+            if(model.Id > 0)
+            {
+                model.UpdatedBy = UserData.Username;
+            }
+            else
+            {
+                model.CreatedBy = UserData.Username;
+            }
+
             var r = await _personilTrxService.AddEdit(model);
 
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
