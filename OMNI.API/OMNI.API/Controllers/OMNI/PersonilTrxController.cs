@@ -232,9 +232,12 @@ namespace OMNI.API.Controllers.OMNI
                 data.TanggalExpired = !string.IsNullOrEmpty(model.TanggalExpired) ? DateTime.ParseExact(model.TanggalExpired, "MM/dd/yyyy", null) : nullDate;
                 data.UpdatedAt = DateTime.Now;
                 data.Year = model.Year;
-                data.UpdatedBy = "admin";
+                data.UpdatedBy = model.UpdatedBy;
                 _dbOMNI.PersonilTrx.Update(data);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
+                //Add History
+                await AddHistory(data.Id, model, "UPDATE", cancellationToken);
+
             }
             else
             {
@@ -246,9 +249,12 @@ namespace OMNI.API.Controllers.OMNI
                 data.TanggalPelatihan = !string.IsNullOrEmpty(model.TanggalPelatihan) ? DateTime.ParseExact(model.TanggalPelatihan, "MM/dd/yyyy", null) : nullDate;
                 data.TanggalExpired = !string.IsNullOrEmpty(model.TanggalExpired) ? DateTime.ParseExact(model.TanggalExpired, "MM/dd/yyyy", null) : nullDate;
                 data.CreatedAt = DateTime.Now;
-                data.CreatedBy = "admin";
+                data.CreatedBy = model.CreatedBy;
                 await _dbOMNI.PersonilTrx.AddAsync(data, cancellationToken);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                //Add History
+                await AddHistory(data.Id, model, "ADD", cancellationToken);
             }
 
             if(model.Files != null)
@@ -278,6 +284,29 @@ namespace OMNI.API.Controllers.OMNI
             await _dbOMNI.SaveChangesAsync(cancellationToken);
 
             return data;
+        }
+
+        public async Task<string> AddHistory(int TrxId, PersonilTrxModel model, string TrxStatus, CancellationToken cancellationToken)
+        {
+            DateTime nullDate = new DateTime();
+
+            HistoryPersonilTrx history = new HistoryPersonilTrx();
+            history.PersonilTrxId = TrxId;
+            history.Personil = await _dbOMNI.Personil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Personil)).FirstOrDefaultAsync(cancellationToken);
+            history.Port = model.Port;
+            history.Name = model.Name;
+            history.TanggalPelatihan = !string.IsNullOrEmpty(model.TanggalPelatihan) ? DateTime.ParseExact(model.TanggalPelatihan, "MM/dd/yyyy", null) : nullDate;
+            history.TanggalExpired = !string.IsNullOrEmpty(model.TanggalExpired) ? DateTime.ParseExact(model.TanggalExpired, "MM/dd/yyyy", null) : nullDate;
+            history.Year = model.Year;
+            history.CreatedBy = model.CreatedBy;
+            history.CreatedAt = DateTime.Now;
+            history.UpdatedBy = model.UpdatedBy;
+            history.UpdatedAt = DateTime.Now;
+            history.TrxStatus = TrxStatus;
+            await _dbOMNI.HistoryPersonilTrx.AddAsync(history, cancellationToken);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+            return "OK";
         }
     }
 }

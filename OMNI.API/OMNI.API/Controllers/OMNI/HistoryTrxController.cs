@@ -26,14 +26,7 @@ namespace OMNI.API.Controllers.OMNI
             _mc = mc;
         }
 
-        public class CountData
-        {
-            public int TrxId { get; set; }
-            public decimal TotalCount { get; set; }
-            public decimal SelisihHubla { get; set; }
-            public string KesesuaianPM58 { get; set; }
-        }
-
+        #region HISTORY LLPTRX
         [HttpGet("GetAllHistoryLLPTrx")]
         public async Task<IActionResult> GetAllHistoryLLPTrx(int trxId, string port, int year, CancellationToken cancellationToken)
         {
@@ -108,5 +101,49 @@ namespace OMNI.API.Controllers.OMNI
 
             return Ok(result);
         }
+        #endregion
+
+        #region HISTORY PERSONIL TRX
+        [HttpGet("GetAllHistoryPersonilTrx")]
+        public async Task<IActionResult> GetAllHistoryPersonilTrx(int trxId, string port, int year, CancellationToken cancellationToken)
+        {
+            List<HistoryPersonilTrxModel> result = new List<HistoryPersonilTrxModel>();
+            List<RekomendasiPersonil> rekomenPersonilList = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
+
+            var list = await _dbOMNI.HistoryPersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year && b.PersonilTrxId == trxId)
+                .Include(b => b.Personil)
+                .OrderBy(b => b.Personil.Id).ToListAsync(cancellationToken);
+
+            if (list.Count() > 0)
+            {
+                for (int i = 0; i < list.Count(); i++)
+                {
+                    HistoryPersonilTrxModel temp = new HistoryPersonilTrxModel();
+                    int diffDays = 0;
+
+                    diffDays = (list[i].TanggalExpired - list[i].TanggalPelatihan).Days;
+
+                    temp.Id = list[i].Id;
+                    temp.Personil = list[i].Personil != null ? list[i].Personil.Name : "-";
+                    temp.Satuan = list[i].Personil != null ? list[i].Personil.Satuan : "-";
+                    temp.Name = list[i].Name;
+                    temp.TanggalPelatihan = list[i].TanggalPelatihan != null ? list[i].TanggalPelatihan.ToString("dd/MM/yyyy") : "-";
+                    temp.TanggalExpired = list[i].TanggalExpired != null ? list[i].TanggalExpired.ToString("dd/MM/yyyy") : "-";
+                    temp.SisaMasaBerlaku = diffDays;
+                    temp.PersentasePersonil = list[i].PersentasePersonil;
+                    temp.Port = list[i].Port;
+                    temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
+                    temp.CreatedBy = list[i].CreatedBy;
+                    temp.UpdateDate = list[i].UpdatedAt.ToString("dd MMM yyyy");
+                    temp.UpdatedBy = list[i].UpdatedBy;
+                    temp.TrxStatus = list[i].TrxStatus;
+                    result.Add(temp);
+                }
+            }
+
+            return Ok(result);
+        }
+
+        #endregion
     }
 }

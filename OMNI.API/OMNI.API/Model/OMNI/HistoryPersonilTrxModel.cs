@@ -9,6 +9,7 @@ namespace OMNI.API.Model.OMNI
     {
         public int PersonilTrxId { get; set; }
         public string Personil { get; set; }
+        public string Satuan { get; set; }
         public string Port { get; set; }
         public string Name { get; set; }
         public decimal TotalDetailExisting { get; set; }
