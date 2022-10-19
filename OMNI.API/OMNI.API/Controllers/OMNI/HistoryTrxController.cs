@@ -112,7 +112,7 @@ namespace OMNI.API.Controllers.OMNI
 
             var list = await _dbOMNI.HistoryPersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year && b.PersonilTrxId == trxId)
                 .Include(b => b.Personil)
-                .OrderBy(b => b.Personil.Id).ToListAsync(cancellationToken);
+                .OrderByDescending(b => b.Personil.Id).ToListAsync(cancellationToken);
 
             if (list.Count() > 0)
             {
