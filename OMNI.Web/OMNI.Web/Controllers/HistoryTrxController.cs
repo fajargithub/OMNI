@@ -24,8 +24,9 @@ namespace OMNI.Web.Controllers
     public class HistoryTrxController : OMNIBaseController
     {
         private readonly ILogger<HistoryTrxController> _logger;
-        private static readonly string INDEX_HISTORY_LLPTRX = "~/Views/HistoryTrx/IndexHistoryLLPTrx.cshtml";
-        private static readonly string INDEX_PERSONIL_TRX = "~/Views/HistoryTrx/IndexHistoryPersonilTrx.cshtml";
+        private static readonly string INDEX_HISTORY_LLP_TRX = "~/Views/HistoryTrx/IndexHistoryLLPTrx.cshtml";
+        private static readonly string INDEX_HISTORY_PERSONIL_TRX = "~/Views/HistoryTrx/IndexHistoryPersonilTrx.cshtml";
+        private static readonly string INDEX_HISTORY_LATIHAN_TRX = "~/Views/HistoryTrx/IndexHistoryPersonilTrx.cshtml";
 
         protected ILLPTrx _llpTrxService;
         protected IKondisi _kondisiService;
@@ -87,7 +88,7 @@ namespace OMNI.Web.Controllers
             ViewBag.EnableVerifikasi1 = false;
             ViewBag.EnableVerifikasi2 = false;
 
-            return PartialView(INDEX_HISTORY_LLPTRX);
+            return PartialView(INDEX_HISTORY_LLP_TRX);
         }
         #endregion
 
@@ -135,7 +136,7 @@ namespace OMNI.Web.Controllers
             ViewBag.EnableVerifikasi1 = false;
             ViewBag.EnableVerifikasi2 = false;
 
-            return PartialView(INDEX_PERSONIL_TRX);
+            return PartialView(INDEX_HISTORY_PERSONIL_TRX);
         }
         #endregion
 

@@ -773,13 +773,17 @@ var initApp = (function (app) {
                             }).then(() => {
                                 $(`#${formId} button[type=submit]`).html(`Submit`).attr("disabled", false);
                                 if (init.returnUrl == null) {
-                                    //location.reload();
+
                                     $(init.modalId).modal('hide');
-                                    /*$(init.tableId).DataTable().ajax.reload(countTotalPercentageLLPTrx, false);*/
+                                    
                                     $(init.tableId).DataTable().ajax.reload(function () {
                                         console.log('on reload datatable!');
                                         if (init.tableId == "#table_surat_penilaian" || init.tableId == "#table_surat_pengesahan" || init.tableId == "#table_verifikasi_surat") {
                                             location.reload();
+                                        } else if (init.tableId == "#table_personil_trx" || init.tableId == "#table_latihan_trx") {
+                                            countTotalPercentageLLPTrx();
+                                            countPercentagePersonilTrx();
+                                            countPercentageLatihanTrx();
                                         }
                                     });
                                 } else {

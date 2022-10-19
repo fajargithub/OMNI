@@ -117,20 +117,6 @@
 
         $("#personil").on('change', function () {
             selectedPersonil = this.value;
-            //console.log(year);
-            //$.ajax({
-            //    url: base_api + "Home/GetRekomendasiPersonilByPersonilId?id=" + selectedPersonil + "&port=" + port + "&year=" + year,
-            //    method: "GET",
-            //    success: function (result) {
-            //        if (result.data !== null) {
-            //            $("#satuan").val(result.data.personil.satuan);
-            //            $("#rekomendasiHubla").val(result.data.value);
-            //        }
-            //    }, complete: function () {
-
-            //    }
-            //})
-
             $.ajax({
                 url: base_api + "Personil/GetById?id=" + selectedPersonil,
                 method: "GET",
@@ -144,7 +130,6 @@
                         method: "GET",
                         success: function (result) {
                             if (result.data !== null) {
-                                //$("#satuan").val(result.data.personil.satuan);
                                 $("#rekomendasiHubla").val(result.data.value);
                             }
                         }, complete: function () {
