@@ -226,9 +226,11 @@ namespace OMNI.API.Controllers.OMNI
                 data.Year = model.Year;
                 data.TanggalPelaksanaan = !string.IsNullOrEmpty(model.TanggalPelaksanaan) ? DateTime.ParseExact(model.TanggalPelaksanaan, "MM/dd/yyyy", null) : nullDate;
                 data.UpdatedAt = DateTime.Now;
-                data.UpdatedBy = "admin";
+                data.UpdatedBy = model.UpdatedBy;
                 _dbOMNI.LatihanTrx.Update(data);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                await AddHistory(data.Id, model, "UPDATE", cancellationToken);
             }
             else
             {
@@ -237,9 +239,11 @@ namespace OMNI.API.Controllers.OMNI
                 data.Year = model.Year;
                 data.TanggalPelaksanaan = !string.IsNullOrEmpty(model.TanggalPelaksanaan) ? DateTime.ParseExact(model.TanggalPelaksanaan, "MM/dd/yyyy", null) : nullDate;
                 data.CreatedAt = DateTime.Now;
-                data.CreatedBy = "admin";
+                data.CreatedBy = model.CreatedBy;
                 await _dbOMNI.LatihanTrx.AddAsync(data, cancellationToken);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                await AddHistory(data.Id, model, "ADD", cancellationToken);
             }
 
             if (model.Files != null)
@@ -263,12 +267,32 @@ namespace OMNI.API.Controllers.OMNI
         {
             LatihanTrx data = await _dbOMNI.LatihanTrx.Where(b => b.Id == id).Include(b => b.Latihan).FirstOrDefaultAsync(cancellationToken);
             data.IsDeleted = GeneralConstants.YES;
-            data.UpdatedBy = "admin";
             data.UpdatedAt = DateTime.Now;
             _dbOMNI.LatihanTrx.Update(data);
             await _dbOMNI.SaveChangesAsync(cancellationToken);
 
             return data;
+        }
+
+        public async Task<string> AddHistory(int trxId, LatihanTrxModel model, string TrxStatus, CancellationToken cancellationToken)
+        {
+            DateTime nullDate = new DateTime();
+
+            HistoryLatihanTrx history = new HistoryLatihanTrx();
+            history.LatihanTrxId = trxId;
+            history.Latihan = await _dbOMNI.Latihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Latihan)).FirstOrDefaultAsync(cancellationToken);
+            history.Port = model.Port;
+            history.Year = model.Year;
+            history.TanggalPelaksanaan = !string.IsNullOrEmpty(model.TanggalPelaksanaan) ? DateTime.ParseExact(model.TanggalPelaksanaan, "MM/dd/yyyy", null) : nullDate;
+            history.CreatedBy = model.CreatedBy;
+            history.CreatedAt = DateTime.Now;
+            history.UpdatedBy = model.UpdatedBy;
+            history.UpdatedAt = DateTime.Now;
+            history.TrxStatus = TrxStatus;
+            await _dbOMNI.HistoryLatihanTrx.AddAsync(history, cancellationToken);
+            await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+            return "OK";
         }
     }
 }

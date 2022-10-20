@@ -145,5 +145,44 @@ namespace OMNI.API.Controllers.OMNI
         }
 
         #endregion
+
+        #region HISTORY PERSONIL TRX
+        [HttpGet("GetAllHistoryLatihanTrx")]
+        public async Task<IActionResult> GetAllHistoryLatihanTrx(int trxId, string port, int year, CancellationToken cancellationToken)
+        {
+            List<HistoryLatihanTrxModel> result = new List<HistoryLatihanTrxModel>();
+            List<RekomendasiLatihan> rekomenlatihanList = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
+
+            var list = await _dbOMNI.HistoryLatihanTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year && b.LatihanTrxId == trxId)
+                .Include(b => b.Latihan)
+                .OrderByDescending(b => b.Latihan.Id).ToListAsync(cancellationToken);
+
+            if (list.Count() > 0)
+            {
+                for (int i = 0; i < list.Count(); i++)
+                {
+                    HistoryLatihanTrxModel temp = new HistoryLatihanTrxModel();
+                    int diffDays = 0;
+
+                    temp.Id = list[i].Id;
+                    temp.Latihan = list[i].Latihan != null ? list[i].Latihan.Name : "-";
+                    temp.Satuan = list[i].Latihan != null ? list[i].Latihan.Satuan : "-";
+                    temp.TanggalPelaksanaan = list[i].TanggalPelaksanaan != null ? list[i].TanggalPelaksanaan.ToString("dd/MM/yyyy") : "-";
+                    temp.PersentaseLatihan = list[i].PersentaseLatihan;
+                    temp.Port = list[i].Port;
+                    temp.Port = list[i].Port;
+                    temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
+                    temp.CreatedBy = list[i].CreatedBy;
+                    temp.UpdateDate = list[i].UpdatedAt.ToString("dd MMM yyyy");
+                    temp.UpdatedBy = list[i].UpdatedBy;
+                    temp.TrxStatus = list[i].TrxStatus;
+                    result.Add(temp);
+                }
+            }
+
+            return Ok(result);
+        }
+
+        #endregion
     }
 }
