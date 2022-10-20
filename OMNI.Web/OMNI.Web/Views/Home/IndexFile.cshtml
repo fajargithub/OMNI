@@ -96,7 +96,8 @@
                         "targets": -1,
                         "data": null,
                         "render": function (row, data, iDisplayIndex) {
-                            return "<a target='_blank' href='/Home/ViewFile?id=" + iDisplayIndex.id + "&flag=@ViewBag.Flag' title='View File'>" + iDisplayIndex.fileName + "</a>";
+                            @*return "<a target='_blank' href='/Home/ViewFile?id=" + iDisplayIndex.id + "&flag=@ViewBag.Flag' title='View File'>" + iDisplayIndex.fileName + "</a>";*@
+                            return "<a target='_blank' href='/Home/ViewFile?id=" + iDisplayIndex.id + "&fileName=" + iDisplayIndex.fileName + "&flag=@ViewBag.Flag' title='View File'>" + iDisplayIndex.fileName + "</a>";
                         }
                     },
                     { "data": "createDate" },
@@ -108,7 +109,7 @@
                             if (editable == "True") {
                                 result += " <a href='javascript:void(0)' onclick='deleteDoc(" + iDisplayIndex.id + ")' class='delete-file' data-id='" + iDisplayIndex.id + "' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
                             }
-                            
+
                             return result;
                         }
                     }
@@ -117,7 +118,7 @@
                 rowCallback: function (row, data, iDisplayIndex) {
                 },
                 "initComplete": function (settings, json) {
-                 
+
                 }
             });
 

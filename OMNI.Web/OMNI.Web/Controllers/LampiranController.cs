@@ -228,12 +228,12 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ViewFile(int id, string flag)
+        public async Task<IActionResult> ViewFile(int id, string fileName, string flag)
         {
-            var r = await _llpTrxService.ReadFile(id, flag);
-            var contentType = await _llpTrxService.GetContentType(id);
+            var r = await _llpTrxService.ReadFile(fileName, flag);
+            var file = await _llpTrxService.GetFileData(id);
 
-            return File(r, @"" + contentType);
+            return File(r, @"" + file.ContentType, file.FileName);
         }
 
         [HttpPost]

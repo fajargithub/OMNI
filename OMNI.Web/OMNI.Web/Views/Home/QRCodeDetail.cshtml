@@ -91,7 +91,7 @@
                     }
                     else if (ViewBag.FileList[i].FileType == "application/pdf")
                     {
-                        <a target='_blank' asp-controller="Home" asp-action="ViewFile" asp-route-id="@ViewBag.FileList[i].Id" asp-route-flag="OMNI_LLP" title='View File'>
+                        <a target='_blank' asp-controller="QRCodeDetail" asp-action="ViewFile" asp-route-id="@ViewBag.FileList[i].Id" asp-route-fileName="@ViewBag.FIleList[i].FileName" asp-route-flag="OMNI_LLP" title='View File'>
                             <img src="~/img/pdf-icon.png" style="width: 150px;" />
                         </a>
                     }

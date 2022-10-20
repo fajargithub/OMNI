@@ -23,25 +23,25 @@ namespace OMNI.Web.Services.Trx
             _httpClient = httpClient;
         }
 
-        public async Task<string> GetContentType(int id)
+        public async Task<FilesModel> GetFileData(int id)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/LLPTrx/GetContentType?id={id}");
+            var result = await client.GetAsync($"/api/LLPTrx/GetFileData?id={id}");
 
             if (result.IsSuccessStatusCode)
 
-                return await result.Content.ReadAsAsync<string>();
+                return await result.Content.ReadAsAsync<FilesModel>();
 
             throw new Exception();
         }
 
-        public async Task<Stream> ReadFile(int id, string flag)
+        public async Task<Stream> ReadFile(string fileName, string flag)
         {
             HttpClient c = _httpClient.CreateClient("OMNI");
 
             try
             {
-                var r = await c.GetAsync($"/api/LLPTrx/ReadFile?id={id}&flag={flag}");
+                var r = await c.GetAsync($"/api/LLPTrx/ReadFile?fileName={fileName}&flag={flag}");
                 if (r.IsSuccessStatusCode)
                 {
                     return await r.Content.ReadAsStreamAsync();
