@@ -26,14 +26,15 @@ namespace OMNI.Web.Controllers
         private readonly ILogger<HistoryTrxController> _logger;
         private static readonly string INDEX_HISTORY_LLP_TRX = "~/Views/HistoryTrx/IndexHistoryLLPTrx.cshtml";
         private static readonly string INDEX_HISTORY_PERSONIL_TRX = "~/Views/HistoryTrx/IndexHistoryPersonilTrx.cshtml";
-        private static readonly string INDEX_HISTORY_LATIHAN_TRX = "~/Views/HistoryTrx/IndexHistoryPersonilTrx.cshtml";
+        private static readonly string INDEX_HISTORY_LATIHAN_TRX = "~/Views/HistoryTrx/IndexHistoryLatihanTrx.cshtml";
 
         protected ILLPTrx _llpTrxService;
         protected IKondisi _kondisiService;
         protected ISpesifikasiJenis _spesifikasiJenisService;
         protected IHistoryLLPTrx _historyLLPTrxService;
         protected IHistoryPersonilTrx _historyPersonilTrxService;
-        public HistoryTrxController(ILogger<HistoryTrxController> logger, IHistoryPersonilTrx historyPersonilTrxService, IHistoryLLPTrx historyLLPTrxService, IAdminLocation adminLocationService, IGuestLocation guestLocationService, ILampiran lampiranService, ILatihan latihanService, ILatihanTrx latihanTrxService, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        protected IHistoryLatihanTrx _historyLatihanTrxService;
+        public HistoryTrxController(ILogger<HistoryTrxController> logger, IHistoryLatihanTrx historyLatihanTrxService, IHistoryPersonilTrx historyPersonilTrxService, IHistoryLLPTrx historyLLPTrxService, IAdminLocation adminLocationService, IGuestLocation guestLocationService, ILampiran lampiranService, ILatihan latihanService, ILatihanTrx latihanTrxService, IPersonil personilService, IPersonilTrx personilTrxService, ISpesifikasiJenis spesifikasiJenisService, IKondisi kondisiService, ILLPTrx llpTrxService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService, IJenis jenisService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _logger = logger;
             _llpTrxService = llpTrxService;
@@ -42,6 +43,7 @@ namespace OMNI.Web.Controllers
             _portService = portService;
             _historyLLPTrxService = historyLLPTrxService;
             _historyPersonilTrxService = historyPersonilTrxService;
+            _historyLatihanTrxService = historyLatihanTrxService;
         }
 
         #region HISTORY LLP TRX
@@ -137,6 +139,54 @@ namespace OMNI.Web.Controllers
             ViewBag.EnableVerifikasi2 = false;
 
             return PartialView(INDEX_HISTORY_PERSONIL_TRX);
+        }
+        #endregion
+
+        #region HISTORY HistoryLatihanTrx
+        [HttpGet]
+        public async Task<JsonResult> HistoryLatihanTrxById(int id)
+        {
+            HistoryLatihanTrxModel data = await _historyLatihanTrxService.GetHistoryLatihanTrxById(id);
+
+            return Json(new
+            {
+                data
+            });
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAllHistoryLatihanTrx(int trxId, string port, int year)
+        {
+            List<HistoryLatihanTrxModel> data = await _historyLatihanTrxService.GetAllHistoryLatihanTrx(trxId, port, year);
+
+            int count = data.Count();
+
+            return Json(new
+            {
+                success = true,
+                recordsTotal = count,
+                recordsFiltered = count,
+                data
+            });
+        }
+
+        [HttpGet]
+        public IActionResult HistoryLatihanTrx(int trxId, string port, int year)
+        {
+            var dateNow = DateTime.Now;
+            var thisYear = dateNow.Year;
+            ViewBag.YearList = GetYearList(2010, 2030);
+            ViewBag.ThisYear = thisYear;
+
+            ViewBag.Year = year;
+            ViewBag.Port = port;
+            ViewBag.TrxId = trxId;
+
+            ViewBag.EnablePengesahan = false;
+            ViewBag.EnableVerifikasi1 = false;
+            ViewBag.EnableVerifikasi2 = false;
+
+            return PartialView(INDEX_HISTORY_LATIHAN_TRX);
         }
         #endregion
 

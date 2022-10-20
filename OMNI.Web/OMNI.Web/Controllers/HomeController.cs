@@ -130,6 +130,15 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditLatihanTrx(LatihanTrxModel model)
         {
+            if (model.Id > 0)
+            {
+                model.UpdatedBy = UserData.Username;
+            }
+            else
+            {
+                model.CreatedBy = UserData.Username;
+            }
+
             var r = await _latihanTrxService.AddEdit(model);
 
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
@@ -163,16 +172,6 @@ namespace OMNI.Web.Controllers
 
             return File(r, @"" + contentType);
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> QrCodeDetail(int id)
-        //{
-        //    List<FilesModel> fileList = await _llpTrxService.GetQRCodeFiles(id, "OMNI_LLP");
-        //    LLPTrxModel data = await _llpTrxService.GetById(id);
-        //    ViewBag.Data = data;
-        //    ViewBag.FileList = fileList;
-        //    return PartialView(QR_CODE_DETAIL);
-        //}
 
         [HttpGet]
         public IActionResult IndexFile(int trxId, string flag)

@@ -112,6 +112,14 @@ namespace OMNI.Web.Services.Trx
                 data.Add(new StringContent(m.Latihan.ToString()), "Latihan");
                 data.Add(new StringContent(m.Satuan.ToString()), "Satuan");
                 data.Add(new StringContent(m.TanggalPelaksanaan.ToString()), "TanggalPelaksanaan");
+                if (m.Id > 0)
+                {
+                    data.Add(new StringContent(m.UpdatedBy), "UpdatedBy");
+                }
+                else
+                {
+                    data.Add(new StringContent(m.CreatedBy), "CreatedBy");
+                }
 
                 if (m.Files != null)
                 {

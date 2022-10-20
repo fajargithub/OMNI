@@ -81,19 +81,6 @@
                     columnDefs: [
                         { "orderable": false, "targets": 15 }
                     ],
-                    dom:
-                        "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                    buttons: [
-                        {
-                            text: '<i class="fal fa-filter"></i> Filter',
-                            className: 'btn btn-sm btn-outline-primary',
-                            action: function (e, dt, node, config) {
-                                $('#table_history_llptrx-filter').toggle();
-                            }
-                        },
-                    ],
                     processing: true,
                     "ajax": {
                         "url": base_api + 'HistoryTrx/GetAllHistoryLLPTrx?trxId=' + trxId + '&port=' + port + '&year=' + selectedYear,

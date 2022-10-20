@@ -1,7 +1,7 @@
 ﻿@{
-    ViewData["Title"] = "History Personil";
+    ViewData["Title"] = "History Latihan";
     ViewData["PageName"] = "history_personil";
-    ViewData["Heading"] = "<i class='subheader-icon fal fa-history'></i>  History Personil";
+    ViewData["Heading"] = "<i class='subheader-icon fal fa-history'></i>  History Latihan";
     ViewData["PageDescription"] = "";
 }
 
@@ -15,15 +15,13 @@
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
-                    <table id="table_history_personil_trx" class="table table-borderless table-hover table-striped w-100">
+                    <table id="table_history_latihan_trx" class="table table-borderless table-hover table-striped w-100">
                         <thead>
                             <tr class="fw-500 text-uppercase">
                                 <th style="width:7%;">No</th>
-                                <th>Personil</th>
-                                <th>Nama Personil</th>
+                                <th style="width:70px;">Latihan</th>
                                 <th style="width:70px;">Satuan</th>
-                                <th style="width:70px;">Tanggal Pelatihan</th>
-                                <th style="width:70px;">Tanggal Expired</th>
+                                <th style="width:70px;">Tanggal Pelaksanaan</th>
                                 <th style="width:80px;">Created By</th>
                                 <th style="width:80px;">Created At</th>
                                 <th style="width:80px;">Updated By</th>
@@ -44,7 +42,7 @@
                 var selectedYear = parseInt("@ViewBag.Year");
                 var trxId = parseInt("@ViewBag.TrxId");
 
-                $('#table_history_personil_trx thead tr:eq(1) th').each(function (i) {
+                $('#table_history_latihan_trx thead tr:eq(1) th').each(function (i) {
                     $('select', this).on('change', function () {
                         if (table.column(i).search() !== this.value) {
                             table
@@ -64,7 +62,7 @@
                     });
                 });
 
-                var table = $('#table_history_personil_trx').DataTable(
+                var table = $('#table_history_latihan_trx').DataTable(
                     {
                         "ordering": false,
                         "scrollX": true,
@@ -73,20 +71,18 @@
                         "paging": false,
                         order: [],
                         columnDefs: [
-                            { "orderable": false, "targets": 10 }
+                            { "orderable": false, "targets": 8 }
                         ],
                         processing: true,
                         "ajax": {
-                            "url": base_api + 'HistoryTrx/GetAllHistoryPersonilTrx?trxId=' + trxId + '&port=' + port + '&year=' + selectedYear,
+                            "url": base_api + 'HistoryTrx/GetAllHistoryLatihanTrx?trxId=' + trxId + '&port=' + port + '&year=' + selectedYear,
                             "type": 'GET'
                         },
                         "columns": [
                             { "data": null },
-                            { "data": "personil" },
-                            { "data": "name" },
+                            { "data": "latihan" },
                             { "data": "satuan" },
-                            { "data": "tanggalPelatihan" },
-                            { "data": "tanggalExpired" },
+                            { "data": "tanggalPelaksanaan" },
                             { "data": "createdBy" },
                             { "data": "createDate" },
                             { "data": "updatedBy" },
@@ -107,4 +103,4 @@
                     });
                 }).draw();
             });
-    </script>
+</script>
