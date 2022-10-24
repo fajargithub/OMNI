@@ -87,7 +87,7 @@ namespace OMNI.API.Controllers.OMNI
                .Include(b => b.SpesifikasiJenis)
                .Include(b => b.SpesifikasiJenis.PeralatanOSR)
                .Include(b => b.SpesifikasiJenis.Jenis)
-               .OrderBy(b => b.SpesifikasiJenis.PeralatanOSR).ToListAsync(cancellationToken);
+               .OrderBy(b => b.SpesifikasiJenis.PeralatanOSR).OrderBy(b => b.SpesifikasiJenis.Jenis).ToListAsync(cancellationToken);
                 if (list.Count() > 0)
                 {
                     for (int i = 0; i < list.Count(); i++)
