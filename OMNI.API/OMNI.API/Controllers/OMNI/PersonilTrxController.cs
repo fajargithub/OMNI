@@ -47,7 +47,7 @@ namespace OMNI.API.Controllers.OMNI
             List<CountData> countTotalDetailExisting = new List<CountData>();
 
             List<PersonilTrxModel> result = new List<PersonilTrxModel>();
-            List<RekomendasiPersonil> rekomenPersonilList = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
+            List<RekomendasiPersonil> rekomenPersonilList = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.RekomendasiType.Id == 1).Include(b => b.Personil).Include(b => b.RekomendasiType).ToListAsync(cancellationToken);
 
             var list = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year)
                 .Include(b => b.Personil)
