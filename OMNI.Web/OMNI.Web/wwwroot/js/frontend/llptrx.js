@@ -385,7 +385,7 @@ var dt = $('#table_llp_trx').DataTable({
         'totalKebutuhanOSCP:name',
         'selisihOSCP:name',
         'kesesuaianOSCP:name',
-        'persentaseOSCP:name',
+        'persentaseOSCP:name'
     ],
     "order": [[1, 'asc']],
     rowCallback: function (row, data, iDisplayIndex) {
