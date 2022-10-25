@@ -561,7 +561,8 @@ namespace OMNI.API.Controllers.OMNI
 
             if (model.Id > 0)
             {
-                bool enableUpdate = false;
+                //bool enableUpdate = false;
+                bool enableUpdate = true;
 
                 data = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == model.Id)
                  .Include(b => b.SpesifikasiJenis)
@@ -569,19 +570,25 @@ namespace OMNI.API.Controllers.OMNI
                  .Include(b => b.SpesifikasiJenis.Jenis)
                  .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
 
-                if(data.QRCodeText == model.QRCodeText)
+                //if(data.QRCodeText == model.QRCodeText)
+                //{
+                //    enableUpdate = true;
+                //} else
+                //{
+                //    var checkNoAsset = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText == model.QRCodeText).FirstOrDefaultAsync(cancellationToken);
+                //    if (checkNoAsset != null)
+                //    {
+                //        enableUpdate = false;
+                //    } else
+                //    {
+                //        enableUpdate = true;
+                //    }
+                //}
+
+                var checkNoAsset = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText == model.QRCodeText).FirstOrDefaultAsync(cancellationToken);
+                if (checkNoAsset == null)
                 {
-                    enableUpdate = true;
-                } else
-                {
-                    var checkNoAsset = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText == model.QRCodeText).FirstOrDefaultAsync(cancellationToken);
-                    if (checkNoAsset != null)
-                    {
-                        enableUpdate = false;
-                    } else
-                    {
-                        enableUpdate = true;
-                    }
+                    data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
                 }
 
                 if (enableUpdate)
@@ -589,7 +596,7 @@ namespace OMNI.API.Controllers.OMNI
                     data.SpesifikasiJenis = await _dbOMNI.SpesifikasiJenis.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(model.Jenis)).FirstOrDefaultAsync(cancellationToken);
 
                     data.Port = model.Port;
-                    data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
+                    //data.QRCodeText = !string.IsNullOrWhiteSpace(model.QRCodeText) ? model.QRCodeText : "";
                     data.DetailExisting = model.DetailExisting;
                     data.Kondisi = model.Kondisi;
                     data.TotalExistingJenis = model.TotalExistingJenis;
