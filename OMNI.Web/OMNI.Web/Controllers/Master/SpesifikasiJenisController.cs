@@ -33,15 +33,15 @@ namespace OMNI.Web.Controllers.Master
         {
             SpesifikasiJenisModel data = await _spesifikasiJenisService.GetById(id);
 
-            string kodeInventory = "";
-            if (data != null)
-            {
-                kodeInventory = data.KodeInventory;
-            }
+            //string kodeInventory = "";
+            //if (data != null)
+            //{
+            //    kodeInventory = data.KodeInventory;
+            //}
 
             return Json(new
             {
-                kodeInventory
+                data
             });
         }
 

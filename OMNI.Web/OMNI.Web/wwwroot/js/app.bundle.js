@@ -639,13 +639,12 @@ var initApp = (function (app) {
                                 countPercentageLatihanTrx();
 
                                 var id = response.id;
-                                /*var qrcode_url = base_api + "Home/QrCodeDetail?id=" + id;*/
                                 var qrcode_url = base_api + "QRCodeDetail/Index?id=" + id;
 
                                 $.ajax({
                                     url: generateQRCode2(qrcode_url),
                                     method: "GET",
-                                    complete: function () {
+                                    success: function () {
                                         var canvas = document.querySelector('canvas');
                                         var pngUrl = canvas.toDataURL();
 
@@ -692,7 +691,10 @@ var initApp = (function (app) {
                                             }, complete: function () {
 
                                             }
-                                        })
+                                        });
+                                    },
+                                    complete: function () {
+                                        
                                     }
                                 })
                             }

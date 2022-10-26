@@ -57,6 +57,7 @@ namespace OMNI.Web.Controllers
                 port = findPort.Name;
             }
 
+            ViewBag.EnablePenilaian = true;
             ViewBag.EnablePengesahan = false;
             ViewBag.EnableVerifikasi1 = false;
             ViewBag.EnableVerifikasi2 = false;
@@ -67,11 +68,13 @@ namespace OMNI.Web.Controllers
                 var findPenilaian = lampiranList.FindAll(b => b.LampiranType == "PENILAIAN").OrderByDescending(b => b.Id).FirstOrDefault();
                 if(findPenilaian != null)
                 {
+                    //ViewBag.EnablePenilaian = false;
                     ViewBag.EnablePengesahan = true;
                     ViewBag.Info = "* Mohon upload Surat Pengesahan";
                     var findPengesahan = lampiranList.FindAll(b => b.LampiranType == "PENGESAHAN").OrderByDescending(b => b.Id).FirstOrDefault();
-                    if(findPengesahan != null)
+                    if(findPengesahan != null && findPengesahan.EndDate != "-")
                     {
+                        //ViewBag.EnablePengesahan = false;
                         var endDatePengesahan = DateTime.ParseExact(findPengesahan.EndDate, "dd MMM yyyy", null);
                         if(dateNow >= endDatePengesahan)
                         {
@@ -87,6 +90,7 @@ namespace OMNI.Web.Controllers
                         var findVerifikasi1 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").OrderByDescending(b => b.Id).FirstOrDefault();
                         if(findVerifikasi1 != null)
                         {
+                            //ViewBag.EnableVerifikasi1 = false;
                             var endDateVerifikasi1 = DateTime.ParseExact(findVerifikasi1.EndDate, "dd MMM yyyy", null);
                             if (dateNow >= endDateVerifikasi1)
                             {
@@ -102,6 +106,7 @@ namespace OMNI.Web.Controllers
                             var findVerifikasi2 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").OrderByDescending(b => b.Id).FirstOrDefault();
                             if(findVerifikasi2 != null)
                             {
+                                //ViewBag.EnableVerifikasi2 = false;
                                 ViewBag.Info = "";
                             }
                         } else

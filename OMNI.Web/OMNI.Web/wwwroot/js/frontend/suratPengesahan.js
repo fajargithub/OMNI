@@ -81,6 +81,7 @@ function deleteSuratPengesahan(id) {
                 console.log(result);
                 Swal.fire('Deleted!', '', 'success');
                 $("#table_surat_pengesahan").DataTable().ajax.reload(null, false);
+                location.reload();
             });
         } else if (result.isDenied) {
 

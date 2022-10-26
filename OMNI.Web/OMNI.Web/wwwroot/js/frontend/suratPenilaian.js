@@ -109,6 +109,7 @@ function deleteSuratPenilaian(id) {
                 console.log(result);
                 Swal.fire('Deleted!', '', 'success');
                 $("#table_surat_penilaian").DataTable().ajax.reload(null, false);
+                location.reload();
             });
         } else if (result.isDenied) {
 

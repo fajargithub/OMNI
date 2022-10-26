@@ -14,9 +14,9 @@
                 </h2>
                 @if (ViewBag.Editable)
                 {
-                    <div class="panel-toolbar">
+                    @*<div class="panel-toolbar">
                         <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                    </div>
+                    </div>*@
                 }
                 </div>
             <div class="panel-container show">
@@ -113,10 +113,10 @@
                             "data": null,
                             "render": function (row, data, iDisplayIndex) {
                                 var result = "";
-                                if (editable == "True") {
-                                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiType/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
-                                        " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
-                                }
+                                //if (editable == "True") {
+                                //    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/RekomendasiType/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                                //        " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
+                                //}
                                 return result;
                             }
                         }

@@ -84,7 +84,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="form-label" for="">Detail Existing di Lokasi</label>
+                    <label class="form-label" for="">Detail Existing di Lokasi <b id="satuanJenis"></b></label>
                     <input class="form-control" type="number" name="DetailExisting" asp-for="DetailExisting" />
                 </div>
             </div>
@@ -266,7 +266,9 @@
                 url: base_api + "SpesifikasiJenis/GetById?id=" + id,
                 method: "GET",
                 success: function (result) {
-                    $("#kodeInventory").val(result.kodeInventory);
+                    console.log(result);
+                    $("#kodeInventory").val(result.data.kodeInventory);
+                    $("#satuanJenis").text("(" + result.data.satuanJenis + ")");
                     validateNoAsset();
                 }, complete: function () {
                 }
