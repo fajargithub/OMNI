@@ -61,7 +61,7 @@ namespace OMNI.API.Controllers.OMNI
                         temp.CreateDate = list[i].CreatedAt.ToString("dd MMM yyyy");
                         temp.CreatedBy = list[i].CreatedBy;
                         temp.CreateDate = list[i].UpdatedAt.ToString("dd MMM yyyy");
-                        temp.CreatedBy = list[i].UpdatedBy;
+                        temp.UpdatedBy = list[i].UpdatedBy;
                         temp.TrxStatus = list[i].TrxStatus;
                         result.Add(temp);
                     }

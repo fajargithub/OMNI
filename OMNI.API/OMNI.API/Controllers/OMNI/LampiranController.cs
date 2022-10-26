@@ -84,7 +84,6 @@ namespace OMNI.API.Controllers.OMNI
                 data.Name = model.Name;
                 data.Port = model.Port;
                 data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
-                data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
                 data.Remark = model.Remark;
                 data.UpdatedAt = DateTime.Now;
                 data.UpdatedBy = "admin";
