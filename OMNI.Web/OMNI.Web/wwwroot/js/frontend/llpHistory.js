@@ -12,19 +12,19 @@ $('#table_history_llp_status').DataTable().destroy();
 
 /* COLUMN FILTER  */
 var table_history_llp_status = $('#table_history_llp_status').DataTable({
-    dom: 'Bfrtip',
-    buttons: [
-        {
-            extend: 'excelHtml5',
-            text: '<i class="fal fa-download"></i> Export Excel',
-            titleAttr: 'Generate Excel',
-            className: 'btn btn-sm btn-outline-primary',
-            title: 'Data LLP History Status ' + formattedToday,
-            exportOptions: {
-                columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-            }
-        }
-    ],
+    //dom: 'Bfrtip',
+    //buttons: [
+    //    {
+    //        extend: 'excelHtml5',
+    //        text: '<i class="fal fa-download"></i> Export Excel',
+    //        titleAttr: 'Generate Excel',
+    //        className: 'btn btn-sm btn-outline-primary',
+    //        title: 'Data LLP History Status ' + formattedToday,
+    //        exportOptions: {
+    //            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    //        }
+    //    }
+    //],
     "columnDefs": [
         { "text-align": "left", "targets": 1 },
     ],
