@@ -66,6 +66,7 @@ namespace OMNI.API.Controllers.OMNI
         {
             int lastSpesifikasiJenisId = 0;
             int lastSpesifikasiJenisId_2 = 0;
+            int lastSpesifikasiJenisId_3 = 0;
             int lastPeralatanOSRId = 0;
             int lastPeralatanOSRId_2 = 0;
             decimal totalKesesuaianHubla = 0;
@@ -301,19 +302,35 @@ namespace OMNI.API.Controllers.OMNI
                                         tempTotalKesesuaianOSCP.TrxId = lastPeralatanOSRId_2;
                                         tempTotalKesesuaianOSCP.TotalCount = findRekomendasiOSCP.Value;
                                         countTotalKesesuaianOSCP.Add(tempTotalKesesuaianOSCP);
-
-
                                     }
                                     else
                                     {
+                                        lastPeralatanOSRId_2 = list[i].SpesifikasiJenis.PeralatanOSR.Id;
                                         totalKesesuaianOSCP += findRekomendasiOSCP.Value;
                                     }
+
+                                    lastSpesifikasiJenisId_3 = list[i].SpesifikasiJenis.Id;
                                 }
                                 else
                                 {
                                     if (lastPeralatanOSRId_2 == list[i].SpesifikasiJenis.PeralatanOSR.Id)
                                     {
-                                        totalKesesuaianOSCP += findRekomendasiOSCP.Value;
+                                        if (i == (list.Count() - 1))
+                                        {
+                                            totalKesesuaianOSCP += findRekomendasiOSCP.Value;
+
+                                            CountData tempTotalKesesuaianOSCP = new CountData();
+                                            tempTotalKesesuaianOSCP.TrxId = lastPeralatanOSRId_2;
+                                            tempTotalKesesuaianOSCP.TotalCount = totalKesesuaianOSCP;
+                                            countTotalKesesuaianOSCP.Add(tempTotalKesesuaianOSCP);
+                                        }
+                                        else
+                                        {
+                                            if(lastSpesifikasiJenisId_3 != list[i].SpesifikasiJenis.Id) {
+                                                totalKesesuaianOSCP += findRekomendasiOSCP.Value;
+                                                lastSpesifikasiJenisId_3 = list[i].SpesifikasiJenis.Id;
+                                            }
+                                        }
                                     }
                                     else
                                     {
@@ -325,7 +342,12 @@ namespace OMNI.API.Controllers.OMNI
                                         if (i == (list.Count() - 1))
                                         {
                                             lastPeralatanOSRId_2 = list[i].SpesifikasiJenis.PeralatanOSR.Id;
-                                            totalKesesuaianOSCP = findRekomendasiOSCP.Value;
+                                            //totalKesesuaianOSCP = findRekomendasiOSCP.Value;
+                                            if (lastSpesifikasiJenisId_3 != list[i].SpesifikasiJenis.Id)
+                                            {
+                                                totalKesesuaianOSCP = findRekomendasiOSCP.Value;
+                                                lastSpesifikasiJenisId_3 = list[i].SpesifikasiJenis.Id;
+                                            }
 
                                             CountData tempTotalKesesuaianOSCP2 = new CountData();
                                             tempTotalKesesuaianOSCP2.TrxId = lastPeralatanOSRId_2;
@@ -335,9 +357,23 @@ namespace OMNI.API.Controllers.OMNI
                                         else
                                         {
                                             lastPeralatanOSRId_2 = list[i].SpesifikasiJenis.PeralatanOSR.Id;
-                                            totalKesesuaianOSCP = findRekomendasiOSCP.Value;
+                                            if (lastSpesifikasiJenisId_3 != list[i].SpesifikasiJenis.Id)
+                                            {
+                                                totalKesesuaianOSCP = findRekomendasiOSCP.Value;
+                                                lastSpesifikasiJenisId_3 = list[i].SpesifikasiJenis.Id;
+                                            }
+                                            //totalKesesuaianOSCP = findRekomendasiOSCP.Value;
                                         }
                                     }
+                                }
+                            } else
+                            {
+                                if (i == (list.Count() - 1))
+                                {
+                                    CountData tempTotalKesesuaianOSCP = new CountData();
+                                    tempTotalKesesuaianOSCP.TrxId = lastPeralatanOSRId_2;
+                                    tempTotalKesesuaianOSCP.TotalCount = totalKesesuaianOSCP;
+                                    countTotalKesesuaianOSCP.Add(tempTotalKesesuaianOSCP);
                                 }
                             }
                         }
