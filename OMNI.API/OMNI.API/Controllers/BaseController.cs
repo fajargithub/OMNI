@@ -458,5 +458,32 @@ namespace OMNI.API.Controllers
             }
             return null;
         }
+
+        public async Task<string> UpdateLLPTrx(List<LLPTrxModel> paramList, CancellationToken cancellationToken)
+        {
+            for(int i=0; i < (paramList.Count()-1); i++)
+            {
+                var data = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == paramList[i].Id)
+                 .Include(b => b.SpesifikasiJenis)
+                 .Include(b => b.SpesifikasiJenis.PeralatanOSR)
+                 .Include(b => b.SpesifikasiJenis.Jenis)
+                 .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
+
+                data.TotalExistingJenis = paramList[i].TotalExistingJenis;
+                data.TotalKebutuhanHubla = paramList[i].TotalKebutuhanHubla;
+                data.SelisihHubla = paramList[i].SelisihHubla;
+                data.TotalKebutuhanOSCP = paramList[i].TotalKebutuhanOSCP;
+                data.SelisihOSCP = paramList[i].SelisihOSCP;
+                data.KesesuaianOSCP = paramList[i].KesesuaianOSCP;
+                data.PersentaseOSCP = paramList[i].PersentaseOSCP;
+                data.KesesuaianMP58 = paramList[i].KesesuaianPM58;
+                data.TotalExistingKeseluruhan = paramList[i].TotalExistingKeseluruhan;
+                data.PersentaseHubla = paramList[i].PersentaseHubla;
+                _dbOMNI.LLPTrx.Update(data);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
+            
+            return "OK";
+        }
     }
 }

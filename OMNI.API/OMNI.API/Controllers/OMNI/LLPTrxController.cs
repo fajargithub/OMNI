@@ -62,7 +62,7 @@ namespace OMNI.API.Controllers.OMNI
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(string port, int year, int isUpdate, CancellationToken cancellationToken)
         {
             int lastSpesifikasiJenisId = 0;
             int lastSpesifikasiJenisId_2 = 0;
@@ -567,6 +567,14 @@ namespace OMNI.API.Controllers.OMNI
             {
                 Console.WriteLine(Ex);
             }
+
+            if(isUpdate == 1)
+            {
+                if(result.Count() > 0)
+                {
+                    await UpdateLLPTrx(result, cancellationToken);
+                }
+            }
            
             return Ok(result);
         }
@@ -646,21 +654,6 @@ namespace OMNI.API.Controllers.OMNI
                  .Include(b => b.SpesifikasiJenis.Jenis)
                  .OrderBy(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
 
-                //if(data.QRCodeText == model.QRCodeText)
-                //{
-                //    enableUpdate = true;
-                //} else
-                //{
-                //    var checkNoAsset = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText == model.QRCodeText).FirstOrDefaultAsync(cancellationToken);
-                //    if (checkNoAsset != null)
-                //    {
-                //        enableUpdate = false;
-                //    } else
-                //    {
-                //        enableUpdate = true;
-                //    }
-                //}
-
                 var checkNoAsset = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText == model.QRCodeText).FirstOrDefaultAsync(cancellationToken);
                 if (checkNoAsset == null)
                 {
@@ -709,6 +702,8 @@ namespace OMNI.API.Controllers.OMNI
 
                     //Add LLPTrx History
                     await AddHistory(data.Id, model, "UPDATE", cancellationToken);
+
+                    await GetAll(data.Port, data.Year, 1, cancellationToken);
 
                     return Ok(new ReturnJson { Id = data.Id });
                 } else
@@ -765,6 +760,8 @@ namespace OMNI.API.Controllers.OMNI
 
                     //Add LLPTrx History
                     await AddHistory(data.Id, model, "ADD", cancellationToken);
+
+                    await GetAll(data.Port, data.Year, 1, cancellationToken);
 
                     return Ok(new ReturnJson { Id = data.Id });
                 }
