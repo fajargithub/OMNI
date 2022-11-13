@@ -485,5 +485,45 @@ namespace OMNI.API.Controllers
             
             return "OK";
         }
+
+        public async Task<string> UpdatePersonilTrx(List<PersonilTrxModel> paramList, CancellationToken cancellationToken)
+        {
+            for (int i = 0; i < (paramList.Count() - 1); i++)
+            {
+                var data = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == paramList[i].Id)
+                 .Include(b => b.Personil)
+                 .OrderBy(b => b.Personil.Id).FirstOrDefaultAsync(cancellationToken);
+
+                data.TotalDetailExisting = paramList[i].TotalDetailExisting;
+                data.SelisihHubla = paramList[i].SelisihHubla;
+                data.KesesuaianPM58 = paramList[i].KesesuaianPM58;
+                data.PersentasePersonil = paramList[i].PersentasePersonil;
+                data.SisaMasaBerlaku = paramList[i].SisaMasaBerlaku;
+
+                _dbOMNI.PersonilTrx.Update(data);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
+
+            return "OK";
+        }
+
+        public async Task<string> UpdateLatihanTrx(List<LatihanTrxModel> paramList, CancellationToken cancellationToken)
+        {
+            for (int i = 0; i < (paramList.Count() - 1); i++)
+            {
+                var data = await _dbOMNI.LatihanTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == paramList[i].Id)
+                 .Include(b => b.Latihan)
+                 .OrderBy(b => b.Latihan.Id).FirstOrDefaultAsync(cancellationToken);
+
+                data.SelisihHubla = paramList[i].SelisihHubla;
+                data.KesesuaianPM58 = paramList[i].KesesuaianPM58;
+                data.PersentaseLatihan = paramList[i].PersentaseLatihan;
+
+                _dbOMNI.LatihanTrx.Update(data);
+                await _dbOMNI.SaveChangesAsync(cancellationToken);
+            }
+
+            return "OK";
+        }
     }
 }

@@ -40,7 +40,7 @@ namespace OMNI.API.Controllers.OMNI
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(string port, int year, int isUpdate, CancellationToken cancellationToken)
         {
             int lastPersonilId = 0;
             decimal totalDetailExisting = 0;
@@ -179,6 +179,11 @@ namespace OMNI.API.Controllers.OMNI
                 result.Add(totalModel);
             }
 
+            if(isUpdate == 1)
+            {
+                await UpdatePersonilTrx(result, cancellationToken);
+            }
+
             return Ok(result);
         }
 
@@ -268,7 +273,9 @@ namespace OMNI.API.Controllers.OMNI
 
                 }
             }
-            
+
+            await GetAll(data.Port, data.Year, 1, cancellationToken);
+
             return Ok(new ReturnJson { });
         }
 
