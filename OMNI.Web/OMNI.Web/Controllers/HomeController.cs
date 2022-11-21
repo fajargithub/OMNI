@@ -99,6 +99,8 @@ namespace OMNI.Web.Controllers
             List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(port);
             if (lampiranList.Count() > 0)
             {
+                DateTime today = DateTime.Now;
+
                 var findPenilaian = lampiranList.FindAll(b => b.LampiranType == "PENILAIAN").OrderByDescending(b => b.Id).FirstOrDefault();
                 if (findPenilaian != null)
                 {
@@ -107,12 +109,45 @@ namespace OMNI.Web.Controllers
                     var findPengesahan = lampiranList.FindAll(b => b.LampiranType == "PENGESAHAN").OrderByDescending(b => b.Id).FirstOrDefault();
                     if (findPengesahan != null)
                     {
-                        ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun pertama) per tanggal " + findPengesahan.EndDate;
+                        if (!string.IsNullOrEmpty(findPengesahan.EndDate) && findPengesahan.EndDate != "-")
+                        {
+                            var endDate = DateTime.ParseExact(findPengesahan.EndDate, "dd MMM yyyy", null);
+                            var countMonths = GetMonthDifference(today, endDate);
+
+                            if(countMonths <= 6)
+                            {
+                                ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun pertama) per tanggal " + findPengesahan.EndDate;
+                            } else
+                            {
+                                ViewBag.Info = "";
+                            }
+                        } else
+                        {
+                            ViewBag.Info = "";
+                        }
 
                         var findVerifikasi1 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").OrderByDescending(b => b.Id).FirstOrDefault();
                         if (findVerifikasi1 != null)
                         {
-                            ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
+                            //ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
+
+                            if (!string.IsNullOrEmpty(findVerifikasi1.EndDate) && findVerifikasi1.EndDate != "-")
+                            {
+                                var endDate = DateTime.ParseExact(findVerifikasi1.EndDate, "dd MMM yyyy", null);
+                                var countMonths = GetMonthDifference(today, endDate);
+
+                                if (countMonths <= 6)
+                                {
+                                    ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
+                                } else
+                                {
+                                    ViewBag.Info = "";
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.Info = "";
+                            }
 
                             var findVerifikasi2 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").OrderByDescending(b => b.Id).FirstOrDefault();
                             if (findVerifikasi2 != null)

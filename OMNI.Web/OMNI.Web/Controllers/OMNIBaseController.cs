@@ -42,6 +42,12 @@ namespace OMNI.Web.Controllers
             public static string RegionTxt { get; set; }
         }
 
+        public static int GetMonthDifference(DateTime startDate, DateTime endDate)
+        {
+            int monthsApart = 12 * (startDate.Year - endDate.Year) + startDate.Month - endDate.Month;
+            return Math.Abs(monthsApart);
+        }
+
         public async Task<string> GetPorts()
         {
             if (UserData.RoleList.Contains("OSMOSYS_ADMIN_REGION1"))
