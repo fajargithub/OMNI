@@ -97,6 +97,8 @@ namespace OMNI.API.Controllers.OMNI
                             tempTotalDetailExisting.TotalCount = totalDetailExisting;
                             countTotalDetailExisting.Add(tempTotalDetailExisting);
 
+                            totalDetailExisting = 0;
+
                             if (i == (list.Count() - 1))
                             {
                                 lastPersonilId = list[i].Personil.Id;
