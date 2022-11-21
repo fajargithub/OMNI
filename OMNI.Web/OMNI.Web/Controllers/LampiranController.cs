@@ -86,36 +86,37 @@ namespace OMNI.Web.Controllers
                         }
 
                         ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun pertama) per tanggal " + findPengesahan.EndDate;
-
-                        var findVerifikasi1 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").OrderByDescending(b => b.Id).FirstOrDefault();
-                        if(findVerifikasi1 != null)
-                        {
-                            //ViewBag.EnableVerifikasi1 = false;
-                            var endDateVerifikasi1 = DateTime.ParseExact(findVerifikasi1.EndDate, "dd MMM yyyy", null);
-                            if (dateNow >= endDateVerifikasi1)
-                            {
-                                ViewBag.EnableVerifikasi2 = true;
-                            }
-                            else
-                            {
-                                ViewBag.EnableVerifikasi2 = false;
-                            }
-
-                            ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
-
-                            var findVerifikasi2 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").OrderByDescending(b => b.Id).FirstOrDefault();
-                            if(findVerifikasi2 != null)
-                            {
-                                //ViewBag.EnableVerifikasi2 = false;
-                                ViewBag.Info = "";
-                            }
-                        } else
-                        {
-                            ViewBag.EnableVerifikasi2 = false;
-                        }
                     } else
                     {
                         ViewBag.EnableVerifikasi1 = false;
+                        ViewBag.EnableVerifikasi2 = false;
+                    }
+
+                    var findVerifikasi1 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").OrderByDescending(b => b.Id).FirstOrDefault();
+                    if (findVerifikasi1 != null)
+                    {
+                        //ViewBag.EnableVerifikasi1 = false;
+                        var endDateVerifikasi1 = DateTime.ParseExact(findVerifikasi1.EndDate, "dd MMM yyyy", null);
+                        if (dateNow >= endDateVerifikasi1)
+                        {
+                            ViewBag.EnableVerifikasi2 = true;
+                        }
+                        else
+                        {
+                            ViewBag.EnableVerifikasi2 = false;
+                        }
+
+                        ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
+
+                        var findVerifikasi2 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").OrderByDescending(b => b.Id).FirstOrDefault();
+                        if (findVerifikasi2 != null)
+                        {
+                            //ViewBag.EnableVerifikasi2 = false;
+                            ViewBag.Info = "";
+                        }
+                    }
+                    else
+                    {
                         ViewBag.EnableVerifikasi2 = false;
                     }
                 } else
