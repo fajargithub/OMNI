@@ -129,9 +129,12 @@
                                                     <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI2" class="btn btn-info btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Kedua</a>
                                                 }
                                             }*@
+                                            @if (ViewBag.Editable)
+                                            {
                                                 <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI1" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Pertama</a>
                                                 <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI2" class="btn btn-info btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Kedua</a>
-                                            </div>
+                                            }
+                                        </div>
                                     </div>
                                     <table id="table_verifikasi_surat" class="table table-borderless table-hover table-striped w-100">
                                         <thead>
