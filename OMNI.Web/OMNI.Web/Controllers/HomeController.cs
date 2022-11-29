@@ -62,6 +62,7 @@ namespace OMNI.Web.Controllers
         {
             var dateNow = DateTime.Now;
             var thisYear = dateNow.Year;
+            
             ViewBag.YearList = GetYearList(2010, 2030);
             ViewBag.ThisYear = thisYear;
             ViewBag.Info = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";

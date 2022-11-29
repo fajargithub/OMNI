@@ -57,6 +57,8 @@ namespace OMNI.Web.Controllers
             }
             else
             {
+                //var getIp = GetIPAddress2();
+
                 ParamUser newUser = new ParamUser();
                 newUser.IPAddress = GetIPAddress();
                 newUser.UserId = r.UserId;

@@ -28,6 +28,7 @@ namespace OMNI.Web.Controllers
         public IActionResult Index()
         {
             ViewBag.Username = UserData.Username;
+            ViewBag.IpAddress = GetIPAddress();
             return View(MAIN_PAGE_URL);
         }
 

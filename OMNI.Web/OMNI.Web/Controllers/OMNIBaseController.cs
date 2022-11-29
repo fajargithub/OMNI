@@ -240,6 +240,27 @@ namespace OMNI.Web.Controllers
 
             public override void OnActionExecuting(ActionExecutingContext context)
             {
+                if (DataUser.UserList != null)
+                {
+                    var findUser = DataUser.UserList.FindAll(b => b.IPAddress.Contains(GetIPAddress())).FirstOrDefault();
+                    if (findUser != null)
+                    {
+                        UserData.IPAddress = findUser.IPAddress;
+                        UserData.UserId = findUser.UserId;
+                        UserData.Username = findUser.Username;
+                        UserData.Email = findUser.Email;
+                        UserData.RoleList = findUser.RoleList;
+                    }
+                    else
+                    {
+                        UserData.IPAddress = null;
+                        UserData.UserId = 0;
+                        UserData.Username = null;
+                        UserData.Email = null;
+                        UserData.RoleList = null;
+                    }
+                }
+
                 //base.OnActionExecuting(context);
                 if (!string.IsNullOrEmpty(Roles))
                 {
@@ -266,7 +287,6 @@ namespace OMNI.Web.Controllers
                 {
                 }
             }
-
         }
 
         public static string GetIPAddress()
@@ -279,7 +299,9 @@ namespace OMNI.Web.Controllers
                 result = ipList[0];
             }
 
-            return result;
+            //Console.WriteLine("MachineName: {0}", Environment.MachineName);
+
+            return Environment.MachineName;
         }
 
         public class yearData
