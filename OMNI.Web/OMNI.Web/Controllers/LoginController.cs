@@ -57,10 +57,30 @@ namespace OMNI.Web.Controllers
             }
             else
             {
-                UserData.UserId = r.UserId;
-                UserData.RoleList = r.Roles;
-                UserData.Username = r.Username;
-                UserData.Email = r.Email;
+                ParamUser newUser = new ParamUser();
+                newUser.IPAddress = GetIPAddress();
+                newUser.UserId = r.UserId;
+                newUser.Username = r.Username;
+                newUser.RoleList = r.Roles;
+                newUser.Email = r.Email;
+
+                var getUserData = DataUser.UserList;
+
+                if(getUserData != null)
+                {
+                    getUserData.Add(newUser);
+                    DataUser.UserList = getUserData;
+                } else
+                {
+                    List<ParamUser> newUserList = new List<ParamUser>();
+                    newUserList.Add(newUser);
+                    DataUser.UserList = newUserList;
+                }
+
+                //UserData.UserId = r.UserId;
+                //UserData.RoleList = r.Roles;
+                //UserData.Username = r.Username;
+                //UserData.Email = r.Email;
                 return Ok(new JsonResponse());
             }
         }
@@ -68,10 +88,10 @@ namespace OMNI.Web.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
-            UserData.UserId = 0;
-            UserData.Username = null;
-            UserData.Email = null;
-            UserData.RoleList = null;
+            if(DataUser.UserList.Count() > 0)
+            {
+                var findUser = DataUser.UserList.RemoveAll(b => b.IPAddress.Contains(GetIPAddress()));
+            }
             return PartialView(LOGOUT_URL);
         }
     }

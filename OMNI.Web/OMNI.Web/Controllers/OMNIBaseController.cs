@@ -15,6 +15,7 @@ using OMNI.Web.Models;
 using OMNI.Utilities.Constants;
 using Microsoft.AspNetCore.Routing;
 using System;
+using System.Net.Sockets;
 
 namespace OMNI.Web.Controllers
 {
@@ -127,6 +128,7 @@ namespace OMNI.Web.Controllers
 
         public static class UserData
         {
+            public static string IPAddress { get; set; }
             public static int UserId { get; set; }
             public static string Username { get; set; }
             public static string Email { get; set; }
@@ -134,9 +136,48 @@ namespace OMNI.Web.Controllers
             public static string[] ParamRole { get; set; }
         }
 
+        public class ParamUser
+        {
+            public string IPAddress { get; set; }
+            public int UserId { get; set; }
+            public string Username { get; set; }
+            public string Email { get; set; }
+            public List<string> RoleList;
+            public string[] ParamRole { get; set; }
+        }
+
+        public static class DataUser
+        {
+            public static List<ParamUser> UserList { get; set; }
+        }
+
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             base.OnActionExecuted(context);
+            ViewBag.Username = null;
+            ViewBag.Email = null;
+            ViewBag.Roles = null;
+
+            if(DataUser.UserList != null)
+            {
+                var findUser = DataUser.UserList.FindAll(b => b.IPAddress.Contains(GetIPAddress())).FirstOrDefault();
+                if (findUser != null)
+                {
+                    UserData.IPAddress = findUser.IPAddress;
+                    UserData.UserId = findUser.UserId;
+                    UserData.Username = findUser.Username;
+                    UserData.Email = findUser.Email;
+                    UserData.RoleList = findUser.RoleList;
+                } else
+                {
+                    UserData.IPAddress = null;
+                    UserData.UserId = 0;
+                    UserData.Username = null;
+                    UserData.Email = null;
+                    UserData.RoleList = null;
+                }
+            }
+
             ViewBag.Username = UserData.Username;
             ViewBag.Email = UserData.Email;
             ViewBag.Roles = UserData.RoleList;
@@ -226,6 +267,19 @@ namespace OMNI.Web.Controllers
                 }
             }
 
+        }
+
+        public static string GetIPAddress()
+        {
+            var result = "";
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            var ipList = (from ip in host.AddressList where ip.AddressFamily == AddressFamily.InterNetwork select ip.ToString()).ToList();
+            if(ipList.Count() > 0)
+            {
+                result = ipList[0];
+            }
+
+            return result;
         }
 
         public class yearData
