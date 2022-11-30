@@ -29,6 +29,9 @@
         <div class="form-group">
             <label class="form-label" for="">Description</label>
             <textarea class="form-control" asp-for="Desc"></textarea>
+
+            <input type="hidden" name="UpdatedBy" asp-for="UpdatedBy" id="updatedBy" />
+            <input type="hidden" name="CreatedBy" asp-for="UpdatedBy" id="createdBy" />
         </div>
     </div>
 
@@ -36,6 +39,10 @@
 </form>
 
 <script type="text/javascript">
+
+    $("#updatedBy").val(userData.username);
+    $("#createdBy").val(userData.username);
+
     $(document).on('submit', '#form-akun', function () {
         var form = $('#form-akun');
         var validation = Array.prototype.filter.call(form, function (form) {

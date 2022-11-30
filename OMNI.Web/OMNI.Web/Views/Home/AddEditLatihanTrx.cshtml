@@ -15,6 +15,9 @@
                     </select>
                     <input type="hidden" name="Port" asp-for="Port" />
                     <input type="hidden" name="Year" asp-for="Year" />
+
+                    <input type="hidden" name="UpdatedBy" asp-for="UpdatedBy" id="updatedBy"  />
+                    <input type="hidden" name="CreatedBy" asp-for="UpdatedBy" id="createdBy" />
                 </div>
             </div>
         </div><br />
@@ -57,6 +60,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $("#updatedBy").val(userData.username);
+        $("#createdBy").val(userData.username);
+
         var selectedPelatihan = $("#latihan").val();
         var port = "@ViewBag.Port";
         var year = parseInt("@ViewBag.Year");

@@ -19,6 +19,9 @@
         <div class="form-group">
             <label class="form-label" for="">Description</label>
             <textarea class="form-control" asp-for="Desc"></textarea>
+
+            <input type="hidden" name="UpdatedBy" asp-for="UpdatedBy" id="updatedBy" />
+            <input type="hidden" name="CreatedBy" asp-for="UpdatedBy" id="createdBy" />
         </div>
     </div>
 
@@ -28,6 +31,9 @@
 <script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $("#updatedBy").val(userData.username);
+        $("#createdBy").val(userData.username);
 
         $(document).on('submit', '#form-akun', function () {
         var form = $('#form-akun');

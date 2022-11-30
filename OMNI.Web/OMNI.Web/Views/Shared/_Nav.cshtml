@@ -32,27 +32,27 @@
                 </a>
             </li>
             <li>
-                <a href="@Url.Action("Index", "Home")" title="" data-filter-tags="LLP">
+                <a href="javascript:void(0)" onclick="dataLokasiFunc(userRole)" title="" data-filter-tags="LLP">
                     <i class="fal fa-book"></i>
                     <span class="nav-link-text" data-i18n="account.index">Data Lokasi</span>
                 </a>
             </li>
             <li>
-                <a href="@Url.Action("Index", "LLPHistoryStatus")" title="" data-filter-tags="Rental / Maintenance History">
+                <a href="javascript:void(0)" onclick="historyRental(userRole)" title="" data-filter-tags="lampiran surat">
                     <i class="fal fa-exchange"></i>
-                    <span class="nav-link-text" data-i18n="account.index"> History Rental/Maintenance</span>
+                    <span class="nav-link-text" data-i18n="account.index">History Rental/maintenance</span>
                 </a>
             </li>
             <li>
-                <a href="@Url.Action("Index", "Lampiran")" title="" data-filter-tags="LLP">
-                    <i class="fal fa-file"></i>
+                <a href="javascript:void(0)" onclick="lampiranSurat(userRole)" title="" data-filter-tags="lampiran surat">
+                    <i class="fal fa-book"></i>
                     <span class="nav-link-text" data-i18n="account.index">Lampiran Surat</span>
                 </a>
             </li>
 
-            @if (ViewBag.EnableUserAccess)
-            { 
-                <li>
+            @*@if (ViewBag.EnableUserAccess)
+            {*@ 
+                <li class="userAccess">
                     <a href="#" title="Dashboard" data-filter-tags="dashboard">
                         <i class="fal fa-list"></i>
                         <span class="nav-link-text" data-i18n="dashboard.dashboarduw">Master Data</span>
@@ -90,8 +90,8 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("Index", "RekomendasiJenis")" title="Rekomendasi Jenis">
-                                        <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Jenis</span>
+                                    <a href="javascript:void(0)" onclick="rekomendasiJenis(userRole)" title="" data-filter-tags="rekomendasi jenis">
+                                        <span class="nav-link-text" data-i18n="account.index">Rekomendasi Jenis</span>
                                     </a>
                                 </li>
                             </ul>
@@ -109,8 +109,8 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("Index", "RekomendasiLatihan")" title="Rekomendasi Latihan">
-                                        <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Latihan</span>
+                                    <a href="javascript:void(0)" onclick="rekomendasiLatihan(userRole)" title="" data-filter-tags="rekomendasi latihan">
+                                        <span class="nav-link-text" data-i18n="account.index">Rekomendasi Latihan</span>
                                     </a>
                                 </li>
                             </ul>
@@ -128,19 +128,19 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="@Url.Action("Index", "RekomendasiPersonil")" title="Rekomendasi Personil">
-                                        <span class="nav-link-text" data-i18n="peralatanOSR.index">Rekomendasi Personil</span>
+                                    <a href="javascript:void(0)" onclick="rekomendasiPersonil(userRole)" title="" data-filter-tags="rekomendasi personil">
+                                        <span class="nav-link-text" data-i18n="account.index">Rekomendasi Personil</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                     </ul>
                 </li>
-            }
+            @*}*@
                 
-                @if (ViewBag.EnableUserAccess)
-                {
-                    <li>
+                @*@if (ViewBag.EnableUserAccess)
+                {*@
+                    <li class="userAccess">
                         <a href="#" title="Dashboard" data-filter-tags="dashboard">
                             <i class="fal fa-users"></i>
                             <span class="nav-link-text" data-i18n="master.personil">User Access</span>
@@ -158,9 +158,41 @@
                             </li>
                         </ul>
                     </li>
-                }
+                @*}*@
 
             </ul>
     </div>
 </div>
+
+<script>
+    function dataLokasiFunc(userRole) {
+        console.log(userRole);
+        window.open("/Home/Index?role=" + userRole + "&userId=" + userData.userId);
+    }
+
+    function lampiranSurat(userRole) {
+        console.log(userRole);
+        window.open("/Lampiran/Index?role=" + userRole + "&userId=" + userData.userId);
+    }
+
+    function historyRental(userRole) {
+        console.log(userRole);
+        window.open("/LLPHistoryStatus/Index?role=" + userRole + "&userId=" + userData.userId);
+    }
+
+    function rekomendasiJenis(userRole) {
+        console.log(userRole);
+        window.open("/RekomendasiJenis/Index?role=" + userRole + "&userId=" + userData.userId);
+    }
+
+    function rekomendasiLatihan(userRole) {
+        console.log(userRole);
+        window.open("/RekomendasiLatihan/Index?role=" + userRole + "&userId=" + userData.userId);
+    }
+
+    function rekomendasiPersonil(userRole) {
+        console.log(userRole);
+        window.open("/RekomendasiPersonil/Index?role=" + userRole + "&userId=" + userData.userId);
+    }
+</script>
 

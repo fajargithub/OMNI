@@ -35,12 +35,16 @@
                 <h2>
                     Rekomendasi Personil List
                 </h2>
-                @if (ViewBag.Editable)
+                @*@if (ViewBag.Editable)
                 {
                     <div class="panel-toolbar">
                         <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                     </div>
-                }
+                }*@
+
+                <div class="panel-toolbar editable">
+                        <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    </div>
                 </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -182,7 +186,7 @@
             });
 
             $("#searchLokasi").click(function () {
-                window.location.href = base_api + 'RekomendasiPersonil/Index?port=' + port + "&year=" + selectedYear;
+                window.location.href = base_api + 'RekomendasiPersonil/Index?port=' + port + "&year=" + selectedYear + "&role=" + userRole + "&userId=" + userData.userId;;
             })
         });
 

@@ -12,6 +12,9 @@
                     <input type="file" name="Files" class="form-control" asp-for="Files" multiple />
                     <input type="hidden" asp-for="TrxId" name="TrxId" value="@ViewBag.TrxId" />
                     <input type="hidden" asp-for="Flag" name="Flag" value="@ViewBag.Flag" />
+
+                    <input type="hidden" name="UpdatedBy" asp-for="UpdatedBy" id="updatedBy" />
+                    <input type="hidden" name="CreatedBy" asp-for="UpdatedBy" id="createdBy" />
                 </div>
             </div>
         </div><br />
@@ -23,6 +26,9 @@
 <script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $("#updatedBy").val(userData.username);
+        $("#createdBy").val(userData.username);
+
         $(document).on('submit', '#form-file', function () {
         var form = $('#form-file');
         var validation = Array.prototype.filter.call(form, function (form) {

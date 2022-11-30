@@ -49,27 +49,73 @@ namespace OMNI.Web.Controllers
             return Math.Abs(monthsApart);
         }
 
-        public async Task<string> GetPorts()
+        public string GetRegionTxt(string role)
         {
-            if (UserData.RoleList.Contains("OSMOSYS_ADMIN_REGION1"))
+            string result = "";
+
+            if (string.IsNullOrEmpty(role))
             {
-                PortData.RegionTxt = "Region 1";
-                PortData.PortList = await GetPortByRegion(2);
+                role = "";
             }
-            else if (UserData.RoleList.Contains("OSMOSYS_ADMIN_REGION2"))
+
+            if (role.Contains("OSMOSYS_ADMIN_REGION1"))
             {
-                PortData.RegionTxt = "Region 2";
-                PortData.PortList = await GetPortByRegion(3);
+                result = "Region 1";
             }
-            else if (UserData.RoleList.Contains("OSMOSYS_ADMIN_REGION3"))
+            else if (role.Contains("OSMOSYS_ADMIN_REGION2"))
             {
-                PortData.RegionTxt = "Region 3";
-                PortData.PortList = await GetPortByRegion(4);
+                result = "Region 2";
             }
-            else if (UserData.RoleList.Contains("OSMOSYS_GUEST_LOKASI") || UserData.RoleList.Contains("OSMOSYS_GUEST_NON_LOKASI"))
+            else if (role.Contains("OSMOSYS_ADMIN_REGION3"))
+            {
+                result = "Region 3";
+            }
+            else if (role.Contains("OSMOSYS_GUEST_LOKASI") || role.Contains("OSMOSYS_GUEST_NON_LOKASI"))
+            {
+                result = "Region (Selected)";
+            }
+            else if (role.Contains("OSMOSYS_ADMIN_LOKASI"))
+            {
+                result = "Region (Selected)";
+            }
+            else if (role.Contains("OSMOSYS_SUPER_ADMIN"))
+            {
+                result = "Region 1, 2 & 3";
+            }
+
+            return result;
+        }
+
+        public async Task<List<Port>> GetPorts(string role, int userId)
+        {
+            List<Port> result = new List<Port>();
+
+            if (string.IsNullOrEmpty(role))
+            {
+                role = "";
+            }
+
+            if(userId < 1)
+            {
+                userId = 0;
+            }
+
+            if (role.Contains("OSMOSYS_ADMIN_REGION1"))
+            {
+                result = await GetPortByRegion(2);
+            }
+            else if (role.Contains("OSMOSYS_ADMIN_REGION2"))
+            {
+                result = await GetPortByRegion(3);
+            }
+            else if (role.Contains("OSMOSYS_ADMIN_REGION3"))
+            {
+                result = await GetPortByRegion(4);
+            }
+            else if (role.Contains("OSMOSYS_GUEST_LOKASI") || role.Contains("OSMOSYS_GUEST_NON_LOKASI"))
             {
                 List<Port> userPorts = new List<Port>();
-                GuestLocationModel guestUser = await _guestLocationService.GetByUserId(UserData.UserId);
+                GuestLocationModel guestUser = await _guestLocationService.GetByUserId(userId);
                 if (guestUser != null)
                 {
                     if (guestUser.PortList.Count() > 0)
@@ -90,11 +136,12 @@ namespace OMNI.Web.Controllers
                     }
                 }
 
-                PortData.RegionTxt = "Region (Selected)";
-                PortData.PortList = userPorts;
-            } else if (UserData.RoleList.Contains("OSMOSYS_ADMIN_LOKASI")) {
+                result = userPorts;
+            }
+            else if (role.Contains("OSMOSYS_ADMIN_LOKASI"))
+            {
                 List<Port> userPorts = new List<Port>();
-                AdminLocationModel adminUser = await _adminLocationService.GetByUserId(UserData.UserId);
+                AdminLocationModel adminUser = await _adminLocationService.GetByUserId(userId);
                 if (adminUser != null)
                 {
                     if (adminUser.PortList.Count() > 0)
@@ -115,122 +162,83 @@ namespace OMNI.Web.Controllers
                     }
                 }
 
-                PortData.RegionTxt = "Region (Selected)";
-                PortData.PortList = userPorts;
-            } else
-            {
-                PortData.RegionTxt = "Region 1, 2 & 3";
-                PortData.PortList = await GetAllPort();
+                result = userPorts;
             }
-
-            return "OK";
-        }
-
-        public static class UserData
-        {
-            public static string IPAddress { get; set; }
-            public static int UserId { get; set; }
-            public static string Username { get; set; }
-            public static string Email { get; set; }
-            public static List<string> RoleList;
-            public static string[] ParamRole { get; set; }
-        }
-
-        public class ParamUser
-        {
-            public string IPAddress { get; set; }
-            public int UserId { get; set; }
-            public string Username { get; set; }
-            public string Email { get; set; }
-            public List<string> RoleList;
-            public string[] ParamRole { get; set; }
-        }
-
-        public static class DataUser
-        {
-            public static List<ParamUser> UserList { get; set; }
-        }
-
-        public override void OnActionExecuted(ActionExecutedContext context)
-        {
-            base.OnActionExecuted(context);
-            ViewBag.Username = null;
-            ViewBag.Email = null;
-            ViewBag.Roles = null;
-
-            if(DataUser.UserList != null)
+            else 
             {
-                var findUser = DataUser.UserList.FindAll(b => b.IPAddress.Contains(GetIPAddress())).FirstOrDefault();
-                if (findUser != null)
-                {
-                    UserData.IPAddress = findUser.IPAddress;
-                    UserData.UserId = findUser.UserId;
-                    UserData.Username = findUser.Username;
-                    UserData.Email = findUser.Email;
-                    UserData.RoleList = findUser.RoleList;
-                } else
-                {
-                    UserData.IPAddress = null;
-                    UserData.UserId = 0;
-                    UserData.Username = null;
-                    UserData.Email = null;
-                    UserData.RoleList = null;
-                }
-            }
-
-            ViewBag.Username = UserData.Username;
-            ViewBag.Email = UserData.Email;
-            ViewBag.Roles = UserData.RoleList;
-
-            if (UserData.RoleList != null)
-            {
-                if (UserData.RoleList.Contains(GeneralConstants.OSMOSYS_MANAGEMENT) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_LOKASI) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_NON_LOKASI))
-                {
-                    ViewBag.Editable = false;
-                }
-                else
-                {
-                    ViewBag.Editable = true;
-                }
-
-                if (UserData.RoleList.Contains(GeneralConstants.OSMOSYS_SUPER_ADMIN) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_MANAGEMENT))
-                {
-                    ViewBag.EnableUserAccess = true;
-                }
-                else
-                {
-                    ViewBag.EnableUserAccess = false;
-                }
-            } else
-            {
-                ViewBag.Editable = false;
-            }
-        }
-
-        public static bool CheckUserRole()
-        {
-            bool result = false;
-            var roleList = UserData.RoleList;
-            if(roleList != null)
-            {
-                if(UserData.ParamRole.Count() > 0)
-                {
-                    for(int i=0; i < UserData.ParamRole.Count(); i++)
-                    {
-                        if (!result)
-                        {
-                            var findRole = roleList.FindAll(b => b.Contains(UserData.ParamRole[i]));
-                            if (findRole.Count() > 0)
-                            {
-                                result = true;
-                            }
-                        }
-                    }
-                }
+                result = await GetAllPort();
             }
 
             return result;
         }
+
+        //public static class UserData
+        //{
+        //    public static int UserId { get; set; }
+        //    public static string Username { get; set; }
+        //    public static string Email { get; set; }
+        //    public static List<string> RoleList;
+        //    public static string[] ParamRole { get; set; }
+        //}
+
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            //base.OnActionExecuted(context);
+
+            //ViewBag.Username = UserData.Username;
+            //ViewBag.Email = UserData.Email;
+            //ViewBag.Roles = UserData.RoleList;
+
+            //if (UserData.RoleList != null)
+            //{
+            //    if (UserData.RoleList.Contains(GeneralConstants.OSMOSYS_MANAGEMENT) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_LOKASI) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_NON_LOKASI))
+            //    {
+            //        ViewBag.Editable = false;
+            //    }
+            //    else
+            //    {
+            //        ViewBag.Editable = true;
+            //    }
+
+            //    if (UserData.RoleList.Contains(GeneralConstants.OSMOSYS_SUPER_ADMIN) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_MANAGEMENT))
+            //    {
+            //        ViewBag.EnableUserAccess = true;
+            //    }
+            //    else
+            //    {
+            //        ViewBag.EnableUserAccess = false;
+            //    }
+            //}
+            //else
+            //{
+            //    ViewBag.Editable = false;
+            //}
+        }
+
+        //public static bool CheckUserRole()
+        //{
+        //    bool result = false;
+        //    var roleList = UserData.RoleList;
+        //    if(roleList != null)
+        //    {
+        //        if(UserData.ParamRole.Count() > 0)
+        //        {
+        //            for(int i=0; i < UserData.ParamRole.Count(); i++)
+        //            {
+        //                if (!result)
+        //                {
+        //                    var findRole = roleList.FindAll(b => b.Contains(UserData.ParamRole[i]));
+        //                    if (findRole.Count() > 0)
+        //                    {
+        //                        result = true;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return result;
+        //}
 
         public class CheckRole : ActionFilterAttribute
         {
@@ -240,68 +248,33 @@ namespace OMNI.Web.Controllers
 
             public override void OnActionExecuting(ActionExecutingContext context)
             {
-                if (DataUser.UserList != null)
-                {
-                    var findUser = DataUser.UserList.FindAll(b => b.IPAddress.Contains(GetIPAddress())).FirstOrDefault();
-                    if (findUser != null)
-                    {
-                        UserData.IPAddress = findUser.IPAddress;
-                        UserData.UserId = findUser.UserId;
-                        UserData.Username = findUser.Username;
-                        UserData.Email = findUser.Email;
-                        UserData.RoleList = findUser.RoleList;
-                    }
-                    else
-                    {
-                        UserData.IPAddress = null;
-                        UserData.UserId = 0;
-                        UserData.Username = null;
-                        UserData.Email = null;
-                        UserData.RoleList = null;
-                    }
-                }
 
-                //base.OnActionExecuting(context);
-                if (!string.IsNullOrEmpty(Roles))
-                {
-                    var arrRoles = Roles.Split(",");
-                    UserData.ParamRole = arrRoles;
-                }
+                ////base.OnActionExecuting(context);
+                //if (!string.IsNullOrEmpty(Roles))
+                //{
+                //    var arrRoles = Roles.Split(",");
+                //    UserData.ParamRole = arrRoles;
+                //}
 
-                isInRole = CheckUserRole();
+                //isInRole = CheckUserRole();
 
-                if (!isInRole)
-                {
-                    if(UserData.ParamRole.Count() > 0 && !string.IsNullOrEmpty(UserData.Username))
-                    {
-                        context.Result = new RedirectToActionResult("NoAccess", "Login", null);
-                    } else
-                    {
-                        UserData.Username = null;
-                        UserData.Email = null;
-                        UserData.RoleList = null;
+                //if (!isInRole)
+                //{
+                //    if(UserData.ParamRole.Count() > 0 && !string.IsNullOrEmpty(UserData.Username))
+                //    {
+                //        context.Result = new RedirectToActionResult("NoAccess", "Login", null);
+                //    } else
+                //    {
+                //        UserData.Username = null;
+                //        UserData.Email = null;
+                //        UserData.RoleList = null;
 
-                        context.Result = new RedirectToActionResult("Index", "Login", null);
-                    }  
-                } else
-                {
-                }
+                //        context.Result = new RedirectToActionResult("Index", "Login", null);
+                //    }  
+                //} else
+                //{
+                //}
             }
-        }
-
-        public static string GetIPAddress()
-        {
-            var result = "";
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            var ipList = (from ip in host.AddressList where ip.AddressFamily == AddressFamily.InterNetwork select ip.ToString()).ToList();
-            if(ipList.Count() > 0)
-            {
-                result = ipList[0];
-            }
-
-            //Console.WriteLine("MachineName: {0}", Environment.MachineName);
-
-            return Environment.MachineName;
         }
 
         public class yearData

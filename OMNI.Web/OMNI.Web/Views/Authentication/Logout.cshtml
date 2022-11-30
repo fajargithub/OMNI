@@ -73,6 +73,7 @@
     $(document).ready(function () {
 
         setTimeout(function () {
+            sessionStorage.removeItem("userData");
             window.location.replace("/Login/Index");
         }, 1000);
     });

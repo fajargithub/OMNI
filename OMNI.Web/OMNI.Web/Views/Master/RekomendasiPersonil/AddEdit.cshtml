@@ -25,6 +25,9 @@
         <div class="form-group">
             <label class="form-label" for="">Rekomendasi Value</label>
             <input class="form-control" type="number" name="Value" asp-for="Value" />
+
+            <input type="hidden" name="UpdatedBy" asp-for="UpdatedBy" id="updatedBy" />
+            <input type="hidden" name="CreatedBy" asp-for="UpdatedBy" id="createdBy" />
         </div>
     </div>
 
@@ -34,6 +37,9 @@
 <script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $("#updatedBy").val(userData.username);
+        $("#createdBy").val(userData.username);
 
         $('.select2-input').select2({
             dropdownParent: $('#modal-add-edit')

@@ -146,7 +146,7 @@
             });
 
         $("#searchLokasi").click(function () {
-            window.location.href = base_api + 'LLPHistoryStatus/Index?port=' + port + "&year=" + selectedYear;
+            window.location.href = base_api + 'LLPHistoryStatus/Index?port=' + port + "&year=" + selectedYear + "&role=" + userRole + "&userId=" + userData.userId;
         })
 
             $('.select2-input-index').select2();

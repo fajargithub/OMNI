@@ -3,6 +3,7 @@
 var totalPersentaseHubla = 0;
 var totalPersentaseOSCP = 0;
 
+
 function countTotalPercentageLLPTrx() {
     console.log('on count percentage llptrx!');
     var lastJenis = "";

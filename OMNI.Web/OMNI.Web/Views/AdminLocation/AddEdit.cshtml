@@ -11,12 +11,18 @@
             </select>
             <input type="hidden" name="Id" asp-for="Id" value="@ViewBag.PrimaryKey" />
             <input type="hidden" name="UserId" asp-for="UserId" />
+
+            <input type="hidden" name="UpdatedBy" asp-for="UpdatedBy" id="updatedBy" />
+            <input type="hidden" name="CreatedBy" asp-for="UpdatedBy" id="createdBy" />
         </div>
     </div>
     @await Html.PartialAsync("_ModalFooter")
 </form>
 
 <script type="text/javascript">
+
+    $("#updatedBy").val(userData.username);
+    $("#createdBy").val(userData.username);
 
         $('.select2-input').select2({
             dropdownParent: $('#modal-add-edit')

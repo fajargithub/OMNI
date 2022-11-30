@@ -51,11 +51,12 @@ namespace OMNI.Web.Controllers.Master
             });
         }
 
-        public async Task<IActionResult> Index(string port, int typeId, int year)
+        public async Task<IActionResult> Index(string port, int typeId, int year, string role, int userId)
         {
-            await GetPorts();
-            ViewBag.PortList = PortData.PortList;
-            ViewBag.RegionTxt = PortData.RegionTxt;
+            List<Port> portList = await GetPorts(role, userId);
+
+            ViewBag.PortList = portList;
+            ViewBag.RegionTxt = GetRegionTxt(role);
 
             var thisYear = DateTime.Now.Year;
 
@@ -72,11 +73,11 @@ namespace OMNI.Web.Controllers.Master
 
             if (!string.IsNullOrEmpty(port))
             {
-                ViewBag.SelectedPort = PortData.PortList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
             }
             else
             {
-                var findPort = PortData.PortList.OrderBy(b => b.Id).FirstOrDefault();
+                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
                 ViewBag.SelectedPort = findPort;
                 port = findPort.Name;
             }

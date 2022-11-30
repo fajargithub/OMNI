@@ -19,6 +19,9 @@
                      <input class="form-control" asp-for="Name" required>
                      <input type="hidden" asp-for="LampiranType" required>
                      <input type="hidden" asp-for="Port" required>
+
+                     <input type="hidden" name="UpdatedBy" asp-for="UpdatedBy" id="updatedBy" />
+                     <input type="hidden" name="CreatedBy" asp-for="UpdatedBy" id="createdBy" />
                  </div>
              </div>
          </div> <br />
@@ -51,6 +54,9 @@
 </form>
 
 <script type="text/javascript">
+
+    $("#updatedBy").val(userData.username);
+    $("#createdBy").val(userData.username);
 
     var id = parseInt("@ViewBag.Id");
     var lampiranType = "@ViewBag.LampiranType";

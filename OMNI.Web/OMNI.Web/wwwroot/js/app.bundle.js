@@ -29,15 +29,51 @@ function generateQRCode2(qrcode_url) {
     qrCode.append(document.getElementById("qrcode"));
 }
 
+var userRole = "";
+var userData = {};
+
+var editable = "False";
+
 function checkSession() {
     console.log('on check session');
-    var username = sessionStorage.getItem("username");
-    if (!username) {
+    var session = sessionStorage.getItem("userData");
+    if (session == null || session == "" || session == undefined) {
+        sessionStorage.removeItem("userData");
         window.location.replace("/Login/Logout");
+    } else {
+        userData = JSON.parse(session);
+        var roles = userData.roles.split("::");
+        userRole = roles[0];
+
+        if (userRole != null) {
+            if (userRole.includes("OSMOSYS_MANAGEMENT") || userRole.includes("OSMOSYS_GUEST_LOKASI") || userRole.includes("OSMOSYS_GUEST_NON_LOKASI")) {
+                $(".editable").hide();
+                editable = "False";
+            }
+            else {
+                $(".editable").show();
+                editable = "True";
+            }
+
+            if (userRole.includes("OSMOSYS_SUPER_ADMIN") || userRole.includes("OSMOSYS_MANAGEMENT")) {
+                $(".userAccess").show();
+                editable = "True";
+            }
+            else {
+                $(".userAccess").hide();
+                editable = "False";
+            }
+        }
+        else {
+            $(".editable").show();
+            editable = "True";
+        }
     }
+
+    console.log(userData.userId);
 }
 
-//checkSession();
+checkSession();
 
 var myapp_config = {
 	/*

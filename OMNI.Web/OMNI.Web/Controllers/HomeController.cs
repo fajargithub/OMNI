@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers
 {
     [AllowAnonymous]
-    [CheckRole(Roles = GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION1 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION2 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION3 + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI)]
+    //[CheckRole(Roles = GeneralConstants.OSMOSYS_SUPER_ADMIN + "," + GeneralConstants.OSMOSYS_MANAGEMENT + "," + GeneralConstants.OSMOSYS_ADMIN_LOKASI + "," + GeneralConstants.OSMOSYS_ADMIN_REGION1 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION2 + "," + GeneralConstants.OSMOSYS_ADMIN_REGION3 + "," + GeneralConstants.OSMOSYS_GUEST_LOKASI + "," + GeneralConstants.OSMOSYS_GUEST_NON_LOKASI)]
     public class HomeController : OMNIBaseController
     {
         private readonly ILogger<HomeController> _logger;
@@ -58,11 +58,12 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string port, int year)
+        public async Task<IActionResult> Index(string port, int year, string role, int userId)
         {
             var dateNow = DateTime.Now;
             var thisYear = dateNow.Year;
-            
+
+            ViewBag.SelectedPort = "";
             ViewBag.YearList = GetYearList(2010, 2030);
             ViewBag.ThisYear = thisYear;
             ViewBag.Info = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
@@ -75,17 +76,18 @@ namespace OMNI.Web.Controllers
                 year = thisYear;
             }
 
-            await GetPorts();
-            ViewBag.PortList = PortData.PortList;
-            ViewBag.RegionTxt = PortData.RegionTxt;
+            List<Port> portList = await GetPorts(role, userId);
+
+            ViewBag.PortList = portList;
+            ViewBag.RegionTxt = GetRegionTxt(role);
 
             if (!string.IsNullOrEmpty(port))
             {
-                ViewBag.SelectedPort = PortData.PortList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
             }
             else
             {
-                var findPort = PortData.PortList.OrderBy(b => b.Id).FirstOrDefault();
+                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
                 if(findPort != null)
                 {
                     ViewBag.SelectedPort = findPort;
@@ -166,14 +168,14 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditLatihanTrx(LatihanTrxModel model)
         {
-            if (model.Id > 0)
-            {
-                model.UpdatedBy = UserData.Username;
-            }
-            else
-            {
-                model.CreatedBy = UserData.Username;
-            }
+            //if (model.Id > 0)
+            //{
+            //    model.UpdatedBy = UserData.Username;
+            //}
+            //else
+            //{
+            //    model.CreatedBy = UserData.Username;
+            //}
 
             var r = await _latihanTrxService.AddEdit(model);
 
@@ -350,13 +352,13 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditLLPTrx(LLPTrxModel model)
         {
-            if(model.Id > 0)
-            {
-                model.UpdatedBy = UserData.Username;
-            } else
-            {
-                model.CreatedBy = UserData.Username;
-            }
+            //if(model.Id > 0)
+            //{
+            //    model.UpdatedBy = UserData.Username;
+            //} else
+            //{
+            //    model.CreatedBy = UserData.Username;
+            //}
             
             var r = await _llpTrxService.AddEdit(model);
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
@@ -425,14 +427,14 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditPersonilTrx(PersonilTrxModel model)
         {
-            if(model.Id > 0)
-            {
-                model.UpdatedBy = UserData.Username;
-            }
-            else
-            {
-                model.CreatedBy = UserData.Username;
-            }
+            //if(model.Id > 0)
+            //{
+            //    model.UpdatedBy = UserData.Username;
+            //}
+            //else
+            //{
+            //    model.CreatedBy = UserData.Username;
+            //}
 
             var r = await _personilTrxService.AddEdit(model);
 

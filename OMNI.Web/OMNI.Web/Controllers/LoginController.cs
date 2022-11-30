@@ -37,6 +37,8 @@ namespace OMNI.Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.EnableUserAccess = false;
+            ViewBag.Editable = false;
             return PartialView(LOGIN_URL);
         }
 
@@ -57,43 +59,27 @@ namespace OMNI.Web.Controllers
             }
             else
             {
-                //var getIp = GetIPAddress2();
 
-                ParamUser newUser = new ParamUser();
-                newUser.IPAddress = GetIPAddress();
-                newUser.UserId = r.UserId;
-                newUser.Username = r.Username;
-                newUser.RoleList = r.Roles;
-                newUser.Email = r.Email;
 
-                var getUserData = DataUser.UserList;
 
-                if(getUserData != null)
-                {
-                    getUserData.Add(newUser);
-                    DataUser.UserList = getUserData;
-                } else
-                {
-                    List<ParamUser> newUserList = new List<ParamUser>();
-                    newUserList.Add(newUser);
-                    DataUser.UserList = newUserList;
-                }
 
                 //UserData.UserId = r.UserId;
                 //UserData.RoleList = r.Roles;
                 //UserData.Username = r.Username;
                 //UserData.Email = r.Email;
-                return Ok(new JsonResponse());
+                return Ok(new JsonResponse { 
+                    Status = GeneralConstants.SUCCESS, 
+                    UserId = r.UserId,
+                    Roles = r.Roles,
+                    Username = r.Username,
+                    Email = r.Email
+                });
             }
         }
 
         [HttpGet]
         public IActionResult Logout()
         {
-            if(DataUser.UserList.Count() > 0)
-            {
-                var findUser = DataUser.UserList.RemoveAll(b => b.IPAddress.Contains(GetIPAddress()));
-            }
             return PartialView(LOGOUT_URL);
         }
     }

@@ -592,6 +592,30 @@ var initApp = (function (app) {
             contentType: false,
             data: formData,
             success: function (response) {
+                if (response.userId !== null && response.userId > 0 && response.userId !== undefined) {
+                    var objUserData = {
+                        userId: response.userId,
+                        username: response.username,
+                        email: response.email,
+                        roles: null
+                    }
+
+                    if (response.roles.length > 0) {
+                        var roleList = "";
+                        for (var i = 0; i < response.roles.length; i++) {
+                            if (i == (response.roles.length - 1)) {
+                                roleList += response.roles[i];
+                            } else {
+                                roleList += response.roles[i] + "::";
+                            }
+                        }
+
+                        objUserData.roles = roleList;
+                        console.log(objUserData);
+                        sessionStorage.setItem("userData", JSON.stringify(objUserData));
+                    }
+                }
+
                 if (response.status == "SUCCESS") {
                     $.ajax({
                         url: setSession(response),

@@ -22,12 +22,16 @@
                 <h2>
                     Spesifikasi / Jenis List
                 </h2>
-                @if (ViewBag.Editable)
+                @*@if (ViewBag.Editable)
                 {
                     <div class="panel-toolbar">
                         <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                     </div>
-                }
+                }*@
+
+                <div class="panel-toolbar editable">
+                        <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    </div>
                 </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -116,25 +120,14 @@
                         },
                     ],
                     processing: true,
-                    //serverSide: true,
                     "ajax": {
                         "url": base_api + 'SpesifikasiJenis/GetAll',
                         "type": 'GET'
-                        //"data": { searchData: result }
                     },
                     "columns": [
                         { "data": null },
                         { "data": "peralatanOSR" },
                         { "data": "jenis" },
-                        //{
-                        //    "targets": -1,
-                        //    "data": null,
-                        //    "render": function (row, data, iDisplayIndex) {
-                        //        var image = "<img src='" + iDisplayIndex.qrCode + "' alt='' width='50'>";
-
-                        //        return image;
-                        //    }
-                        //},
                         {
                             "targets": -1,
                             "data": null,

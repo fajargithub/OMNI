@@ -4,8 +4,8 @@
             <img src="~/img/@ViewBag.Avatar" class="rounded-circle profile-image" alt="@ViewBag.User">
         </span>
         <div class="info-card-text">
-            <div class="fs-lg text-truncate text-truncate-lg">@User.Identity.Name</div>
-            <span class="text-truncate text-truncate-md opacity-80">@ViewBag.Email</span>
+            <div class="fs-lg text-truncate text-truncate-lg"><b id="username"></b></div>
+            <span class="text-truncate text-truncate-md opacity-80"><b id="email"></b></span>
         </div>
     </div>
 </div>
@@ -28,6 +28,9 @@
 <script src="~/js/front/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+
+        $("#username").text(userData.username);
+        $("#email").text(userData.email);
 
         function funcLogout() {
             window.onbeforeunload = function () { return "Your work will be lost."; };

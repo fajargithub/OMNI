@@ -37,7 +37,7 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string port, int year)
+        public async Task<IActionResult> Index(string port, int year, string role, int userId)
         {
             var dateNow = DateTime.Now;
             var thisYear = dateNow.Year;
@@ -53,17 +53,18 @@ namespace OMNI.Web.Controllers
                 year = thisYear;
             }
 
-            await GetPorts();
-            ViewBag.PortList = PortData.PortList;
-            ViewBag.RegionTxt = PortData.RegionTxt;
+            List<Port> portList = await GetPorts(role, userId);
+
+            ViewBag.PortList = portList;
+            ViewBag.RegionTxt = GetRegionTxt(role);
 
             if (!string.IsNullOrEmpty(port))
             {
-                ViewBag.SelectedPort = PortData.PortList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
             }
             else
             {
-                var findPort = PortData.PortList.OrderBy(b => b.Id).FirstOrDefault();
+                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
                 ViewBag.SelectedPort = findPort;
                 port = findPort.Name;
             }

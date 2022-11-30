@@ -15,8 +15,9 @@
                     </select>
                     <input type="hidden" name="Port" asp-for="Port" />
                     <input type="hidden" name="Year" asp-for="Year" />
-                    <input type="hidden" name="CreatedBy" asp-for="CreatedBy" />
-                    <input type="hidden" name="UpdatedBy" asp-for="UpdatedBy" />
+
+                    <input type="hidden" name="UpdatedBy" asp-for="UpdatedBy" id="updatedBy" />
+                    <input type="hidden" name="CreatedBy" asp-for="UpdatedBy" id="createdBy" />
                 </div>
             </div>
             <div class="col-md-3">
@@ -78,6 +79,10 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $("#updatedBy").val(userData.username);
+        $("#createdBy").val(userData.username);
+
         $(".datepicker").datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,

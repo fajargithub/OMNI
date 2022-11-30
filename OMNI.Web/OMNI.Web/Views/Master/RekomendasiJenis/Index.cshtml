@@ -195,20 +195,6 @@
                 });
             }).draw();
 
-            $("#port").on('change', function () {
-                port = this.value;
-                typeId = $("#rekomendasiType").val();
-
-                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId;
-            });
-
-            $("#rekomendasiType").on('change', function () {
-                typeId = this.value;
-                port = $("#port").val();
-
-                /*window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId + "&year=" + selectedYear;*/
-            });
-
             $("#year-lokasi").on('change', function () {
                 selectedYear = this.value;
             });
@@ -217,8 +203,12 @@
                 port = this.value;
             });
 
+            $("#rekomendasiType").on('change', function () {
+                typeId = this.value;
+            });
+
             $("#searchLokasi").click(function () {
-                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId + "&year=" + selectedYear;
+                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId + "&year=" + selectedYear + "&role=" + userRole + "&userId=" + userData.userId;
             })
         });
 
