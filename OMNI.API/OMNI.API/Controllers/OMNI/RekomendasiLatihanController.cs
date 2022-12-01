@@ -87,22 +87,33 @@ namespace OMNI.API.Controllers.OMNI
                 data.UpdatedBy = "admin";
                 _dbOMNI.RekomendasiLatihan.Update(data);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                return Ok(new ReturnJson { });
             }
             else
             {
-                data.Latihan = await _dbOMNI.Latihan.Where(b => b.Id == int.Parse(model.Latihan)).FirstOrDefaultAsync(cancellationToken);
-                data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
-                data.Port = model.Port;
-                data.Year = model.Year;
-                data.Value = model.Value;
-                data.CreatedAt = DateTime.Now;
-                data.CreatedBy = "admin";
-                await _dbOMNI.RekomendasiLatihan.AddAsync(data, cancellationToken);
-                await _dbOMNI.SaveChangesAsync(cancellationToken);
+                var check = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Latihan.Id == int.Parse(model.Latihan) && b.Port.Contains(model.Port)).Include(b => b.Latihan).FirstOrDefaultAsync(cancellationToken);
+                if (check != null)
+                {
+                    return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "Data already exist" });
+                }
+                else
+                {
+                    data.Latihan = await _dbOMNI.Latihan.Where(b => b.Id == int.Parse(model.Latihan)).FirstOrDefaultAsync(cancellationToken);
+                    data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
+                    data.Port = model.Port;
+                    data.Year = model.Year;
+                    data.Value = model.Value;
+                    data.CreatedAt = DateTime.Now;
+                    data.CreatedBy = "admin";
+                    await _dbOMNI.RekomendasiLatihan.AddAsync(data, cancellationToken);
+                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                    return Ok(new ReturnJson { });
+                }
             }
 
-
-            return Ok(new ReturnJson { });
+            
         }
 
         // DELETE api/<ValuesController>/5

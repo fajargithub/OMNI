@@ -87,22 +87,32 @@ namespace OMNI.API.Controllers.OMNI
                 data.UpdatedBy = "admin";
                 _dbOMNI.RekomendasiPersonil.Update(data);
                 await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                return Ok(new ReturnJson { });
             }
             else
             {
-                data.Personil = await _dbOMNI.Personil.Where(b => b.Id == int.Parse(model.Personil)).FirstOrDefaultAsync(cancellationToken);
-                data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
-                data.Port = model.Port;
-                data.Year = model.Year;
-                data.Value = model.Value;
-                data.CreatedAt = DateTime.Now;
-                data.CreatedBy = "admin";
-                await _dbOMNI.RekomendasiPersonil.AddAsync(data, cancellationToken);
-                await _dbOMNI.SaveChangesAsync(cancellationToken);
+                var check = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Personil.Id == int.Parse(model.Personil) && b.Port.Contains(model.Port)).Include(b => b.Personil).FirstOrDefaultAsync(cancellationToken);
+
+                if (check != null)
+                {
+                    return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "Data already exist" });
+                }
+                else
+                {
+                    data.Personil = await _dbOMNI.Personil.Where(b => b.Id == int.Parse(model.Personil)).FirstOrDefaultAsync(cancellationToken);
+                    data.RekomendasiType = await _dbOMNI.RekomendasiType.Where(b => b.Id == int.Parse(model.RekomendasiType)).FirstOrDefaultAsync(cancellationToken);
+                    data.Port = model.Port;
+                    data.Year = model.Year;
+                    data.Value = model.Value;
+                    data.CreatedAt = DateTime.Now;
+                    data.CreatedBy = "admin";
+                    await _dbOMNI.RekomendasiPersonil.AddAsync(data, cancellationToken);
+                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                    return Ok(new ReturnJson { });
+                }
             }
-
-
-            return Ok(new ReturnJson { });
         }
 
         // DELETE api/<ValuesController>/5
