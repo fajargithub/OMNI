@@ -128,9 +128,14 @@
     <script src="~/js/datatable/datatable.js"></script>
 
     <script>
-        @*var port = "@ViewBag.SelectedPort.Name";
-        var selectedYear = parseInt("@ViewBag.ThisYear");*@
+        var defaultPort = "@ViewBag.SelectedPort.Name";
+        var defaultYear = "@ViewBag.ThisYear";
 
+        if (defaultPort !== localStorage.getItem("port") || defaultYear !== localStorage.getItem("selectedYear")) {
+            setTimeout(function () {
+                window.location.href = base_api + 'LLPHistoryStatus/Index?port=' + localStorage.getItem("port") + "&year=" + localStorage.getItem("selectedYear");
+            }, 200);
+        }
 
         $("#year-lokasi").val(selectedYear).change();
 

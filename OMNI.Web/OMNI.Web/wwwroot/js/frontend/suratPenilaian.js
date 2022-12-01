@@ -33,7 +33,7 @@
             ordering: false,
             order: [],
             columnDefs: [
-                { "orderable": false, "targets": 5 }
+                { "orderable": false, "targets": 6 }
             ],
             buttons: [
                 {
@@ -53,6 +53,7 @@
                 { "data": null },
                 { "data": "name" },
                 { "data": "startDate" },
+                { "data": "endDate" },
                 { "data": "createdBy" },
                 { "data": "createDate" },
                 {

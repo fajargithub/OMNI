@@ -84,6 +84,7 @@
                                                 <th style="width:7%;">No</th>
                                                 <th>Perihal Surat</th>
                                                 <th>Tanggal Surat Keluar</th>
+                                                <th>Tanggal Tenggat</th>
                                                 <th>Uploaded By</th>
                                                 <th>Uploaded At</th>
                                                 <th class="text-center" style="width:10%;">Action</th>
@@ -175,10 +176,10 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         var trxId = 0;
-        //var port = "@ViewBag.SelectedPort.Name";
-        //var selectedYear = parseInt("@ViewBag.ThisYear");
-
-        console.log(port);
+        var defaultPort = "@ViewBag.SelectedPort.Name";
+        if (defaultPort !== port) {
+            window.location.href = base_api + 'Lampiran/Index?port=' + localStorage.getItem("port");
+        }
 
         $('.select2-input-index').select2();
 
