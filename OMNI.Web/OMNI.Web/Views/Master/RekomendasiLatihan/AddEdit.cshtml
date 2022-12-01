@@ -9,7 +9,7 @@
         <div class="form-group">
             <label class="form-label" for="">Select Latihan</label>
             <select name="Latihan" asp-for="Latihan" id="latihan" class="select2-input"
-                    asp-items="@(new SelectList(ViewBag.LatihanList, "Id","Name"))">
+                    asp-items="@(new SelectList(ViewBag.LatihanList, "Id","Name"))" required>
             </select>
             <input type="hidden" name="Port" asp-for="Port" />
             <input type="hidden" name="Year" asp-for="Year" />
@@ -18,7 +18,7 @@
         <div class="form-group">
             <label class="form-label" for="">Select Type</label>
             <select name="RekomendasiType" asp-for="RekomendasiType" id="rekomendasiType" class="select2-input"
-                    asp-items="@(new SelectList(ViewBag.RekomendasiTypeList, "Id","Name"))">
+                    asp-items="@(new SelectList(ViewBag.RekomendasiTypeList, "Id","Name"))" required>
             </select>
         </div>
 

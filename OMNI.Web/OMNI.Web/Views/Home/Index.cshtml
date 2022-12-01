@@ -280,11 +280,30 @@
 
 
     <script>
-        @*var isManagement = "@ViewBag.Roles.Contains("OSMOSYS_ADMIN_REGION")";
-        console.log(isManagement);*@
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                console.log("Browser tab is hidden")
+            } else {
+                console.log("Browser tab is visible")
 
-        var port = "@ViewBag.SelectedPort.Name";
-        var selectedYear = parseInt("@ViewBag.ThisYear");
+                if (port !== localStorage.getItem("port") || selectedYear !== localStorage.getItem("selectedYear")) {
+                    setTimeout(function () {
+                        window.location.href = base_api + 'Home/Index?port=' + localStorage.getItem("port") + "&year=" + localStorage.getItem("selectedYear") + "&role=" + userRole + "&userId=" + userData.userId;
+                    }, 200);
+                } 
+            }
+        });
+
+        $("#year-lokasi").on('change', function () {
+            selectedYear = this.value;
+            localStorage.setItem("selectedYear", this.value);
+        });
+
+        $("#port").on('change', function () {
+            port = this.value;
+            localStorage.setItem("port", this.value);
+
+        });
 
         $("#year-lokasi").val(selectedYear).change();
 
@@ -292,15 +311,8 @@
                 $("#port").val(port).change();
         }
 
-        $("#year-lokasi").on('change', function () {
-            selectedYear = this.value;
-        });
-
-            $("#port").on('change', function () {
-                port = this.value;
-            });
-
         $("#searchLokasi").click(function () {
+            console.log(port);
             window.location.href = base_api + 'Home/Index?port=' + port + "&year=" + selectedYear + "&role=" + userRole + "&userId=" + userData.userId;
         })
 

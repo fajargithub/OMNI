@@ -80,9 +80,9 @@ namespace OMNI.Web.Controllers.Master
         [HttpGet]
         public async Task<IActionResult> AddEdit(int id, string port, int year)
         {
-            ViewBag.PersonilList = await _personilService.GetAll();
-            //ViewBag.RekomendasiTypeList = await GetAllRekomendasiType();
+            var personilList = await _personilService.GetAll();
             var rekomendasiTypeList = await GetAllRekomendasiType();
+
             ViewBag.RekomendasiTypeList = rekomendasiTypeList.FindAll(b => b.Id == 1).ToList();
             ViewBag.Year = year;
             RekomendasiPersonilModel model = new RekomendasiPersonilModel();
@@ -91,7 +91,10 @@ namespace OMNI.Web.Controllers.Master
             if (id > 0)
             {
                 model = await _rekomendasiPersonilService.GetById(id);
+                personilList = personilList.FindAll(b => b.Id == int.Parse(model.Personil));
             }
+
+            ViewBag.PersonilList = personilList;
 
             return PartialView(ADD_EDIT, model);
         }

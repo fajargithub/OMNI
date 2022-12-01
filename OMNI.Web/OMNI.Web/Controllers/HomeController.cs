@@ -31,8 +31,6 @@ namespace OMNI.Web.Controllers
         private static readonly string INDEX_FILE = "~/Views/Home/IndexFile.cshtml";
         private static readonly string ADD_EDIT_FILE = "~/Views/Home/AddEditFile.cshtml";
 
-        //private static readonly string QR_CODE_DETAIL = "~/Views/Home/QRCodeDetail.cshtml";
-
         private static readonly string ADD_EDIT_LLP_HISTORY_STATUS = "~/Views/Home/AddEditLLPHistoryStatus.cshtml";
 
         protected ILLPTrx _llpTrxService;
@@ -202,13 +200,13 @@ namespace OMNI.Web.Controllers
             });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ViewFile(int id, string fileName, string flag)
+        [Route("Home/ViewFile/{fileName}")]
+        public async Task<IActionResult> ViewFile([FromRoute] string fileName, int id, string flag)
         {
             var r = await _llpTrxService.ReadFile(fileName, flag);
             var file = await _llpTrxService.GetFileData(id);
 
-            return File(r, @"" + file.ContentType, file.FileName);
+            return File(r, @"" + file.ContentType);
         }
 
         [HttpGet]

@@ -128,8 +128,9 @@
     <script src="~/js/datatable/datatable.js"></script>
 
     <script>
-        var port = "@ViewBag.SelectedPort.Name";
-        var selectedYear = parseInt("@ViewBag.ThisYear");
+        @*var port = "@ViewBag.SelectedPort.Name";
+        var selectedYear = parseInt("@ViewBag.ThisYear");*@
+
 
         $("#year-lokasi").val(selectedYear).change();
 
@@ -137,13 +138,29 @@
                 $("#port").val(port).change();
         }
 
-        $("#year-lokasi").on('change', function () {
-            selectedYear = this.value;
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                console.log("Browser tab is hidden")
+            } else {
+                console.log("Browser tab is visible")
+
+                if (port !== localStorage.getItem("port") || selectedYear !== localStorage.getItem("selectedYear")) {
+                    setTimeout(function () {
+                        window.location.href = base_api + 'LLPHistoryStatus/Index?port=' + localStorage.getItem("port") + "&year=" + localStorage.getItem("selectedYear") + "&role=" + userRole + "&userId=" + userData.userId;
+                    }, 200);
+                }
+            }
         });
 
-            $("#port").on('change', function () {
-                port = this.value;
-            });
+        $("#year-lokasi").on('change', function () {
+            selectedYear = this.value;
+            localStorage.setItem("selectedYear", this.value);
+        });
+
+        $("#port").on('change', function () {
+            port = this.value;
+            localStorage.setItem("port", this.value);
+        });
 
         $("#searchLokasi").click(function () {
             window.location.href = base_api + 'LLPHistoryStatus/Index?port=' + port + "&year=" + selectedYear + "&role=" + userRole + "&userId=" + userData.userId;

@@ -84,14 +84,11 @@
         $(document).ready(function () {
             var statusSurat = "@ViewBag.StatusSurat";
             var port = "@ViewBag.SelectedPort.Name";
+            var selectedYear = parseInt("@ViewBag.ThisYear");
+
             if (port !== null && port !== "") {
                 $("#port").val(port).change();
             }
-
-            console.log(statusSurat);
-
-            var selectedYear = parseInt("@ViewBag.ThisYear");
-            console.log(selectedYear);
 
             $("#year-lokasi").val(selectedYear).change();
 
@@ -167,15 +164,20 @@
                             "render": function (row, data, iDisplayIndex) {
                                 var result = "";
 
-                                if (statusSurat == "") {
-                                    if (editable == "True") {
-                                        result += "<input class='input-value' type='number' onchange='inputValue(" + iDisplayIndex.id + ")' id='value-" + iDisplayIndex.id + "' data-port='" + port + "' data-typeId='" + typeId + "' data-year='" + selectedYear + "' value='" + iDisplayIndex.value + "' style='width:50px;'>";
+                                if (typeId == 1) {
+                                    if (statusSurat == "") {
+                                        if (editable == "True") {
+                                            result += "<input class='input-value' type='number' onchange='inputValue(" + iDisplayIndex.id + ")' id='value-" + iDisplayIndex.id + "' data-port='" + port + "' data-typeId='" + typeId + "' data-year='" + selectedYear + "' value='" + iDisplayIndex.value + "' style='width:50px;'>";
+                                        } else {
+                                            result += "<input class='input-value' type='number' value='" + iDisplayIndex.value + "' style='width:50px;' disabled>";
+                                        }
                                     } else {
                                         result += "<input class='input-value' type='number' value='" + iDisplayIndex.value + "' style='width:50px;' disabled>";
                                     }
                                 } else {
-                                    result += "<input class='input-value' type='number' value='" + iDisplayIndex.value + "' style='width:50px;' disabled>";
+                                    result += "<input class='input-value' type='number' onchange='inputValue(" + iDisplayIndex.id + ")' id='value-" + iDisplayIndex.id + "' data-port='" + port + "' data-typeId='" + typeId + "' data-year='" + selectedYear + "' value='" + iDisplayIndex.value + "' style='width:50px;'>";
                                 }
+                                
                                 return result;
                             }
                         },

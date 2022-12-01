@@ -3,16 +3,6 @@
 // Please be sure to re-run gulp again if you do not see the config changes
 //-----------------------------
 
-function checkSessionOnLoginPage(){
-    var username = sessionStorage.getItem("username");
-    console.log(username);
-    if (username) {
-        window.location.replace("/MainPage/Index");
-    }
-}
-
-//checkSessionOnLoginPage();
-
 var myapp_config = {
     /*
     APP VERSION
@@ -612,7 +602,7 @@ var initApp = (function (app) {
 
                         objUserData.roles = roleList;
                         console.log(objUserData);
-                        sessionStorage.setItem("userData", JSON.stringify(objUserData));
+                        localStorage.setItem("userData", JSON.stringify(objUserData));
                     }
                 }
 

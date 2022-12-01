@@ -3,6 +3,23 @@
 // Please be sure to re-run gulp again if you do not see the config changes
 //--------------------------------------------------------------------------
 
+var port = localStorage.getItem("port");
+var selectedYear = localStorage.getItem("selectedYear");
+
+if (port == null || port == "" || port == undefined) {
+    localStorage.setItem("port", "Senipah");
+    port = "Senipah";
+} else {
+    port = localStorage.getItem("port");
+}
+
+if (selectedYear == null || selectedYear == "" || selectedYear == undefined) {
+    localStorage.setItem("selectedYear", new Date().getFullYear());
+    selectedYear = new Date().getFullYear();
+} else {
+    selectedYear = localStorage.getItem("selectedYear");
+}
+
 function generateQRCode2(qrcode_url) {
     console.log('on generate QR Code 2');
     $('#qrcode').empty();
@@ -35,10 +52,9 @@ var userData = {};
 var editable = "False";
 
 function checkSession() {
-    console.log('on check session');
-    var session = sessionStorage.getItem("userData");
+    var session = localStorage.getItem("userData");
     if (session == null || session == "" || session == undefined) {
-        sessionStorage.removeItem("userData");
+        localStorage.clear();
         window.location.replace("/Login/Logout");
     } else {
         userData = JSON.parse(session);
@@ -69,11 +85,13 @@ function checkSession() {
             editable = "True";
         }
     }
-
-    console.log(userData.userId);
 }
 
 checkSession();
+
+document.onclick = function () {
+    checkSession();
+}
 
 var myapp_config = {
 	/*

@@ -9,7 +9,7 @@
         <div class="form-group">
             <label class="form-label" for="">Select Personil</label>
             <select name="Personil" asp-for="Personil" id="personil" class="select2-input"
-                    asp-items="@(new SelectList(ViewBag.PersonilList, "Id","Name"))">
+                    asp-items="@(new SelectList(ViewBag.PersonilList, "Id","Name"))" required>
             </select>
             <input type="hidden" name="Port" asp-for="Port" />
             <input type="hidden" name="Year" asp-for="Year" />
