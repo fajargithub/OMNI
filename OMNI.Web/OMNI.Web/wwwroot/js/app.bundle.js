@@ -55,7 +55,7 @@ function checkSession() {
     var session = localStorage.getItem("userData");
     if (session == null || session == "" || session == undefined) {
         localStorage.clear();
-        window.location.replace("/Login/Logout");
+        window.location.replace("/Login/Index");
     } else {
         userData = JSON.parse(session);
         var roles = userData.roles.split("::");
