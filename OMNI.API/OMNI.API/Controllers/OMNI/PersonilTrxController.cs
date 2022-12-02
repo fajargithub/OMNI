@@ -135,7 +135,21 @@ namespace OMNI.API.Controllers.OMNI
                     temp.Name = list[i].Name;
                     //temp.TotalDetailExisting = list[i].TotalDetailExisting;
                     temp.TanggalPelatihan = list[i].TanggalPelatihan != null ? list[i].TanggalPelatihan.ToString("dd/MM/yyyy") : "-";
-                    temp.TanggalExpired = list[i].TanggalExpired != null ? list[i].TanggalExpired.ToString("dd/MM/yyyy") : "-";
+
+                    if(temp.Personil.Contains("IMO Level - 1"))
+                    {
+                        var tglExpired = list[i].TanggalPelatihan.AddYears(5);
+                        temp.TanggalExpired = tglExpired.ToString("dd/MM/yyyy");
+                    } else
+                    {
+                        temp.TanggalExpired = "-";
+                    }
+
+                    //if(list[i].TanggalExpired != null)
+                    //{
+                    //    temp.TanggalExpired = list[i].TanggalExpired != null ? list[i].TanggalExpired.ToString("dd/MM/yyyy") : "-";
+                    //}
+                    
                     temp.SisaMasaBerlaku = diffDays;
                     temp.PersentasePersonil = list[i].PersentasePersonil;
                     temp.Port = list[i].Port;
