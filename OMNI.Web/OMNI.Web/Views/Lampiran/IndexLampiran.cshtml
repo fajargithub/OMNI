@@ -58,7 +58,7 @@
                                     <a class="nav-link" data-toggle="tab" href="#tab_borders_icons-2" role="tab" aria-selected="false"> Surat Pengesahan</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tab_borders_icons-3" role="tab" aria-selected="false">Surat Perpanjangan Pengesahan</a>
+                                    <a class="nav-link" data-toggle="tab" href="#tab_borders_icons-3" role="tab" aria-selected="false">Surat Verifikasi Antara</a>
                                 </li>
                             </ul>
                             <div class="tab-content border border-top-0 p-3">
@@ -66,13 +66,6 @@
                                     <div class="row" style="padding:10px;">
                                         @if (ViewBag.EnablePenilaian)
                                         {
-                                            @*@if (ViewBag.Editable)
-                                            {
-                                                <div class="col-md-12 editable" style="text-align:right;">
-                                                    <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="PENILAIAN" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                                                </div>
-                                            }*@
-
                                             <div class="col-md-12 editable" style="text-align:right;">
                                                 <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="PENILAIAN" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                                             </div>
@@ -97,11 +90,6 @@
                                         <div class="col-md-12" style="text-align:right;">
                                             @if (ViewBag.EnablePengesahan)
                                             {
-                                                @*@if (ViewBag.Editable)
-            {
-                <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="PENGESAHAN" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-            }*@
-
                                                 <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="PENGESAHAN" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                                             }
                                         </div>
@@ -122,30 +110,10 @@
                                 <div class="tab-pane fade" id="tab_borders_icons-3" role="tabpanel">
                                     <div class="row" style="padding:10px;">
                                         <div class="col-md-12" style="text-align:right;">
-                                            @*@if (ViewBag.EnableVerifikasi1)
-                                            {
-                                                @if (ViewBag.Editable)
-                                                {
-                                                    <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI1" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Pertama</a>
-                                                }
-                                            }
-                                            @if (ViewBag.EnableVerifikasi2)
-                                            {
-                                                @if (ViewBag.Editable)
-                                                {
-                                                    <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI2" class="btn btn-info btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Kedua</a>
-                                                }
-                                            }*@
-                                                                                @*@if (ViewBag.Editable)
-                                            {
-                                                <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI1" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Pertama</a>
-                                                <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI2" class="btn btn-info btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Kedua</a>
-                                            }*@
-
-                                            <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI1" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Pertama</a>
-                                            <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI2" class="btn btn-info btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Kedua</a>
+                                            <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI1" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Add</a>
+                                            @*<a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI2" class="btn btn-info btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Kedua</a>
                                         </div>
-                                    </div>
+                                    </div>*@
                                     <table id="table_verifikasi_surat" class="table table-borderless table-hover table-striped w-100">
                                         <thead>
                                             <tr class="fw-500 text-uppercase">

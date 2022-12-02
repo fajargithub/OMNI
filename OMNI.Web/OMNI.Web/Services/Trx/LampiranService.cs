@@ -57,6 +57,11 @@ namespace OMNI.Web.Services.Trx
                 data.Add(new StringContent(m.Port.ToString()), "Port");
                 data.Add(new StringContent(m.LampiranType.ToString()), "LampiranType");
                 data.Add(new StringContent(m.StartDate.ToString()), "StartDate");
+                if(m.LampiranType == "PENILAIAN")
+                {
+                    data.Add(new StringContent(m.EndDate.ToString()), "EndDate");
+                }
+
                 data.Add(new StringContent(m.Name.ToString()), "Name");
                 if (string.IsNullOrEmpty(m.Remark))
                 {

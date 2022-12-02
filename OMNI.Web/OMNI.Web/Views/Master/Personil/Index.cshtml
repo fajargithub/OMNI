@@ -22,7 +22,7 @@
                 }*@
 
                 <div class="panel-toolbar editable">
-                        <a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                        @*<a asp-action="AddEdit" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>*@
                     </div>
                 </div>
             <div class="panel-container show">
@@ -34,14 +34,14 @@
                                 <th>Nama</th>
                                 <th>Satuan</th>
                                 <th>Desc</th>
-                                <th class="text-center" style="width:10%;">Action</th>
+                                @*<th class="text-center" style="width:10%;">Action</th>*@
                             </tr>
                             <tr id="table1-filter" style="display:none;">
                                 <th></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Name" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Satuan" /></th>
                                 <th><input type="text" class="form-control" placeholder="Filter Desc" /></th>
-                                <th></th>
+                                @*<th></th>*@
                             </tr>
                         </thead>
                     </table>
@@ -93,7 +93,7 @@
                     ordering: false,
                     order: [],
                     columnDefs: [
-                        { "orderable": false, "targets": 4 }
+                        { "orderable": false, "targets": 3 }
                     ],
                     dom:
                         "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
@@ -120,18 +120,18 @@
                         { "data": "name" },
                         { "data": "satuan" },
                         { "data": "desc" },
-                        {
-                            "targets": -1,
-                            "data": null,
-                            "render": function (row, data, iDisplayIndex) {
-                                var result = "";
-                                if (editable == "True") {
-                                    result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Personil/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
-                                        " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
-                                }
-                                return result;
-                            }
-                        }
+                        //{
+                        //    "targets": -1,
+                        //    "data": null,
+                        //    "render": function (row, data, iDisplayIndex) {
+                        //        var result = "";
+                        //        if (editable == "True") {
+                        //            result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Personil/AddEdit?id=" + iDisplayIndex.id + "' class='btn btn-primary btn-rubah btn-xs small-font' title='Edit'><i class='fa fa-pencil'></i></a>" +
+                        //                " <div onclick='deleteAction(" + iDisplayIndex.id + ")' class='btn btn-danger btn-xs small-font btn-delete' title='Delete'><i class='fa fa-trash'></i></div>";
+                        //        }
+                        //        return result;
+                        //    }
+                        //}
                     ],
                     "order": [[1, 'asc']],
                     rowCallback: function (row, data, iDisplayIndex) {

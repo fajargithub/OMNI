@@ -112,7 +112,12 @@ namespace OMNI.Web.Services.Trx
                 data.Add(new StringContent(m.Year.ToString()), "Year");
                 data.Add(new StringContent(m.Port.ToString()), "Port");
                 data.Add(new StringContent(m.TanggalPelatihan.ToString()), "TanggalPelatihan");
-                data.Add(new StringContent(m.TanggalExpired.ToString()), "TanggalExpired");
+
+                if (!string.IsNullOrEmpty(m.TanggalExpired))
+                {
+                    data.Add(new StringContent(m.TanggalExpired.ToString()), "TanggalExpired");
+                }
+                
                 if(m.Id > 0)
                 {
                     data.Add(new StringContent(m.UpdatedBy), "UpdatedBy");

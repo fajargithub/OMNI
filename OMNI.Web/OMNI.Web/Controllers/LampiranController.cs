@@ -61,7 +61,7 @@ namespace OMNI.Web.Controllers
             ViewBag.EnablePenilaian = true;
             ViewBag.EnablePengesahan = false;
             ViewBag.EnableVerifikasi1 = false;
-            ViewBag.EnableVerifikasi2 = false;
+            //ViewBag.EnableVerifikasi2 = false;
 
             List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(port);
             if(lampiranList.Count() > 0)
@@ -86,41 +86,50 @@ namespace OMNI.Web.Controllers
                             ViewBag.EnableVerifikasi1 = false;
                         }
 
-                        ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun pertama) per tanggal " + findPengesahan.EndDate;
+                        //ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun pertama) per tanggal " + findPengesahan.EndDate;
+                        ViewBag.Info = "* Mohon upload Surat Verifikasi Antara per tanggal " + findPengesahan.EndDate;
                     } else
                     {
                         ViewBag.EnableVerifikasi1 = false;
-                        ViewBag.EnableVerifikasi2 = false;
+                        //ViewBag.EnableVerifikasi2 = false;
                     }
 
                     var findVerifikasi1 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").OrderByDescending(b => b.Id).FirstOrDefault();
                     if (findVerifikasi1 != null)
                     {
-                        //ViewBag.EnableVerifikasi1 = false;
-                        var endDateVerifikasi1 = DateTime.ParseExact(findVerifikasi1.EndDate, "dd MMM yyyy", null);
-                        if (dateNow >= endDateVerifikasi1)
-                        {
-                            ViewBag.EnableVerifikasi2 = true;
-                        }
-                        else
-                        {
-                            ViewBag.EnableVerifikasi2 = false;
-                        }
-
-                        ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
-
-                        var findVerifikasi2 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").OrderByDescending(b => b.Id).FirstOrDefault();
-                        if (findVerifikasi2 != null)
-                        {
-                            //ViewBag.EnableVerifikasi2 = false;
-                            ViewBag.Info = "";
-                        }
+                        ViewBag.EnableVerifikasi1 = false;
+                        ViewBag.Info = "";
                     }
-                    else
-                    {
-                        ViewBag.EnableVerifikasi2 = false;
-                    }
-                } else
+
+                    //var findVerifikasi1 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").OrderByDescending(b => b.Id).FirstOrDefault();
+                    //if (findVerifikasi1 != null)
+                    //{
+                    //    //ViewBag.EnableVerifikasi1 = false;
+                    //    var endDateVerifikasi1 = DateTime.ParseExact(findVerifikasi1.EndDate, "dd MMM yyyy", null);
+                    //    if (dateNow >= endDateVerifikasi1)
+                    //    {
+                    //        ViewBag.EnableVerifikasi2 = true;
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.EnableVerifikasi2 = false;
+                    //    }
+
+                    //    ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
+
+                    //    var findVerifikasi2 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").OrderByDescending(b => b.Id).FirstOrDefault();
+                    //    if (findVerifikasi2 != null)
+                    //    {
+                    //        //ViewBag.EnableVerifikasi2 = false;
+                    //        ViewBag.Info = "";
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    ViewBag.EnableVerifikasi2 = false;
+                    //}
+                }
+                else
                 {
                     ViewBag.EnablePengesahan = false;
                     ViewBag.EnableVerifikasi1 = false;
