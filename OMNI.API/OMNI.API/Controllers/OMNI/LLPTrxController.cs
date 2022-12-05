@@ -42,7 +42,7 @@ namespace OMNI.API.Controllers.OMNI
             List<int> listNumber = new List<int>();
             List<string> result = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText.Contains(inventoryNumber)).Select(b => b.QRCodeText).ToListAsync(cancellationToken);
 
-            if(result.Count() > 0)
+            if (result.Count() > 0)
             {
                 for(int i=0; i < result.Count(); i++)
                 {
@@ -59,6 +59,168 @@ namespace OMNI.API.Controllers.OMNI
 
             return Ok(newNumber);
         }
+
+        public async Task<int> GetLastNoAssetStr(string inventoryNumber, int primaryId, CancellationToken cancellationToken)
+        {
+            int newNumber = 1;
+            List<int> listNumber = new List<int>();
+            List<string> result = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.QRCodeText.Contains(inventoryNumber)).Select(b => b.QRCodeText).ToListAsync(cancellationToken);
+
+            if (result.Count() > 0)
+            {
+                for (int i = 0; i < result.Count(); i++)
+                {
+                    var arrTemp = result[i].Split("-");
+                    listNumber.Add(int.Parse(arrTemp[3]));
+                }
+
+                if (listNumber.Count() > 0)
+                {
+                    int maxNumber = listNumber.Max();
+                    newNumber = maxNumber + newNumber;
+                }
+            }
+
+            return newNumber;
+        }
+
+        [HttpGet("GetCopyDataYear")]
+        public async Task<IActionResult> GetCopyDataYear(string port, CancellationToken cancellationToken)
+        {
+            List<int> yearList = new List<int>();
+
+            var list = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).ToListAsync(cancellationToken);
+
+            if(list.Count() > 0)
+            {
+                var group = list.GroupBy(b => b.Year).ToList();
+                if(group.Count() > 0)
+                {
+                    for(int i=0; i < group.Count(); i++)
+                    {
+                        yearList.Add(group[i].Key);
+                    }
+                }
+            }
+            return Ok(yearList);
+        }
+
+        [HttpGet("CopyData")]
+        public async Task<IActionResult> CopyData(string port, int year, int targetYear, CancellationToken cancellationToken)
+        {
+            List<int> ListId = new List<int>();
+
+            try
+            {
+                var list = await _dbOMNI.LLPTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year).Include(b => b.SpesifikasiJenis).Include(b => b.SpesifikasiJenis.Jenis).ToListAsync(cancellationToken);
+
+                if (list.Count() > 0)
+                {
+                    for (int i = 0; i < list.Count(); i++)
+                    {
+                        LLPTrx data = new LLPTrx();
+
+                        data.SpesifikasiJenis = list[i].SpesifikasiJenis;
+                        data.Port = list[i].Port;
+                        if (!string.IsNullOrWhiteSpace(list[i].QRCodeText))
+                        {
+                            var arrTemp = list[i].QRCodeText.Split("-");
+                            var newNoAsset = await GetLastNoAssetStr(arrTemp[0], 0, cancellationToken);
+                            var newInv = arrTemp[0] + "-" + targetYear + "-" + arrTemp[2] + "-" + newNoAsset;
+
+                            data.QRCodeText = newInv;
+                        }
+                        
+                        data.DetailExisting = list[i].DetailExisting;
+                        data.Kondisi = list[i].Kondisi;
+                        data.TotalExistingJenis = list[i].TotalExistingJenis;
+                        data.TotalExistingKeseluruhan = list[i].TotalExistingKeseluruhan;
+                        data.TotalKebutuhanHubla = list[i].TotalKebutuhanHubla;
+                        data.SelisihHubla = list[i].SelisihHubla;
+                        data.PersentaseHubla = list[i].PersentaseHubla;
+                        data.TotalKebutuhanOSCP = list[i].TotalKebutuhanOSCP;
+                        data.SelisihOSCP = list[i].SelisihOSCP;
+                        data.KesesuaianOSCP = list[i].KesesuaianOSCP;
+                        data.PersentaseOSCP = list[i].PersentaseOSCP;
+                        data.Year = targetYear;
+                        data.Brand = list[i].Brand;
+                        data.NoAsset = list[i].NoAsset;
+                        data.Status = list[i].Status;
+                        data.SerialNumber = list[i].SerialNumber;
+                        data.Remark = list[i].Remark;
+                        data.CreatedAt = DateTime.Now;
+                        data.CreatedBy = list[i].CreatedBy;
+                        await _dbOMNI.LLPTrx.AddAsync(data, cancellationToken);
+                        await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                        LLPTrxModel tempModel = new LLPTrxModel();
+
+                        tempModel.Jenis = data.SpesifikasiJenis.Jenis.Id.ToString();
+                        tempModel.Port = data.Port;
+                        tempModel.QRCodeText = data.QRCodeText;
+                        tempModel.DetailExisting = data.DetailExisting;
+                        tempModel.Kondisi = data.Kondisi;
+                        tempModel.TotalExistingJenis = data.TotalExistingJenis;
+                        tempModel.TotalExistingKeseluruhan = data.TotalExistingKeseluruhan;
+                        tempModel.TotalKebutuhanHubla = data.TotalKebutuhanHubla;
+                        tempModel.SelisihHubla = data.SelisihHubla;
+                        tempModel.PersentaseHubla = data.PersentaseHubla;
+                        tempModel.TotalKebutuhanOSCP = data.TotalKebutuhanOSCP;
+                        tempModel.SelisihOSCP = data.SelisihOSCP;
+                        tempModel.KesesuaianOSCP = data.KesesuaianOSCP;
+                        tempModel.PersentaseOSCP = data.PersentaseOSCP;
+                        tempModel.Year = targetYear;
+                        tempModel.Brand = data.Brand;
+                        tempModel.NoAsset = data.NoAsset;
+                        tempModel.Status = data.Status;
+                        tempModel.SerialNumber = data.SerialNumber;
+                        tempModel.Remark = data.Remark;
+                        tempModel.CreatedAt = DateTime.Now;
+                        tempModel.CreatedBy = data.CreatedBy;
+
+                        //Add LLPTrx History
+                        await AddHistory(data.Id, tempModel, "ADD", cancellationToken);
+
+                        ListId.Add(data.Id);
+                    }
+                }
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
+            return Ok(ListId);
+        }
+
+        [HttpGet("DeleteAllLLPTrx")]
+        public async Task<IActionResult> DeleteAllLLPTrx(string port, int year, CancellationToken cancellationToken)
+        {
+            var status = "FAILED";
+
+            try
+            {
+                var list = await _dbOMNI.LLPTrx.Where(b => b.Port == port && b.Year == year).Include(b => b.SpesifikasiJenis).ToListAsync(cancellationToken);
+                if (list.Count() > 0)
+                {
+                    for (int i = 0; i < list.Count(); i++)
+                    {
+                        list[i].IsDeleted = GeneralConstants.YES;
+                        list[i].UpdatedAt = DateTime.Now;
+                        _dbOMNI.LLPTrx.Update(list[i]);
+                        await _dbOMNI.SaveChangesAsync(cancellationToken);
+                    }
+                }
+
+                status = "SUCCESS";
+            } catch(Exception ex)
+            {
+
+            }
+            
+
+            return Ok(status);
+        }
+
 
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
