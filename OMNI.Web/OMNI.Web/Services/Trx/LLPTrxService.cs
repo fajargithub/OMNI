@@ -96,6 +96,41 @@ namespace OMNI.Web.Services.Trx
 
             throw new Exception();
         }
+        public async Task<List<string>> GetCopyDataYear(string port)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/LLPTrx/GetCopyDataYear?port={port}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<List<string>>();
+
+            throw new Exception();
+        }
+
+        public async Task<List<int>> CopyData(string port, int year, int targetYear)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/LLPTrx/CopyData?port={port}&year={year}&targetYear={targetYear}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<List<int>>();
+
+            throw new Exception();
+        }
+
+        public async Task<string> DeleteAllLLPTrx(string port, int year)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var r = await client.GetAsync($"/api/LLPTrx/DeleteAllLLPTrx?port={port}&year={year}");
+
+            if (r.IsSuccessStatusCode)
+
+                return await r.Content.ReadAsAsync<string>();
+
+            throw new Exception();
+        }
 
         public async Task<LLPTrxModel> GetById(int id)
         {

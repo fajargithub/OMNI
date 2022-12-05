@@ -19,6 +19,9 @@ namespace OMNI.Web.Services.Trx.Interface
         public Task<List<FilesModel>> GetAllFiles(int trxId, string flag);
         public Task<string> DeleteFile(int id);
         public Task<List<LLPTrxModel>> GetAllLLPTrx(string port, int year);
+        public Task<List<string>> GetCopyDataYear(string port);
+        public Task<List<int>> CopyData(string port, int year, int targetYear);
+        public Task<string> DeleteAllLLPTrx(string port, int year);
         public Task<LLPTrxModel> GetById(int id);
         public Task<BaseJson<LLPTrxModel>> AddEdit(LLPTrxModel model);
         public Task<BaseJson<QRCodeDataModel>> UpdateQRCode(QRCodeDataModel model);

@@ -5,18 +5,23 @@ var totalPersentaseOSCP = 0;
 
 
 function countTotalPercentageLLPTrx() {
-    console.log('on count percentage llptrx!');
     var lastJenis = "";
     var totalPersentaseHubla = 0;
     var totalPersentaseOSCP = 0;
     var countRekomendasiHubla = 0;
     var countRekomendasiOSCP = 0;
-    //count total persentase hubla
+
     $.ajax({
         url: base_api + 'Home/GetAllLLPTrx?port=' + port + "&year=" + selectedYear,
         method: "GET",
         success: function (result) {
             if (result.data !== null && result.data !== undefined) {
+                if (result.data.length > 0) {
+                    $("#copyData").hide();
+                } else {
+                    $("#copyData").show();
+                }
+                
                 for (var i = 0; i < result.data.length; i++) {
                     if (lastJenis == "") {
                         lastJenis = result.data[i].jenis;

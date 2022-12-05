@@ -59,6 +59,54 @@
     .dataTables_scrollBody {
         min-height: 200px;
     }
+
+    .white-font {
+        color: white;
+    }
+
+    .qr-code-generator {
+        width: 500px;
+        margin: 0 auto;
+    }
+
+        .qr-code-generator * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+    #qrcode {
+        width: 128px;
+        height: 128px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+        #qrcode a {
+            font-size: 0.8em;
+        }
+
+    .generate-qr-code {
+        display: block;
+        width: 100%;
+        margin: 0.5em 0 0;
+        padding: 0.25em;
+        font-size: 1.2em;
+        border: none;
+        cursor: pointer;
+        background-color: #e5554e;
+        color: #fff;
+    }
+
+    canvas {
+        height: 100px;
+        width: 100px;
+    }
+
+    #upload-label {
+        color: darkred;
+        font-size: 12px;
+    }
 </style>
 <link href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.bootstrap.min.css" rel="stylesheet" />
 
@@ -104,6 +152,8 @@
                 </h2>
 
                 <div class="panel-toolbar editable">
+                    <a href="javascript:void(0)" id="deleteAll" class="btn btn-danger btn-sm shadow-0 white-font"><i class="fal fa-times"></i>  Delete All</a> &nbsp;
+                    <a href="javascript:void(0)" id="copyData" class="btn btn-info btn-sm shadow-0 white-font"><i class="fal fa-copy"></i>  Copy Data</a> &nbsp;
                     <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit" data-backdrop='static' data-keyboard='false'><i class="fal fa-plus"></i>  Add</a>
                 </div>
             </div>
@@ -249,6 +299,42 @@
     </div>
 </div>
 
+<div id="modal-copy-data" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-copy"></i> Copy Data</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:center;">
+                    <div class="form-group">
+                        <label class="form-label" for="">Select Data from Year: </label>
+                        <select name="Year" id="yearData" class="select2-input" required>
+                        </select>
+                    </div>
+                </p>
+                <p style="text-align:center;">
+                    <div class="form-group">
+                        <input type="hidden" id="qrcode-value" required />
+                        <input type="hidden" id="qrcode-text" required />
+                    </div>
+                    <div class="col-md-12" id="show-qrcode">
+                        <br />
+                        <div id="qrcode"></div>
+                    </div>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="submitCopyData">Submit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-history", Type = ModalType.Right, Size = ModalSize.Large })
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Medium })
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-file", Type = ModalType.Right, Size = ModalSize.Medium })
@@ -260,8 +346,186 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/ashl1/datatables-rowsgroup@fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
 
-
+    <script src="~/js/qr-code-styling.js"></script>
     <script>
+        $("#show-qrcode").hide();
+        $('.select2-input').select2({
+            dropdownParent: $('#modal-copy-data')
+        });
+
+        $("#copyData").hide();
+
+        var yearList = [];
+        var idCopies = null;
+        var copyIndex = 0;
+
+        $("#copyData").click(function () {
+            $.ajax({
+                url: base_api + "Home/GetCopyDataYear?port=" + port,
+                method: "GET",
+                success: function (result) {
+                    yearList = result.data;
+                },
+                complete: function () {
+                    console.log(yearList);
+                    $("#yearData").empty();
+                    var $dropdown = $("#yearData");
+                    $.each(yearList, function () {
+                        $dropdown.append($("<option />").val(this).text(this));
+                    });
+
+                    $('#modal-copy-data').modal('show');
+                }
+            });
+        });
+
+        function updateCopyQRCode() {
+            $("#show-qrcode").show();
+                var id = idCopies[copyIndex];
+                var qrcode_url = base_api + "QRCodeDetail/Index?id=" + id;
+
+                $.ajax({
+                    url: generateQRCode2(qrcode_url),
+                    method: "GET",
+                    success: function () {
+                        var canvas = document.querySelector('canvas');
+                        var pngUrl = canvas.toDataURL();
+
+                        var qrcodeVal = {
+                            primaryId: id,
+                            qrCode: pngUrl
+                        }
+
+                        $.ajax({
+                            url: base_api + "Home/UpdateQRCode",
+                            method: "POST",
+                            data: { data: qrcodeVal },
+                            success: function (result) {
+                                console.log(result);
+                                if (result.status == "SUCCESS") {
+                                    console.log("success update QRCODE");
+                                } else {
+                                    console.log("failed update QRCODE");
+                                }
+                            }, complete: function () {
+                                console.log(copyIndex);
+                                if (copyIndex < idCopies.length) {
+                                    updateCopyQRCode();
+                                    copyIndex++;
+                                } else {
+                                    Swal.fire(
+                                        'Success!',
+                                        'Data has been copied',
+                                        'success'
+                                    )
+
+                                    setTimeout(function () {
+                                        Swal.close();
+                                        $('#modal-copy-data').modal('hide');
+                                        $("#show-qrcode").hide();
+                                        $("#table_llp_trx").DataTable().ajax.reload(function () {
+                                            countTotalPercentageLLPTrx();
+                                        });
+                                    }, 1000)
+                                }
+                            }
+                        });
+                    },
+                    complete: function () {
+                        
+                    }
+                })
+        }
+
+        $("#submitCopyData").click(function () {
+            idCopies = null;
+            copyIndex = 0;
+            var yearData = parseInt($("#yearData").val());
+            var targetYear = parseInt($("#year-lokasi").val());
+            if (yearData > 0) {
+                Swal.fire({
+                    title: 'Do you want to copy data ' + port + " from year " + yearData + "?",
+                    icon: 'info',
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.value) {
+
+                        Swal.fire({
+                            title: '<i class="fa fa-cog fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only"> Copying Data</span>',
+                            text: 'Saving, please wait',
+                            allowOutsideClick: false,
+                            showConfirmButton: false
+                        });
+
+                        $.ajax({
+                            url: base_api + "Home/CopyData?port=" + port + "&year=" + yearData + "&targetYear=" + targetYear,
+                            method: "GET",
+                            success: function (result) {
+                                if (result.result.length > 0) {
+                                    idCopies = result.result;
+                                    updateCopyQRCode();
+                                }
+                            }
+                        })
+                    } else if (result.isDenied) {
+
+                    }
+                })
+            }
+
+        });
+
+        $("#deleteAll").click(function () {
+            var targetYear = parseInt($("#year-lokasi").val());
+
+            Swal.fire({
+                title: 'Do you want to delete All of data?',
+                icon: 'warning',
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.value) {
+
+                    Swal.fire({
+                        title: '<i class="fa fa-cog fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only"> Delete Data</span>',
+                        text: 'Deleting, please wait',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
+
+                    $.ajax({
+                        url: base_api + "Home/DeleteAllLLPTrx?port=" + port + "&year=" + targetYear,
+                        method: "GET",
+                        success: function (result) {
+                            if (result.result == "SUCCESS") {
+                                Swal.fire(
+                                        'Success!',
+                                        'Data is deleted',
+                                        'success'
+                                    )
+
+                                    setTimeout(function () {
+                                        Swal.close();
+                                        $('#modal-copy-data').modal('hide');
+                                        $("#table_llp_trx").DataTable().ajax.reload(function () {
+                                            console.log('on reload datatable!');
+                                            countTotalPercentageLLPTrx();
+                                        });
+                                    }, 1000)
+                            }
+                        }
+                    })
+                } else if (result.isDenied) {
+
+                }
+            })
+
+
+        });
+
         document.addEventListener("visibilitychange", function () {
             if (document.hidden) {
                 console.log("Browser tab is hidden")

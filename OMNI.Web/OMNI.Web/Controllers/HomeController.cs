@@ -163,6 +163,39 @@ namespace OMNI.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<JsonResult> GetCopyDataYear(string port)
+        {
+            List<string> data = await _llpTrxService.GetCopyDataYear(port);
+
+            return Json(new
+            {
+                data
+            });
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> CopyData(string port, int year, int targetYear)
+        {
+            var result = await _llpTrxService.CopyData(port, year, targetYear);
+
+            return Json(new
+            {
+                result
+            });
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> DeleteAllLLPTrx(string port, int year)
+        {
+            var result = await _llpTrxService.DeleteAllLLPTrx(port, year);
+
+            return Json(new
+            {
+                result
+            });
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddEditLatihanTrx(LatihanTrxModel model)
         {

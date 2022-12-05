@@ -195,12 +195,6 @@
             $("#year").val(yearNow).change();
         }
 
-        //if (primaryId > 0) {
-        //    $("#files").prop('required', false);
-        //} else {
-        //    $("#files").prop('required', true);
-        //}
-
         $("#noAset").val(noAsset);
 
         var selectedJenisId = parseInt("@ViewBag.JenisId");
@@ -217,7 +211,7 @@
 
             $.ajax({
                 url: base_api + "Home/GetLastNoAsset",
-                data: { inventoryNumber: inventoryNumber, primaryId: primaryId },
+                data: { inventoryNumber: kodeInventory, primaryId: primaryId },
                 method: "POST",
                 success: function (result) {
                     $("#noAset").val(result.noAsset);
