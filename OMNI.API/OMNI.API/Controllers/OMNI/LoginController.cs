@@ -80,7 +80,7 @@ namespace OMNI.API.Controllers.OMNI
                 List<UserRoleModel> findRoles = (from userRole in _appDbContext.UserRoles
                                              join role in _appDbContext.Roles on userRole.RoleId equals role.Id
                                              join user in _appDbContext.Users on userRole.UserId equals user.Id
-                                             where (user.Email == employee.Email && role.Name.Contains("OSMOSYS"))
+                                             where (user.Email == employee.Email && role.Name.Contains("OSMOSYS") && !role.Name.Contains("MANAGEMENT"))
                                              select new UserRoleModel
                                              {
                                                  RoleName = role.Name,

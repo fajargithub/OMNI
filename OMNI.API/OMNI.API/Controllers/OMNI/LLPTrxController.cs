@@ -122,14 +122,16 @@ namespace OMNI.API.Controllers.OMNI
 
                         data.SpesifikasiJenis = list[i].SpesifikasiJenis;
                         data.Port = list[i].Port;
-                        if (!string.IsNullOrWhiteSpace(list[i].QRCodeText))
-                        {
-                            var arrTemp = list[i].QRCodeText.Split("-");
-                            var newNoAsset = await GetLastNoAssetStr(arrTemp[0], 0, cancellationToken);
-                            var newInv = arrTemp[0] + "-" + targetYear + "-" + arrTemp[2] + "-" + newNoAsset;
+                        //data.QRCode = list[i].QRCode;
+                        data.QRCodeText = list[i].QRCodeText;
+                        //if (!string.IsNullOrWhiteSpace(list[i].QRCodeText))
+                        //{
+                        //    var arrTemp = list[i].QRCodeText.Split("-");
+                        //    var newNoAsset = await GetLastNoAssetStr(arrTemp[0], 0, cancellationToken);
+                        //    var newInv = arrTemp[0] + "-" + targetYear + "-" + arrTemp[2] + "-" + newNoAsset;
 
-                            data.QRCodeText = newInv;
-                        }
+                        //    data.QRCodeText = newInv;
+                        //}
                         
                         data.DetailExisting = list[i].DetailExisting;
                         data.Kondisi = list[i].Kondisi;
@@ -157,6 +159,7 @@ namespace OMNI.API.Controllers.OMNI
 
                         tempModel.Jenis = data.SpesifikasiJenis.Jenis.Id.ToString();
                         tempModel.Port = data.Port;
+                        //tempModel.QRCode = data.QRCode;
                         tempModel.QRCodeText = data.QRCodeText;
                         tempModel.DetailExisting = data.DetailExisting;
                         tempModel.Kondisi = data.Kondisi;
@@ -974,14 +977,21 @@ namespace OMNI.API.Controllers.OMNI
             data.PortTo = model.PortTo;
             data.Status = model.Status;
 
-            if(data.Status == "STAND BY")
-            {
-                data.StartDate = DateTime.Now;
-                data.EndDate = (DateTime?)null;
-            } else
+            if (!string.IsNullOrEmpty(model.StartDate))
             {
                 data.StartDate = string.IsNullOrEmpty(model.StartDate) ? (DateTime?)null : DateTime.ParseExact(model.StartDate, "MM/dd/yyyy", null);
+            } else
+            {
+                data.StartDate = (DateTime?)null;
+            }
+
+            if (!string.IsNullOrEmpty(model.EndDate))
+            {
                 data.EndDate = string.IsNullOrEmpty(model.EndDate) ? (DateTime?)null : DateTime.ParseExact(model.EndDate, "MM/dd/yyyy", null);
+            }
+            else
+            {
+                data.EndDate = (DateTime?)null;
             }
             
             data.Remark = model.Remark;

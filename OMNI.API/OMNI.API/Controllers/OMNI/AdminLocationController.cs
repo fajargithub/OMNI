@@ -72,6 +72,71 @@ namespace OMNI.API.Controllers.OMNI
             return Ok(result);
         }
 
+        [HttpGet("GetAllAdminRegion")]
+        public async Task<IActionResult> GetAllAdminRegion(CancellationToken cancellationToken)
+        {
+            List<AdminLocationModel> result = new List<AdminLocationModel>();
+
+            var adminRegion1List = await _userManager.GetUsersInRoleAsync("OSMOSYS_ADMIN_REGION1");
+            if (adminRegion1List.Count() > 0)
+            {
+                for (int i = 0; i < adminRegion1List.Count(); i++)
+                {
+                    var findEmployee = await _dbCorePTK.Employees.Where(b => b.IsDeleted == GeneralConstants.NO && b.Email.ToLower() == adminRegion1List[i].Email.ToLower()).FirstOrDefaultAsync(cancellationToken);
+                    if (findEmployee != null)
+                    {
+
+                        AdminLocationModel temp = new AdminLocationModel();
+                        temp.UserId = findEmployee.Id;
+                        temp.UserName = findEmployee.Name;
+                        temp.Email = findEmployee.Email;
+                        temp.Region = "REGION 1";
+                        result.Add(temp);
+                    }
+                }
+            }
+
+            var adminRegion2List = await _userManager.GetUsersInRoleAsync("OSMOSYS_ADMIN_REGION2");
+            if (adminRegion2List.Count() > 0)
+            {
+                for (int i = 0; i < adminRegion2List.Count(); i++)
+                {
+                    var findEmployee = await _dbCorePTK.Employees.Where(b => b.IsDeleted == GeneralConstants.NO && b.Email.ToLower() == adminRegion2List[i].Email.ToLower()).FirstOrDefaultAsync(cancellationToken);
+                    if (findEmployee != null)
+                    {
+
+                        AdminLocationModel temp = new AdminLocationModel();
+                        temp.UserId = findEmployee.Id;
+                        temp.UserName = findEmployee.Name;
+                        temp.Email = findEmployee.Email;
+                        temp.Region = "REGION 2";
+                        result.Add(temp);
+                    }
+                }
+            }
+
+            var adminRegion3List = await _userManager.GetUsersInRoleAsync("OSMOSYS_ADMIN_REGION3");
+            if (adminRegion3List.Count() > 0)
+            {
+                for (int i = 0; i < adminRegion3List.Count(); i++)
+                {
+                    var findEmployee = await _dbCorePTK.Employees.Where(b => b.IsDeleted == GeneralConstants.NO && b.Email.ToLower() == adminRegion3List[i].Email.ToLower()).FirstOrDefaultAsync(cancellationToken);
+                    if (findEmployee != null)
+                    {
+
+                        AdminLocationModel temp = new AdminLocationModel();
+                        temp.UserId = findEmployee.Id;
+                        temp.UserName = findEmployee.Name;
+                        temp.Email = findEmployee.Email;
+                        temp.Region = "REGION 3";
+                        result.Add(temp);
+                    }
+                }
+            }
+
+            return Ok(result);
+        }
+
         // GET: api/<ValuesController>
         [HttpGet("GetByUserId")]
         public async Task<IActionResult> GetByUserId(int id, CancellationToken cancellationToken)

@@ -99,6 +99,11 @@ namespace OMNI.API.Controllers.OMNI
                 }
             }
 
+            if (result.Count() > 0)
+            {
+                result = result.OrderByDescending(b => b.GuestCategory).ToList();
+            }
+
             return Ok(result);
         }
 
