@@ -59,14 +59,6 @@ namespace OMNI.Web.Controllers
             }
             else
             {
-
-
-
-
-                //UserData.UserId = r.UserId;
-                //UserData.RoleList = r.Roles;
-                //UserData.Username = r.Username;
-                //UserData.Email = r.Email;
                 return Ok(new JsonResponse { 
                     Status = GeneralConstants.SUCCESS, 
                     UserId = r.UserId,

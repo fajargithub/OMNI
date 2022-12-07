@@ -197,6 +197,7 @@
         $("#noAset").val(noAsset);
 
         var selectedJenisId = parseInt("@ViewBag.JenisId");
+        console.log(selectedJenisId);
         var selectedPeralatanOSR = $("#peralatanOSR").val();
 
         var inventoryNumber = "";
@@ -270,6 +271,7 @@
                     $("#satuanJenis").text("(" + result.data.satuanJenis + ")");
                     validateNoAsset();
                 }, complete: function () {
+
                 }
             })
         });
@@ -290,7 +292,9 @@
                             $dropdown.append($("<option />").val(this.id).text(this.jenis));
                         });
 
-                        selectedJenisId = result.data[0].id;
+                        if (selectedJenisId < 1) {
+                            selectedJenisId = result.data[0].id;
+                        }
                     }
                 }, complete: function () {
                     $("#jenis").val(selectedJenisId).change();
