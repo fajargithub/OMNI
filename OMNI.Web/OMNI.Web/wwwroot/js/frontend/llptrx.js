@@ -399,6 +399,10 @@ var dt = $('#table_llp_trx').DataTable({
     "initComplete": countTotalPercentageLLPTrx
 });
 
+dt.on('draw', function () {
+    countTotalPercentageLLPTrx();
+});
+
 
 $("#table_llp_trx thead th input[type=text]").on('keyup change',
     function () {

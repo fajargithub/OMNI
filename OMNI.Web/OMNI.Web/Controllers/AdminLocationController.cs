@@ -20,6 +20,7 @@ namespace OMNI.Web.Controllers
     public class AdminLocationController : OMNIBaseController
     {
         private static readonly string INDEX = "~/Views/AdminLocation/Index.cshtml";
+        private static readonly string INDEX_ADMIN_REGION = "~/Views/AdminLocation/IndexAdminRegion.cshtml";
         private static readonly string ADD_EDIT = "~/Views/AdminLocation/AddEdit.cshtml";
 
         public AdminLocationController(IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
@@ -30,6 +31,26 @@ namespace OMNI.Web.Controllers
         public async Task<JsonResult> GetAll()
         {
             List<AdminLocationModel> data = await _adminLocationService.GetAll();
+
+            int count = data.Count();
+
+            return Json(new
+            {
+                success = true,
+                recordsTotal = count,
+                recordsFiltered = count,
+                data
+            });
+        }
+
+        public IActionResult AdminRegionIndex()
+        {
+            return View(INDEX_ADMIN_REGION);
+        }
+
+        public async Task<JsonResult> GetAllAdminRegion()
+        {
+            List<AdminLocationModel> data = await _adminLocationService.GetAllAdminRegion();
 
             int count = data.Count();
 

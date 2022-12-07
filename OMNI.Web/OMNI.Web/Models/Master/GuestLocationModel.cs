@@ -12,5 +12,6 @@ namespace OMNI.Web.Models.Master
         public string StrPortList { get; set; }
         public List<string> PortList { get; set; }
         public string Email { get; set; }
+        public string Region { get; set; }
     }
 }

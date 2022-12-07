@@ -46,6 +46,32 @@ function generateQRCode2(qrcode_url) {
     qrCode.append(document.getElementById("qrcode"));
 }
 
+function generateQRCode3(qrcode_url) {
+    console.log('on generate QR Code 2');
+    $('#qrcode2').empty();
+
+    const qrCode = new QRCodeStyling({
+        width: 300,
+        height: 300,
+        type: "canvas",
+        data: qrcode_url,
+        image: "/img/pertamina.png",
+        dotsOptions: {
+            color: "#4267b2",
+            type: "rounded"
+        },
+        backgroundOptions: {
+            color: "#e9ebee",
+        },
+        imageOptions: {
+            crossOrigin: "anonymous",
+            margin: 5,
+        }
+    });
+
+    qrCode.append(document.getElementById("qrcode2"));
+}
+
 var userRole = "";
 var userData = {};
 
@@ -62,7 +88,7 @@ function checkSession() {
         userRole = roles[0];
 
         if (userRole != null) {
-            if (userRole.includes("OSMOSYS_MANAGEMENT") || userRole.includes("OSMOSYS_GUEST_LOKASI") || userRole.includes("OSMOSYS_GUEST_NON_LOKASI")) {
+            if (userRole.includes("OSMOSYS_MANAGEMENT") || userRole.includes("OSMOSYS_GUEST")) {
                 $(".editable").hide();
                 editable = "False";
             }
@@ -71,7 +97,7 @@ function checkSession() {
                 editable = "True";
             }
 
-            if (userRole.includes("OSMOSYS_SUPER_ADMIN") || userRole.includes("OSMOSYS_MANAGEMENT")) {
+            if (userRole.includes("OSMOSYS_SUPER_ADMIN") || userRole.includes("OSMOSYS_ADMIN")) {
                 $(".userAccess").show();
                 editable = "True";
             }

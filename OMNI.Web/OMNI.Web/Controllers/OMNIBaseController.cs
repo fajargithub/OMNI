@@ -58,15 +58,15 @@ namespace OMNI.Web.Controllers
                 role = "";
             }
 
-            if (role.Contains("OSMOSYS_ADMIN_REGION1"))
+            if (role.Contains("REGION1"))
             {
                 result = "Region 1";
             }
-            else if (role.Contains("OSMOSYS_ADMIN_REGION2"))
+            else if (role.Contains("REGION2"))
             {
                 result = "Region 2";
             }
-            else if (role.Contains("OSMOSYS_ADMIN_REGION3"))
+            else if (role.Contains("REGION3"))
             {
                 result = "Region 3";
             }
@@ -100,15 +100,15 @@ namespace OMNI.Web.Controllers
                 userId = 0;
             }
 
-            if (role.Contains("OSMOSYS_ADMIN_REGION1"))
+            if (role.Contains("REGION1"))
             {
                 result = await GetPortByRegion(2);
             }
-            else if (role.Contains("OSMOSYS_ADMIN_REGION2"))
+            else if (role.Contains("REGION2"))
             {
                 result = await GetPortByRegion(3);
             }
-            else if (role.Contains("OSMOSYS_ADMIN_REGION3"))
+            else if (role.Contains("REGION3"))
             {
                 result = await GetPortByRegion(4);
             }

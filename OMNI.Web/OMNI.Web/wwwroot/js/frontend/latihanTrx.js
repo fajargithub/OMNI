@@ -198,6 +198,10 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
     "initComplete": countPercentageLatihanTrx
 });
 
+table_latihan_trx.on('draw', function () {
+    countPercentageLatihanTrx();
+});
+
 function deleteLatihanTrx(id) {
     Swal.fire({
         title: 'Do you want to delete?',

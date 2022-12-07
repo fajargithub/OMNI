@@ -195,7 +195,14 @@ var table_personil_trx = $('#table_personil_trx').DataTable({
     "order": [[1, 'asc']],
     rowCallback: function (row, data, iDisplayIndex) {
     },
+    //fnDrawCallback: function (settings) {
+    //    alert('on Change Page!');
+    //},
     "initComplete": countPercentagePersonilTrx
+});
+
+table_personil_trx.on('draw', function () {
+    countPercentagePersonilTrx();
 });
 
 //table_personil_trx.on('order.table_personil_trx search.table_personil_trx', function () {

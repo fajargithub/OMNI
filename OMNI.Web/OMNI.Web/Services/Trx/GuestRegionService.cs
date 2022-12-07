@@ -12,74 +12,62 @@ using System.Threading.Tasks;
 
 namespace OMNI.Web.Services.Trx
 {
-    public class AdminLocationService : IAdminLocation
+    public class GuestRegionService : IGuestRegion
     {
         private readonly IHttpClientFactory _httpClient;
 
-        public AdminLocationService(IHttpClientFactory httpClient)
+        public GuestRegionService(IHttpClientFactory httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<List<AdminLocationModel>> GetAll()
+        public async Task<List<GuestRegionModel>> GetAll()
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/AdminLocation/GetAll");
+            var result = await client.GetAsync($"/api/GuestRegion/GetAll");
 
             if (result.IsSuccessStatusCode)
 
-                return await result.Content.ReadAsAsync<List<AdminLocationModel>>();
+                return await result.Content.ReadAsAsync<List<GuestRegionModel>>();
 
             throw new Exception();
         }
 
-        public async Task<List<AdminLocationModel>> GetAllAdminRegion()
+        public async Task<GuestRegionModel> GetByUserId(int id)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/AdminLocation/GetAllAdminRegion");
+            var result = await client.GetAsync($"/api/GuestRegion/GetByUserId?id={id}");
 
             if (result.IsSuccessStatusCode)
 
-                return await result.Content.ReadAsAsync<List<AdminLocationModel>>();
+                return await result.Content.ReadAsAsync<GuestRegionModel>();
 
             throw new Exception();
         }
 
-        public async Task<AdminLocationModel> GetByUserId(int id)
+        public async Task<GuestRegionModel> GetById(int id)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/AdminLocation/GetByUserId?id={id}");
+            var result = await client.GetAsync($"/api/GuestRegion/{id}");
 
             if (result.IsSuccessStatusCode)
 
-                return await result.Content.ReadAsAsync<AdminLocationModel>();
+                return await result.Content.ReadAsAsync<GuestRegionModel>();
 
             throw new Exception();
         }
 
-        public async Task<AdminLocationModel> GetById(int id)
-        {
-            HttpClient client = _httpClient.CreateClient("OMNI");
-            var result = await client.GetAsync($"/api/AdminLocation/{id}");
-
-            if (result.IsSuccessStatusCode)
-
-                return await result.Content.ReadAsAsync<AdminLocationModel>();
-
-            throw new Exception();
-        }
-
-        public async Task<BaseJson<AdminLocationModel>> AddEdit(AdminLocationModel m)
+        public async Task<BaseJson<GuestRegionModel>> AddEdit(GuestRegionModel m)
         {
             HttpClient c = _httpClient.CreateClient("OMNI");
 
             try
             {
-                var r = await c.PostAsJsonAsync("/api/AdminLocation", m);
+                var r = await c.PostAsJsonAsync("/api/GuestRegion", m);
 
                 if (r.IsSuccessStatusCode)
                 {
-                    return await r.Content.ReadAsAsync<BaseJson<AdminLocationModel>>();
+                    return await r.Content.ReadAsAsync<BaseJson<GuestRegionModel>>();
                 }
 
                 throw new Exception();
@@ -93,7 +81,7 @@ namespace OMNI.Web.Services.Trx
         public async Task<string> Delete(int id)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");
-            var r = await client.DeleteAsync($"/api/AdminLocation/{id}");
+            var r = await client.DeleteAsync($"/api/GuestRegion/{id}");
 
 
             if (r.IsSuccessStatusCode)

@@ -141,9 +141,9 @@
                 @*@if (ViewBag.EnableUserAccess)
                 {*@
                     <li class="userAccess">
-                        <a href="#" title="Dashboard" data-filter-tags="dashboard">
+                        <a href="#" title="Dashboard" data-filter-tags="user.access">
                             <i class="fal fa-users"></i>
-                            <span class="nav-link-text" data-i18n="master.personil">User Access</span>
+                            <span class="nav-link-text" data-i18n="user.access">User Access</span>
                         </a>
                         <ul>
                             <li>
@@ -152,8 +152,18 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="@Url.Action("Index", "GuestRegion")" title="" data-filter-tags="guestregion">
+                                    <span class="nav-link-text" data-i18n="account.index">Guest Region</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="@Url.Action("Index", "AdminLocation")" title="" data-filter-tags="adminlocation">
                                     <span class="nav-link-text" data-i18n="account.index">Admin Location</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("AdminRegionIndex", "AdminLocation")" title="" data-filter-tags="adminregion">
+                                    <span class="nav-link-text" data-i18n="account.index">Admin Region</span>
                                 </a>
                             </li>
                         </ul>

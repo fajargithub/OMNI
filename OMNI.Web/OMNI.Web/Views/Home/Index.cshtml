@@ -317,12 +317,12 @@
                 </p>
                 <p style="text-align:center;">
                     <div class="form-group">
-                        <input type="hidden" id="qrcode-value" required />
-                        <input type="hidden" id="qrcode-text" required />
+                        @*<input type="hidden" id="qrcode-value2" required />
+                        <input type="hidden" id="qrcode-text2" required />*@
                     </div>
                     <div class="col-md-12" id="show-qrcode">
                         <br />
-                        <div id="qrcode"></div>
+                        <div id="qrcode2"></div>
                     </div>
                 </p>
             </div>
@@ -385,7 +385,7 @@
                 var qrcode_url = base_api + "QRCodeDetail/Index?id=" + id;
 
                 $.ajax({
-                    url: generateQRCode2(qrcode_url),
+                    url: generateQRCode3(qrcode_url),
                     method: "GET",
                     success: function () {
                         var canvas = document.querySelector('canvas');
@@ -401,7 +401,6 @@
                             method: "POST",
                             data: { data: qrcodeVal },
                             success: function (result) {
-                                console.log(result);
                                 if (result.status == "SUCCESS") {
                                     console.log("success update QRCODE");
                                 } else {

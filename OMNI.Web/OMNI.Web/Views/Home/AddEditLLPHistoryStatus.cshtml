@@ -48,13 +48,13 @@
               </div><br />
 
         <div class="row" id="date">
-            <div class="col-md-6">
+            <div class="col-md-6" id="tglIn">
                 <div class="form-group">
                     <label class="form-label" for="">Tanggal In</label>
                     <input type="text" id="startDate" asp-for="StartDate" name="StartDate" class="form-control datepicker" style="width: 100% !important;">
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" id="tglOut">
                 <div class="form-group">
                     <label class="form-label" for="">Tanggal Out</label>
                     <input type="text" id="endDate" asp-for="EndDate" name="EndDate" class="form-control datepicker" style="width: 100% !important;">
@@ -95,13 +95,19 @@
 
         var status = $("#status").val();
         if (status == "STAND BY") {
-            $("#startDate").attr("required", false);
+            $("#startDate").attr("required", true);
             $("#endDate").attr("required", false);
 
-            $("#date").hide();
+            $("#date").show();
+            $("#tglOut").hide();
+        } else if (status == "MAINTENANCE") {
+            $("#date").show();
+            $("#tglOut").show();
+            $("#startDate").attr("required", true);
+            $("#endDate").attr("required", false);
         } else {
             $("#date").show();
-
+            $("#tglOut").show();
             $("#startDate").attr("required", true);
             $("#endDate").attr("required", true);
         }
@@ -109,13 +115,19 @@
         $("#status").on('change', function () {
             console.log(this.value);
             if (this.value == "STAND BY") {
-                $("#startDate").attr("required", false);
+                $("#startDate").attr("required", true);
                 $("#endDate").attr("required", false);
-
-                $("#date").hide();
+                $("#date").show();
+                $("#tglOut").hide();
+            } else if (this.value == "MAINTENANCE") {
+                console.log('on MAINTENANCE')
+                $("#date").show();
+                $("#tglOut").show();
+                $("#startDate").attr("required", true);
+                $("#endDate").attr("required", false);
             } else {
                 $("#date").show();
-
+                $("#tglOut").show();
                 $("#startDate").attr("required", true);
                 $("#endDate").attr("required", true);
             }
