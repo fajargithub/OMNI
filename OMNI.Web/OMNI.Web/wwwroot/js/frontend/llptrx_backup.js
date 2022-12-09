@@ -21,7 +21,7 @@ function countTotalPercentageLLPTrx() {
                 } else {
                     $("#copyData").show();
                 }
-                
+
                 for (var i = 0; i < result.data.length; i++) {
                     if (lastJenis == "") {
                         lastJenis = result.data[i].jenis;
@@ -88,10 +88,10 @@ var dt = $('#table_llp_trx').DataTable({
     "paging": false,
     "fixedColumns": {
         leftColumns: 7
-       // rightColumns: 1
+        // rightColumns: 1
     },
     "ajax": {
-        "url": base_api + 'Home/GetAllLLPTrx?port=' + port +"&year=" + selectedYear,
+        "url": base_api + 'Home/GetAllLLPTrx?port=' + port + "&year=" + selectedYear,
         "type": 'GET'
     },
     "columns": [
@@ -100,7 +100,7 @@ var dt = $('#table_llp_trx').DataTable({
             name: 'peralatanOSR',
             title: 'Peralatan OSR',
             data: 'peralatanOSR',
-            render : function (row, data, iDisplayIndex) {
+            render: function (row, data, iDisplayIndex) {
                 var result = iDisplayIndex.peralatanOSR;
                 if (result == "Total Persentase") {
                     result = "<b>Total Persentase</b>";
@@ -269,7 +269,7 @@ var dt = $('#table_llp_trx').DataTable({
 
                     }
                 }
-                
+
 
                 return result;
             }
@@ -338,7 +338,7 @@ var dt = $('#table_llp_trx').DataTable({
                             "<a class='dropdown-item' data-toggle='modal' data-target='#modal-history' href='/HistoryTrx/HistoryLLPTrx?trxId=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' title='Edit'><b style='color:teal;'><i class='fa fa-history'></i> History</b></a>" +
                             "<a class='dropdown-item btn-delete' href='javascript:void(0)' onclick='deleteLLPTrx(" + iDisplayIndex.id + ")' title='Delete'><b style='color:red;'><i class='fa fa-trash'></i> Delete</b></a>";
                     }
-                    
+
                     result += "</div>" +
                         "</div>";
                 }
@@ -377,33 +377,21 @@ var dt = $('#table_llp_trx').DataTable({
             this.api().cell($('td:eq(17)', row)).data('');
         }
     },
-    //rowsGroup: [
-    //    'peralatanOSR:name',
-    //    'satuanJenis:name',
-    //    'totalExistingJenis:name',
-    //    /*'totalExistingKeseluruhan:name',*/
-    //    'rekomendasiHubla:name',
-    //    'totalKebutuhanHubla:name',
-    //    'selisihHubla:name',
-    //    'kesesuaianPM58:name',
-    //    'persentaseHubla:name',
-    //    'rekomendasiOSCP:name',
-    //    'totalKebutuhanOSCP:name',
-    //    'selisihOSCP:name',
-    //    'kesesuaianOSCP:name',
-    //    'persentaseOSCP:name'
-    //],
     rowsGroup: [
+        'peralatanOSR:name',
+        'satuanJenis:name',
+        'totalExistingJenis:name',
         'totalExistingKeseluruhan:name',
-        10,
-        11,
-        14,
-        15,
-        16,
-        0,
-        2,
-        7,
-        9
+        'rekomendasiHubla:name',
+        'totalKebutuhanHubla:name',
+        'selisihHubla:name',
+        'kesesuaianPM58:name',
+        'persentaseHubla:name',
+        'rekomendasiOSCP:name',
+        'totalKebutuhanOSCP:name',
+        'selisihOSCP:name',
+        'kesesuaianOSCP:name',
+        'persentaseOSCP:name'
     ],
     "order": [[1, 'asc']],
     rowCallback: function (row, data, iDisplayIndex) {
