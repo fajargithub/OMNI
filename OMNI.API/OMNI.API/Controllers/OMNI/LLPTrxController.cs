@@ -590,23 +590,6 @@ namespace OMNI.API.Controllers.OMNI
                             temp.TotalKebutuhanOSCP = 0;
                         }
 
-                        //COUNT SELISIH HUBLA
-                        if (countTotalExistingJenis.Count() > 0)
-                        {
-                            for (int j = 0; j < countTotalExistingJenis.Count(); j++)
-                            {
-                                var findTotalKebutuhanHubla = countTotalKesesuaianHubla.Find(b => b.TrxId == countTotalExistingJenis[j].TrxId);
-                                if (findTotalKebutuhanHubla != null)
-                                {
-                                    countTotalExistingJenis[j].SelisihHubla = countTotalExistingJenis[j].TotalCount - findTotalKebutuhanHubla.TotalCount;
-                                }
-                                else
-                                {
-                                    countTotalExistingJenis[j].SelisihHubla = countTotalExistingJenis[j].TotalCount;
-                                }
-                            }
-                        }
-
                         temp.SatuanJenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Satuan : "-";
                         temp.Port = list[i].Port;
                         temp.QRCode = list[i].QRCode;
@@ -659,8 +642,8 @@ namespace OMNI.API.Controllers.OMNI
                                 }
                             }
 
-                            result[i].SelisihHubla = find.SelisihHubla;
-                            if (find.SelisihHubla >= 0)
+                            result[i].SelisihHubla = find.TotalCount - result[i].RekomendasiHubla;
+                            if (result[i].SelisihHubla >= 0)
                             {
                                 result[i].KesesuaianPM58 = "TERPENUHI";
                             }
