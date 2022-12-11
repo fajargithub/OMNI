@@ -51,6 +51,24 @@ namespace OMNI.API.Controllers.OMNI
             return Ok(result);
         }
 
+        [HttpGet("{GetLastHistoryByTrxId}")]
+        public async Task<IActionResult> GetLastHistoryByTrxId(int id, CancellationToken cancellationToken)
+        {
+            LLPHistoryStatusModel result = new LLPHistoryStatusModel();
+            var temp = await _dbOMNI.LLPHistoryStatus.Where(b => b.IsDeleted == GeneralConstants.NO && b.LLPTrx.Id == id).Include(b => b.LLPTrx).OrderByDescending(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
+            if (temp != null)
+            {
+                result.Id = temp.Id;
+                result.Status = temp.Status;
+                result.StartDate = temp.StartDate.HasValue ? temp.StartDate.Value.ToString("dd MMM yyyy") : "-";
+                result.EndDate = temp.EndDate.HasValue ? temp.EndDate.Value.ToString("dd MMM yyyy") : "-";
+                result.PortFrom = temp.PortFrom;
+                result.PortTo = temp.PortTo;
+                result.Remark = temp.Remark;
+            }
+            return Ok(result);
+        }
+
         // GET: api/<ValuesController>
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
