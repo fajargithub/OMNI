@@ -23,22 +23,22 @@
                     <tr>
                         <th scope="col">Nama Peralatan OSR</th>
                         <td>:</td>
-                        <td>@ViewBag.Data.PeralatanOSRName</td>
+                        <td colspan="4">@ViewBag.Data.PeralatanOSRName</td>
                     </tr>
                     <tr>
                         <th scope="col">Nama Spesifikasi / Jenis</th>
                         <td>:</td>
-                        <td>@ViewBag.Data.JenisName</td>
+                        <td colspan="4">@ViewBag.Data.JenisName</td>
                     </tr>
                     <tr>
                         <th>Detail Eksisting Lokasi</th>
                         <td>:</td>
-                        <td>@ViewBag.Data.DetailExisting</td>
+                        <td colspan="4">@ViewBag.Data.DetailExisting</td>
                     </tr>
                     <tr>
                         <th>Kondisi</th>
                         <td>:</td>
-                        <td>
+                        <td colspan="4">
                             @if (ViewBag.Data.Kondisi == "Baik")
                             {
                                 <b style="color:green;">Baik</b>
@@ -54,24 +54,25 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Lokasi</th>
+                        <th>Last Status</th>
                         <td>:</td>
-                        <td>@ViewBag.Data.Port</td>
+                        <td colspan="4">@ViewBag.LLPHistory.Status</td>
                     </tr>
                     <tr>
-                        <th>Nomor Asset</th>
+                        <th>Lokasi From</th>
                         <td>:</td>
-                        <td>@ViewBag.Data.QRCodeText</td>
+                        <td>@ViewBag.LLPHistory.PortFrom</td>
+                        <th>Lokasi To</th>
+                        <td>:</td>
+                        <td>@ViewBag.LLPHistory.PortTo</td>
                     </tr>
                     <tr>
-                        <th>Brand</th>
+                        <th>Tanggal In</th>
                         <td>:</td>
-                        <td>@ViewBag.Data.Brand</td>
-                    </tr>
-                    <tr>
-                        <th>Serial Number</th>
+                        <td>@ViewBag.LLPHistory.StartDate</td>
+                         <th>Tanggal Out</th>
                         <td>:</td>
-                        <td>@ViewBag.Data.SerialNumber</td>
+                        <td>@ViewBag.LLPHistory.EndDate</td>
                     </tr>
                 </tbody>
             </table>

@@ -21,11 +21,12 @@ namespace OMNI.Web.Controllers
         private static readonly string QR_CODE_DETAIL = "~/Views/Home/QRCodeDetail.cshtml";
 
         protected ILLPTrx _llpTrxService;
-
-        public QRCodeDetailController(ILLPTrx llpTrxService, IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        protected ILLPHistoryStatus _llpHistoryStatusService;
+        public QRCodeDetailController(ILLPHistoryStatus llpHistoryStatusService, ILLPTrx llpTrxService, IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
         {
             _jenisService = jenisService;
             _llpTrxService = llpTrxService;
+            _llpHistoryStatusService = llpHistoryStatusService;
         }
 
         [HttpGet]
@@ -33,8 +34,19 @@ namespace OMNI.Web.Controllers
         {
             List<FilesModel> fileList = await _llpTrxService.GetQRCodeFiles(id, "OMNI_LLP");
             LLPTrxModel data = await _llpTrxService.GetById(id);
+            LLPHistoryStatusModel llpHistory = new LLPHistoryStatusModel();
+            ViewBag.LLPHistory = llpHistory;
+
+            var findLLPHistory = await _llpHistoryStatusService.GetLastHistoryByTrxId(id);
+
+            if(findLLPHistory != null)
+            {
+                ViewBag.LLPHistory = findLLPHistory;
+            }
+
             ViewBag.Data = data;
             ViewBag.FileList = fileList;
+            
             return PartialView(QR_CODE_DETAIL);
         }
 

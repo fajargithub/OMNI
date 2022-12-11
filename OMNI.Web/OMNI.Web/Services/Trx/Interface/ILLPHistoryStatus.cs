@@ -10,5 +10,6 @@ namespace OMNI.Web.Services.Trx.Interface
     {
         public Task<LLPHistoryStatusModel> GetById(int id);
         public Task<List<LLPHistoryStatusModel>> GetAll(string port, int year);
+        public Task<LLPHistoryStatusModel> GetLastHistoryByTrxId(int id);
     }
 }

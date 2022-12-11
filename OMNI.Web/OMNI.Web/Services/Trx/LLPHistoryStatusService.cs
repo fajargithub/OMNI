@@ -39,5 +39,16 @@ namespace OMNI.Web.Services.Trx
 
             throw new Exception();
         }
+        public async Task<LLPHistoryStatusModel> GetLastHistoryByTrxId(int id)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/LLPHistoryStatus/GetLastHistoryByTrxId?id={id}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<LLPHistoryStatusModel>();
+
+            throw new Exception();
+        }
     }
 }
