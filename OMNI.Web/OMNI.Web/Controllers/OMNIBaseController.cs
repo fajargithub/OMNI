@@ -16,6 +16,7 @@ using OMNI.Utilities.Constants;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Net.Sockets;
+using Microsoft.AspNetCore.Http;
 
 namespace OMNI.Web.Controllers
 {
@@ -41,6 +42,17 @@ namespace OMNI.Web.Controllers
         {
             public static List<Port> PortList { get; set; }
             public static string RegionTxt { get; set; }
+        }
+
+        public void SetSession(string userId)
+        {
+            HttpContext.Session.SetString("userId", userId);
+        }
+
+        public string GetSession()
+        {
+            var result = this.HttpContext.Session.GetString("userId");
+            return result;
         }
 
         public static int GetMonthDifference(DateTime startDate, DateTime endDate)

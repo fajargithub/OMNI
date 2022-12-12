@@ -59,6 +59,8 @@ namespace OMNI.Web.Controllers
             }
             else
             {
+                SetSession(r.UserId.ToString());
+
                 return Ok(new JsonResponse { 
                     Status = GeneralConstants.SUCCESS, 
                     UserId = r.UserId,
