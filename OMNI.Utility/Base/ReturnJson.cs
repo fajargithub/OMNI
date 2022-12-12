@@ -17,5 +17,6 @@ namespace OMNI.Utilities.Base
         public string Email { get; set; }
         public string Position { get; set; }
         public List<string> Roles { get; set; }
+        public string Role { get; set; }
     }
 }

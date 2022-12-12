@@ -86,15 +86,19 @@ namespace OMNI.API.Controllers.OMNI
                                                  RoleName = role.Name,
                                              }).ToList();
 
+                string paramRole = "";
+
                 if(findRoles.Count() > 0)
                 {
+                    paramRole = findRoles[0].RoleName;
+
                     for(int i=0; i < findRoles.Count(); i++)
                     {
                         roleList.Add(findRoles[i].RoleName);
                     }
                 }
 
-                return Ok(new ReturnJson { IsSuccess = true, UserId = employee.Id, Username = employee.Name, Email = employee.Email, Roles = roleList } );
+                return Ok(new ReturnJson { IsSuccess = true, UserId = employee.Id, Username = employee.Name, Email = employee.Email, Roles = roleList, Role = paramRole } );
             } else
             {
                 return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "Invalid Username / Password"});
