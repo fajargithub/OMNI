@@ -44,15 +44,35 @@ namespace OMNI.Web.Controllers
             public static string RegionTxt { get; set; }
         }
 
-        public void SetSession(string userId)
+        public class UserData
         {
-            HttpContext.Session.SetString("userId", userId);
+            public int UserId { get; set; }
+            public string Username { get; set; }
+            public string Email { get; set; }
+            public string Role { get; set; }
         }
 
-        public string GetSession()
+        public void SetSession(UserData data)
         {
-            var result = this.HttpContext.Session.GetString("userId");
-            return result;
+            HttpContext.Session.SetInt32("userId", data.UserId);
+            HttpContext.Session.SetString("username", data.Username);
+            HttpContext.Session.SetString("email", data.Email);
+            HttpContext.Session.SetString("role", data.Role);
+        }
+
+        public UserData GetSession()
+        {
+            UserData user = new UserData();
+            user.UserId = HttpContext.Session.GetInt32("userId").HasValue ? this.HttpContext.Session.GetInt32("userId").Value : 0;
+            user.Username = HttpContext.Session.GetString("username");
+            user.Email = HttpContext.Session.GetString("email");
+            user.Role = HttpContext.Session.GetString("Role");
+            return user;
+        }
+
+        public void DeleteSession()
+        {
+            HttpContext.Session.Clear();
         }
 
         public static int GetMonthDifference(DateTime startDate, DateTime endDate)

@@ -59,7 +59,13 @@ namespace OMNI.Web.Controllers
             }
             else
             {
-                SetSession(r.UserId.ToString());
+                UserData newUser = new UserData();
+                newUser.UserId = r.UserId;
+                newUser.Username = r.Username;
+                newUser.Role = r.Role;
+                newUser.Email = r.Email;
+
+                SetSession(newUser);
 
                 return Ok(new JsonResponse { 
                     Status = GeneralConstants.SUCCESS, 
@@ -74,6 +80,7 @@ namespace OMNI.Web.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
+            DeleteSession();
             return PartialView(LOGOUT_URL);
         }
     }

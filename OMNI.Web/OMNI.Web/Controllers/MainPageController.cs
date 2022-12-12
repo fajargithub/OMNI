@@ -27,7 +27,8 @@ namespace OMNI.Web.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.UserId = GetSession();
+            var userSession = GetSession();
+            ViewBag.UserId = userSession.UserId;
             //ViewBag.Username = UserData.Username;
             return View(MAIN_PAGE_URL);
         }
