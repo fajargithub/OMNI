@@ -116,7 +116,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="form-label" for="">Select Lokasi - @ViewBag.RegionTxt</label>
-                    <select asp-for="Port" id="port" class="select2-input-index"
+                    <select asp-for="Port" name="Port" id="port" class="select2-input-index" value="@ViewBag.SelectedPort"
                             asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
                     </select>
                 </div> <br />
@@ -124,7 +124,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="form-label" for="">Select Year</label>
-                    <select name="Year" id="year-lokasi" class="select2-input-index"
+                    <select asp-for="Year" name="Year" id="year-lokasi" class="select2-input-index" value="@ViewBag.SelectedYear"
                             asp-items="@(new SelectList(ViewBag.YearList, "Name","Name"))">
                     </select>
                 </div> <br />
@@ -151,11 +151,15 @@
                     Lindungan Lingkungan Perairan
                 </h2>
 
-                <div class="panel-toolbar editable">
-                    <a href="javascript:void(0)" id="deleteAll" class="btn btn-danger btn-sm shadow-0 white-font"><i class="fal fa-times"></i>  Delete All</a> &nbsp;
-                    <a href="javascript:void(0)" id="copyData" class="btn btn-info btn-sm shadow-0 white-font"><i class="fal fa-copy"></i>  Copy Data</a> &nbsp;
-                    <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit" data-backdrop='static' data-keyboard='false'><i class="fal fa-plus"></i>  Add</a>
-                </div>
+                @if (ViewBag.Editable)
+                {
+                    <div class="panel-toolbar">
+                        <a href="javascript:void(0)" id="deleteAll" class="btn btn-danger btn-sm shadow-0 white-font"><i class="fal fa-times"></i>  Delete All</a> &nbsp;
+                        <a href="javascript:void(0)" id="copyData" class="btn btn-info btn-sm shadow-0 white-font"><i class="fal fa-copy"></i>  Copy Data</a> &nbsp;
+                        <a asp-action="AddEditLLPTrx" asp-route-port="@ViewBag.SelectedPort" asp-route-year="@ViewBag.SelectedYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit" data-backdrop='static' data-keyboard='false'><i class="fal fa-plus"></i>  Add</a>
+                    </div>
+                }
+
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -206,9 +210,13 @@
                     PERSONIL
                 </h2>
 
-                <div class="panel-toolbar editable">
-                    <a asp-action="AddEditPersonilTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                </div>
+                @if (ViewBag.Editable)
+                {
+                    <div class="panel-toolbar">
+                        <a asp-action="AddEditPersonilTrx" asp-route-port="@ViewBag.SelectedPort" asp-route-year="@ViewBag.SelectedYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    </div>
+                }
+
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -246,10 +254,12 @@
                     LATIHAN
                 </h2>
 
-                <div class="panel-toolbar editable">
-                    <a asp-action="AddEditLatihanTrx" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                </div>
-
+                @if (ViewBag.Editable)
+                {
+                    <div class="panel-toolbar">
+                        <a asp-action="AddEditLatihanTrx" asp-route-port="@ViewBag.SelectedPort" asp-route-year="@ViewBag.SelectedYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                    </div>
+                }
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -317,8 +327,6 @@
                 </p>
                 <p style="text-align:center;">
                     <div class="form-group">
-                        @*<input type="hidden" id="qrcode-value2" required />
-                        <input type="hidden" id="qrcode-text2" required />*@
                     </div>
                     <div class="col-md-12" id="show-qrcode">
                         <br />
@@ -521,53 +529,24 @@
 
                 }
             })
-
-
         });
 
-        document.addEventListener("visibilitychange", function () {
-            if (document.hidden) {
-                console.log("Browser tab is hidden")
-            } else {
-                console.log("Browser tab is visible")
+        selectedYear = "@ViewBag.SelectedYear";
+        port = "@ViewBag.SelectedPort";
 
-                if (port !== localStorage.getItem("port") || selectedYear !== localStorage.getItem("selectedYear")) {
-                    setTimeout(function () {
-                        window.location.href = base_api + 'Home/Index?port=' + localStorage.getItem("port") + "&year=" + localStorage.getItem("selectedYear") + "&role=" + userRole + "&userId=" + userData.userId;
-                    }, 200);
-                }
-
-                var defaultPort = "@ViewBag.SelectedPort.Name";
-                var defaultYear = "@ViewBag.ThisYear";
-
-                if (defaultPort !== localStorage.getItem("port") || defaultYear !== localStorage.getItem("selectedYear")) {
-                    setTimeout(function () {
-                        window.location.href = base_api + 'Home/Index?port=' + localStorage.getItem("port") + "&year=" + localStorage.getItem("selectedYear") + "&role=" + userRole + "&userId=" + userData.userId;
-                    }, 200);
-                }
-            }
-        });
+        $("#year-lokasi").val(selectedYear).change();
+        $("#port").val(port).change();
 
         $("#year-lokasi").on('change', function () {
             selectedYear = this.value;
-            localStorage.setItem("selectedYear", this.value);
         });
 
         $("#port").on('change', function () {
             port = this.value;
-            localStorage.setItem("port", this.value);
-
         });
 
-        $("#year-lokasi").val(selectedYear).change();
-
-            if (port !== null && port !== "") {
-                $("#port").val(port).change();
-        }
-
         $("#searchLokasi").click(function () {
-            console.log(port);
-            window.location.href = base_api + 'Home/Index?port=' + port + "&year=" + selectedYear + "&role=" + userRole + "&userId=" + userData.userId;
+            window.location.href = base_api + 'Home/Index?port=' + port + "&year=" + selectedYear;
         })
 
             $('.select2-input-index').select2();

@@ -56,40 +56,51 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string port, int year, string role, int userId)
+        public async Task<IActionResult> Index(string port, int year)
         {
             var dateNow = DateTime.Now;
             var thisYear = dateNow.Year;
 
             ViewBag.SelectedPort = "";
             ViewBag.YearList = GetYearList(2010, 2030);
-            ViewBag.ThisYear = thisYear;
             ViewBag.Info = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
 
             if (year > 0)
             {
-                ViewBag.ThisYear = year;
+                ViewBag.SelectedYear = year;
+                SetSelectedYear(year);
             } else
             {
-                year = thisYear;
+                int? getSelectedYear = GetSelectedYear();
+                if (getSelectedYear.HasValue)
+                {
+                    ViewBag.SelectedYear = getSelectedYear.Value;
+                } else
+                {
+                    ViewBag.SelectedYear = thisYear;
+                }
             }
 
-            List<Port> portList = await GetPorts(role, userId);
+            List<Port> portList = await GetPorts();
 
             ViewBag.PortList = portList;
-            ViewBag.RegionTxt = GetRegionTxt(role);
+            ViewBag.RegionTxt = GetRegionTxt();
 
             if (!string.IsNullOrEmpty(port))
             {
-                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedPort = port;
+                SetSelectedPort(port);
             }
             else
             {
-                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-                if(findPort != null)
+                string getSelectedPort = GetSelectedPort();
+                if (!string.IsNullOrEmpty(getSelectedPort))
                 {
-                    ViewBag.SelectedPort = findPort;
-                    port = findPort.Name;
+                    ViewBag.SelectedPort = getSelectedPort;
+                } else
+                {
+                    ViewBag.SelectedPort = "Senipah";
+                    SetSelectedPort("Senipah");
                 }
             }
 
@@ -97,7 +108,7 @@ namespace OMNI.Web.Controllers
             ViewBag.EnableVerifikasi1 = false;
             ViewBag.EnableVerifikasi2 = false;
 
-            List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(port);
+            List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(GetSelectedPort());
             if (lampiranList.Count() > 0)
             {
                 DateTime today = DateTime.Now;
@@ -199,14 +210,18 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditLatihanTrx(LatihanTrxModel model)
         {
-            //if (model.Id > 0)
-            //{
-            //    model.UpdatedBy = UserData.Username;
-            //}
-            //else
-            //{
-            //    model.CreatedBy = UserData.Username;
-            //}
+            var session = GetSession();
+            if (session != null)
+            {
+                if (model.Id > 0)
+                {
+                    model.UpdatedBy = session.Username;
+                }
+                else
+                {
+                    model.CreatedBy = session.Username;
+                }
+            }
 
             var r = await _latihanTrxService.AddEdit(model);
 
@@ -383,14 +398,20 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditLLPTrx(LLPTrxModel model)
         {
-            //if(model.Id > 0)
-            //{
-            //    model.UpdatedBy = UserData.Username;
-            //} else
-            //{
-            //    model.CreatedBy = UserData.Username;
-            //}
+            var session = GetSession();
+            if(session != null)
+            {
+                if (model.Id > 0)
+                {
+                    model.UpdatedBy = session.Username;
+                }
+                else
+                {
+                    model.CreatedBy = session.Username;
+                }
+            }
             
+
             var r = await _llpTrxService.AddEdit(model);
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {
@@ -458,14 +479,18 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditPersonilTrx(PersonilTrxModel model)
         {
-            //if(model.Id > 0)
-            //{
-            //    model.UpdatedBy = UserData.Username;
-            //}
-            //else
-            //{
-            //    model.CreatedBy = UserData.Username;
-            //}
+            var session = GetSession();
+            if (session != null)
+            {
+                if (model.Id > 0)
+                {
+                    model.UpdatedBy = session.Username;
+                }
+                else
+                {
+                    model.CreatedBy = session.Username;
+                }
+            }
 
             var r = await _personilTrxService.AddEdit(model);
 
@@ -571,6 +596,19 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEditLLPHistoryStatus(LLPHistoryStatusModel model)
         {
+            var session = GetSession();
+            if (session != null)
+            {
+                if (model.Id > 0)
+                {
+                    model.UpdatedBy = session.Username;
+                }
+                else
+                {
+                    model.CreatedBy = session.Username;
+                }
+            }
+
             var r = await _llpTrxService.AddEditLLPHistoryStatus(model);
 
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)

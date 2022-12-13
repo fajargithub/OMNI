@@ -590,20 +590,20 @@ var initApp = (function (app) {
                         roles: null
                     }
 
-                    if (response.roles.length > 0) {
-                        var roleList = "";
-                        for (var i = 0; i < response.roles.length; i++) {
-                            if (i == (response.roles.length - 1)) {
-                                roleList += response.roles[i];
-                            } else {
-                                roleList += response.roles[i] + "::";
-                            }
-                        }
+                    //if (response.roles.length > 0) {
+                    //    var roleList = "";
+                    //    for (var i = 0; i < response.roles.length; i++) {
+                    //        if (i == (response.roles.length - 1)) {
+                    //            roleList += response.roles[i];
+                    //        } else {
+                    //            roleList += response.roles[i] + "::";
+                    //        }
+                    //    }
 
-                        objUserData.roles = roleList;
-                        console.log(objUserData);
-                        localStorage.setItem("userData", JSON.stringify(objUserData));
-                    }
+                    //    objUserData.roles = roleList;
+                    //    console.log(objUserData);
+                    //    localStorage.setItem("userData", JSON.stringify(objUserData));
+                    //}
                 }
 
                 if (response.status == "SUCCESS") {

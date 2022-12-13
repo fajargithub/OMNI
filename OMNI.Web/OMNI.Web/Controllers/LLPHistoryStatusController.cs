@@ -37,36 +37,54 @@ namespace OMNI.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string port, int year, string role, int userId)
+        public async Task<IActionResult> Index(string port, int year)
         {
             var dateNow = DateTime.Now;
             var thisYear = dateNow.Year;
+
+            ViewBag.SelectedPort = "";
             ViewBag.YearList = GetYearList(2010, 2030);
-            ViewBag.ThisYear = thisYear;
 
             if (year > 0)
             {
-                ViewBag.ThisYear = year;
+                ViewBag.SelectedYear = year;
+                SetSelectedYear(year);
             }
             else
             {
-                year = thisYear;
+                int? getSelectedYear = GetSelectedYear();
+                if (getSelectedYear.HasValue)
+                {
+                    ViewBag.SelectedYear = getSelectedYear.Value;
+                }
+                else
+                {
+                    ViewBag.SelectedYear = thisYear;
+                }
             }
 
-            List<Port> portList = await GetPorts(role, userId);
+            List<Port> portList = await GetPorts();
 
             ViewBag.PortList = portList;
-            ViewBag.RegionTxt = GetRegionTxt(role);
+            ViewBag.RegionTxt = GetRegionTxt();
 
             if (!string.IsNullOrEmpty(port))
             {
-                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedPort = port;
+                SetSelectedPort(port);
             }
             else
             {
-                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-                ViewBag.SelectedPort = findPort;
-                port = findPort.Name;
+                string getSelectedPort = GetSelectedPort();
+                if (!string.IsNullOrEmpty(getSelectedPort))
+                {
+                    ViewBag.SelectedPort = getSelectedPort;
+                }
+                else
+                {
+                    ViewBag.SelectedPort = "Senipah";
+                    SetSelectedPort("Senipah");
+                }
             }
 
             return View(INDEX_FILE);

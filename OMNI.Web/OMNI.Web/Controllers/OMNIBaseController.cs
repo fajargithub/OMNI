@@ -52,6 +52,33 @@ namespace OMNI.Web.Controllers
             public string Role { get; set; }
         }
 
+        public class SelectedPortYear
+        {
+            public string Port { get; set; }
+            public int? Year { get; set; }
+        }
+
+        public void SetSelectedYear(int year)
+        {
+            HttpContext.Session.SetInt32("year", year);
+        }
+
+        public void SetSelectedPort(string port)
+        {
+            HttpContext.Session.SetString("port", port);
+        }
+
+        public int? GetSelectedYear()
+        {
+            return HttpContext.Session.GetInt32("year");
+        }
+
+        public string GetSelectedPort()
+        {
+            return HttpContext.Session.GetString("port");
+        }
+
+
         public void SetSession(UserData data)
         {
             HttpContext.Session.SetInt32("userId", data.UserId);
@@ -60,13 +87,14 @@ namespace OMNI.Web.Controllers
             HttpContext.Session.SetString("role", data.Role);
         }
 
+        [HttpPost]
         public UserData GetSession()
         {
             UserData user = new UserData();
             user.UserId = HttpContext.Session.GetInt32("userId").HasValue ? this.HttpContext.Session.GetInt32("userId").Value : 0;
             user.Username = HttpContext.Session.GetString("username");
             user.Email = HttpContext.Session.GetString("email");
-            user.Role = HttpContext.Session.GetString("Role");
+            user.Role = HttpContext.Session.GetString("role");
             return user;
         }
 
@@ -81,122 +109,113 @@ namespace OMNI.Web.Controllers
             return Math.Abs(monthsApart);
         }
 
-        public string GetRegionTxt(string role)
+        public string GetRegionTxt()
         {
             string result = "";
 
-            if (string.IsNullOrEmpty(role))
-            {
-                role = "";
-            }
+            var session = GetSession();
 
-            if (role.Contains("REGION1"))
+            if(session.UserId > 0)
             {
-                result = "Region 1";
-            }
-            else if (role.Contains("REGION2"))
-            {
-                result = "Region 2";
-            }
-            else if (role.Contains("REGION3"))
-            {
-                result = "Region 3";
-            }
-            else if (role.Contains("OSMOSYS_GUEST_LOKASI") || role.Contains("OSMOSYS_GUEST_NON_LOKASI"))
-            {
-                result = "Region (Selected)";
-            }
-            else if (role.Contains("OSMOSYS_ADMIN_LOKASI"))
-            {
-                result = "Region (Selected)";
-            }
-            else if (role.Contains("OSMOSYS_SUPER_ADMIN"))
-            {
-                result = "Region 1, 2 & 3";
+                if (session.Role.Contains("REGION1"))
+                {
+                    result = "Region 1";
+                }
+                else if (session.Role.Contains("REGION2"))
+                {
+                    result = "Region 2";
+                }
+                else if (session.Role.Contains("REGION3"))
+                {
+                    result = "Region 3";
+                }
+                else if (session.Role.Contains("OSMOSYS_GUEST_LOKASI") || session.Role.Contains("OSMOSYS_GUEST_NON_LOKASI"))
+                {
+                    result = "Region (Selected)";
+                }
+                else if (session.Role.Contains("OSMOSYS_ADMIN_LOKASI"))
+                {
+                    result = "Region (Selected)";
+                }
+                else if (session.Role.Contains("OSMOSYS_SUPER_ADMIN"))
+                {
+                    result = "Region 1, 2 & 3";
+                }
             }
 
             return result;
         }
 
-        public async Task<List<Port>> GetPorts(string role, int userId)
+        public async Task<List<Port>> GetPorts()
         {
             List<Port> result = new List<Port>();
+            List<Port> userPorts = new List<Port>();
 
-            if (string.IsNullOrEmpty(role))
+            var session = GetSession();
+            if (session.UserId > 0)
             {
-                role = "";
-            }
-
-            if(userId < 1)
-            {
-                userId = 0;
-            }
-
-            if (role.Contains("REGION1"))
-            {
-                result = await GetPortByRegion(2);
-            }
-            else if (role.Contains("REGION2"))
-            {
-                result = await GetPortByRegion(3);
-            }
-            else if (role.Contains("REGION3"))
-            {
-                result = await GetPortByRegion(4);
-            }
-            else if (role.Contains("OSMOSYS_GUEST_LOKASI") || role.Contains("OSMOSYS_GUEST_NON_LOKASI"))
-            {
-                List<Port> userPorts = new List<Port>();
-                GuestLocationModel guestUser = await _guestLocationService.GetByUserId(userId);
-                if (guestUser != null)
+                if (session.Role.Contains("REGION1"))
                 {
-                    if (guestUser.PortList.Count() > 0)
+                    result = await GetPortByRegion(2);
+                }
+                else if (session.Role.Contains("REGION2"))
+                {
+                    result = await GetPortByRegion(3);
+                }
+                else if (session.Role.Contains("REGION3"))
+                {
+                    result = await GetPortByRegion(4);
+                }
+                else if (session.Role.Contains("OSMOSYS_GUEST_LOKASI") || session.Role.Contains("OSMOSYS_GUEST_NON_LOKASI"))
+                {
+                    GuestLocationModel guestUser = await _guestLocationService.GetByUserId(session.UserId);
+                    if (guestUser != null)
                     {
-                        var portList = await GetAllPort();
-                        if (portList.Count() > 0)
+                        if (guestUser.PortList.Count() > 0)
                         {
-                            for (int i = 0; i < guestUser.PortList.Count(); i++)
+                            var portList = await GetAllPort();
+                            if (portList.Count() > 0)
                             {
-                                Port temp = new Port();
-                                var findPort = portList.FindAll(b => b.Name.Contains(guestUser.PortList[i])).FirstOrDefault();
-                                if (findPort != null)
+                                for (int i = 0; i < guestUser.PortList.Count(); i++)
                                 {
-                                    userPorts.Add(findPort);
+                                    Port temp = new Port();
+                                    var findPort = portList.FindAll(b => b.Name.Contains(guestUser.PortList[i])).FirstOrDefault();
+                                    if (findPort != null)
+                                    {
+                                        userPorts.Add(findPort);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-
-                result = userPorts;
-            }
-            else if (role.Contains("OSMOSYS_ADMIN_LOKASI"))
-            {
-                List<Port> userPorts = new List<Port>();
-                AdminLocationModel adminUser = await _adminLocationService.GetByUserId(userId);
-                if (adminUser != null)
+                else if (session.Role.Contains("OSMOSYS_ADMIN_LOKASI"))
                 {
-                    if (adminUser.PortList.Count() > 0)
+                    AdminLocationModel adminUser = await _adminLocationService.GetByUserId(session.UserId);
+                    if (adminUser != null)
                     {
-                        var portList = await GetAllPort();
-                        if (portList.Count() > 0)
+                        if (adminUser.PortList.Count() > 0)
                         {
-                            for (int i = 0; i < adminUser.PortList.Count(); i++)
+                            var portList = await GetAllPort();
+                            if (portList.Count() > 0)
                             {
-                                Port temp = new Port();
-                                var findPort = portList.FindAll(b => b.Name.Contains(adminUser.PortList[i])).FirstOrDefault();
-                                if (findPort != null)
+                                for (int i = 0; i < adminUser.PortList.Count(); i++)
                                 {
-                                    userPorts.Add(findPort);
+                                    Port temp = new Port();
+                                    var findPort = portList.FindAll(b => b.Name.Contains(adminUser.PortList[i])).FirstOrDefault();
+                                    if (findPort != null)
+                                    {
+                                        userPorts.Add(findPort);
+                                    }
                                 }
                             }
                         }
                     }
+                } else
+                {
+                    result = await GetAllPort();
                 }
-
-                result = userPorts;
-            }
-            else 
+            } else 
             {
                 result = await GetAllPort();
             }
@@ -204,47 +223,49 @@ namespace OMNI.Web.Controllers
             return result;
         }
 
-        //public static class UserData
-        //{
-        //    public static int UserId { get; set; }
-        //    public static string Username { get; set; }
-        //    public static string Email { get; set; }
-        //    public static List<string> RoleList;
-        //    public static string[] ParamRole { get; set; }
-        //}
-
         public override void OnActionExecuted(ActionExecutedContext context)
         {
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+
+            var checkSession = GetSession();
+            if(checkSession.UserId < 1 && !controllerName.Contains("Login"))
+            {
+                context.Result = new RedirectToActionResult("Index", "Login", null);
+            } else
+            {
+                ViewBag.Username = checkSession.Username;
+                ViewBag.Email = checkSession.Email;
+                ViewBag.Role = checkSession.Role;
+
+                if (checkSession.Role != null)
+                {
+                    if (checkSession.Role.Contains("GUEST"))
+                    {
+                        ViewBag.Editable = false;
+                    }
+                    else
+                    {
+                        ViewBag.Editable = true;
+                    }
+
+                    if (checkSession.Role.Contains(GeneralConstants.OSMOSYS_SUPER_ADMIN))
+                    {
+                        ViewBag.EnableUserAccess = true;
+                    }
+                    else
+                    {
+                        ViewBag.EnableUserAccess = false;
+                    }
+                }
+                else
+                {
+                    ViewBag.Editable = false;
+                }
+            }
+
             //base.OnActionExecuted(context);
 
-            //ViewBag.Username = UserData.Username;
-            //ViewBag.Email = UserData.Email;
-            //ViewBag.Roles = UserData.RoleList;
 
-            //if (UserData.RoleList != null)
-            //{
-            //    if (UserData.RoleList.Contains(GeneralConstants.OSMOSYS_MANAGEMENT) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_LOKASI) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_GUEST_NON_LOKASI))
-            //    {
-            //        ViewBag.Editable = false;
-            //    }
-            //    else
-            //    {
-            //        ViewBag.Editable = true;
-            //    }
-
-            //    if (UserData.RoleList.Contains(GeneralConstants.OSMOSYS_SUPER_ADMIN) || UserData.RoleList.Contains(GeneralConstants.OSMOSYS_MANAGEMENT))
-            //    {
-            //        ViewBag.EnableUserAccess = true;
-            //    }
-            //    else
-            //    {
-            //        ViewBag.EnableUserAccess = false;
-            //    }
-            //}
-            //else
-            //{
-            //    ViewBag.Editable = false;
-            //}
         }
 
         //public static bool CheckUserRole()

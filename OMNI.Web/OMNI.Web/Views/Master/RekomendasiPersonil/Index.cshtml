@@ -35,16 +35,12 @@
                 <h2>
                     Rekomendasi Personil List
                 </h2>
-                @*@if (ViewBag.Editable)
+                @if (ViewBag.Editable)
                 {
                     <div class="panel-toolbar">
-                        <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                        <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort" asp-route-year="@ViewBag.SelectedYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                     </div>
-                }*@
-
-                <div class="panel-toolbar editable">
-                        <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-year="@ViewBag.ThisYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
-                    </div>
+                }
                 </div>
             <div class="panel-container show">
                 <div class="panel-content">
@@ -77,15 +73,23 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         $(document).ready(function () {
-            var port = "@ViewBag.SelectedPort.Name";
-            var selectedYear = parseInt("@ViewBag.ThisYear");
+            selectedYear = "@ViewBag.SelectedYear";
+            port = "@ViewBag.SelectedPort";
 
             $("#year-lokasi").val(selectedYear).change();
+            $("#port").val(port).change();
 
-            if (port !== null && port !== "") {
-                $("#port").val(port).change();
-                $('a').attr('asp-route-port', port);
-            }
+            $("#year-lokasi").on('change', function () {
+                selectedYear = this.value;
+            });
+
+            $("#port").on('change', function () {
+                port = this.value;
+            });
+
+            $("#searchLokasi").click(function () {
+                window.location.href = base_api + 'RekomendasiPersonil/Index?port=' + port + "&year=" + selectedYear;
+            })
 
             $('.select2-input-index').select2();
 

@@ -31,39 +31,44 @@ namespace OMNI.Web.Controllers
             _portService = portService;
         }
 
-        public async Task<IActionResult> Index(string port, string role, int userId)
+        public async Task<IActionResult> Index(string port)
         {
+            ViewBag.Info = "* Silahkan upload Surat Penilaian";
+
             var dateNow = DateTime.Now;
             var thisYear = dateNow.Year;
 
-            ViewBag.Info = "* Silahkan upload Surat Penilaian";
+            ViewBag.SelectedPort = "";
 
-            ViewBag.YearList = GetYearList(2010, 2030);
-
-            ViewBag.ThisYear = thisYear;
-
-            List<Port> portList = await GetPorts(role, userId);
+            List<Port> portList = await GetPorts();
 
             ViewBag.PortList = portList;
-            ViewBag.RegionTxt = GetRegionTxt(role);
+            ViewBag.RegionTxt = GetRegionTxt();
 
             if (!string.IsNullOrEmpty(port))
             {
-                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedPort = port;
+                SetSelectedPort(port);
             }
             else
             {
-                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-                ViewBag.SelectedPort = findPort;
-                port = findPort.Name;
+                string getSelectedPort = GetSelectedPort();
+                if (!string.IsNullOrEmpty(getSelectedPort))
+                {
+                    ViewBag.SelectedPort = getSelectedPort;
+                }
+                else
+                {
+                    ViewBag.SelectedPort = "Senipah";
+                    SetSelectedPort("Senipah");
+                }
             }
 
             ViewBag.EnablePenilaian = true;
             ViewBag.EnablePengesahan = false;
             ViewBag.EnableVerifikasi1 = false;
-            //ViewBag.EnableVerifikasi2 = false;
 
-            List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(port);
+            List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(GetSelectedPort());
             if(lampiranList.Count() > 0)
             {
                 var findPenilaian = lampiranList.FindAll(b => b.LampiranType == "PENILAIAN").OrderByDescending(b => b.Id).FirstOrDefault();
@@ -100,34 +105,6 @@ namespace OMNI.Web.Controllers
                         ViewBag.EnableVerifikasi1 = false;
                         ViewBag.Info = "";
                     }
-
-                    //var findVerifikasi1 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI1").OrderByDescending(b => b.Id).FirstOrDefault();
-                    //if (findVerifikasi1 != null)
-                    //{
-                    //    //ViewBag.EnableVerifikasi1 = false;
-                    //    var endDateVerifikasi1 = DateTime.ParseExact(findVerifikasi1.EndDate, "dd MMM yyyy", null);
-                    //    if (dateNow >= endDateVerifikasi1)
-                    //    {
-                    //        ViewBag.EnableVerifikasi2 = true;
-                    //    }
-                    //    else
-                    //    {
-                    //        ViewBag.EnableVerifikasi2 = false;
-                    //    }
-
-                    //    ViewBag.Info = "* Mohon upload Verifikasi Surat Perpanjangan Pengesahan (2,5 tahun kedua) per tanggal " + findVerifikasi1.EndDate;
-
-                    //    var findVerifikasi2 = lampiranList.FindAll(b => b.LampiranType == "VERIFIKASI2").OrderByDescending(b => b.Id).FirstOrDefault();
-                    //    if (findVerifikasi2 != null)
-                    //    {
-                    //        //ViewBag.EnableVerifikasi2 = false;
-                    //        ViewBag.Info = "";
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    ViewBag.EnableVerifikasi2 = false;
-                    //}
                 }
                 else
                 {
@@ -189,6 +166,19 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEdit(LampiranModel model)
         {
+            var session = GetSession();
+            if (session != null)
+            {
+                if (model.Id > 0)
+                {
+                    model.UpdatedBy = session.Username;
+                }
+                else
+                {
+                    model.CreatedBy = session.Username;
+                }
+            }
+
             var r = await _lampiranService.AddEdit(model);
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)
             {

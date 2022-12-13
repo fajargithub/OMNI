@@ -31,10 +31,6 @@
 <script src="~/js/jquery-qrcode.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-
-        $("#updatedBy").val(userData.username);
-        $("#createdBy").val(userData.username);
-
         $(document).on('submit', '#form-akun', function () {
         var form = $('#form-akun');
         var validation = Array.prototype.filter.call(form, function (form) {

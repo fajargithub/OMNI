@@ -71,6 +71,19 @@ namespace OMNI.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEdit(GuestLocationModel model)
         {
+            var session = GetSession();
+            if (session != null)
+            {
+                if (model.Id > 0)
+                {
+                    model.UpdatedBy = session.Username;
+                }
+                else
+                {
+                    model.CreatedBy = session.Username;
+                }
+            }
+
             var r = await _guestLocationService.AddEdit(model);
 
             if (!r.IsSuccess || r.Code != (int)HttpStatusCode.OK)

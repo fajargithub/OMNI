@@ -51,35 +51,55 @@ namespace OMNI.Web.Controllers.Master
             });
         }
 
-        public async Task<IActionResult> Index(string port, int typeId, int year, string role, int userId)
+        public async Task<IActionResult> Index(string port, int typeId, int year)
         {
-            List<Port> portList = await GetPorts(role, userId);
 
-            ViewBag.PortList = portList;
-            ViewBag.RegionTxt = GetRegionTxt(role);
+            ViewBag.RegionTxt = GetRegionTxt();
 
             var thisYear = DateTime.Now.Year;
 
             ViewBag.YearList = GetYearList(2010, 2030);
 
-            ViewBag.ThisYear = thisYear;
             if (year > 0)
             {
-                ViewBag.ThisYear = year;
-            } else
-            {
-                year = thisYear;
-            }
-
-            if (!string.IsNullOrEmpty(port))
-            {
-                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedYear = year;
+                SetSelectedYear(year);
             }
             else
             {
-                var findPort = portList.OrderBy(b => b.Id).FirstOrDefault();
-                ViewBag.SelectedPort = findPort;
-                port = findPort.Name;
+                int? getSelectedYear = GetSelectedYear();
+                if (getSelectedYear.HasValue)
+                {
+                    ViewBag.SelectedYear = getSelectedYear.Value;
+                }
+                else
+                {
+                    ViewBag.SelectedYear = thisYear;
+                }
+            }
+
+            List<Port> portList = await GetPorts();
+
+            ViewBag.PortList = portList;
+            ViewBag.RegionTxt = GetRegionTxt();
+
+            if (!string.IsNullOrEmpty(port))
+            {
+                ViewBag.SelectedPort = port;
+                SetSelectedPort(port);
+            }
+            else
+            {
+                string getSelectedPort = GetSelectedPort();
+                if (!string.IsNullOrEmpty(getSelectedPort))
+                {
+                    ViewBag.SelectedPort = getSelectedPort;
+                }
+                else
+                {
+                    ViewBag.SelectedPort = "Senipah";
+                    SetSelectedPort("Senipah");
+                }
             }
 
             List<RekomendasiType> rekomendasiTypeList = await _rekomendasiTypeService.GetAll();
@@ -97,7 +117,7 @@ namespace OMNI.Web.Controllers.Master
             ViewBag.StatusSurat = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
 
             //FIND LAMPIRAN
-            List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(port);
+            List<LampiranModel> lampiranList = await _lampiranService.GetAllByPort(GetSelectedPort());
             if (lampiranList.Count() > 0)
             {
                 List<LampiranModel> findLampiranType = new List<LampiranModel>();

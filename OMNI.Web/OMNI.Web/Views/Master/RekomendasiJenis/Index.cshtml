@@ -83,8 +83,8 @@
     <script>
         $(document).ready(function () {
             var statusSurat = "@ViewBag.StatusSurat";
-            var port = "@ViewBag.SelectedPort.Name";
-            var selectedYear = parseInt("@ViewBag.ThisYear");
+            var port = "@ViewBag.SelectedPort";
+            var selectedYear = parseInt("@ViewBag.SelectedYear");
 
             if (port !== null && port !== "") {
                 $("#port").val(port).change();
@@ -210,7 +210,7 @@
             });
 
             $("#searchLokasi").click(function () {
-                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId + "&year=" + selectedYear + "&role=" + userRole + "&userId=" + userData.userId;
+                window.location.href = base_api + 'RekomendasiJenis/Index?port=' + port + "&typeId=" + typeId + "&year=" + selectedYear;
             })
         });
 

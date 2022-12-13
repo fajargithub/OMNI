@@ -128,47 +128,22 @@
     <script src="~/js/datatable/datatable.js"></script>
 
     <script>
-        var defaultPort = "@ViewBag.SelectedPort.Name";
-        var defaultYear = "@ViewBag.ThisYear";
-
-        if (defaultPort !== localStorage.getItem("port") || defaultYear !== localStorage.getItem("selectedYear")) {
-            setTimeout(function () {
-                window.location.href = base_api + 'LLPHistoryStatus/Index?port=' + localStorage.getItem("port") + "&year=" + localStorage.getItem("selectedYear");
-            }, 200);
-        }
+        selectedYear = "@ViewBag.SelectedYear";
+        port = "@ViewBag.SelectedPort";
 
         $("#year-lokasi").val(selectedYear).change();
-
-            if (port !== null && port !== "") {
-                $("#port").val(port).change();
-        }
-
-        document.addEventListener("visibilitychange", function () {
-            if (document.hidden) {
-                console.log("Browser tab is hidden")
-            } else {
-                console.log("Browser tab is visible")
-
-                if (port !== localStorage.getItem("port") || selectedYear !== localStorage.getItem("selectedYear")) {
-                    setTimeout(function () {
-                        window.location.href = base_api + 'LLPHistoryStatus/Index?port=' + localStorage.getItem("port") + "&year=" + localStorage.getItem("selectedYear") + "&role=" + userRole + "&userId=" + userData.userId;
-                    }, 200);
-                }
-            }
-        });
+        $("#port").val(port).change();
 
         $("#year-lokasi").on('change', function () {
             selectedYear = this.value;
-            localStorage.setItem("selectedYear", this.value);
         });
 
         $("#port").on('change', function () {
             port = this.value;
-            localStorage.setItem("port", this.value);
         });
 
         $("#searchLokasi").click(function () {
-            window.location.href = base_api + 'LLPHistoryStatus/Index?port=' + port + "&year=" + selectedYear + "&role=" + userRole + "&userId=" + userData.userId;
+            window.location.href = base_api + 'LLPHistoryStatus/Index?port=' + port + "&year=" + selectedYear;
         })
 
             $('.select2-input-index').select2();

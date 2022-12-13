@@ -67,7 +67,7 @@
                                         @if (ViewBag.EnablePenilaian)
                                         {
                                             <div class="col-md-12 editable" style="text-align:right;">
-                                                <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="PENILAIAN" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                                                <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort" asp-route-lampiranType="PENILAIAN" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                                             </div>
                                         }
                                     </div>
@@ -90,7 +90,7 @@
                                         <div class="col-md-12" style="text-align:right;">
                                             @if (ViewBag.EnablePengesahan)
                                             {
-                                                <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="PENGESAHAN" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
+                                                <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort" asp-route-lampiranType="PENGESAHAN" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                                             }
                                         </div>
                                     </div>
@@ -110,7 +110,7 @@
                                 <div class="tab-pane fade" id="tab_borders_icons-3" role="tabpanel">
                                     <div class="row" style="padding:10px;">
                                         <div class="col-md-12" style="text-align:right;">
-                                            <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI1" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Add</a>
+                                            <a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort" asp-route-lampiranType="VERIFIKASI1" class="btn btn-primary btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Add</a>
                                             @*<a asp-action="AddEdit" asp-route-port="@ViewBag.SelectedPort.Name" asp-route-lampiranType="VERIFIKASI2" class="btn btn-info btn-sm btn-xs shadow-0 pull-right editable" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i> Verifikasi Kedua</a>
                                         </div>
                                     </div>*@
@@ -144,41 +144,24 @@
     <script src="~/js/datatable/datatable.js"></script>
     <script>
         var trxId = 0;
-        var defaultPort = "@ViewBag.SelectedPort.Name";
-        if (defaultPort !== port) {
-            window.location.href = base_api + 'Lampiran/Index?port=' + localStorage.getItem("port");
-        }
+        port = "@ViewBag.SelectedPort";
 
-        $('.select2-input-index').select2();
+        $("#year-lokasi").val(selectedYear).change();
+        $("#port").val(port).change();
 
-        //$("#year-lokasi").val(selectedYear).change();
-
-            if (port !== null && port !== "") {
-                $("#port").val(port).change();
-        }
-
-        document.addEventListener("visibilitychange", function () {
-            if (document.hidden) {
-                console.log("Browser tab is hidden")
-            } else {
-                console.log("Browser tab is visible")
-
-                if (port !== localStorage.getItem("port")) {
-                    setTimeout(function () {
-                        window.location.href = base_api + 'Lampiran/Index?port=' + localStorage.getItem("port") + "&role=" + userRole;
-                    }, 200);
-                }
-            }
+        $("#year-lokasi").on('change', function () {
+            selectedYear = this.value;
         });
 
         $("#port").on('change', function () {
             port = this.value;
-            localStorage.setItem("port", this.value);
         });
 
         $("#searchLokasi").click(function () {
-            window.location.href = base_api + 'Lampiran/Index?port=' + port + "&role=" + userRole;
+            window.location.href = base_api + 'Lampiran/Index?port=' + port;
         })
+
+        $('.select2-input-index').select2();
     </script>
     <script src="~/js/frontend/suratPenilaian.js"></script>
     <script src="~/js/frontend/suratPengesahan.js"></script>

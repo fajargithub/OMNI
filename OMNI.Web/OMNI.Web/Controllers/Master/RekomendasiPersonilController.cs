@@ -48,30 +48,54 @@ namespace OMNI.Web.Controllers.Master
             });
         }
 
-        public async Task<IActionResult> Index(string port, int year, string role, int userId)
+        public async Task<IActionResult> Index(string port, int year)
         {
-            List<Port> portList = await GetPorts(role, userId);
+            var dateNow = DateTime.Now;
+            var thisYear = dateNow.Year;
 
-            ViewBag.PortList = portList;
-            ViewBag.RegionTxt = GetRegionTxt(role);
-
-            var thisYear = DateTime.Now.Year;
-
+            ViewBag.SelectedPort = "";
             ViewBag.YearList = GetYearList(2010, 2030);
 
-            ViewBag.ThisYear = thisYear;
             if (year > 0)
             {
-                ViewBag.ThisYear = year;
-            }
-
-            if (!string.IsNullOrEmpty(port))
-            {
-                ViewBag.SelectedPort = portList.Where(b => b.Name == port).FirstOrDefault();
+                ViewBag.SelectedYear = year;
+                SetSelectedYear(year);
             }
             else
             {
-                ViewBag.SelectedPort = portList.OrderBy(b => b.Id).FirstOrDefault();
+                int? getSelectedYear = GetSelectedYear();
+                if (getSelectedYear.HasValue)
+                {
+                    ViewBag.SelectedYear = getSelectedYear.Value;
+                }
+                else
+                {
+                    ViewBag.SelectedYear = thisYear;
+                }
+            }
+
+            List<Port> portList = await GetPorts();
+
+            ViewBag.PortList = portList;
+            ViewBag.RegionTxt = GetRegionTxt();
+
+            if (!string.IsNullOrEmpty(port))
+            {
+                ViewBag.SelectedPort = port;
+                SetSelectedPort(port);
+            }
+            else
+            {
+                string getSelectedPort = GetSelectedPort();
+                if (!string.IsNullOrEmpty(getSelectedPort))
+                {
+                    ViewBag.SelectedPort = getSelectedPort;
+                }
+                else
+                {
+                    ViewBag.SelectedPort = "Senipah";
+                    SetSelectedPort("Senipah");
+                }
             }
 
             return View(INDEX);
