@@ -180,10 +180,10 @@ namespace OMNI.API.Controllers.OMNI
                 Console.WriteLine(ex);
             }
 
-            if(isUpdate == 1)
-            {
-                await UpdateLatihanTrx(result, cancellationToken);
-            }
+            //if(isUpdate == 1)
+            //{
+            //    await UpdateLatihanTrx(result, cancellationToken);
+            //}
 
             return Ok(result);
         }

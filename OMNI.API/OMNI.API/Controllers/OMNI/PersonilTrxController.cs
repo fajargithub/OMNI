@@ -118,9 +118,7 @@ namespace OMNI.API.Controllers.OMNI
                     }
 
                     PersonilTrxModel temp = new PersonilTrxModel();
-                    int diffDays = 0;
-
-                    diffDays = (list[i].TanggalExpired - list[i].TanggalPelatihan).Days;
+                    
                     var findRekomendasiHubla = rekomenPersonilList.Find(b => b.Personil.Id == list[i].Personil.Id);
 
                     if (findRekomendasiHubla != null)
@@ -136,20 +134,25 @@ namespace OMNI.API.Controllers.OMNI
                     //temp.TotalDetailExisting = list[i].TotalDetailExisting;
                     temp.TanggalPelatihan = list[i].TanggalPelatihan != null ? list[i].TanggalPelatihan.ToString("dd/MM/yyyy") : "-";
 
-                    if(temp.Personil.Contains("IMO Level - 1"))
+                    int diffDays = 0;
+
+                    if (temp.Personil.Contains("IMO Level - 1"))
                     {
                         var tglExpired = list[i].TanggalPelatihan.AddYears(5);
                         temp.TanggalExpired = tglExpired.ToString("dd/MM/yyyy");
+
+                        if (tglExpired != null)
+                        {
+                            if (!tglExpired.ToString("d/M/yyyy").Contains("1/1/0001"))
+                            {
+                                diffDays = (tglExpired - list[i].TanggalPelatihan).Days;
+                            }
+                        }
                     } else
                     {
                         temp.TanggalExpired = "-";
                     }
 
-                    //if(list[i].TanggalExpired != null)
-                    //{
-                    //    temp.TanggalExpired = list[i].TanggalExpired != null ? list[i].TanggalExpired.ToString("dd/MM/yyyy") : "-";
-                    //}
-                    
                     temp.SisaMasaBerlaku = diffDays;
                     temp.PersentasePersonil = list[i].PersentasePersonil;
                     temp.Port = list[i].Port;
@@ -195,10 +198,10 @@ namespace OMNI.API.Controllers.OMNI
                 result.Add(totalModel);
             }
 
-            if(isUpdate == 1)
-            {
-                await UpdatePersonilTrx(result, cancellationToken);
-            }
+            //if(isUpdate == 1)
+            //{
+            //    await UpdatePersonilTrx(result, cancellationToken);
+            //}
 
             return Ok(result);
         }
@@ -290,7 +293,7 @@ namespace OMNI.API.Controllers.OMNI
                 }
             }
 
-            await GetAll(data.Port, data.Year, 1, cancellationToken);
+            //await GetAll(data.Port, data.Year, 1, cancellationToken);
 
             return Ok(new ReturnJson { });
         }

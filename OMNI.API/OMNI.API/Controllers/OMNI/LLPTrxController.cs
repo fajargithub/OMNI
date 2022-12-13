@@ -716,13 +716,13 @@ namespace OMNI.API.Controllers.OMNI
                 Console.WriteLine(Ex);
             }
 
-            if(isUpdate == 1)
-            {
-                if(result.Count() > 0)
-                {
-                    await UpdateLLPTrx(result, cancellationToken);
-                }
-            }
+            //if(isUpdate == 1)
+            //{
+            //    if(result.Count() > 0)
+            //    {
+            //        await UpdateLLPTrx(result, cancellationToken);
+            //    }
+            //}
            
             return Ok(result);
         }
