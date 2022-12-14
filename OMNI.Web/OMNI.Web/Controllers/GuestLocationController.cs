@@ -59,7 +59,6 @@ namespace OMNI.Web.Controllers
                 if (data != null)
                 {
                     ViewBag.PrimaryKey = data.Id;
-                    //model.Id = data.Id;
                     model.UserId = data.UserId;
                     model.PortList = data.PortList;
                 }
