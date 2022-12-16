@@ -36,7 +36,6 @@ namespace OMNI.Web.Controllers
             ViewBag.Info = "* Silahkan upload Surat Penilaian";
 
             var dateNow = DateTime.Now;
-            var thisYear = dateNow.Year;
 
             ViewBag.SelectedPort = "";
 
@@ -59,8 +58,12 @@ namespace OMNI.Web.Controllers
                 }
                 else
                 {
-                    ViewBag.SelectedPort = "Senipah";
-                    SetSelectedPort("Senipah");
+                    if (portList.Count() > 0)
+                    {
+                        ViewBag.SelectedPort = portList[0].Id;
+                        SetSelectedPort(portList[0].Id.ToString());
+                    }
+
                 }
             }
 

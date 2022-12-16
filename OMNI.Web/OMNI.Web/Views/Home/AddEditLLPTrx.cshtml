@@ -260,6 +260,7 @@
             console.log('on jenis change!');
             $("#submit").hide();
             var id = this.value;
+            console.log(id);
             $.ajax({
                 url: base_api + "SpesifikasiJenis/GetById?id=" + id,
                 method: "GET",

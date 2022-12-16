@@ -186,6 +186,8 @@ namespace OMNI.Web.Controllers
                                     }
                                 }
                             }
+
+                            result = userPorts;
                         }
                     }
                 }
@@ -208,6 +210,8 @@ namespace OMNI.Web.Controllers
                                         userPorts.Add(findPort);
                                     }
                                 }
+
+                                result = userPorts;
                             }
                         }
                     }

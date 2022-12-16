@@ -41,30 +41,30 @@
     <script type="text/javascript">
     "use strict";
 
-    const createConnection = () => {
-        connection.start().then(function () {
-            $(`#real-time-icon`)
-                .removeClass(`text-danger`)
-                .addClass(`text-primary`);
-            $(`#real-time-icon`)
-                .attr("title", "Realtime mode ON, You will recive notification immediatly")
-                .attr("data-original-title", "Realtime mode ON, You will recive notification immediatly");
-        }).catch(function (err) {
-            connectionClosed();
-            return console.error(err.toString());
-        });
-    };
+    //const createConnection = () => {
+    //    connection.start().then(function () {
+    //        $(`#real-time-icon`)
+    //            .removeClass(`text-danger`)
+    //            .addClass(`text-primary`);
+    //        $(`#real-time-icon`)
+    //            .attr("title", "Realtime mode ON, You will recive notification immediatly")
+    //            .attr("data-original-title", "Realtime mode ON, You will recive notification immediatly");
+    //    }).catch(function (err) {
+    //        connectionClosed();
+    //        return console.error(err.toString());
+    //    });
+    //};
 
-    Object.defineProperty(WebSocket, 'OPEN', { value: 1, });
+    //Object.defineProperty(WebSocket, 'OPEN', { value: 1, });
 
-    const connectionClosed = () =>
-    {
-        $(`#real-time-icon`)
-            .removeClass(`text-primary`)
-            .addClass(`text-danger`)
-            .attr("title", "Realtime mode OFF, You will not recive notification immediatly")
-            .attr("data-original-title", "Realtime mode OFF, You will not recive notification immediatly");
-    }
+    //const connectionClosed = () =>
+    //{
+    //    $(`#real-time-icon`)
+    //        .removeClass(`text-primary`)
+    //        .addClass(`text-danger`)
+    //        .attr("title", "Realtime mode OFF, You will not recive notification immediatly")
+    //        .attr("data-original-title", "Realtime mode OFF, You will not recive notification immediatly");
+    //}
 
 
     connection.on("test", function (message) {

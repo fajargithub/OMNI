@@ -12,7 +12,7 @@
         <div class="form-group">
             <label class="form-label" for="">Select Lokasi - @ViewBag.RegionTxt</label>
             <select asp-for="Port" id="port" class="select2-input-index"
-                    asp-items="@(new SelectList(ViewBag.PortList, "Name","Name"))">
+                    asp-items="@(new SelectList(ViewBag.PortList, "Id","Name"))">
             </select>
         </div> <br />
     </div>

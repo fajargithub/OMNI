@@ -54,11 +54,12 @@ namespace OMNI.Web.Controllers.Master
         public async Task<IActionResult> Index(string port, int typeId, int year)
         {
 
-            ViewBag.RegionTxt = GetRegionTxt();
+            var dateNow = DateTime.Now;
+            var thisYear = dateNow.Year;
 
-            var thisYear = DateTime.Now.Year;
-
+            ViewBag.SelectedPort = "";
             ViewBag.YearList = GetYearList(2010, 2030);
+            ViewBag.Info = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
 
             if (year > 0)
             {
@@ -97,8 +98,12 @@ namespace OMNI.Web.Controllers.Master
                 }
                 else
                 {
-                    ViewBag.SelectedPort = "Senipah";
-                    SetSelectedPort("Senipah");
+                    if (portList.Count() > 0)
+                    {
+                        ViewBag.SelectedPort = portList[0].Id;
+                        SetSelectedPort(portList[0].Id.ToString());
+                    }
+
                 }
             }
 

@@ -82,8 +82,12 @@ namespace OMNI.Web.Controllers
                 }
                 else
                 {
-                    ViewBag.SelectedPort = "Senipah";
-                    SetSelectedPort("Senipah");
+                    if (portList.Count() > 0)
+                    {
+                        ViewBag.SelectedPort = portList[0].Id;
+                        SetSelectedPort(portList[0].Id.ToString());
+                    }
+
                 }
             }
 

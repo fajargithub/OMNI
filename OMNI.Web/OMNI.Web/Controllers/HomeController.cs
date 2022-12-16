@@ -101,8 +101,8 @@ namespace OMNI.Web.Controllers
                 {
                     if(portList.Count() > 0)
                     {
-                        ViewBag.SelectedPort = portList[0].Name;
-                        SetSelectedPort(portList[0].Name);
+                        ViewBag.SelectedPort = portList[0].Id;
+                        SetSelectedPort(portList[0].Id.ToString());
                     }
                     
                 }
