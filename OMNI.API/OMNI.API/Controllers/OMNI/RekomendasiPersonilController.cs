@@ -92,7 +92,7 @@ namespace OMNI.API.Controllers.OMNI
             }
             else
             {
-                var check = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Personil.Id == int.Parse(model.Personil) && b.Port.Contains(model.Port)).Include(b => b.Personil).FirstOrDefaultAsync(cancellationToken);
+                var check = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO && b.Personil.Id == int.Parse(model.Personil) && b.Port == model.Port).Include(b => b.Personil).FirstOrDefaultAsync(cancellationToken);
 
                 if (check != null)
                 {

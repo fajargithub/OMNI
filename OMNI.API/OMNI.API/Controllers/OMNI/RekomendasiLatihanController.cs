@@ -92,7 +92,7 @@ namespace OMNI.API.Controllers.OMNI
             }
             else
             {
-                var check = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Latihan.Id == int.Parse(model.Latihan) && b.Port.Contains(model.Port)).Include(b => b.Latihan).FirstOrDefaultAsync(cancellationToken);
+                var check = await _dbOMNI.RekomendasiLatihan.Where(b => b.IsDeleted == GeneralConstants.NO && b.Latihan.Id == int.Parse(model.Latihan) && b.Port == model.Port).Include(b => b.Latihan).FirstOrDefaultAsync(cancellationToken);
                 if (check != null)
                 {
                     return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "Data already exist" });

@@ -21,9 +21,11 @@ namespace OMNI.API.Controllers.OMNI
     [Produces("application/json")]
     public class LLPTrxController : BaseController
     {
-        public LLPTrxController(OMNIDbContext dbOMNI, MinioClient mc) : base(dbOMNI, mc)
+        private CorePTKContext _corePTKDb;
+        public LLPTrxController(CorePTKContext dbCorePTK, OMNIDbContext dbOMNI, MinioClient mc) : base(dbOMNI, mc)
         {
             _dbOMNI = dbOMNI;
+            _corePTKDb = dbCorePTK;
             _mc = mc;
         }
 
@@ -1030,5 +1032,29 @@ namespace OMNI.API.Controllers.OMNI
 
             return "OK";
         }
+
+        //[HttpGet("GeneratePort")]
+        //public async Task<IActionResult> GeneratePort(CancellationToken cancellationToken)
+        //{
+        //    var portList = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.PAreaSub.Id > 0).Include(b => b.PAreaSub).OrderBy(b => b.Id).ToListAsync(cancellationToken);
+        //    var dataList = await _dbOMNI.RekomendasiPersonil.Where(b => b.IsDeleted == GeneralConstants.NO).ToListAsync(cancellationToken);
+        //    if(dataList.Count() > 0 && portList.Count() > 0)
+        //    {
+        //        foreach(var port in portList)
+        //        {
+        //            var findData = dataList.FindAll(b => b.Port == port.Name).ToList();
+        //            if(findData.Count() > 0)
+        //            {
+        //                foreach(var data in findData)
+        //                {
+        //                    data.Port = port.Id.ToString();
+        //                    _dbOMNI.RekomendasiPersonil.Update(data);
+        //                    await _dbOMNI.SaveChangesAsync(cancellationToken);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return Ok("OK");
+        //} 
     }
 }
