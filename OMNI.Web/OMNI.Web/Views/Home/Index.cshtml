@@ -366,6 +366,7 @@
         var yearList = [];
         var idCopies = null;
         var copyIndex = 0;
+        var portName = "@ViewBag.PortName";
 
         $("#copyData").click(function () {
             $.ajax({
@@ -375,7 +376,6 @@
                     yearList = result.data;
                 },
                 complete: function () {
-                    console.log(yearList);
                     $("#yearData").empty();
                     var $dropdown = $("#yearData");
                     $.each(yearList, function () {

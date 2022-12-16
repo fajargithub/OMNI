@@ -62,6 +62,7 @@ namespace OMNI.Web.Controllers
             var thisYear = dateNow.Year;
 
             ViewBag.SelectedPort = "";
+            ViewBag.PortName = "";
             ViewBag.YearList = GetYearList(2010, 2030);
             ViewBag.Info = "* Surat Penilaian belum terupload pada sistem OSMOSYS, Mohon upload Surat Penilaian";
 
@@ -89,6 +90,7 @@ namespace OMNI.Web.Controllers
             if (!string.IsNullOrEmpty(port))
             {
                 ViewBag.SelectedPort = port;
+                ViewBag.PortName = portList.Find(b => b.Id == int.Parse(port)).Name;
                 SetSelectedPort(port);
             }
             else
@@ -97,11 +99,13 @@ namespace OMNI.Web.Controllers
                 if (!string.IsNullOrEmpty(getSelectedPort))
                 {
                     ViewBag.SelectedPort = getSelectedPort;
+                    ViewBag.PortName = portList.Find(b => b.Id == int.Parse(getSelectedPort)).Name;
                 } else
                 {
                     if(portList.Count() > 0)
                     {
                         ViewBag.SelectedPort = portList[0].Id;
+                        ViewBag.PortName = portList.Find(b => b.Id == portList[0].Id).Name;
                         SetSelectedPort(portList[0].Id.ToString());
                     }
                     

@@ -75,9 +75,9 @@ var dt = $('#table_llp_trx').DataTable({
             text: '<i class="fal fa-download"></i> Export Excel',
             titleAttr: 'Generate Excel',
             className: 'btn btn-sm btn-outline-primary',
-            title: 'Data LLP ' + formattedToday,
+            title: 'Data LLP - ' + portName + ", " + selectedYear,
             exportOptions: {
-                columns: [1, 2, 3, 4, 6, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+                columns: [0, 1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
             }
         }
     ],
