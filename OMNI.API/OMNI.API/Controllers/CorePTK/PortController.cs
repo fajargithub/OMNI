@@ -68,7 +68,7 @@ namespace OMNI.API.Controllers.CorePTK
         public async Task<IActionResult> GetPortRegion(string port, CancellationToken cancellationToken)
         {
             string result = "";
-            var data = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.Name == port).Include(b => b.PAreaSub).Include(b => b.PAreaSub.PArea).Include(b => b.PAreaSub.PArea.Region).FirstOrDefaultAsync(cancellationToken);
+            var data = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == int.Parse(port)).Include(b => b.PAreaSub).Include(b => b.PAreaSub.PArea).Include(b => b.PAreaSub.PArea.Region).FirstOrDefaultAsync(cancellationToken);
             if(data != null)
             {
                 if(data.PAreaSub != null)

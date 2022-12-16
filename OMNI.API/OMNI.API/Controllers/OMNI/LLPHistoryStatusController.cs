@@ -26,8 +26,10 @@ namespace OMNI.API.Controllers.OMNI
     [Produces("application/json")]
     public class LLPHistoryStatusController : BaseController
     {
-        public LLPHistoryStatusController(OMNIDbContext dbOMNI, MinioClient mc) : base(dbOMNI, mc)
+        private readonly CorePTKContext _corePTKDb;
+        public LLPHistoryStatusController(CorePTKContext corePTKDb, OMNIDbContext dbOMNI, MinioClient mc) : base(dbOMNI, mc)
         {
+            _corePTKDb = corePTKDb;
             _dbOMNI = dbOMNI;
             _mc = mc;
         }
@@ -55,6 +57,7 @@ namespace OMNI.API.Controllers.OMNI
         public async Task<IActionResult> GetLastHistoryByTrxId(int id, CancellationToken cancellationToken)
         {
             LLPHistoryStatusModel result = new LLPHistoryStatusModel();
+            
             var temp = await _dbOMNI.LLPHistoryStatus.Where(b => b.IsDeleted == GeneralConstants.NO && b.LLPTrx.Id == id).Include(b => b.LLPTrx).OrderByDescending(b => b.CreatedAt).FirstOrDefaultAsync(cancellationToken);
             if (temp != null)
             {
@@ -74,7 +77,7 @@ namespace OMNI.API.Controllers.OMNI
         public async Task<IActionResult> GetAll(string port, int year, CancellationToken cancellationToken)
         {
             List<LLPHistoryStatusModel> result = new List<LLPHistoryStatusModel>();
-           
+            var portList = await _corePTKDb.Port.Where(b => b.IsDeleted == GeneralConstants.NO && b.PAreaSub.Id > 0).Include(b => b.PAreaSub).OrderBy(b => b.Id).ToListAsync(cancellationToken);
             try
             {
                 var list = await _dbOMNI.LLPHistoryStatus.Where(b => b.IsDeleted == GeneralConstants.NO && b.LLPTrx.IsDeleted == GeneralConstants.NO && b.PortFrom == port && b.LLPTrx.Year == year)
@@ -94,8 +97,8 @@ namespace OMNI.API.Controllers.OMNI
                         temp.Satuan = list[i].LLPTrx.SpesifikasiJenis.Jenis.Satuan;
                         temp.NoAsset = list[i].LLPTrx.QRCodeText;
                         temp.Status = list[i].Status;
-                        temp.PortFrom = list[i].PortFrom;
-                        temp.PortTo = list[i].PortTo;
+                        temp.PortFrom = !string.IsNullOrEmpty(list[i].PortFrom) ? portList.Find(b => b.Id == int.Parse(list[i].PortFrom)).Name : "-";
+                        temp.PortTo = !string.IsNullOrEmpty(list[i].PortTo) ? portList.Find(b => b.Id == int.Parse(list[i].PortTo)).Name : "-";
                         temp.StartDate = list[i].StartDate.HasValue ? list[i].StartDate.Value.ToString("dd MMM yyyy") : "-";
                         temp.EndDate = list[i].EndDate.HasValue ? list[i].EndDate.Value.ToString("dd MMM yyyy") : "-";
                         temp.Remark = list[i].Remark;
