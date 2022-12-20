@@ -275,12 +275,12 @@ namespace OMNI.API.Controllers
         }
 
         [HttpGet("ReadFile")]
-        public async Task<FileStreamResult> ReadFile(string fileName, string flag, bool isFileNameFromDb = false)
+        public async Task<FileStreamResult> ReadFile(string fileName, string flag, int id, bool isFileNameFromDb = false)
         {
             try
             {
                 //FileUpload file = await _dbOMNI.Set<FileUpload>().SingleOrDefaultAsync(b => b.FileName.Contains(file) && b.IsDeleted == GeneralConstants.NO && b.Flag == flag);
-                FileUpload file = await _dbOMNI.FileUpload.Where(b => b.IsDeleted == GeneralConstants.NO && b.FileName.ToLower().Contains(fileName.ToLower()) && b.Flag == flag).FirstOrDefaultAsync();
+                FileUpload file = await _dbOMNI.FileUpload.Where(b => b.IsDeleted == GeneralConstants.NO && b.Id == id && b.FileName.ToLower().Contains(fileName.ToLower()) && b.Flag == flag).FirstOrDefaultAsync();
                 MemoryStream stream = new MemoryStream();
                 string filePath = file != null ? (Path.Combine(file.FilePath + file.FileName)) : GeneralConstants.IMG_PLACEHOLDER;
 
