@@ -239,7 +239,7 @@ namespace OMNI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewFile(int id, string fileName, string flag)
         {
-            var r = await _llpTrxService.ReadFile(fileName, flag);
+            var r = await _llpTrxService.ReadFile(id, fileName, flag);
             var file = await _llpTrxService.GetFileData(id);
 
             return File(r, @"" + file.ContentType, file.FileName);

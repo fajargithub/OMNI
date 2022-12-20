@@ -35,13 +35,13 @@ namespace OMNI.Web.Services.Trx
             throw new Exception();
         }
 
-        public async Task<Stream> ReadFile(string fileName, string flag)
+        public async Task<Stream> ReadFile(int id, string fileName, string flag)
         {
             HttpClient c = _httpClient.CreateClient("OMNI");
 
             try
             {
-                var r = await c.GetAsync($"/api/LLPTrx/ReadFile?fileName={fileName}&flag={flag}");
+                var r = await c.GetAsync($"/api/LLPTrx/ReadFile?fileName={fileName}&flag={flag}&id={id}");
                 if (r.IsSuccessStatusCode)
                 {
                     return await r.Content.ReadAsStreamAsync();

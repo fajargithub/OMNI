@@ -259,7 +259,7 @@ namespace OMNI.Web.Controllers
         [Route("Home/ViewFile/{fileName}")]
         public async Task<IActionResult> ViewFile([FromRoute] string fileName, int id, string flag)
         {
-            var r = await _llpTrxService.ReadFile(fileName, flag);
+            var r = await _llpTrxService.ReadFile(id, fileName, flag);
             var file = await _llpTrxService.GetFileData(id);
 
             return File(r, @"" + file.ContentType);
