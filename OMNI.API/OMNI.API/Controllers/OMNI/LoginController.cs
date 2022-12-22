@@ -98,7 +98,14 @@ namespace OMNI.API.Controllers.OMNI
                     }
                 }
 
-                return Ok(new ReturnJson { IsSuccess = true, UserId = employee.Id, Username = employee.Name, Email = employee.Email, Roles = roleList, Role = paramRole } );
+                if (paramRole.Contains("OSMOSYS"))
+                {
+                    return Ok(new ReturnJson { IsSuccess = true, UserId = employee.Id, Username = employee.Name, Email = employee.Email, Roles = roleList, Role = paramRole });
+                } else
+                {
+                    return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "You don't have access, please contract Administrator" });
+                }
+                
             } else
             {
                 return Ok(new ReturnJson { IsSuccess = false, ErrorMsg = "Invalid Username / Password"});
