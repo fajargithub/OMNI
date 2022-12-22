@@ -77,7 +77,7 @@ var dt = $('#table_llp_trx').DataTable({
             className: 'btn btn-sm btn-outline-primary',
             title: 'Data LLP - ' + portName + ", " + selectedYear,
             exportOptions: {
-                columns: [0, 1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+                columns: [0, 1, 2, 3, 26, 27, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
             }
         }
     ],
@@ -345,6 +345,24 @@ var dt = $('#table_llp_trx').DataTable({
 
                 return result;
             }
+        },
+        {
+            "targets": -1,
+            "data": null,
+            "visible": false,
+            "render": function (row, data, iDisplayIndex) {
+                result = iDisplayIndex.qrCodeText;
+                return result;
+            }
+        },
+        {
+            "targets": -1,
+            "data": null,
+            "visible": false,
+            "render": function (row, data, iDisplayIndex) {
+                result = base_api + "Home/ExcelFileList?id=" + iDisplayIndex.id;
+                return result;
+            }
         }
     ],
     createdRow: function (row, data, dataIndex) {
@@ -377,22 +395,6 @@ var dt = $('#table_llp_trx').DataTable({
             this.api().cell($('td:eq(17)', row)).data('');
         }
     },
-    //rowsGroup: [
-    //    'peralatanOSR:name',
-    //    'satuanJenis:name',
-    //    'totalExistingJenis:name',
-    //    /*'totalExistingKeseluruhan:name',*/
-    //    'rekomendasiHubla:name',
-    //    'totalKebutuhanHubla:name',
-    //    'selisihHubla:name',
-    //    'kesesuaianPM58:name',
-    //    'persentaseHubla:name',
-    //    'rekomendasiOSCP:name',
-    //    'totalKebutuhanOSCP:name',
-    //    'selisihOSCP:name',
-    //    'kesesuaianOSCP:name',
-    //    'persentaseOSCP:name'
-    //],
     rowsGroup: [
         'totalExistingKeseluruhan:name',
         10,
@@ -434,7 +436,7 @@ function qrcodeClick(id) {
             Swal.fire({
                 imageUrl: result.data.qrCode,
                 imageAlt: 'QR Code',
-                html: 'No Asset: <a href="javascript:void(0)" class="openimage" data-base64="' + result.data.qrCode + '">' + result.data.qrCodeText + '</a> '
+                html: 'Kode: <a href="javascript:void(0)" class="openimage" data-base64="' + result.data.qrCode + '">' + result.data.qrCodeText + '</a> '
             })
         }
     });
