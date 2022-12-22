@@ -26,8 +26,6 @@
                 }
             }
         }, complete: function () {
-            console.log(countRekomendasiHubla);
-            console.log(totalPersentaseHubla);
             var resultPersentaseHublalatihan = totalPersentaseHubla / (countRekomendasiHubla * 100) * 100;
             if (Number.isNaN(resultPersentaseHublalatihan)) {
                 resultPersentaseHublalatihan = 0;
