@@ -595,6 +595,7 @@ namespace OMNI.API.Controllers.OMNI
                         temp.SatuanJenis = list[i].SpesifikasiJenis != null ? list[i].SpesifikasiJenis.Jenis.Satuan : "-";
                         temp.Port = list[i].Port;
                         temp.QRCode = list[i].QRCode;
+                        temp.QRCodeText = list[i].QRCodeText;
                         temp.DetailExisting = list[i].DetailExisting;
                         temp.Kondisi = list[i].Kondisi;
                         temp.PersentaseHubla = list[i].PersentaseHubla;
