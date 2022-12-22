@@ -16,6 +16,7 @@ namespace OMNI.Web.Services.Trx.Interface
         public Task<FilesModel> GetFileData(int id);
         public Task<Stream> ReadFile(int trxId, string fileName, string flag);
         public Task<List<FilesModel>> GetQRCodeFiles(int trxId, string flag);
+        public Task<List<FilesModel>> GetPublicFiles(int trxId, string flag);
         public Task<List<FilesModel>> GetAllFiles(int trxId, string flag);
         public Task<string> DeleteFile(int id);
         public Task<List<LLPTrxModel>> GetAllLLPTrx(string port, int year);

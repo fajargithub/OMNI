@@ -62,6 +62,17 @@ namespace OMNI.Web.Services.Trx
 
             throw new Exception();
         }
+        public async Task<List<FilesModel>> GetPublicFiles(int trxId, string flag)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/LLPTrx/GetPublicFiles?trxId={trxId}&flag={flag}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<List<FilesModel>>();
+
+            throw new Exception();
+        }
         public async Task<List<FilesModel>> GetAllFiles(int trxId, string flag)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");

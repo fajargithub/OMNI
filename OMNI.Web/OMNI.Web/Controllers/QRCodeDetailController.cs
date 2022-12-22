@@ -16,13 +16,14 @@ using System.Threading.Tasks;
 namespace OMNI.Web.Controllers
 {
     [AllowAnonymous]
-    public class QRCodeDetailController : OMNIBaseController
+    public class QRCodeDetailController : BaseController
     {
         private static readonly string QR_CODE_DETAIL = "~/Views/Home/QRCodeDetail.cshtml";
 
         protected ILLPTrx _llpTrxService;
         protected ILLPHistoryStatus _llpHistoryStatusService;
-        public QRCodeDetailController(ILLPHistoryStatus llpHistoryStatusService, ILLPTrx llpTrxService, IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base(adminLocationService, guestLocationService, rekomendasiTypeService, portService, peralatanOSRService, jenisService)
+        protected IJenis _jenisService;
+        public QRCodeDetailController(ILLPHistoryStatus llpHistoryStatusService, ILLPTrx llpTrxService, IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base()
         {
             _jenisService = jenisService;
             _llpTrxService = llpTrxService;

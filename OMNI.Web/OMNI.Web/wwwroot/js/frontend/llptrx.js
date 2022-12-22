@@ -77,7 +77,8 @@ var dt = $('#table_llp_trx').DataTable({
             className: 'btn btn-sm btn-outline-primary',
             title: 'Data LLP - ' + portName + ", " + selectedYear,
             exportOptions: {
-                columns: [0, 1, 2, 3, 26, 27, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+                columns: [0, 1, 2, 3, 26, 27, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+                rows: ':not(:last)'
             }
         }
     ],
@@ -360,7 +361,7 @@ var dt = $('#table_llp_trx').DataTable({
             "data": null,
             "visible": false,
             "render": function (row, data, iDisplayIndex) {
-                result = base_api + "Home/ExcelFileList?id=" + iDisplayIndex.id;
+                result = base_api + "Public/Index?id=" + iDisplayIndex.id + "&port=" + port + "&year=" + selectedYear;
                 return result;
             }
         }

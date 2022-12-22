@@ -2,24 +2,6 @@
 // HEADSUP!
 // Please be sure to re-run gulp again if you do not see the config changes
 //--------------------------------------------------------------------------
-
-//var port = localStorage.getItem("port");
-//var selectedYear = localStorage.getItem("selectedYear");
-
-//if (port == null || port == "" || port == undefined) {
-//    localStorage.setItem("port", "Senipah");
-//    port = "Senipah";
-//} else {
-//    port = localStorage.getItem("port");
-//}
-
-//if (selectedYear == null || selectedYear == "" || selectedYear == undefined) {
-//    localStorage.setItem("selectedYear", new Date().getFullYear());
-//    selectedYear = new Date().getFullYear();
-//} else {
-//    selectedYear = localStorage.getItem("selectedYear");
-//}
-
 var port = "";
 var selectedYear = 0;
 
@@ -74,64 +56,6 @@ function generateQRCode3(qrcode_url) {
 
     qrCode.append(document.getElementById("qrcode2"));
 }
-
-//var userRole = "";
-//var userData = {};
-
-//function checkSession() {
-//    $.ajax({
-//        url: base_api + "Home/GetSession",
-//        method: "POST",
-//        success: function (result) {
-//            console.log(result);
-//            if (result.userId < 1) {
-//                window.location.replace("/Login/Index");
-//            }
-//        }
-//    });
-
-
-//    var session = localStorage.getItem("userData");
-//    if (session == null || session == "" || session == undefined) {
-//        localStorage.clear();
-//        window.location.replace("/Login/Index");
-//    } else {
-//        userData = JSON.parse(session);
-//        var roles = userData.roles.split("::");
-//        userRole = roles[0];
-
-//        if (userRole != null) {
-//            if (userRole.includes("OSMOSYS_MANAGEMENT") || userRole.includes("OSMOSYS_GUEST")) {
-//                $(".editable").hide();
-//                editable = "False";
-//            }
-//            else {
-//                $(".editable").show();
-//                editable = "True";
-//            }
-
-//            if (userRole.includes("OSMOSYS_SUPER_ADMIN") || userRole.includes("OSMOSYS_ADMIN")) {
-//                $(".userAccess").show();
-//                editable = "True";
-//            }
-//            else {
-//                $(".userAccess").hide();
-//                editable = "False";
-//            }
-//        }
-//        else {
-//            $(".editable").show();
-//            editable = "True";
-//        }
-//    }
-//}
-
-//checkSession();
-
-document.onclick = function () {
-    //checkSession();
-}
-
 var myapp_config = {
 	/*
 	APP VERSION

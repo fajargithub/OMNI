@@ -1,0 +1,65 @@
+﻿@model OMNI.Web.Models.Master.LLPTrxModel
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+<link href="~/css/datatable/datatable.css" rel="stylesheet" />
+<link href="~/css/datatable/datatable-sc.css" rel="stylesheet" />
+<link href="~/css/sweetalert2/sweetalert2.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet" />
+
+<style>
+    .swal2-popup {
+        width: 80% !important;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h5>File Lokasi @ViewBag.Port, @ViewBag.Year</h5>
+            <b style="color:darkred;"><i>@ViewBag.PeralatanOSR, @ViewBag.Jenis</i></b>
+            <br />
+        </div>
+    </div><br />
+    <div class="row" style="text-align:center !important;">
+
+        @if (ViewBag.FileList.Count > 0)
+        {
+            for (int i = 0; i < ViewBag.FileList.Count; i++)
+            {
+                <div class="col-4" style=" margin-bottom: 10px;">
+                    @if (ViewBag.FileList[i].FileType == "image/jpeg" || ViewBag.FileList[i].FileType == "image/png")
+                    {
+                        <img src="@ViewBag.FileList[i].Base64" data-base64="@ViewBag.FileList[i].Base64" data-filename="@ViewBag.FileList[i].FileName" class="openImage" style="max-width:150px;" />
+                    }
+                    else
+                    {
+                        <a target='_blank' asp-controller="Public" asp-action="ViewFile" asp-route-id="@ViewBag.FileList[i].Id" asp-route-fileName="@ViewBag.FIleList[i].FileName" asp-route-flag="OMNI_LLP" title='View File'>
+                            <h1 style="font-size: 3.5rem;"><i class="fa-solid fa-file-arrow-down"></i></h1> 
+                            @ViewBag.FileList[i].FileName
+                        </a>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/js/datatable/datatable.js"></script>
+<script src="~/js/sweetalert2/sweetalert2.bundle.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".openImage").click(function () {
+
+            var base64 = $(this).data('base64');
+            var filename = $(this).data('filename');
+
+            Swal.fire({
+                title: filename,
+                text: '',
+                imageUrl: base64,
+                imageAlt: 'Custom image',
+            });
+        })
+    });
+</script>
