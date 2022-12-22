@@ -182,6 +182,77 @@ namespace OMNI.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetPublicFiles")]
+        public async Task<IActionResult> GetPublicFiles(string trxId, string flag, CancellationToken cancellationToken)
+        {
+            List<FileUpload> fileList = await _dbOMNI.FileUpload.Where(b => b.IsDeleted == GeneralConstants.NO && b.TrxId == int.Parse(trxId) && b.Flag == flag).ToListAsync(cancellationToken);
+            List<FilesModel> result = new List<FilesModel>();
+
+            try
+            {
+                if (fileList != null)
+                {
+                    for (int i = 0; i < fileList.Count(); i++)
+                    {
+                        FilesModel temp = new FilesModel();
+                        temp.Id = fileList[i].Id;
+                        temp.FileName = RemoveFileExtension(fileList[i].FileName);
+                        temp.FileType = fileList[i].ContentType;
+                        temp.FilePath = fileList[i] != null ? (Path.Combine(fileList[i].FilePath + fileList[i].FileName)) : GeneralConstants.IMG_PLACEHOLDER;
+
+                        var base64Type = "";
+
+                        if (temp.FileType == "image/jpeg")
+                        {
+                            base64Type = "data:image/jpeg;base64,";
+                        }
+                        else if (temp.FileType == "image/png")
+                        {
+                            base64Type = "data:image/png;base64,";
+                        }
+
+
+                        MemoryStream stream = new MemoryStream();
+                        string filePath = fileList[i] != null ? (Path.Combine(fileList[i].FilePath + fileList[i].FileName)) : GeneralConstants.IMG_PLACEHOLDER;
+
+                        bool isFileExists = false;
+                        if (fileList[i] != null)
+                        {
+                            try
+                            {
+                                ObjectStat stat = await _mc.StatObjectAsync("uploaded", filePath);
+                                isFileExists = true;
+                            }
+                            catch (ObjectNotFoundException)
+                            {
+
+                            }
+                        }
+                        if (isFileExists && !temp.FileType.Contains("application/pdf"))
+                        {
+                            await _mc.GetObjectAsync("uploaded", filePath, b => b.CopyTo(stream));
+
+                            var image = Bitmap.FromStream(stream);
+                            System.IO.MemoryStream ms = new MemoryStream();
+                            image.Save(ms, ImageFormat.Jpeg);
+                            byte[] byteImage = ms.ToArray();
+                            temp.Base64 = base64Type + Convert.ToBase64String(byteImage);
+                        }
+
+                        temp.CreateDate = fileList[i].CreatedAt.ToString("dd/MM/yyyy");
+                        temp.CreatedBy = fileList[i].CreatedBy;
+                        result.Add(temp);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return Ok(result);
+        }
+
         [HttpGet("GetAllFiles")]
         public async Task<IActionResult> GetAllFiles(string trxId, string flag, CancellationToken cancellationToken) {
             List<FileUpload> fileList = await _dbOMNI.FileUpload.Where(b => b.IsDeleted == GeneralConstants.NO && b.TrxId == int.Parse(trxId) && b.Flag == flag).ToListAsync(cancellationToken);
