@@ -145,10 +145,7 @@ namespace OMNI.Web.Controllers
                 ViewBag.Title = "Surat Pengesahan";
             } else if(lampiranType == "VERIFIKASI1")
             {
-                ViewBag.Title = "Verifikasi Surat Pengesahan 2,5 Tahun Pertama";
-            } else if(lampiranType == "VERIFIKASI2")
-            {
-                ViewBag.Title = "Verifikasi Surat Pengesahan 2,5 Tahun Kedua";
+                ViewBag.Title = "Verifikasi Antara";
             }
 
             var region = await _portService.GetPortRegion(port);

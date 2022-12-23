@@ -26,21 +26,19 @@
             { "data": null },
             { "data": "name" },
             { "data": "startDate" },
-            {
-                "targets": -1,
-                "data": null,
-                "render": function (row, data, iDisplayIndex) {
-                    var result = "";
+            //{
+            //    "targets": -1,
+            //    "data": null,
+            //    "render": function (row, data, iDisplayIndex) {
+            //        var result = "";
 
-                    if (iDisplayIndex.lampiranType == "VERIFIKASI1") {
-                        result += "Verifikasi 2,5 tahun Pertama";
-                    } else if (iDisplayIndex.lampiranType == "VERIFIKASI2") {
-                        result += "Verifikasi 2,5 tahun Kedua";
-                    }
+            //        if (iDisplayIndex.lampiranType == "VERIFIKASI1") {
+            //            result += "Verifikasi Antara";
+            //        }
 
-                    return result;
-                }
-            },
+            //        return result;
+            //    }
+            //},
             { "data": "createdBy" },
             { "data": "createDate" },
             {

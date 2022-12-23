@@ -23,11 +23,13 @@ namespace OMNI.Web.Controllers
         protected ILLPTrx _llpTrxService;
         protected ILLPHistoryStatus _llpHistoryStatusService;
         protected IJenis _jenisService;
+        protected IPort _portService;
         public QRCodeDetailController(ILLPHistoryStatus llpHistoryStatusService, ILLPTrx llpTrxService, IAdminLocation adminLocationService, IGuestLocation guestLocationService, IJenis jenisService, IRekomendasiType rekomendasiTypeService, IPort portService, IPeralatanOSR peralatanOSRService) : base()
         {
             _jenisService = jenisService;
             _llpTrxService = llpTrxService;
             _llpHistoryStatusService = llpHistoryStatusService;
+            _portService = portService;
         }
 
         [HttpGet]
@@ -35,13 +37,20 @@ namespace OMNI.Web.Controllers
         {
             List<FilesModel> fileList = await _llpTrxService.GetQRCodeFiles(id, "OMNI_LLP");
             LLPTrxModel data = await _llpTrxService.GetById(id);
+            var getPort = await _portService.GetById(int.Parse(data.Port));
+            data.Port = getPort.Name;
             LLPHistoryStatusModel llpHistory = new LLPHistoryStatusModel();
             ViewBag.LLPHistory = llpHistory;
 
             var findLLPHistory = await _llpHistoryStatusService.GetLastHistoryByTrxId(id);
 
-            if(findLLPHistory != null)
+            if (findLLPHistory.Id > 0)
             {
+                var portFrom = await _portService.GetById(int.Parse(findLLPHistory.PortFrom));
+                var portTo = await _portService.GetById(int.Parse(findLLPHistory.PortTo));
+                findLLPHistory.PortFrom = portFrom.Name;
+                findLLPHistory.PortTo = portTo.Name;
+
                 ViewBag.LLPHistory = findLLPHistory;
             }
 

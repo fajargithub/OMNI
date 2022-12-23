@@ -1,5 +1,4 @@
 ﻿function countPercentageLatihanTrx() {
-    console.log('on count percentage latihan trx!');
     var countRekomendasiHubla = 0;
     var totalPersentaseHubla = 0;
     var lastLatihan = "";
@@ -59,6 +58,8 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
     "iDisplayLength": -1,
     "ordering": false,
     "scrollX": true,
+    "paging": true,
+    "pageLength": 10,
     "ajax": {
         "url": base_api + 'Home/GetAllLatihanTrx?port=' + port + "&year=" + selectedYear,
         "type": 'GET'
@@ -141,8 +142,6 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
 
                 if (editable == "True") {
                     if (iDisplayIndex.latihan != "Total Persentase") {
-                        //result += "<a data-toggle='modal' data-target='#modal-add-edit' href='/Home/AddEditLatihanTrx?id=" + iDisplayIndex.id + "&port=" + port.replace(" ", "%20") + "&year=" + selectedYear + "' style='color:orange;' title='Edit'><i class='fa fa-pencil'></i></a> &nbsp;" +
-                        //    " <a href='javascript:void(0)' onclick='deleteLatihanTrx(" + iDisplayIndex.id + ")' class='btn-delete' title='Delete' style='color:red;'><i class='fa fa-trash'></i></a>";
                         result += "<div class='btn-group' role='group'>" +
                             "<button id='btnGroupVerticalDrop1' type='button' class='btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Action</button>" +
                             "<div class='dropdown-menu' aria-labelledby='btnGroupVerticalDrop1'>" +
