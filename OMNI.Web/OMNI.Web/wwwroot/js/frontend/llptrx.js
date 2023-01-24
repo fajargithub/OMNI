@@ -190,6 +190,8 @@ var dt = $('#table_llp_trx').DataTable({
                     result = "<b style='color:green;'>TERPENUHI</b>";
                 } else if (iDisplayIndex.kesesuaianPM58 == "KURANG") {
                     result = "<b style='color:red;'>KURANG</b>";
+                } else if (iDisplayIndex.kesesuaianPM58 == "TIDAK TERPENUHI") {
+                    result = "<b style='color:darkorange;'>TIDAK TERPENUHI</b>";
                 }
 
                 return result;
@@ -241,13 +243,15 @@ var dt = $('#table_llp_trx').DataTable({
             render: function (row, data, iDisplayIndex) {
                 var result = "";
 
-                if (iDisplayIndex.kesesuaianOSCP == "TERPENUHI") {
+                if (iDisplayIndex.kesesuaianPM58 == "TERPENUHI") {
                     result = "<b style='color:green;'>TERPENUHI</b>";
-                } else if (iDisplayIndex.kesesuaianOSCP == "KURANG") {
+                } else if (iDisplayIndex.kesesuaianPM58 == "KURANG") {
                     result = "<b style='color:red;'>KURANG</b>";
+                } else if (iDisplayIndex.kesesuaianPM58 == "TIDAK TERPENUHI") {
+                    result = "<b style='color:darkorange;'>TIDAK TERPENUHI</b>";
                 }
 
-                return result;
+                return iDisplayIndex.kesesuaianPM58 + ": " + result;
             }
         },
         {

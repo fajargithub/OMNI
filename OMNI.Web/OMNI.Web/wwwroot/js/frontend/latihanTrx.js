@@ -110,6 +110,8 @@ var table_latihan_trx = $('#table_latihan_trx').DataTable({
                     result = "<b style='color:green;'>TERPENUHI</b>";
                 } else if (iDisplayIndex.kesesuaianPM58 == "KURANG") {
                     result = "<b style='color:red;'>KURANG</b>";
+                } else if (iDisplayIndex.kesesuaianPM58 == "TIDAK TERPENUHI") {
+                    result = "<b style='color:darkorange;'>TIDAK TERPENUHI</b>";
                 }
 
                 return result;
