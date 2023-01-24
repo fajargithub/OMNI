@@ -172,22 +172,26 @@ namespace OMNI.API.Controllers.OMNI
                             result[j].TotalDetailExisting = find.TotalCount;
                             result[j].SelisihHubla = find.TotalCount - result[j].RekomendasiHubla;
 
-                            if(result[j].RekomendasiHubla > 0)
+                            if (result[j].SelisihHubla >= 0)
+                            {
+                                result[j].KesesuaianPM58 = "TERPENUHI";
+                            }
+                            else
+                            {
+                                result[j].KesesuaianPM58 = "KURANG";
+                            }
+
+                            if (result[j].RekomendasiHubla > 0)
                             {
                                 result[j].PersentasePersonil = Math.Round(find.TotalCount / result[j].RekomendasiHubla * 100, 2);
+                            } else
+                            {
+                                result[j].KesesuaianPM58 = "TIDAK TERPENUHI";
                             }
                             
                             if(result[j].PersentasePersonil > 100)
                             {
                                 result[j].PersentasePersonil = 100;
-                            }
-
-                            if(result[j].SelisihHubla >= 0)
-                            {
-                                result[j].KesesuaianPM58 = "TERPENUHI";
-                            } else
-                            {
-                                result[j].KesesuaianPM58 = "KURANG";
                             }
                         }
                     }

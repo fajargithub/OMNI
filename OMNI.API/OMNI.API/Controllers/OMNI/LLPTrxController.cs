@@ -654,6 +654,11 @@ namespace OMNI.API.Controllers.OMNI
                             {
                                 result[i].KesesuaianPM58 = "KURANG";
                             }
+
+                            if(result[i].RekomendasiHubla <= 0)
+                            {
+                                result[i].KesesuaianPM58 = "TIDAK TERPENUHI";
+                            }
                         }
                     }
                 }

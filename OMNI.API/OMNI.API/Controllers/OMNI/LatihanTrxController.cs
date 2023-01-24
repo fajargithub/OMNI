@@ -127,6 +127,7 @@ namespace OMNI.API.Controllers.OMNI
                             temp.RekomendasiHubla = findRekomendasiHubla.Value;
                         }
 
+
                         temp.Id = list[i].Id;
                         temp.Latihan = list[i].Latihan != null ? list[i].Latihan.Name : "-";
                         temp.LatihanId = list[i].Latihan != null ? list[i].Latihan.Id : 0;
@@ -166,6 +167,11 @@ namespace OMNI.API.Controllers.OMNI
                                 else
                                 {
                                     result[i].KesesuaianPM58 = "KURANG";
+                                }
+
+                                if(result[i].RekomendasiHubla <= 0)
+                                {
+                                    result[i].KesesuaianPM58 = "TIDAK TERPENUHI";
                                 }
                             }
                         }
