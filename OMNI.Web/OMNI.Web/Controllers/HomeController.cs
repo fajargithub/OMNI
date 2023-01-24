@@ -450,6 +450,39 @@ namespace OMNI.Web.Controllers
         #endregion
 
         #region PERSONIL REGION
+
+        [HttpGet]
+        public async Task<JsonResult> CopyDataPersonilTrx(string port, int year, int targetYear)
+        {
+            var result = await _personilTrxService.CopyDataPersonilTrx(port, year, targetYear);
+
+            return Json(new
+            {
+                result
+            });
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCopyDataYearPersonilTrx(string port)
+        {
+            List<string> data = await _personilTrxService.GetCopyDataYearPersonilTrx(port);
+
+            return Json(new
+            {
+                data
+            });
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> DeleteAllPersonilTrx(string port, int year)
+        {
+            var result = await _personilTrxService.DeleteAllPersonilTrx(port, year);
+
+            return Json(new
+            {
+                result
+            });
+        }
         public async Task<JsonResult> GetAllPersonilTrx(string port, int year)
         {
             List<PersonilTrxModel> data = await _personilTrxService.GetAllPersonilTrx(port, year);

@@ -1,4 +1,118 @@
-﻿function countPercentagePersonilTrx() {
+﻿$("#copyDataPersonil").hide();
+
+$("#deleteAllPersonil").click(function () {
+    var targetYear = parseInt($("#year-lokasi").val());
+
+    Swal.fire({
+        title: 'Do you want to delete All of Personil data?',
+        icon: 'warning',
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        if (result.value) {
+
+            Swal.fire({
+                title: '<i class="fa fa-cog fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only"> Delete Data</span>',
+                text: 'Deleting, please wait',
+                allowOutsideClick: false,
+                showConfirmButton: false
+            });
+
+            $.ajax({
+                url: base_api + "Home/DeleteAllPersonilTrx?port=" + port + "&year=" + targetYear,
+                method: "GET",
+                success: function (result) {
+                    if (result.result == "SUCCESS") {
+                        Swal.fire(
+                            'Success!',
+                            'Data is deleted',
+                            'success'
+                        )
+
+                        setTimeout(function () {
+                            Swal.close();
+                            $('#modal-copy-data').modal('hide');
+                            $("#table_personil_trx").DataTable().ajax.reload(function () {
+                                console.log('on reload datatable!');
+                                countPercentagePersonilTrx();
+                            });
+                        }, 1000)
+                    }
+                }
+            })
+        } else if (result.isDenied) {
+
+        }
+    })
+});
+
+$("#copyDataPersonil").click(function () {
+    $.ajax({
+        url: base_api + "Home/GetCopyDataYearPersonilTrx?port=" + port,
+        method: "GET",
+        success: function (result) {
+            yearList = result.data;
+            console.log(yearList);
+        },
+        complete: function () {
+            $("#yearDataPersonilTrx").empty();
+            var $dropdown = $("#yearDataPersonilTrx");
+            $.each(yearList, function () {
+                console.log(this);
+                $dropdown.append($("<option />").val(this).text(this));
+            });
+
+            $('#modal-copy-data-personiltrx').modal('show');
+        }
+    });
+});
+
+$("#submitCopyDataPersonilTrx").click(function () {
+    console.log('submit copy data personil trx!');
+    idCopies = null;
+    copyIndex = 0;
+    var yearData = parseInt($("#yearDataPersonilTrx").val());
+    var targetYear = parseInt($("#year-lokasi").val());
+    if (yearData > 0) {
+        Swal.fire({
+            title: 'Do you want to copy data personil ' + portName + " from year " + yearData + "?",
+            icon: 'info',
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.value) {
+
+                Swal.fire({
+                    title: '<i class="fa fa-cog fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only"> Copying Data</span>',
+                    text: 'Saving, please wait',
+                    allowOutsideClick: false,
+                    showConfirmButton: false
+                });
+
+                $.ajax({
+                    url: base_api + "Home/CopyDataPersonilTrx?port=" + port + "&year=" + yearData + "&targetYear=" + targetYear,
+                    method: "GET",
+                    success: function (result) {
+                        setTimeout(function () {
+                            Swal.close();
+                            $('#modal-copy-data-personiltrx').modal('hide');
+                            $("#table_personil_trx").DataTable().ajax.reload(function () {
+                                countPercentagePersonilTrx();
+                            });
+                        }, 1000)
+                    }
+                })
+            } else if (result.isDenied) {
+
+            }
+        })
+    }
+
+});
+
+function countPercentagePersonilTrx() {
     console.log('on count percentage personil trx!');
     var countRekomendasiHublaPersonil = 0;
     var totalPersentasePersonil = 0;
@@ -8,6 +122,8 @@
         method: "GET",
         success: function (result) {
             if (result.data.length > 0) {
+                $("#copyDataPersonil").hide();
+
                 for (var i = 0; i < result.data.length; i++) {
                     if (lastPersonil == "") {
                         lastPersonil = result.data[i].personil;
@@ -24,6 +140,8 @@
                     }
 
                 }
+            } else {
+                $("#copyDataPersonil").show();
             }
         }, complete: function () {
             var resultPersentaseHublaPersonil = totalPersentasePersonil / (countRekomendasiHublaPersonil * 100) * 100;

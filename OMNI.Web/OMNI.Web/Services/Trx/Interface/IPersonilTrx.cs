@@ -12,6 +12,9 @@ namespace OMNI.Web.Services.Trx.Interface
 {
     public interface IPersonilTrx
     {
+        public Task<List<int>> CopyDataPersonilTrx(string port, int year, int targetYear);
+        public Task<List<string>> GetCopyDataYearPersonilTrx(string port);
+        public Task<string> DeleteAllPersonilTrx(string port, int year);
         public Task<string> GetContentType(int id);
         public Task<Stream> ReadFile(int id, string flag);
         public Task<List<FilesModel>> GetAllFiles(int trxId);

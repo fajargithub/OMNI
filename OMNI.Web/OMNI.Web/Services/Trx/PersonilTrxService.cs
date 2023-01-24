@@ -23,6 +23,42 @@ namespace OMNI.Web.Services.Trx
             _httpClient = httpClient;
         }
 
+        public async Task<List<int>> CopyDataPersonilTrx(string port, int year, int targetYear)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/PersonilTrx/CopyDataPersonilTrx?port={port}&year={year}&targetYear={targetYear}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<List<int>>();
+
+            throw new Exception();
+        }
+
+        public async Task<List<string>> GetCopyDataYearPersonilTrx(string port)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var result = await client.GetAsync($"/api/PersonilTrx/GetCopyDataYearPersonilTrx?port={port}");
+
+            if (result.IsSuccessStatusCode)
+
+                return await result.Content.ReadAsAsync<List<string>>();
+
+            throw new Exception();
+        }
+
+        public async Task<string> DeleteAllPersonilTrx(string port, int year)
+        {
+            HttpClient client = _httpClient.CreateClient("OMNI");
+            var r = await client.GetAsync($"/api/PersonilTrx/DeleteAllPersonilTrx?port={port}&year={year}");
+
+            if (r.IsSuccessStatusCode)
+
+                return await r.Content.ReadAsAsync<string>();
+
+            throw new Exception();
+        }
+
         public async Task<string> GetContentType(int id)
         {
             HttpClient client = _httpClient.CreateClient("OMNI");

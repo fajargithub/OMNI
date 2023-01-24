@@ -215,6 +215,8 @@
                 @if (ViewBag.Editable)
                 {
                     <div class="panel-toolbar">
+                        <a href="javascript:void(0)" id="deleteAllPersonil" class="btn btn-danger btn-sm shadow-0 white-font"><i class="fal fa-times"></i>  Delete All</a> &nbsp;
+                        <a href="javascript:void(0)" id="copyDataPersonil" class="btn btn-info btn-sm shadow-0 white-font"><i class="fal fa-copy"></i>  Copy Data</a> &nbsp;
                         <a asp-action="AddEditPersonilTrx" asp-route-port="@ViewBag.SelectedPort" asp-route-year="@ViewBag.SelectedYear" class="btn btn-primary btn-sm shadow-0" data-toggle="modal" data-target="#modal-add-edit"><i class="fal fa-plus"></i>  Add</a>
                     </div>
                 }
@@ -345,6 +347,40 @@
     </div>
 </div>
 
+<div id="modal-copy-data-personiltrx" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-copy"></i> Copy Data Personil</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:center;">
+                    <div class="form-group">
+                        <label class="form-label" for="">Select Data from Year: </label>
+                        <select name="Year" id="yearDataPersonilTrx" class="select2-input2" required>
+                        </select>
+                    </div>
+                </p>
+                <p style="text-align:center;">
+                    <div class="form-group">
+                    </div>
+                    <div class="col-md-12" id="show-qrcode">
+                        <br />
+                        <div id="qrcode2"></div>
+                    </div>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="submitCopyDataPersonilTrx">Submit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-history", Type = ModalType.Right, Size = ModalSize.Large })
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-add-edit", Type = ModalType.Right, Size = ModalSize.Medium })
 @await Html.PartialAsync("_Modal", new ModalViewModel { ID = "modal-file", Type = ModalType.Right, Size = ModalSize.Medium })
@@ -361,6 +397,10 @@
         $("#show-qrcode").hide();
         $('.select2-input').select2({
             dropdownParent: $('#modal-copy-data')
+        });
+
+        $('.select2-input2').select2({
+            dropdownParent: $('#modal-copy-data-personiltrx')
         });
 
         $("#copyData").hide();
@@ -453,7 +493,7 @@
             var targetYear = parseInt($("#year-lokasi").val());
             if (yearData > 0) {
                 Swal.fire({
-                    title: 'Do you want to copy data ' + port + " from year " + yearData + "?",
+                    title: 'Do you want to copy data ' + portName + " from year " + yearData + "?",
                     icon: 'info',
                     showDenyButton: false,
                     showCancelButton: true,
