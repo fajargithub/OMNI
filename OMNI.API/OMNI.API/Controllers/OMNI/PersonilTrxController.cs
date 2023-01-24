@@ -338,5 +338,112 @@ namespace OMNI.API.Controllers.OMNI
 
             return "OK";
         }
+
+        [HttpGet("DeleteAllPersonilTrx")]
+        public async Task<IActionResult> DeleteAllPersonilTrx(string port, int year, CancellationToken cancellationToken)
+        {
+            var status = "FAILED";
+
+            try
+            {
+                var list = await _dbOMNI.PersonilTrx.Where(b => b.Port == port && b.Year == year).ToListAsync(cancellationToken);
+                if (list.Count() > 0)
+                {
+                    for (int i = 0; i < list.Count(); i++)
+                    {
+                        list[i].IsDeleted = GeneralConstants.YES;
+                        list[i].UpdatedAt = DateTime.Now;
+                        _dbOMNI.PersonilTrx.Update(list[i]);
+                        await _dbOMNI.SaveChangesAsync(cancellationToken);
+                    }
+                }
+
+                status = "SUCCESS";
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
+            return Ok(status);
+        }
+
+        [HttpGet("GetCopyDataYearPersonilTrx")]
+        public async Task<IActionResult> GetCopyDataYearPersonilTrx(string port, CancellationToken cancellationToken)
+        {
+            List<int> yearList = new List<int>();
+
+            var list = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port).ToListAsync(cancellationToken);
+
+            if (list.Count() > 0)
+            {
+                var group = list.GroupBy(b => b.Year).ToList();
+                if (group.Count() > 0)
+                {
+                    for (int i = 0; i < group.Count(); i++)
+                    {
+                        yearList.Add(group[i].Key);
+                    }
+                }
+            }
+            return Ok(yearList);
+        }
+
+        [HttpGet("CopyDataPersonilTrx")]
+        public async Task<IActionResult> CopyDataPersonilTrx(string port, int year, int targetYear, CancellationToken cancellationToken)
+        {
+            List<int> ListId = new List<int>();
+
+            DateTime nullDate = new DateTime();
+
+            try
+            {
+                var list = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year).Include(b => b.Personil).ToListAsync(cancellationToken);
+
+                if (list.Count() > 0)
+                {
+                    for (int i = 0; i < list.Count(); i++)
+                    {
+                        PersonilTrx data = new PersonilTrx();
+
+                        data.Personil = list[i].Personil;
+                        data.Port =  list[i].Port;
+                        data.Name =  list[i].Name;
+                        data.Year =  targetYear;
+                        data.TanggalPelatihan = list[i].TanggalPelatihan != null ? list[i].TanggalPelatihan : nullDate;
+                        data.TanggalExpired = list[i].TanggalExpired != null ? list[i].TanggalExpired : nullDate;
+                        data.CreatedAt = DateTime.Now;
+                        data.CreatedBy =  list[i].CreatedBy;
+                        await _dbOMNI.PersonilTrx.AddAsync(data, cancellationToken);
+                        await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                        HistoryPersonilTrx history = new HistoryPersonilTrx();
+                        history.PersonilTrxId = data.Id;
+                        history.Personil = data.Personil;
+                        history.Port = data.Port;
+                        history.Name = data.Name;
+                        history.TanggalPelatihan = data.TanggalPelatihan != null ? data.TanggalPelatihan : nullDate;
+                        history.TanggalExpired = data.TanggalExpired != null ? data.TanggalExpired : nullDate;
+                        history.Year = data.Year;
+                        history.CreatedBy = data.CreatedBy;
+                        history.CreatedAt = DateTime.Now;
+                        history.UpdatedBy = data.UpdatedBy;
+                        history.UpdatedAt = DateTime.Now;
+                        history.TrxStatus = "ADD";
+                        await _dbOMNI.HistoryPersonilTrx.AddAsync(history, cancellationToken);
+                        await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+                        ListId.Add(data.Id);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return Ok(ListId);
+        }
     }
 }
