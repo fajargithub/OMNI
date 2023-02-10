@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio.AspNetCore;
 using OMNI.API.Configurations;
+using OMNI.API.Services;
+using OMNI.API.Services.Interfaces;
 using OMNI.API.Services.LDAP;
 using OMNI.API.Services.LDAP.Interfaces;
 using OMNI.Data.Data;
@@ -33,17 +35,17 @@ namespace OMNI.API.Extensions
                 => options.UseSqlServer(connection + appSettings.DataBase[DatabaseEnums.CorePTKDb.ToString()]));
         }
 
-        //public static void ConfigureDataLayer(this IServiceCollection services)
-        //{
-        //    services.AddScoped<CustomSignInService>();
-        //}
+        public static void ConfigureDataLayer(this IServiceCollection services)
+        {
+            services.AddScoped<PersonilTrxService>();
+        }
 
-        //public static void ConfigureDomainLayer(this IServiceCollection services)
-        //{
-        //    services.AddScoped<ICustomSignInService, CustomSignInService>();
-        //}
+        public static void ConfigureDomainLayer(this IServiceCollection services)
+        {
+            services.AddScoped<IPersonilTrx, PersonilTrxService>();
+        }
 
-            public static void ConfigureMinio(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureMinio(this IServiceCollection services, IConfiguration configuration)
         {
             var appSettings = configuration.Get<AppSettings>();
             string a = configuration.GetSection("MinioService").GetSection("AccessKey").Value;

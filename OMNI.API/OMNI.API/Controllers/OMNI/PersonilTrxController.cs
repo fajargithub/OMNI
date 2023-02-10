@@ -6,6 +6,7 @@ using Minio;
 using Minio.DataModel;
 using Minio.Exceptions;
 using OMNI.API.Model.OMNI;
+using OMNI.API.Services.Interfaces;
 using OMNI.Data.Data;
 using OMNI.Data.Data.Dao;
 using OMNI.Domain.AppLogRepo;
@@ -26,10 +27,12 @@ namespace OMNI.API.Controllers.OMNI
     [Produces("application/json")]
     public class PersonilTrxController : BaseController
     {
-        public PersonilTrxController(OMNIDbContext dbOMNI, MinioClient mc) : base(dbOMNI, mc)
+        protected IPersonilTrx _personilTrxService;
+        public PersonilTrxController(IPersonilTrx personilTrxService, OMNIDbContext dbOMNI, MinioClient mc) : base(dbOMNI, mc)
         {
             _dbOMNI = dbOMNI;
             _mc = mc;
+            _personilTrxService = personilTrxService;
         }
 
         public class CountData
@@ -390,60 +393,76 @@ namespace OMNI.API.Controllers.OMNI
             return Ok(yearList);
         }
 
-        [HttpGet("CopyDataPersonilTrx")]
-        public async Task<IActionResult> CopyDataPersonilTrx(string port, int year, int targetYear, CancellationToken cancellationToken)
+        [HttpGet("GetPersonilTrxByIdSP")]
+        public IActionResult GetPersonilTrxByIdSP(int id)
         {
-            List<int> ListId = new List<int>();
+            var list = _personilTrxService.GetPersonilTrxById(id);
 
-            DateTime nullDate = new DateTime();
-
-            try
-            {
-                var list = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year).Include(b => b.Personil).ToListAsync(cancellationToken);
-
-                if (list.Count() > 0)
-                {
-                    for (int i = 0; i < list.Count(); i++)
-                    {
-                        PersonilTrx data = new PersonilTrx();
-
-                        data.Personil = list[i].Personil;
-                        data.Port =  list[i].Port;
-                        data.Name =  list[i].Name;
-                        data.Year =  targetYear;
-                        data.TanggalPelatihan = list[i].TanggalPelatihan != null ? list[i].TanggalPelatihan : nullDate;
-                        data.TanggalExpired = list[i].TanggalExpired != null ? list[i].TanggalExpired : nullDate;
-                        data.CreatedAt = DateTime.Now;
-                        data.CreatedBy =  list[i].CreatedBy;
-                        await _dbOMNI.PersonilTrx.AddAsync(data, cancellationToken);
-                        await _dbOMNI.SaveChangesAsync(cancellationToken);
-
-                        HistoryPersonilTrx history = new HistoryPersonilTrx();
-                        history.PersonilTrxId = data.Id;
-                        history.Personil = data.Personil;
-                        history.Port = data.Port;
-                        history.Name = data.Name;
-                        history.TanggalPelatihan = data.TanggalPelatihan != null ? data.TanggalPelatihan : nullDate;
-                        history.TanggalExpired = data.TanggalExpired != null ? data.TanggalExpired : nullDate;
-                        history.Year = data.Year;
-                        history.CreatedBy = data.CreatedBy;
-                        history.CreatedAt = DateTime.Now;
-                        history.UpdatedBy = data.UpdatedBy;
-                        history.UpdatedAt = DateTime.Now;
-                        history.TrxStatus = "ADD";
-                        await _dbOMNI.HistoryPersonilTrx.AddAsync(history, cancellationToken);
-                        await _dbOMNI.SaveChangesAsync(cancellationToken);
-
-                        ListId.Add(data.Id);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-            return Ok(ListId);
+            return Ok(list);
         }
+
+        [HttpGet("GetAllPersonilTrxSP")]
+        public IActionResult GetAllPersonilTrxSP()
+        {
+            var list = _personilTrxService.GetAllPersonilTrx();
+
+            return Ok(list);
+        }
+
+        //[HttpGet("CopyDataPersonilTrx")]
+        //public async Task<IActionResult> CopyDataPersonilTrx(string port, int year, int targetYear, CancellationToken cancellationToken)
+        //{
+        //    List<int> ListId = new List<int>();
+
+        //    DateTime nullDate = new DateTime();
+
+        //    try
+        //    {
+        //        var list = await _dbOMNI.PersonilTrx.Where(b => b.IsDeleted == GeneralConstants.NO && b.Port == port && b.Year == year).Include(b => b.Personil).ToListAsync(cancellationToken);
+
+        //        if (list.Count() > 0)
+        //        {
+        //            for (int i = 0; i < list.Count(); i++)
+        //            {
+        //                PersonilTrx data = new PersonilTrx();
+
+        //                data.Personil = list[i].Personil;
+        //                data.Port =  list[i].Port;
+        //                data.Name =  list[i].Name;
+        //                data.Year =  targetYear;
+        //                data.TanggalPelatihan = list[i].TanggalPelatihan != null ? list[i].TanggalPelatihan : nullDate;
+        //                data.TanggalExpired = list[i].TanggalExpired != null ? list[i].TanggalExpired : nullDate;
+        //                data.CreatedAt = DateTime.Now;
+        //                data.CreatedBy =  list[i].CreatedBy;
+        //                await _dbOMNI.PersonilTrx.AddAsync(data, cancellationToken);
+        //                await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+        //                HistoryPersonilTrx history = new HistoryPersonilTrx();
+        //                history.PersonilTrxId = data.Id;
+        //                history.Personil = data.Personil;
+        //                history.Port = data.Port;
+        //                history.Name = data.Name;
+        //                history.TanggalPelatihan = data.TanggalPelatihan != null ? data.TanggalPelatihan : nullDate;
+        //                history.TanggalExpired = data.TanggalExpired != null ? data.TanggalExpired : nullDate;
+        //                history.Year = data.Year;
+        //                history.CreatedBy = data.CreatedBy;
+        //                history.CreatedAt = DateTime.Now;
+        //                history.UpdatedBy = data.UpdatedBy;
+        //                history.UpdatedAt = DateTime.Now;
+        //                history.TrxStatus = "ADD";
+        //                await _dbOMNI.HistoryPersonilTrx.AddAsync(history, cancellationToken);
+        //                await _dbOMNI.SaveChangesAsync(cancellationToken);
+
+        //                ListId.Add(data.Id);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex);
+        //    }
+
+        //    return Ok(ListId);
+        //}
     }
 }
